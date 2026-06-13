@@ -1,0 +1,43 @@
+/* Общий motion для появления, удаления и перестановки элементов списка. */
+.app-list-motion-container {
+  position: relative;
+}
+
+.app-list-motion-item {
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+.app-list-motion-item > * {
+  min-height: 0;
+}
+
+.app-list-motion-enter-active,
+.app-list-motion-leave-active {
+  overflow: hidden;
+  transition: grid-template-rows 260ms ease, opacity 260ms ease, transform 260ms ease;
+}
+
+.app-list-motion-enter-from {
+  transform: scale(0.98);
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+
+.app-list-motion-leave-to {
+  transform: scale(0.98);
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-list-motion-enter-active,
+  .app-list-motion-leave-active {
+    transition: none;
+  }
+
+  .app-list-motion-enter-from,
+  .app-list-motion-leave-to {
+    transform: none;
+  }
+}

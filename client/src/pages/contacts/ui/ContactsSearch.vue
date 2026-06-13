@@ -43,50 +43,56 @@ const {
             color="semi-contrast-text"
             :text="$t(CONTACTS_PAGE_I18N.loading)"
           />
-          <div v-else class="contacts-search__list">
-            <NmorphBadge
-              v-for="contact in foundContactList"
-              :key="contact.id"
-              :value="getSearchedContactStatus(contact)"
-              hide-on-falsy-value
-              size="tiny"
-              :color="getSearchedContactStatusColor(contact)"
-              type="ribbon"
-              ribbon-corner="bottom-left"
-            >
-              <NmorphCard shadow-type="inset" content-class="contacts-search__item">
-                <AppProfileBasicData :image-id="contact.avatarId" :title="contact.nickname" :name="contact.nickname">
-                  <template #title>
-                    <div class="contacts-search__name">
-                      <AppText truncate :text="contact.nickname" />
-                    </div>
-                  </template>
-                </AppProfileBasicData>
-                <NmorphButton
-                  v-if="isDefaultContactInteraction(contact.interactionType)"
-                  shape="square"
-                  design="plain"
-                  borderless
-                  :loading="loadingContactIds.has(contact.id)"
-                  :aria-label="$t(CONTACTS_PAGE_I18N.add)"
-                  @click="emit('add', contact.id)"
-                >
-                  <template #icon>
-                    <NmorphIconPlusThin />
-                  </template>
-                </NmorphButton>
-              </NmorphCard>
-            </NmorphBadge>
-            <NmorphButton
-              v-if="searchHasMore"
-              :text="$t(CONTACTS_PAGE_I18N.loadMore) + '...'"
-              fill
-              design="plain"
-              borderless
-              :loading="isSearchLoadingMore"
-              @click="loadMoreSearchedContacts"
-            />
-          </div>
+          <TransitionGroup
+            v-else
+            class="contacts-search__list app-list-motion-container"
+            name="app-list-motion"
+            tag="div"
+          >
+            <div v-for="contact in foundContactList" :key="contact.id" class="app-list-motion-item">
+              <NmorphBadge
+                :value="getSearchedContactStatus(contact)"
+                hide-on-falsy-value
+                size="tiny"
+                :color="getSearchedContactStatusColor(contact)"
+                type="ribbon"
+                ribbon-corner="bottom-left"
+              >
+                <NmorphCard shadow-type="inset" content-class="contacts-search__item">
+                  <AppProfileBasicData :image-id="contact.avatarId" :title="contact.nickname" :name="contact.nickname">
+                    <template #title>
+                      <div class="contacts-search__name">
+                        <AppText truncate :text="contact.nickname" />
+                      </div>
+                    </template>
+                  </AppProfileBasicData>
+                  <NmorphButton
+                    v-if="isDefaultContactInteraction(contact.interactionType)"
+                    shape="square"
+                    design="plain"
+                    borderless
+                    :loading="loadingContactIds.has(contact.id)"
+                    :aria-label="$t(CONTACTS_PAGE_I18N.add)"
+                    @click="emit('add', contact.id)"
+                  >
+                    <template #icon>
+                      <NmorphIconPlusThin />
+                    </template>
+                  </NmorphButton>
+                </NmorphCard>
+              </NmorphBadge>
+            </div>
+            <div v-if="searchHasMore" key="load-more" class="app-list-motion-item">
+              <NmorphButton
+                :text="$t(CONTACTS_PAGE_I18N.loadMore) + '...'"
+                fill
+                design="plain"
+                borderless
+                :loading="isSearchLoadingMore"
+                @click="loadMoreSearchedContacts"
+              />
+            </div>
+          </TransitionGroup>
         </div>
         <slot />
       </div>

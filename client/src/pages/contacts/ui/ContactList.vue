@@ -14,56 +14,56 @@ const emit = defineEmits<ContactListEmits>()
 </script>
 
 <template>
-  <div class="contact-list">
-    <NmorphBadge
-      v-for="contact in props.contactList"
-      :key="contact.id"
-      :value="props.getContactStatus(contact)"
-      hide-on-falsy-value
-      type="ribbon"
-      :ribbon-tilt="false"
-      size="tiny"
-      ribbon-corner="bottom-left"
-      :offset-y="2"
-      :color="getContactStatusTagColor(contact)"
-    >
-      <NmorphCard class="contact-list__item" content-class="contact-list__item-content" shadow-type="inset">
-        <AppProfileBasicData
-          class="contact-list__profile"
-          :image-id="contact.avatarId"
-          :title="contact.nickname"
-          :name="contact.nickname"
-        >
-          <template #title>
-            <div class="contact-list__title">
-              <div class="contact-list__name">
-                <AppText truncate :text="contact.nickname" />
+  <TransitionGroup class="contact-list app-list-motion-container" name="app-list-motion" tag="div">
+    <div v-for="contact in props.contactList" :key="contact.id" class="app-list-motion-item">
+      <NmorphBadge
+        :value="props.getContactStatus(contact)"
+        hide-on-falsy-value
+        type="ribbon"
+        :ribbon-tilt="false"
+        size="tiny"
+        ribbon-corner="bottom-left"
+        :offset-y="2"
+        :color="getContactStatusTagColor(contact)"
+      >
+        <NmorphCard class="contact-list__item" content-class="contact-list__item-content" shadow-type="inset">
+          <AppProfileBasicData
+            class="contact-list__profile"
+            :image-id="contact.avatarId"
+            :title="contact.nickname"
+            :name="contact.nickname"
+          >
+            <template #title>
+              <div class="contact-list__title">
+                <div class="contact-list__name">
+                  <AppText truncate :text="contact.nickname" />
+                </div>
               </div>
-            </div>
-          </template>
-          <template #description>
-            <UserActivityStatus
-              v-if="props.isContactActivityVisible(contact)"
-              :online="contact.online"
-              :last-seen="contact.lastSeen"
+            </template>
+            <template #description>
+              <UserActivityStatus
+                v-if="props.isContactActivityVisible(contact)"
+                :online="contact.online"
+                :last-seen="contact.lastSeen"
+              />
+            </template>
+          </AppProfileBasicData>
+          <div class="contact-list__actions">
+            <ContactContextMenu
+              :contact="contact"
+              :is-creating-chat="props.creatingChatContactIds.has(contact.id)"
+              :is-updating-contact="props.loadingContactIds.has(contact.id)"
+              :personal-chat-room-id="props.getPersonalChatRoomId(contact.id)"
+              @create-chat="emit('create-chat', $event)"
+              @delete="emit('delete', $event)"
+              @go-to-chat="emit('go-to-chat', $event)"
+              @update-interaction="(id, interaction) => emit('update-interaction', id, interaction)"
             />
-          </template>
-        </AppProfileBasicData>
-        <div class="contact-list__actions">
-          <ContactContextMenu
-            :contact="contact"
-            :is-creating-chat="props.creatingChatContactIds.has(contact.id)"
-            :is-updating-contact="props.loadingContactIds.has(contact.id)"
-            :personal-chat-room-id="props.getPersonalChatRoomId(contact.id)"
-            @create-chat="emit('create-chat', $event)"
-            @delete="emit('delete', $event)"
-            @go-to-chat="emit('go-to-chat', $event)"
-            @update-interaction="(id, interaction) => emit('update-interaction', id, interaction)"
-          />
-        </div>
-      </NmorphCard>
-    </NmorphBadge>
-  </div>
+          </div>
+        </NmorphCard>
+      </NmorphBadge>
+    </div>
+  </TransitionGroup>
 </template>
 
 <style lang="scss">
