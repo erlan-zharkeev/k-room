@@ -16,7 +16,8 @@ const emit = defineEmits<ChatRoomMessagesEmits>()
 const {
   hasMessages,
   isLoading,
-  measureMessageListItemElement,
+  messageRemovalOverlayItems,
+  registerMessageListItemElement,
   messageVirtualListStyle,
   messageVirtualListItems,
   saveMessagesScrollState,
@@ -50,7 +51,7 @@ const {
         <div
           v-for="{ item, virtualItem } in messageVirtualListItems"
           :key="item.id"
-          :ref="measureMessageListItemElement"
+          :ref="(element) => registerMessageListItemElement(element, item)"
           :data-index="virtualItem.index"
         >
           <div v-if="item.type === 'message-gap'" class="chat-room-messages__gap" />
@@ -77,6 +78,27 @@ const {
         <AppText alignment="center" :selectable="false" :text="$t(CHAT_ROOM_CONTENT_I18N.noMessages)" />
       </div>
     </NmorphScroll>
+    <div v-if="messageRemovalOverlayItems.length" class="chat-room-messages__removal-layer">
+      <div
+        v-for="overlayItem in messageRemovalOverlayItems"
+        :key="overlayItem.id"
+        class="chat-room-messages__removal-item"
+        :class="{ 'chat-room-messages__removal-item--leaving': overlayItem.isLeaving }"
+        :style="overlayItem.style"
+      >
+        <div
+          class="chat-room-messages__message"
+          :class="{ 'chat-room-messages__message--self': overlayItem.message.isSelf }"
+        >
+          <MessageBody
+            :message="overlayItem.message"
+            :is-private-room="props.isPrivateRoom"
+            :room="props.room"
+            @select-message="emit('select-message', $event)"
+          />
+        </div>
+      </div>
+    </div>
     <NmorphButton
       v-if="showBackToBottomButton"
       class="chat-room-messages__back-to-bottom"
@@ -159,6 +181,28 @@ const {
 
 .chat-room-messages__message--self {
   justify-content: flex-end;
+}
+
+.chat-room-messages__removal-layer {
+  pointer-events: none;
+  position: fixed;
+  z-index: 4;
+  inset: 0;
+}
+
+.chat-room-messages__removal-item {
+  position: absolute;
+  transform-origin: center;
+  transform: translateY(0) scale(1);
+
+  opacity: 1;
+
+  transition: opacity 340ms ease, transform 340ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.chat-room-messages__removal-item--leaving {
+  transform: translateY(-10px) scale(0.94);
+  opacity: 0;
 }
 
 @keyframes chat-room-messages-loading-progress-glow {
