@@ -22,7 +22,7 @@ import {
   MESSAGE_VIDEO_DRAFT_MEDIA_ID_PREFIX,
   useMedia
 } from 'src/entities/media-file'
-import { useMessage } from 'src/entities/message'
+import { useMessage, useMessageRemovalMotion } from 'src/entities/message'
 import { useUser } from 'src/entities/user'
 
 import { useMessageNotification } from './use-message-notification.model'
@@ -31,6 +31,7 @@ export const useMessageSync = () => {
   const { mutate: mutateRoom } = useChatRoom()
   const { bulkDelete: bulkDeleteMedia, get: getMedia, put: putMedia } = useMedia()
   const { bulkUpdate, getById, messageById, mutate: mutateMessage, put, remove, update } = useMessage()
+  const { startMessageRemovalMotion, stopMessageRemovalMotion } = useMessageRemovalMotion()
   const { user } = useUser()
   const { playDeliveredMessageSound, showDeliveredMessageToast } = useMessageNotification()
 
@@ -177,6 +178,11 @@ export const useMessageSync = () => {
 
   const handleMessageDeleted = async ({ messageId, roomId }: EventMessageDeleted) => {
     const message = getById(messageId)
+
+    if (message) {
+      startMessageRemovalMotion(messageId)
+      stopMessageRemovalMotion(messageId)
+    }
 
     await remove(messageId)
     await mutateRoom(roomId, (room) => {

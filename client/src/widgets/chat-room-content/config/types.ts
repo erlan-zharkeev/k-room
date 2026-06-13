@@ -510,3 +510,10 @@ export interface MessageVirtualListItemProps {
   item: MessageVirtualListItem
   virtualItem: VirtualItem
 }
+
+export interface MessageRemovalOverlayItem {
+  id: string
+  isLeaving: boolean
+  message: Message
+  style: Record<'left' | 'top' | 'width', string>
+}

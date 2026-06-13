@@ -1,11 +1,17 @@
 import type { Virtualizer } from '@tanstack/vue-virtual'
-import { computed, toRef, watch } from 'vue'
+import { useTimeoutFn } from '@vueuse/core'
+import { computed, ref, toRef, watch } from 'vue'
 
-import { useMessage } from 'src/entities/message'
+import { useMessage, useMessageRemovalMotion } from 'src/entities/message'
 import { useSocketAvailability } from 'src/shared/api'
 
-import { ROOM_MESSAGES_PRELOAD_EDGE_ITEMS } from '../config/constants'
-import type { ChatRoomMessagesProps, ChatRoomMessagesTargetMessageScrolled } from '../config/types'
+import { MESSAGE_REMOVAL_MOTION_MS, ROOM_MESSAGES_PRELOAD_EDGE_ITEMS } from '../config/constants'
+import type {
+  ChatRoomMessagesProps,
+  ChatRoomMessagesTargetMessageScrolled,
+  MessageRemovalOverlayItem,
+  MessageVirtualListItem
+} from '../config/types'
 
 import { useChatRoomMessageList } from './use-chat-room-message-list.model'
 import { useChatRoomMessageNavigation } from './use-chat-room-message-navigation.model'
@@ -21,7 +27,10 @@ export const useChatRoomMessages = (
   const room = toRef(props, 'room')
   const targetMessageId = toRef(props, 'targetMessageId')
   const { messageById } = useMessage()
+  const { removingMessageIds, stopMessageRemovalMotion } = useMessageRemovalMotion()
   const { isSocketOnlineActionAvailable } = useSocketAvailability()
+  const messageListItemElements = new Map<string, HTMLElement>()
+  const messageRemovalOverlayItems = ref<MessageRemovalOverlayItem[]>([])
   const {
     loadedMessageRanges,
     isLoading,
@@ -115,6 +124,63 @@ export const useChatRoomMessages = (
     updateBackToBottomButtonVisibility()
     markVisibleMessagesAsRead(virtualizer)
     preloadAdjacentMessages(virtualizer)
+  }
+
+  const removeMessageRemovalOverlayItem = (id: string) => {
+    messageRemovalOverlayItems.value = messageRemovalOverlayItems.value.filter((item) => item.id !== id)
+  }
+
+  const captureMessageRemovalOverlay = (messageId: string) => {
+    const element = messageListItemElements.get(messageId)
+    const message = messageById.value.get(messageId)
+
+    if (!element || !message) return
+
+    const rect = element.getBoundingClientRect()
+    const overlayId = `${messageId}:${Date.now()}`
+
+    messageRemovalOverlayItems.value = [
+      ...messageRemovalOverlayItems.value,
+      {
+        id: overlayId,
+        isLeaving: false,
+        message,
+        style: {
+          left: `${rect.left}px`,
+          top: `${rect.top}px`,
+          width: `${rect.width}px`
+        }
+      }
+    ]
+
+    requestAnimationFrame(() => {
+      messageRemovalOverlayItems.value = messageRemovalOverlayItems.value.map((item) =>
+        item.id === overlayId ? { ...item, isLeaving: true } : item
+      )
+    })
+
+    const { start } = useTimeoutFn(
+      () => {
+        removeMessageRemovalOverlayItem(overlayId)
+      },
+      MESSAGE_REMOVAL_MOTION_MS,
+      { immediate: false }
+    )
+
+    start()
+  }
+
+  const registerMessageListItemElement = (element: unknown, item: MessageVirtualListItem) => {
+    measureMessageListItemElement(element)
+
+    if (item.type !== 'message') return
+
+    if (element instanceof HTMLElement) {
+      messageListItemElements.set(item.messageId, element)
+      return
+    }
+
+    messageListItemElements.delete(item.messageId)
   }
 
   const messageVirtualizerApi = useChatRoomMessageVirtualizer(
@@ -213,6 +279,17 @@ export const useChatRoomMessages = (
   watch(messageStatusKeys, () => markVisibleMessagesAsRead(messageVirtualizer.value), { immediate: true })
 
   watch(
+    () => [...removingMessageIds],
+    (messageIds) => {
+      messageIds.forEach((messageId) => {
+        captureMessageRemovalOverlay(messageId)
+        stopMessageRemovalMotion(messageId)
+      })
+    },
+    { flush: 'sync' }
+  )
+
+  watch(
     () => ({
       messageId: targetMessageId.value,
       roomId: room.value.id
@@ -228,7 +305,8 @@ export const useChatRoomMessages = (
   return {
     hasMessages,
     isLoading,
-    measureMessageListItemElement,
+    messageRemovalOverlayItems,
+    registerMessageListItemElement,
     messageVirtualListStyle,
     messageVirtualListItems,
     saveMessagesScrollState,
