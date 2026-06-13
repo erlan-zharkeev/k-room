@@ -18,7 +18,11 @@ import { AppLogo } from 'src/shared/ui'
           <slot>
             <NmorphScroll>
               <div class="page-layout__router-view-wrapper">
-                <RouterView />
+                <RouterView v-slot="{ Component, route }">
+                  <Transition name="app-route-motion" mode="out-in">
+                    <component :is="Component" :key="route.fullPath" />
+                  </Transition>
+                </RouterView>
               </div>
             </NmorphScroll>
           </slot>

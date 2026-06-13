@@ -33,17 +33,21 @@ const {
       <div class="app-layout__content">
         <NmorphCard v-if="showNavigation" class="app-layout__navigation-widget widget">
           <ContentNavigationLayout :title-key="navigationTitleKey">
-            <RouterView name="content-navigation" />
+            <RouterView v-slot="{ Component, route }" name="content-navigation">
+              <Transition name="app-route-motion" mode="out-in">
+                <component :is="Component" :key="route.matched[1]?.path ?? route.fullPath" />
+              </Transition>
+            </RouterView>
           </ContentNavigationLayout>
         </NmorphCard>
         <NmorphCard v-if="showContent" class="app-layout__content-widget widget">
           <ContentLayout v-if="isContentLayoutEnabled" :title-key="contentTitleKey">
-            <RouterView v-slot="{ Component }" name="content">
-              <component :is="Component" />
+            <RouterView v-slot="{ Component, route }" name="content">
+              <component :is="Component" :key="route.matched[1]?.path ?? route.fullPath" />
             </RouterView>
           </ContentLayout>
-          <RouterView v-else v-slot="{ Component }" name="content">
-            <component :is="Component" />
+          <RouterView v-else v-slot="{ Component, route }" name="content">
+            <component :is="Component" :key="route.matched[1]?.path ?? route.fullPath" />
           </RouterView>
         </NmorphCard>
       </div>

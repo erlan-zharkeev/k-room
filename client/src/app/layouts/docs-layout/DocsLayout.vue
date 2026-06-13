@@ -12,7 +12,11 @@ import { PageBackButton } from 'src/features/page-back-button'
       <article>
         <slot>
           <NmorphScroll>
-            <RouterView />
+            <RouterView v-slot="{ Component, route }">
+              <Transition name="app-route-motion" mode="out-in">
+                <component :is="Component" :key="route.fullPath" />
+              </Transition>
+            </RouterView>
           </NmorphScroll>
         </slot>
       </article>

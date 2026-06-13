@@ -56,7 +56,11 @@ useAuthLayoutNetBackground()
             />
           </RouterLink>
         </div>
-        <RouterView />
+        <RouterView v-slot="{ Component, route }">
+          <Transition name="app-route-motion" mode="out-in">
+            <component :is="Component" :key="route.fullPath" />
+          </Transition>
+        </RouterView>
       </NmorphCard>
     </div>
   </section>
@@ -129,6 +133,13 @@ useAuthLayoutNetBackground()
   z-index: 1;
   inset: 0;
   opacity: 0.42;
+}
+
+.auth-layout__net-background > canvas {
+  position: fixed !important;
+  inset: 0;
+  width: 100vw !important;
+  height: 100dvh !important;
 }
 
 .auth-layout__top-side {
