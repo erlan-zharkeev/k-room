@@ -225,7 +225,12 @@ export type {
   EventUpdatedMessageReactions
 } from './message/types'
 
-export type { ChangePasswordPayload, CreateNewPasswordPayload, UpdateUserDataPayload } from './requests/types'
+export type {
+  ChangePasswordPayload,
+  CreateNewPasswordPayload,
+  UpdateUserDataPayload,
+  UpdateUserOnboardingPayload
+} from './requests/types'
 
 export type {
   CodeRequestResponse,
@@ -313,9 +318,14 @@ export type { ReqStatus } from './status/types'
 export { normalizeTimestamp } from './time/lib/normalize-timestamp'
 export { formatHumanDateTime } from './time/lib/format-human-date-time'
 
-export { USER_NICKNAME_MAX_LENGTH, USER_NICKNAME_MIN_LENGTH, USER_ROLES } from './user/constants'
+export {
+  USER_DEFAULT_ONBOARDING,
+  USER_NICKNAME_MAX_LENGTH,
+  USER_NICKNAME_MIN_LENGTH,
+  USER_ROLES
+} from './user/constants'
 export { isNicknameValid, normalizeNicknameKey } from './user/lib/nickname'
-export type { UserRole, UserPreview, UserData } from './user/types'
+export type { UserRole, UserOnboardingData, UserPreview, UserData } from './user/types'
 
 export { VALIDATION_I18N } from './validation/i18n'
 export { createValidationMessages } from './validation/messages'
@@ -347,6 +357,7 @@ export {
   createSendPasswordRecoveryCodeSchema,
   createValidateChangeEmailCodeSchema,
   createUpdateUserDataSchema,
+  createUpdateUserOnboardingSchema,
   createValidatePasswordRecoveryCodeSchema
 } from './validation/schemas'
 export type { ValidationI18n, ValidationMessages } from './validation/types'

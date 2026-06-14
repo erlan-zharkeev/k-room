@@ -1,4 +1,12 @@
-import type { ChangePasswordPayload, Interaction, Provider, UnknownObject, UserData, UserPreview } from 'global-shared'
+import type {
+  ChangePasswordPayload,
+  Interaction,
+  Provider,
+  UnknownObject,
+  UserData,
+  UserOnboardingData,
+  UserPreview
+} from 'global-shared'
 import type { Types } from 'mongoose'
 
 export interface UserDevice {
@@ -25,6 +33,7 @@ export interface UserPersonalData extends Pick<UserData, 'email'> {
   chatRooms: string[]
   pinnedChatRoomIds: string[]
   mutedChatRoomIds: string[]
+  onboarding?: UserOnboardingData
 }
 
 export interface UserPublicData extends Omit<UserPreview, 'id'> {
@@ -73,6 +82,12 @@ export interface UpdateUserDataParams {
   nickname?: string
   avatarFileBuffer?: Buffer
   resetAvatar?: 'reset' | ''
+}
+
+export interface UpdateUserOnboardingParams {
+  userId: string
+  welcomeCompleted?: boolean
+  guideCompleted?: boolean
 }
 
 export interface AdminUserRecord {

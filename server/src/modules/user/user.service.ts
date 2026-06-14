@@ -5,6 +5,7 @@ import {
   type MediaId,
   type UserData,
   VALIDATION_PATTERNS,
+  isBoolean,
   normalizeNicknameKey,
   REQ_STATUS
 } from 'global-shared'
@@ -25,6 +26,7 @@ import type {
   ChangePasswordParams,
   CreateUserParams,
   UpdateUserDataParams,
+  UpdateUserOnboardingParams,
   UserExistParams,
   UserExistState,
   UserSchema
@@ -143,6 +145,38 @@ export class UserService {
     }
 
     await user.updateOne({ $set: { 'personal.email': normalizedEmail, 'system.confirmed': true } })
+  }
+
+  async updateUserOnboarding({ userId, welcomeCompleted, guideCompleted }: UpdateUserOnboardingParams) {
+    const updatedOnboardingData: Partial<UserData['onboarding']> = {}
+
+    if (isBoolean(welcomeCompleted)) {
+      updatedOnboardingData.welcomeCompleted = welcomeCompleted
+    }
+
+    if (isBoolean(guideCompleted)) {
+      updatedOnboardingData.guideCompleted = guideCompleted
+    }
+
+    if (!Object.keys(updatedOnboardingData).length) {
+      throw new AppError(REQ_STATUS.badRequest, UPDATE_USER_DATA_I18N.nothingToUpdate)
+    }
+
+    const user = await UserModel.findOneAndUpdate(
+      { _id: userId },
+      {
+        $set: Object.fromEntries(
+          Object.entries(updatedOnboardingData).map(([key, value]) => [`personal.onboarding.${key}`, value])
+        )
+      },
+      { new: true }
+    )
+
+    if (!user) {
+      throw new AppError(REQ_STATUS.server, UPDATE_USER_DATA_I18N.failedUpdate)
+    }
+
+    return mapUserToDto(user)
   }
 
   async updateUserData({ userId, nickname, avatarFileBuffer, resetAvatar }: UpdateUserDataParams) {
