@@ -110,6 +110,12 @@ export const createUpdateUserDataSchema = (messages: ValidationMessages) =>
     nickname: v.optional(nicknameSchema(messages))
   })
 
+export const createUpdateUserOnboardingSchema = () =>
+  v.object({
+    welcomeCompleted: v.optional(v.boolean()),
+    guideCompleted: v.optional(v.boolean())
+  })
+
 export const createCreateNewPasswordFormSchema = (messages: ValidationMessages) =>
   v.object({
     firstPassword: createPasswordSchema(messages),

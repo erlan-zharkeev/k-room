@@ -46,6 +46,7 @@ export const AUTH_ENDPOINTS = {
 export const USER_ENDPOINTS = {
   getUserData: '/users/me',
   editUserData: '/users/me',
+  updateUserOnboarding: '/users/me/onboarding',
   changePassword: '/users/me/password',
   resetPassword: '/user/reset-password'
 } as const

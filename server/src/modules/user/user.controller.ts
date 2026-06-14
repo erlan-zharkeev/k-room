@@ -7,6 +7,7 @@ import {
   type CreateNewPasswordPayload,
   type UserData,
   type UpdateUserDataPayload,
+  type UpdateUserOnboardingPayload,
   USER_ENDPOINTS
 } from 'global-shared'
 import { memoryStorage } from 'multer'
@@ -22,7 +23,12 @@ import { SessionService } from '../session/session.service'
 
 import { CHANGE_PASSWORD_I18N, RESET_PASSWORD_I18N, UPDATE_USER_DATA_I18N } from './user.i18n'
 import { UserService } from './user.service'
-import { CHANGE_PASSWORD_VALIDATION, RESET_PASSWORD_VALIDATION, UPDATE_USER_DATA_VALIDATION } from './user.validation'
+import {
+  CHANGE_PASSWORD_VALIDATION,
+  RESET_PASSWORD_VALIDATION,
+  UPDATE_USER_DATA_VALIDATION,
+  UPDATE_USER_ONBOARDING_VALIDATION
+} from './user.validation'
 
 @Controller()
 export class UserController {
@@ -85,6 +91,31 @@ export class UserController {
         nickname: payload?.nickname,
         avatarFileBuffer: file?.buffer,
         resetAvatar: payload?.['reset-avatar']
+      })
+
+      return sendResponse(response, language, userData, SHARED_I18N.success, true)
+    } catch (error) {
+      throw toAppError(error, UPDATE_USER_DATA_I18N.failedUpdate)
+    }
+  }
+
+  @Patch(USER_ENDPOINTS.updateUserOnboarding)
+  @UseGuards(AccessTokenGuard)
+  async updateUserOnboarding(
+    @Req() request: Request,
+    @Res() response: Response<BackendResponse<UserData>>,
+    @Body() payload?: UpdateUserOnboardingPayload
+  ) {
+    const { language } = request
+
+    try {
+      const userId = requireAuthUserId(request, this.sessionService.getUnauthorizedMessage())
+
+      runRequestValidation(request, UPDATE_USER_ONBOARDING_VALIDATION)
+      const userData = await this.userService.updateUserOnboarding({
+        userId,
+        welcomeCompleted: payload?.welcomeCompleted,
+        guideCompleted: payload?.guideCompleted
       })
 
       return sendResponse(response, language, userData, SHARED_I18N.success, true)

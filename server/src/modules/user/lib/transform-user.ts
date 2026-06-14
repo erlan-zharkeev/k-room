@@ -1,4 +1,11 @@
-import { CONTACT_INTERACTION, type Contact, type Interaction, type UserData } from 'global-shared'
+import {
+  CONTACT_INTERACTION,
+  USER_DEFAULT_ONBOARDING,
+  type Contact,
+  type Interaction,
+  type UserData,
+  type UserOnboardingData
+} from 'global-shared'
 
 import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 
@@ -16,11 +23,19 @@ export const transformUserToPreview = (user: UserSchema) => {
   }
 }
 
+const mapUserOnboardingToDto = (onboarding: UserOnboardingData = USER_DEFAULT_ONBOARDING): UserOnboardingData => {
+  return {
+    welcomeCompleted: onboarding.welcomeCompleted,
+    guideCompleted: onboarding.guideCompleted
+  }
+}
+
 export const mapUserToDto = (user: UserSchema): UserData => {
   return {
     ...transformUserToPreview(user),
     role: user.system.role,
-    email: user.personal.email
+    email: user.personal.email,
+    onboarding: mapUserOnboardingToDto(user.personal.onboarding)
   }
 }
 

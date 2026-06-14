@@ -12,3 +12,8 @@ export interface UpdateUserDataPayload {
   nickname?: string
   'reset-avatar'?: 'reset' | ''
 }
+
+export interface UpdateUserOnboardingPayload {
+  welcomeCompleted?: boolean
+  guideCompleted?: boolean
+}

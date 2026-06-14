@@ -1,4 +1,5 @@
-import { USER_NICKNAME_MAX_LENGTH, USER_NICKNAME_MIN_LENGTH, USER_ROLES } from 'global-shared'
+import { USER_DEFAULT_ONBOARDING, USER_NICKNAME_MAX_LENGTH, USER_NICKNAME_MIN_LENGTH, USER_ROLES } from 'global-shared'
+import type { UserOnboardingData } from 'global-shared'
 import { model, Schema } from 'mongoose'
 
 import type { UserPersonalData, UserPublicData, UserSchema, UserSystemData } from './types'
@@ -37,6 +38,22 @@ const systemSchema = new Schema<UserSystemData>(
   { _id: false }
 )
 
+const onboardingSchema = new Schema<UserOnboardingData>(
+  {
+    welcomeCompleted: {
+      type: Boolean,
+      required: true,
+      default: USER_DEFAULT_ONBOARDING.welcomeCompleted
+    },
+    guideCompleted: {
+      type: Boolean,
+      required: true,
+      default: USER_DEFAULT_ONBOARDING.guideCompleted
+    }
+  },
+  { _id: false }
+)
+
 const personalSchema = new Schema<UserPersonalData>(
   {
     email: {
@@ -62,6 +79,11 @@ const personalSchema = new Schema<UserPersonalData>(
       type: [String],
       required: true,
       default: []
+    },
+    onboarding: {
+      type: onboardingSchema,
+      required: true,
+      default: () => ({ ...USER_DEFAULT_ONBOARDING })
     }
   },
   { _id: false, minimize: false }
