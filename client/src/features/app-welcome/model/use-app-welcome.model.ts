@@ -1,10 +1,14 @@
 import { nextTick, onMounted, ref } from 'vue'
 
+import { useUser, useUserOnboarding } from 'src/entities/user'
+
 import type { AppWelcomeDialogEmit } from '../config/types'
 
 const isAppWelcomeVisible = ref(false)
 
 export const useAppWelcome = () => {
+  const { user } = useUser()
+
   const openAppWelcome = () => {
     isAppWelcomeVisible.value = true
   }
@@ -16,7 +20,10 @@ export const useAppWelcome = () => {
   const initializeAppWelcome = () => {
     onMounted(async () => {
       await nextTick()
-      openAppWelcome()
+
+      if (!user.value.onboarding.welcomeCompleted) {
+        openAppWelcome()
+      }
     })
   }
 
@@ -30,13 +37,19 @@ export const useAppWelcome = () => {
 
 export const useAppWelcomeDialog = (emit: AppWelcomeDialogEmit) => {
   const { closeAppWelcome, initializeAppWelcome, isAppWelcomeVisible } = useAppWelcome()
+  const { user } = useUser()
+  const { updateUserOnboarding } = useUserOnboarding()
 
-  const completeAppWelcome = () => {
+  const completeAppWelcome = async () => {
+    if (!user.value.onboarding.welcomeCompleted) {
+      await updateUserOnboarding({ welcomeCompleted: true })
+    }
+
     closeAppWelcome()
     emit('complete')
   }
 
-  const updateAppWelcomeVisible = (isVisible: boolean) => {
+  const updateAppWelcomeVisible = async (isVisible: boolean) => {
     if (isVisible) {
       isAppWelcomeVisible.value = true
       return
