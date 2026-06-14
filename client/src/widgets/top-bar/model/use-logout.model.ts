@@ -10,6 +10,7 @@ import { blockMediaSync, useMedia } from 'src/entities/media-file'
 import { useMessage } from 'src/entities/message'
 import { useRoomCall } from 'src/entities/room-call'
 import { useUser } from 'src/entities/user'
+import { useLogoutNavigation } from 'src/features/client-session'
 import { blockAuthRefresh, useHttp, socket } from 'src/shared/api'
 import { clearCookie } from 'src/shared/lib'
 
@@ -25,6 +26,7 @@ export const useLogout = () => {
   const { reset: resetMessage } = useMessage()
   const { reset: resetRoomCall } = useRoomCall()
   const { reset: resetUser } = useUser()
+  const { startLogoutNavigation, stopLogoutNavigation } = useLogoutNavigation()
   const isLogoutLoading = ref(false)
   const logoutStatus = useLocalStorage<string | null>(LOCAL_STORAGE_KEY.LogoutStatus, null)
 
@@ -50,10 +52,17 @@ export const useLogout = () => {
     } catch {
       logoutStatus.value = 'failed'
     } finally {
-      await resetClientData()
       clearCookie()
       socket.disconnect()
-      await router.push(ROUTE_NAMES.authLogin)
+      startLogoutNavigation()
+
+      try {
+        await router.push(ROUTE_NAMES.authLogin)
+      } finally {
+        stopLogoutNavigation()
+      }
+
+      await resetClientData()
       isLogoutLoading.value = false
     }
   }

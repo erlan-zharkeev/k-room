@@ -1,191 +1,613 @@
-import { CONTACT_INTERACTION, DAY_IN_MS } from 'global-shared'
+import { CONTACT_INTERACTION } from 'global-shared'
 import keyBy from 'lodash/keyBy'
 
-import { FIXTURE_MAX_LENGTH_NICKNAMES, USER_FIXTURES } from '../user/user.constants'
+import type { FixtureContactData, FixtureGroupData, FixtureMessageData, FixtureUserData } from './fixtures.types'
 
-import type { FixtureContactData } from './fixtures.types'
+const FIXTURE_PASSWORD = 'Asdf1234'
 
-export const BASE_FIXTURE_TIMESTAMP_MS = Date.UTC(2026, 1, 1, 8, 0, 0)
-export const DIRECT_FIXTURE_MESSAGE_ID_PREFIX = 'fixture-erlan-tolik'
-export const FRONTEND_CORE_FIXTURE_GROUP_KEY = 'frontend-core'
-export const FRONTEND_CORE_FIXTURE_MESSAGE_ID_PREFIX = 'fixture-frontend-core'
-export const FRONTEND_CORE_SELF_PHOTO_MESSAGE_INDEX = 103
-export const LONG_PRIVATE_FIXTURE_CONTACT_NICKNAME = FIXTURE_MAX_LENGTH_NICKNAMES.roma
-export const LONG_PRIVATE_FIXTURE_MESSAGE_ID_PREFIX = 'fixture-long-private'
-export const LONG_PRIVATE_FIXTURE_MESSAGE_COUNT = 14
-export const LONG_PRIVATE_FIXTURE_CREATED_AT_OFFSET_MS = 14 * DAY_IN_MS
-export const LONG_PRIVATE_FIXTURE_MESSAGE_BODY =
-  'Unread private fixture message for checking chat list title truncation next to the unread tag.'
-export const FIXTURE_SENDING_MESSAGE_INDEX = 102
-export const FIXTURE_REPLIED_MESSAGE_INDEX = 100
-export const FIXTURE_REPLY_TARGET_MESSAGE_INDEX = 96
-export const FIXTURE_LONG_REPLIED_MESSAGE_BODY =
-  'Reply preview stress case: this quoted message is intentionally long so the chat bubble can show how replied content behaves with wrapping, spacing, contrast, and overflow in the compact message layout across desktop and mobile widths. It should remain readable without breaking the bubble geometry or footer alignment.'
+const FIXTURE_USERS = [
+  {
+    nickname: 'Ethan',
+    avatarId: '68f100000000000000000001',
+    avatarPath: 'ethan.png'
+  },
+  {
+    nickname: 'Olivia',
+    avatarId: '68f100000000000000000002',
+    avatarPath: 'olivia.png'
+  },
+  {
+    nickname: 'Maya',
+    avatarId: '68f100000000000000000003',
+    avatarPath: 'maya.png'
+  },
+  {
+    nickname: 'Noah',
+    avatarId: '68f100000000000000000004',
+    avatarPath: 'noah.png'
+  },
+  {
+    nickname: 'Lucas',
+    avatarId: '68f100000000000000000005',
+    avatarPath: 'lucas.png'
+  }
+] as const
+
+const buildFixtureId = (index: number) =>
+  (BigInt('0x68a09410778b70d522ea8fa0') + BigInt(index)).toString(16).padStart(24, '0')
+
+export const BASE_FIXTURE_TIMESTAMP_MS = Date.UTC(2026, 5, 12, 15, 0, 0)
+export const USER_FIXTURES = FIXTURE_USERS.map(({ nickname, avatarId, avatarPath }, index) => ({
+  id: buildFixtureId(index),
+  email: `${nickname.toLowerCase()}@gmail.com`,
+  nickname,
+  pass: FIXTURE_PASSWORD,
+  avatarId,
+  avatarPath
+})) satisfies FixtureUserData[]
+export const PRIMARY_FIXTURE_USERNAMES = {
+  ethan: 'Ethan',
+  olivia: 'Olivia',
+  maya: 'Maya',
+  noah: 'Noah',
+  lucas: 'Lucas'
+} as const
+export const PRIMARY_FIXTURE_NICKNAME = PRIMARY_FIXTURE_USERNAMES.ethan
+export const DIRECT_FIXTURE_CONTACT_NICKNAME = PRIMARY_FIXTURE_USERNAMES.olivia
+export const SECONDARY_DIRECT_FIXTURE_CONTACT_NICKNAME = PRIMARY_FIXTURE_USERNAMES.maya
+export const TERTIARY_DIRECT_FIXTURE_CONTACT_NICKNAME = PRIMARY_FIXTURE_USERNAMES.noah
+export const QUATERNARY_DIRECT_FIXTURE_CONTACT_NICKNAME = PRIMARY_FIXTURE_USERNAMES.lucas
+export const PRODUCT_STUDIO_FIXTURE_GROUP_KEY = 'product-studio'
+export const WEEKEND_HOUSE_FIXTURE_GROUP_KEY = 'weekend-house'
+export const FIXTURE_GROUPS = [
+  {
+    key: PRODUCT_STUDIO_FIXTURE_GROUP_KEY,
+    adminNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    chatName: 'Product Studio',
+    avatarId: '68f100000000000000000006',
+    avatarPath: 'product-studio.png',
+    nicknames: [
+      PRIMARY_FIXTURE_USERNAMES.ethan,
+      PRIMARY_FIXTURE_USERNAMES.olivia,
+      PRIMARY_FIXTURE_USERNAMES.maya,
+      PRIMARY_FIXTURE_USERNAMES.noah
+    ]
+  },
+  {
+    key: WEEKEND_HOUSE_FIXTURE_GROUP_KEY,
+    adminNickname: PRIMARY_FIXTURE_USERNAMES.olivia,
+    chatName: 'Weekend House',
+    avatarId: '68f100000000000000000007',
+    avatarPath: 'weekend-house.png',
+    nicknames: [
+      PRIMARY_FIXTURE_USERNAMES.ethan,
+      PRIMARY_FIXTURE_USERNAMES.olivia,
+      PRIMARY_FIXTURE_USERNAMES.maya,
+      PRIMARY_FIXTURE_USERNAMES.lucas
+    ]
+  }
+] as const satisfies readonly FixtureGroupData[]
+export const DIRECT_FIXTURE_MESSAGE_ID_PREFIX = 'fixture-ethan-olivia'
+export const SECONDARY_DIRECT_FIXTURE_MESSAGE_ID_PREFIX = 'fixture-ethan-maya'
+export const TERTIARY_DIRECT_FIXTURE_MESSAGE_ID_PREFIX = 'fixture-ethan-noah'
+export const QUATERNARY_DIRECT_FIXTURE_MESSAGE_ID_PREFIX = 'fixture-ethan-lucas'
+export const PRODUCT_STUDIO_FIXTURE_MESSAGE_ID_PREFIX = 'fixture-product-studio'
+export const WEEKEND_HOUSE_FIXTURE_MESSAGE_ID_PREFIX = 'fixture-weekend-house'
+export const DIRECT_FIXTURE_CREATED_AT_OFFSET_MS = 0
+export const SECONDARY_DIRECT_FIXTURE_CREATED_AT_OFFSET_MS = 2 * 60 * 60 * 1000
+export const TERTIARY_DIRECT_FIXTURE_CREATED_AT_OFFSET_MS = 3 * 60 * 60 * 1000
+export const PRODUCT_STUDIO_FIXTURE_CREATED_AT_OFFSET_MS = 4 * 60 * 60 * 1000
+export const QUATERNARY_DIRECT_FIXTURE_CREATED_AT_OFFSET_MS = 5 * 60 * 60 * 1000
+export const WEEKEND_HOUSE_FIXTURE_CREATED_AT_OFFSET_MS = 6 * 60 * 60 * 1000
+const buildLegacyFixtureId = (index: number) =>
+  (BigInt('0x68a09410778b70d522ea8fa0') + BigInt(index)).toString(16).padStart(24, '0')
+
+export const LEGACY_FIXTURE_USER_IDS = Array.from({ length: 28 }, (_, index) => buildLegacyFixtureId(index + 5))
+export const LEGACY_FIXTURE_ROOM_CHAT_NAMES = [
+  'Frontend Core',
+  'Weekend Plans',
+  'Design Review',
+  'Admin Leave Test Alpha',
+  'Admin Leave Test Beta'
+] as const
+export const LEGACY_FIXTURE_EMPTY_ROOM_CHAT_NAME_PATTERN = /^Empty Room \d+$/
+export const LEGACY_FIXTURE_MESSAGE_ID_PATTERN = /^fixture-(erlan-tolik|frontend-core|long-private)-/
 export const FIXTURE_MESSAGE_IMAGE_FILES = [
   {
     id: '68f000000000000000000001',
-    path: 'src/modules/fixtures/images/tolik.jpg'
+    path: 'ethan.png'
   },
   {
     id: '68f000000000000000000002',
-    path: 'src/modules/fixtures/images/guest.jpg'
+    path: 'olivia.png'
   },
   {
     id: '68f000000000000000000003',
-    path: 'src/modules/fixtures/images/erlan.jpg'
+    path: 'maya.png'
   },
   {
     id: '68f000000000000000000004',
-    path: 'src/modules/fixtures/images/tolik.jpg'
+    path: 'noah.png'
   },
   {
     id: '68f000000000000000000005',
-    path: 'src/modules/fixtures/images/guest.jpg'
+    path: 'lucas.png'
   }
 ] as const
-export const FIXTURE_TOLIK_MESSAGE_IMAGES_BY_INDEX: Record<number, readonly string[]> = {
-  96: [FIXTURE_MESSAGE_IMAGE_FILES[0].id],
-  100: FIXTURE_MESSAGE_IMAGE_FILES.map(({ id }) => id)
-}
-const FIXTURE_REACTION_STRESS_GLYPH_KEYS = [
-  '\u{1F44D}',
-  '\u{1F525}',
-  '\u{1F440}',
-  '\u{1F600}',
-  '\u{1F604}',
-  '\u{1F60E}',
-  '\u{1F914}',
-  '\u{1F389}',
-  '\u{1F680}',
-  '\u{2728}',
-  '\u{1F4AF}',
-  '\u{1F64C}',
-  '\u{1F44F}',
-  '\u{1F9E0}',
-  '\u{1F4A1}',
-  '\u{1F6E0}',
-  '\u{1F9EA}',
-  '\u{1F4CC}',
-  '\u{1F4CE}',
-  '\u{1F4F8}',
-  '\u{1F3AF}',
-  '\u{1F4A5}',
-  '\u{1F48E}',
-  '\u{1F9CA}',
-  '\u{1F331}',
-  '\u{1F4AC}',
-  '\u{1F4DD}',
-  '\u{1F50D}',
-  '\u{1F511}',
-  '\u{1F512}',
-  '\u{1F9F2}',
-  '\u{1F9ED}',
-  '\u{1F9F9}'
-] as const
-const FIXTURE_REACTION_STRESS_OFFSETS = [0, 1, 2] as const
-const FIXTURE_REACTION_STRESS_NICKNAMES = USER_FIXTURES.map(({ nickname }) => nickname)
-const FIXTURE_WIDE_REACTIONS = FIXTURE_REACTION_STRESS_NICKNAMES.map((nickname, index) => ({
-  nickname,
-  glyphKey: FIXTURE_REACTION_STRESS_GLYPH_KEYS[index]
-}))
-const FIXTURE_DENSE_REACTIONS = FIXTURE_REACTION_STRESS_NICKNAMES.flatMap((nickname, index) =>
-  FIXTURE_REACTION_STRESS_OFFSETS.map((offset) => ({
-    nickname,
-    glyphKey: FIXTURE_REACTION_STRESS_GLYPH_KEYS[(index + offset) % FIXTURE_REACTION_STRESS_GLYPH_KEYS.length]
-  }))
-)
-export const FIXTURE_MESSAGE_REACTIONS_BY_INDEX: Record<number, readonly { nickname: string; glyphKey: string }[]> = {
-  88: FIXTURE_WIDE_REACTIONS,
-  89: FIXTURE_DENSE_REACTIONS,
-  92: [
-    { nickname: 'erlan', glyphKey: '\u{1F44D}' },
-    { nickname: 'tolik', glyphKey: '\u{1F44D}' }
-  ],
-  96: [
-    { nickname: 'erlan', glyphKey: '\u{1F525}' },
-    { nickname: 'tolik', glyphKey: '\u{1F525}' }
-  ],
-  100: [
-    { nickname: 'erlan', glyphKey: '\u{1F440}' },
-    { nickname: 'tolik', glyphKey: '\u{1F44D}' },
-    { nickname: FIXTURE_MAX_LENGTH_NICKNAMES.alina, glyphKey: '\u{1F525}' }
-  ]
-} as const
+
 export const FIXTURE_CONTACTS = [
   {
-    nickname: 'tolik',
+    nickname: PRIMARY_FIXTURE_USERNAMES.olivia,
     interaction: CONTACT_INTERACTION.INVITE_ACCEPTED,
     reverseInteraction: CONTACT_INTERACTION.INVITE_ACCEPTED
   },
   {
-    nickname: 'guest',
-    interaction: CONTACT_INTERACTION.DEFAULT
-  },
-  {
-    nickname: FIXTURE_MAX_LENGTH_NICKNAMES.alina,
-    interaction: CONTACT_INTERACTION.INVITED,
-    reverseInteraction: CONTACT_INTERACTION.INVITE_RECEIVED
-  },
-  {
-    nickname: FIXTURE_MAX_LENGTH_NICKNAMES.misha,
-    interaction: CONTACT_INTERACTION.INVITE_RECEIVED,
-    reverseInteraction: CONTACT_INTERACTION.INVITED
-  },
-  {
-    nickname: FIXTURE_MAX_LENGTH_NICKNAMES.dasha,
-    interaction: CONTACT_INTERACTION.BLOCKED
-  },
-  {
-    nickname: FIXTURE_MAX_LENGTH_NICKNAMES.roma,
+    nickname: PRIMARY_FIXTURE_USERNAMES.maya,
     interaction: CONTACT_INTERACTION.INVITE_ACCEPTED,
     reverseInteraction: CONTACT_INTERACTION.INVITE_ACCEPTED
   },
   {
-    nickname: 'nina',
-    interaction: CONTACT_INTERACTION.INVITED,
-    reverseInteraction: CONTACT_INTERACTION.INVITE_RECEIVED
+    nickname: PRIMARY_FIXTURE_USERNAMES.noah,
+    interaction: CONTACT_INTERACTION.INVITE_ACCEPTED,
+    reverseInteraction: CONTACT_INTERACTION.INVITE_ACCEPTED
   },
   {
-    nickname: 'mark',
-    interaction: CONTACT_INTERACTION.BLOCKED
+    nickname: PRIMARY_FIXTURE_USERNAMES.lucas,
+    interaction: CONTACT_INTERACTION.INVITE_ACCEPTED,
+    reverseInteraction: CONTACT_INTERACTION.INVITE_ACCEPTED
   }
 ] as const satisfies FixtureContactData[]
-export const MESSAGE_SUBJECTS = [
-  'search contacts',
-  'socket reconnect flow',
-  'message pagination',
-  'chat room sorting',
-  'device permissions',
-  'notification center',
-  'group room updates',
-  'image upload flow',
-  'scroll restoration',
-  'profile editing'
-] as const
-export const MESSAGE_ACTIONS = [
-  'looks stable after the last patch',
-  'still needs a regression check',
-  'started behaving better in Chromium',
-  'shows the edge case more clearly now',
-  'needs cleaner empty-state handling',
-  'benefits from stronger typing',
-  'should be covered by a smoke test',
-  'would be easier to inspect with better fixtures',
-  'is ready for another review pass',
-  'should be rechecked after deploy'
-] as const
-export const MESSAGE_QUALIFIERS = [
-  'before lunch',
-  'after the nightly restart',
-  'when the room is reopened',
-  'on a fresh session',
-  'after clearing the cache',
-  'while testing on mobile width',
-  'with multiple rooms selected in sequence',
-  'after a silent token refresh',
-  'when the modal is opened twice',
-  'while the websocket reconnects'
-] as const
+
+export const DIRECT_FIXTURE_MESSAGES = [
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'Morning Olivia. I tightened the onboarding flow and left the guide open so we can capture it from a clean first-run state.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.olivia,
+    body: 'Great. The first screen already feels more welcoming. I would keep the copy short and let the highlighted areas do most of the work.',
+    imageIds: [],
+    reactions: [
+      {
+        nickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+        glyphKey: '\u{1F44D}'
+      }
+    ],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'Agreed. I also want the chat list to look like real product usage instead of a database stress test.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.olivia,
+    body: 'Then we should use names, avatars, and conversations that feel like a small team actually shipped something today.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'Exactly. I will keep two group rooms visible: one work room and one casual room. That should make the navigation screenshots much easier to read.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: 4
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.olivia,
+    body: 'I added the latest profile shots here so we can verify image bubbles, rounded corners, and the gallery layout in the same pass.',
+    imageIds: [FIXTURE_MESSAGE_IMAGE_FILES[1].id, FIXTURE_MESSAGE_IMAGE_FILES[2].id],
+    reactions: [
+      {
+        nickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+        glyphKey: '\u{1F440}'
+      }
+    ],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'These look clean. I will use this conversation for the message deletion and reply states because the spacing is realistic.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.olivia,
+    body: 'Perfect. After that, let us grab desktop and mobile screenshots before we touch the server-side guide progress.',
+    imageIds: [],
+    reactions: [
+      {
+        nickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+        glyphKey: '\u{2728}'
+      }
+    ],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'One more detail: the empty background should never flash between routes. I want the guide captures to feel calm.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.olivia,
+    body: 'Yes. Calm is the right word. The app is dark and dense, so every transition needs to feel intentional.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'I will run through the first-login path again after fixtures reload. If anything still looks synthetic, we can tune the copy.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.olivia,
+    body: 'Sounds good. Send me the final screenshots when the guide sits correctly next to each highlighted block.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  }
+] as const satisfies readonly FixtureMessageData[]
+
+export const SECONDARY_DIRECT_FIXTURE_MESSAGES = [
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.maya,
+    body: 'Hey Ethan, I reviewed the settings page. The FAQ button for reopening the guide is in the right place.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'Nice. I want new users to discover it naturally, but still have a clear way back to it later.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.maya,
+    body: 'Then keep the label direct. "Show guide" is enough. No extra helper text needed.',
+    imageIds: [],
+    reactions: [
+      {
+        nickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+        glyphKey: '\u{1F4AF}'
+      }
+    ],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'Good call. The guide already explains itself once it opens.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: 3
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.maya,
+    body: 'Also, the success outline around the target block reads well. It draws attention without covering the interface.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'That was the goal. It should look like the app is helping, not like a modal is fighting the layout.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.maya,
+    body: 'I will check the narrow viewport next. The tooltip should stay attached to the target, not the screen edge.',
+    imageIds: [FIXTURE_MESSAGE_IMAGE_FILES[2].id],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'Thanks. If mobile looks right, the guide is ready for the server progress flag.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  }
+] as const satisfies readonly FixtureMessageData[]
+
+export const TERTIARY_DIRECT_FIXTURE_MESSAGES = [
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.noah,
+    body: 'Hey Ethan, I checked the call screen after the route animation changes. The canvas background stays stable now.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'Good. That was the one part I did not want showing up in onboarding screenshots.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.noah,
+    body: 'The call list also feels lighter with real names. It is much easier to judge spacing when the data looks natural.',
+    imageIds: [],
+    reactions: [
+      {
+        nickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+        glyphKey: '\u{1F44D}'
+      }
+    ],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'Exactly. I want every screen in the guide to feel like a real workspace, not a fixture dump.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: 3
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.noah,
+    body: 'I will keep testing the call controls on desktop. The active state should be obvious without shouting.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'Thanks. Once calls look clean, the guide can point there without extra explanation.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  }
+] as const satisfies readonly FixtureMessageData[]
+
+export const QUATERNARY_DIRECT_FIXTURE_MESSAGES = [
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.lucas,
+    body: 'I went through the contact screen. The accepted contacts look good, but the list needed one more real conversation.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'Perfect timing. I am adding direct chats for everyone so screenshots do not make half the contacts look inactive.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.lucas,
+    body: 'That will help. A quiet contact list is fine, but it should still feel like people actually use the app.',
+    imageIds: [],
+    reactions: [
+      {
+        nickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+        glyphKey: '\u{2728}'
+      }
+    ],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'Agreed. I will keep the copy short and use the weekend group for the more casual preview.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: 3
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.lucas,
+    body: 'Nice. I can review the final mobile screenshots after the seed reloads.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'Deal. I will ping you once the fixture chats are in place.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  }
+] as const satisfies readonly FixtureMessageData[]
+
+export const PRODUCT_STUDIO_FIXTURE_MESSAGES = [
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'I replaced the demo rooms with a smaller set of realistic chats. The left navigation should look much cleaner now.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.noah,
+    body: 'Excellent. The old empty rooms made every screenshot feel like a load test.',
+    imageIds: [],
+    reactions: [
+      {
+        nickname: PRIMARY_FIXTURE_USERNAMES.olivia,
+        glyphKey: '\u{1F44D}'
+      }
+    ],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.maya,
+    body: 'Can we keep one image-heavy message in the room? It helps check the gallery spacing against the chat background.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'Yes. I added a two-image message in the direct chat and a single image here for the group layout.',
+    imageIds: [FIXTURE_MESSAGE_IMAGE_FILES[3].id],
+    reactions: [],
+    replyToIndex: 3
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.olivia,
+    body: 'The group header also needs a proper avatar. A real image there makes the top bar feel finished.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.noah,
+    body: 'I am checking unread badges now. The values are high enough to test the chip, but not so high that the list looks broken.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'That balance matters. We need realistic density, not every edge case on the first screen.',
+    imageIds: [],
+    reactions: [
+      {
+        nickname: PRIMARY_FIXTURE_USERNAMES.maya,
+        glyphKey: '\u{2728}'
+      }
+    ],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.maya,
+    body: 'The contact list should also be calmer now: no blocked users, no max-length names, and no placeholder avatars.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.olivia,
+    body: 'Good. For onboarding screenshots, the product should look like it already has a small real team inside.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.noah,
+    body: 'I will take the wide layout screenshots after the fixtures reload.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'I will handle the mobile set. The guide placement is easier to judge with natural data in the list.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.maya,
+    body: 'Great. Once we have both, we can decide which images belong inside each guide step.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  }
+] as const satisfies readonly FixtureMessageData[]
+
+export const WEEKEND_HOUSE_FIXTURE_MESSAGES = [
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.lucas,
+    body: 'Quick weekend check: are we still aiming for Saturday morning?',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.olivia,
+    body: 'Yes. I can pick up coffee and breakfast on the way out.',
+    imageIds: [],
+    reactions: [
+      {
+        nickname: PRIMARY_FIXTURE_USERNAMES.maya,
+        glyphKey: '\u{1F44D}'
+      }
+    ],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'I will bring the camera. We can use a few natural shots for the next round of interface previews.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.maya,
+    body: 'Love that. The app looks better when the media feels personal instead of stock.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: 3
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.lucas,
+    body: 'I booked the place until Sunday evening, so no rush after lunch.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.olivia,
+    body: 'Nice. I added everyone to the shared list. Snacks, chargers, and board games are covered.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+    body: 'I uploaded the last portrait here too, just to make sure group media preview works with a casual chat.',
+    imageIds: [FIXTURE_MESSAGE_IMAGE_FILES[4].id],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.maya,
+    body: 'Looks good on my side. The image sits nicely against the dark background.',
+    imageIds: [],
+    reactions: [
+      {
+        nickname: PRIMARY_FIXTURE_USERNAMES.ethan,
+        glyphKey: '\u{2728}'
+      }
+    ],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.lucas,
+    body: 'I will share the address tonight. See you all Saturday.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  },
+  {
+    authorNickname: PRIMARY_FIXTURE_USERNAMES.olivia,
+    body: 'Perfect. I will keep notifications on so nobody misses the final details.',
+    imageIds: [],
+    reactions: [],
+    replyToIndex: null
+  }
+] as const satisfies readonly FixtureMessageData[]
+
 export const USER_BY_NICKNAME = keyBy(USER_FIXTURES, 'nickname')
-export const ERLAN_ID = USER_BY_NICKNAME.erlan?.id ?? ''
-export const TOLIK_ID = USER_BY_NICKNAME.tolik?.id ?? ''
+export const PRIMARY_FIXTURE_USER_ID = USER_BY_NICKNAME[PRIMARY_FIXTURE_NICKNAME]!.id
+export const DIRECT_FIXTURE_CONTACT_USER_ID = USER_BY_NICKNAME[DIRECT_FIXTURE_CONTACT_NICKNAME]!.id
+export const SECONDARY_DIRECT_FIXTURE_CONTACT_USER_ID = USER_BY_NICKNAME[SECONDARY_DIRECT_FIXTURE_CONTACT_NICKNAME]!.id
+export const TERTIARY_DIRECT_FIXTURE_CONTACT_USER_ID = USER_BY_NICKNAME[TERTIARY_DIRECT_FIXTURE_CONTACT_NICKNAME]!.id
+export const QUATERNARY_DIRECT_FIXTURE_CONTACT_USER_ID =
+  USER_BY_NICKNAME[QUATERNARY_DIRECT_FIXTURE_CONTACT_NICKNAME]!.id

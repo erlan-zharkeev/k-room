@@ -23,14 +23,14 @@ export const AUTH_LAYOUT_NET_EFFECT_OPTIONS = {
   backgroundAlpha: 0,
   forceAnimate: false,
   gyroControls: false,
-  maxDistance: 19,
+  maxDistance: 25,
   minHeight: 100,
   minWidth: 100,
-  mouseControls: true,
-  points: 8,
-  scale: 1,
+  mouseControls: false,
+  points: 10,
+  scale: 0.5,
   scaleMobile: 1.45,
   showDots: true,
-  spacing: 16,
-  touchControls: true
+  spacing: 15,
+  touchControls: false
 } as const

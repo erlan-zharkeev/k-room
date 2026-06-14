@@ -2,11 +2,18 @@
 import { NmorphCard } from '@nmorph/nmorph-ui-kit'
 
 import { AppNavigation } from 'src/features/app-navigation'
+import { ONBOARDING_GUIDE_STEP, OnboardingGuideTarget } from 'src/features/onboarding-guide'
 </script>
 
 <template>
   <NmorphCard tag="footer" class="mobile-nav-footer" content-class="mobile-nav-footer__content">
-    <AppNavigation footer />
+    <OnboardingGuideTarget
+      class="mobile-nav-footer__navigation-guide-target"
+      :name="ONBOARDING_GUIDE_STEP.navigation"
+      position="top"
+    >
+      <AppNavigation footer />
+    </OnboardingGuideTarget>
   </NmorphCard>
 </template>
 

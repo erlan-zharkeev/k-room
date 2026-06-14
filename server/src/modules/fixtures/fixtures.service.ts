@@ -4,78 +4,108 @@ import path from 'node:path'
 import bcrypt from 'bcryptjs'
 import {
   CHAT_KIND,
-  DAY_IN_MS,
   type ImageObject,
   MEDIA_AVATAR_VALIDATION_OPTIONS,
   MESSAGE_STATUS_VALUE,
-  MINUTE_IN_MS,
-  REQ_STATUS
+  MINUTE_IN_MS
 } from 'global-shared'
-import compact from 'lodash/compact'
 import countBy from 'lodash/countBy'
 import { Types, type HydratedDocument } from 'mongoose'
 
 import { ChatRoomModel } from 'src/modules/chat-rooms/chat-rooms.model'
+import type { ChatRoomDocument, ChatRoomSchema } from 'src/modules/chat-rooms/chat-rooms.types'
 import { buildImageAspectRatioDetails } from 'src/modules/media/lib/build-image-aspect-ratio-details'
 import { uploadBufferToBucket } from 'src/modules/media/media.service'
 import type { StreamMediaFileData } from 'src/modules/media/media.types'
 import { MessageModel } from 'src/modules/messages/messages.model'
 import { createUser, isUserExist } from 'src/modules/user/lib/user-existence'
 import type { UserSchema } from 'src/modules/user/types'
-import { FIXTURE_GROUPS, FIXTURE_MESSAGE_COUNT, USER_FIXTURES } from 'src/modules/user/user.constants'
-import { USER_I18N } from 'src/modules/user/user.i18n'
 import { UserModel } from 'src/modules/user/user.model'
-import { AppError } from 'src/shared/lib/app-error'
 import { log } from 'src/shared/lib/log'
 import { stringifyMongoIds } from 'src/shared/lib/normalize-object-id'
 
 import {
   BASE_FIXTURE_TIMESTAMP_MS,
+  DIRECT_FIXTURE_CONTACT_NICKNAME,
+  DIRECT_FIXTURE_CONTACT_USER_ID,
+  DIRECT_FIXTURE_CREATED_AT_OFFSET_MS,
   DIRECT_FIXTURE_MESSAGE_ID_PREFIX,
-  ERLAN_ID,
+  DIRECT_FIXTURE_MESSAGES,
   FIXTURE_CONTACTS,
-  FIXTURE_LONG_REPLIED_MESSAGE_BODY,
+  FIXTURE_GROUPS,
   FIXTURE_MESSAGE_IMAGE_FILES,
-  FIXTURE_MESSAGE_REACTIONS_BY_INDEX,
-  FIXTURE_REPLIED_MESSAGE_INDEX,
-  FIXTURE_REPLY_TARGET_MESSAGE_INDEX,
-  FIXTURE_SENDING_MESSAGE_INDEX,
-  FIXTURE_TOLIK_MESSAGE_IMAGES_BY_INDEX,
-  FRONTEND_CORE_FIXTURE_GROUP_KEY,
-  FRONTEND_CORE_FIXTURE_MESSAGE_ID_PREFIX,
-  FRONTEND_CORE_SELF_PHOTO_MESSAGE_INDEX,
-  LONG_PRIVATE_FIXTURE_CONTACT_NICKNAME,
-  LONG_PRIVATE_FIXTURE_CREATED_AT_OFFSET_MS,
-  LONG_PRIVATE_FIXTURE_MESSAGE_BODY,
-  LONG_PRIVATE_FIXTURE_MESSAGE_COUNT,
-  LONG_PRIVATE_FIXTURE_MESSAGE_ID_PREFIX,
-  MESSAGE_ACTIONS,
-  MESSAGE_QUALIFIERS,
-  MESSAGE_SUBJECTS,
-  TOLIK_ID,
-  USER_BY_NICKNAME
+  LEGACY_FIXTURE_EMPTY_ROOM_CHAT_NAME_PATTERN,
+  LEGACY_FIXTURE_MESSAGE_ID_PATTERN,
+  LEGACY_FIXTURE_ROOM_CHAT_NAMES,
+  LEGACY_FIXTURE_USER_IDS,
+  PRIMARY_FIXTURE_NICKNAME,
+  PRIMARY_FIXTURE_USER_ID,
+  PRODUCT_STUDIO_FIXTURE_CREATED_AT_OFFSET_MS,
+  PRODUCT_STUDIO_FIXTURE_GROUP_KEY,
+  PRODUCT_STUDIO_FIXTURE_MESSAGE_ID_PREFIX,
+  PRODUCT_STUDIO_FIXTURE_MESSAGES,
+  QUATERNARY_DIRECT_FIXTURE_CONTACT_NICKNAME,
+  QUATERNARY_DIRECT_FIXTURE_CONTACT_USER_ID,
+  QUATERNARY_DIRECT_FIXTURE_CREATED_AT_OFFSET_MS,
+  QUATERNARY_DIRECT_FIXTURE_MESSAGE_ID_PREFIX,
+  QUATERNARY_DIRECT_FIXTURE_MESSAGES,
+  SECONDARY_DIRECT_FIXTURE_CONTACT_NICKNAME,
+  SECONDARY_DIRECT_FIXTURE_CONTACT_USER_ID,
+  SECONDARY_DIRECT_FIXTURE_CREATED_AT_OFFSET_MS,
+  SECONDARY_DIRECT_FIXTURE_MESSAGE_ID_PREFIX,
+  SECONDARY_DIRECT_FIXTURE_MESSAGES,
+  TERTIARY_DIRECT_FIXTURE_CONTACT_NICKNAME,
+  TERTIARY_DIRECT_FIXTURE_CONTACT_USER_ID,
+  TERTIARY_DIRECT_FIXTURE_CREATED_AT_OFFSET_MS,
+  TERTIARY_DIRECT_FIXTURE_MESSAGE_ID_PREFIX,
+  TERTIARY_DIRECT_FIXTURE_MESSAGES,
+  USER_FIXTURES,
+  USER_BY_NICKNAME,
+  WEEKEND_HOUSE_FIXTURE_CREATED_AT_OFFSET_MS,
+  WEEKEND_HOUSE_FIXTURE_GROUP_KEY,
+  WEEKEND_HOUSE_FIXTURE_MESSAGE_ID_PREFIX,
+  WEEKEND_HOUSE_FIXTURE_MESSAGES
 } from './fixtures.constants'
-import type { FixtureContactData, FixtureUserData } from './fixtures.types'
+import type { FixtureContactData, FixtureMessageData, FixtureUserData } from './fixtures.types'
 
-const ensureAvatarLoaded = async (user: HydratedDocument<UserSchema>, avatarPath: string) => {
-  if (user.public.avatarId) {
-    return false
-  }
+const resolveFixtureImagePath = (imagePath: string) => path.resolve(__dirname, 'images', imagePath)
 
-  const buffer = await fs.readFile(path.resolve(avatarPath))
-  const avatarId = await uploadBufferToBucket(buffer, 'image', {
+const ensureAvatarLoaded = async (user: HydratedDocument<UserSchema>, avatarId: string, avatarPath: string) => {
+  const buffer = await fs.readFile(resolveFixtureImagePath(avatarPath))
+  const loadedAvatarId = await uploadBufferToBucket(buffer, 'image', {
+    id: avatarId,
+    overwrite: true,
     compression: 'avatar',
     validation: MEDIA_AVATAR_VALIDATION_OPTIONS
   })
 
-  user.public.avatarId = avatarId
+  user.public.avatarId = loadedAvatarId
   await user.save()
 
   return true
 }
 
+const ensureChatRoomAvatarLoaded = async (
+  room: HydratedDocument<ChatRoomSchema>,
+  avatarId: string,
+  avatarPath: string
+) => {
+  const buffer = await fs.readFile(resolveFixtureImagePath(avatarPath))
+  const loadedAvatarId = await uploadBufferToBucket(buffer, 'image', {
+    id: avatarId,
+    overwrite: true,
+    compression: 'avatar',
+    validation: MEDIA_AVATAR_VALIDATION_OPTIONS
+  })
+
+  room.avatarId = loadedAvatarId
+  await room.save()
+
+  return true
+}
+
 const loadUserFixture = async (data: FixtureUserData) => {
-  const { id, nickname, email, pass, avatarPath } = data
+  const { id, nickname, email, pass, avatarId, avatarPath } = data
   const identifier = new Types.ObjectId(id)
   const userExistState = await isUserExist({ id: identifier, nickname, email })
 
@@ -108,7 +138,7 @@ const loadUserFixture = async (data: FixtureUserData) => {
         await existingUser.save()
       }
 
-      const avatarLoaded = await ensureAvatarLoaded(existingUser, avatarPath)
+      const avatarLoaded = await ensureAvatarLoaded(existingUser, avatarId, avatarPath)
 
       return avatarLoaded || wasUpdated ? 'updated' : 'skipped'
     }
@@ -123,8 +153,9 @@ const loadUserFixture = async (data: FixtureUserData) => {
     return 'failed'
   }
 
+  user.public.nickname = nickname
   await user.set('system.confirmed', true).save()
-  await ensureAvatarLoaded(user, avatarPath)
+  await ensureAvatarLoaded(user, avatarId, avatarPath)
 
   return 'created'
 }
@@ -174,16 +205,51 @@ const ensureChatRoomAvatarState = async () => {
   log.info(`-Chat room avatar state normalized: updated=${result.modifiedCount}`)
 }
 
+const buildLegacyFixtureContactUnset = () =>
+  Object.fromEntries(LEGACY_FIXTURE_USER_IDS.map((id) => [`personal.contacts.${id}`, '']))
+
+const cleanupLegacyFixtureData = async () => {
+  const legacyRooms = await ChatRoomModel.find({
+    $or: [
+      { chatName: { $in: LEGACY_FIXTURE_ROOM_CHAT_NAMES } },
+      { chatName: LEGACY_FIXTURE_EMPTY_ROOM_CHAT_NAME_PATTERN },
+      { users: { $in: LEGACY_FIXTURE_USER_IDS } }
+    ]
+  })
+    .select('_id messages')
+    .lean<Pick<ChatRoomDocument, '_id' | 'messages'>[]>()
+  const legacyRoomIds = stringifyMongoIds(legacyRooms.map(({ _id }) => _id))
+  const legacyRoomMessageIds = legacyRooms.flatMap(({ messages }) => stringifyMongoIds(messages))
+  const [deletedUsers, deletedRooms, deletedMessages] = await Promise.all([
+    UserModel.deleteMany({ _id: { $in: LEGACY_FIXTURE_USER_IDS } }),
+    ChatRoomModel.deleteMany({ _id: { $in: legacyRoomIds } }),
+    MessageModel.deleteMany({
+      $or: [{ _id: LEGACY_FIXTURE_MESSAGE_ID_PATTERN }, { _id: { $in: legacyRoomMessageIds } }]
+    }),
+    ChatRoomModel.updateMany({}, { $pull: { messages: LEGACY_FIXTURE_MESSAGE_ID_PATTERN } }),
+    UserModel.updateMany(
+      {},
+      {
+        $pull: {
+          'personal.chatRooms': { $in: legacyRoomIds },
+          'personal.pinnedChatRoomIds': { $in: legacyRoomIds },
+          'personal.mutedChatRoomIds': { $in: legacyRoomIds }
+        },
+        $unset: buildLegacyFixtureContactUnset()
+      }
+    )
+  ])
+  const deletedCount = deletedUsers.deletedCount + deletedRooms.deletedCount + deletedMessages.deletedCount
+
+  if (!deletedCount) return
+
+  log.info(`-Legacy fixtures cleaned: deleted=${deletedCount}`)
+}
+
 const buildFixtureMessageId = (prefix: string, idx: number) => `${prefix}-${String(idx).padStart(3, '0')}`
 
 const ensureMessageImageLoaded = async (id: string, imagePath: string) => {
-  const existingImage = await UserModel.db.collection('image.files').findOne({ _id: new Types.ObjectId(id) })
-
-  if (existingImage) {
-    return false
-  }
-
-  const buffer = await fs.readFile(path.resolve(imagePath))
+  const buffer = await fs.readFile(resolveFixtureImagePath(imagePath))
 
   await uploadBufferToBucket(buffer, 'image', {
     id,
@@ -219,43 +285,38 @@ const resolveFixtureMessageImages = (
   imageObjectById: ReadonlyMap<string, ImageObject>
 ): ImageObject[] => imageIds.map((id) => imageObjectById.get(id)!)
 
-const buildFixtureMessageBody = (idx: number) => {
-  const subject = MESSAGE_SUBJECTS[(idx - 1) % MESSAGE_SUBJECTS.length]
-  const action = MESSAGE_ACTIONS[Math.floor((idx - 1) / MESSAGE_SUBJECTS.length) % MESSAGE_ACTIONS.length]
-  const qualifier =
-    MESSAGE_QUALIFIERS[
-      Math.floor((idx - 1) / (MESSAGE_SUBJECTS.length * MESSAGE_ACTIONS.length)) % MESSAGE_QUALIFIERS.length
-    ]
-
-  return `Fixture note ${String(idx).padStart(3, '0')}: ${subject} ${action} ${qualifier}.`
-}
-
-const buildFixtureMessageReactions = (idx: number, roomNicknames: readonly string[]) => {
+const buildFixtureMessageReactions = (reactions: FixtureMessageData['reactions'], roomNicknames: readonly string[]) => {
   const roomNicknameSet = new Set(roomNicknames)
 
-  return (FIXTURE_MESSAGE_REACTIONS_BY_INDEX[idx] ?? []).flatMap(({ nickname, glyphKey }) => {
+  return reactions.flatMap(({ nickname, glyphKey }) => {
     if (!roomNicknameSet.has(nickname)) {
       return []
     }
 
-    const authorId = USER_BY_NICKNAME[nickname]?.id
-
-    return authorId ? [{ nickname, authorId, glyphKey }] : []
+    return [
+      {
+        nickname,
+        authorId: USER_BY_NICKNAME[nickname]!.id,
+        glyphKey
+      }
+    ]
   })
 }
 
-const buildFixtureRepliedMessage = (prefix: string, imageObjectById: ReadonlyMap<string, ImageObject>) => {
-  const targetAuthorNickname = 'tolik'
+const buildFixtureRepliedMessage = (
+  prefix: string,
+  messageSources: readonly FixtureMessageData[],
+  replyToIndex: number,
+  imageObjectById: ReadonlyMap<string, ImageObject>
+) => {
+  const targetMessage = messageSources[replyToIndex - 1]!
 
   return {
-    id: buildFixtureMessageId(prefix, FIXTURE_REPLY_TARGET_MESSAGE_INDEX),
-    authorNickname: targetAuthorNickname,
-    authorId: TOLIK_ID,
-    body: FIXTURE_LONG_REPLIED_MESSAGE_BODY,
-    images: resolveFixtureMessageImages(
-      FIXTURE_TOLIK_MESSAGE_IMAGES_BY_INDEX[FIXTURE_REPLY_TARGET_MESSAGE_INDEX] ?? [],
-      imageObjectById
-    )
+    id: buildFixtureMessageId(prefix, replyToIndex),
+    authorNickname: targetMessage.authorNickname,
+    authorId: USER_BY_NICKNAME[targetMessage.authorNickname]!.id,
+    body: targetMessage.body,
+    images: resolveFixtureMessageImages(targetMessage.imageIds, imageObjectById)
   }
 }
 
@@ -264,50 +325,26 @@ const buildFixtureMessage = (
   prefix: string,
   roomUserIds: readonly string[],
   roomNicknames: readonly string[],
+  messageSources: readonly FixtureMessageData[],
+  messageSource: FixtureMessageData,
+  createdAtOffsetMs: number,
   imageObjectById: ReadonlyMap<string, ImageObject>
 ) => {
-  const isErlanAuthor = idx % 2 !== 0
-  const authorId = isErlanAuthor ? ERLAN_ID : TOLIK_ID
-  const authorNickname = isErlanAuthor ? 'erlan' : 'tolik'
-  const createdAt = BASE_FIXTURE_TIMESTAMP_MS + idx * (37 * MINUTE_IN_MS) + Math.floor(idx / 18) * DAY_IN_MS
+  const { authorNickname, body, imageIds, reactions, replyToIndex } = messageSource
+  const createdAt = BASE_FIXTURE_TIMESTAMP_MS + createdAtOffsetMs + idx * (11 * MINUTE_IN_MS)
 
   return {
     _id: buildFixtureMessageId(prefix, idx),
-    authorId,
+    authorId: USER_BY_NICKNAME[authorNickname]!.id,
     authorNickname,
-    body: buildFixtureMessageBody(idx),
+    body,
     createdAt,
-    reactions: buildFixtureMessageReactions(idx, roomNicknames),
-    images: resolveFixtureMessageImages(FIXTURE_TOLIK_MESSAGE_IMAGES_BY_INDEX[idx] ?? [], imageObjectById),
+    reactions: buildFixtureMessageReactions(reactions, roomNicknames),
+    images: resolveFixtureMessageImages(imageIds, imageObjectById),
     usersMetaData: roomUserIds.map((id) => ({ id, status: MESSAGE_STATUS_VALUE.DELIVERED })),
-    repliedMessage: idx === FIXTURE_REPLIED_MESSAGE_INDEX ? buildFixtureRepliedMessage(prefix, imageObjectById) : null
-  }
-}
-
-const buildFixtureSendingMessage = (
-  prefix: string,
-  roomUserIds: readonly string[],
-  roomNicknames: readonly string[],
-  imageObjectById: ReadonlyMap<string, ImageObject>
-) => {
-  const createdAt =
-    BASE_FIXTURE_TIMESTAMP_MS +
-    FIXTURE_SENDING_MESSAGE_INDEX * (37 * MINUTE_IN_MS) +
-    Math.floor(FIXTURE_SENDING_MESSAGE_INDEX / 18) * DAY_IN_MS
-
-  return {
-    _id: buildFixtureMessageId(prefix, FIXTURE_SENDING_MESSAGE_INDEX),
-    authorId: ERLAN_ID,
-    authorNickname: 'erlan',
-    body: buildFixtureMessageBody(100),
-    createdAt,
-    reactions: buildFixtureMessageReactions(100, roomNicknames),
-    images: resolveFixtureMessageImages(
-      FIXTURE_MESSAGE_IMAGE_FILES.map(({ id }) => id),
-      imageObjectById
-    ),
-    usersMetaData: roomUserIds.map((id) => ({ id, status: MESSAGE_STATUS_VALUE.SENDING })),
-    repliedMessage: null
+    repliedMessage: replyToIndex
+      ? buildFixtureRepliedMessage(prefix, messageSources, replyToIndex, imageObjectById)
+      : null
   }
 }
 
@@ -315,61 +352,23 @@ const buildFixtureMessages = (
   prefix: string,
   roomUserIds: readonly string[],
   roomNicknames: readonly string[],
+  messageSources: readonly FixtureMessageData[],
+  createdAtOffsetMs: number,
   imageObjectById: ReadonlyMap<string, ImageObject>
 ) => [
-  ...Array.from({ length: FIXTURE_MESSAGE_COUNT }, (_, idx) =>
-    buildFixtureMessage(idx + 1, prefix, roomUserIds, roomNicknames, imageObjectById)
-  ),
-  buildFixtureSendingMessage(prefix, roomUserIds, roomNicknames, imageObjectById)
-]
-
-const buildFrontendCoreSelfPhotoMessage = (
-  roomUserIds: readonly string[],
-  imageObjectById: ReadonlyMap<string, ImageObject>
-) => {
-  const createdAt =
-    BASE_FIXTURE_TIMESTAMP_MS +
-    FRONTEND_CORE_SELF_PHOTO_MESSAGE_INDEX * (37 * MINUTE_IN_MS) +
-    Math.floor(FRONTEND_CORE_SELF_PHOTO_MESSAGE_INDEX / 18) * DAY_IN_MS
-
-  return {
-    _id: buildFixtureMessageId(FRONTEND_CORE_FIXTURE_MESSAGE_ID_PREFIX, FRONTEND_CORE_SELF_PHOTO_MESSAGE_INDEX),
-    authorId: ERLAN_ID,
-    authorNickname: 'erlan',
-    body: buildFixtureMessageBody(FRONTEND_CORE_SELF_PHOTO_MESSAGE_INDEX),
-    createdAt,
-    reactions: [],
-    images: resolveFixtureMessageImages([FIXTURE_MESSAGE_IMAGE_FILES[2].id], imageObjectById),
-    usersMetaData: roomUserIds.map((id) => ({ id, status: MESSAGE_STATUS_VALUE.DELIVERED })),
-    repliedMessage: null
-  }
-}
-
-const buildFrontendCoreFixtureMessages = (
-  roomUserIds: readonly string[],
-  roomNicknames: readonly string[],
-  imageObjectById: ReadonlyMap<string, ImageObject>
-) => [
-  ...buildFixtureMessages(FRONTEND_CORE_FIXTURE_MESSAGE_ID_PREFIX, roomUserIds, roomNicknames, imageObjectById),
-  buildFrontendCoreSelfPhotoMessage(roomUserIds, imageObjectById)
-]
-
-const buildLongPrivateFixtureMessage = (idx: number, contactId: string, contactNickname: string) => ({
-  _id: buildFixtureMessageId(LONG_PRIVATE_FIXTURE_MESSAGE_ID_PREFIX, idx),
-  authorId: contactId,
-  authorNickname: contactNickname,
-  body: `${LONG_PRIVATE_FIXTURE_MESSAGE_BODY} ${String(idx).padStart(2, '0')}.`,
-  createdAt: BASE_FIXTURE_TIMESTAMP_MS + LONG_PRIVATE_FIXTURE_CREATED_AT_OFFSET_MS + idx * MINUTE_IN_MS,
-  reactions: [],
-  images: [],
-  usersMetaData: [ERLAN_ID, contactId].map((id) => ({ id, status: MESSAGE_STATUS_VALUE.DELIVERED })),
-  repliedMessage: null
-})
-
-const buildLongPrivateFixtureMessages = (contactId: string, contactNickname: string) =>
-  Array.from({ length: LONG_PRIVATE_FIXTURE_MESSAGE_COUNT }, (_, idx) =>
-    buildLongPrivateFixtureMessage(idx + 1, contactId, contactNickname)
+  ...messageSources.map((messageSource, index) =>
+    buildFixtureMessage(
+      index + 1,
+      prefix,
+      roomUserIds,
+      roomNicknames,
+      messageSources,
+      messageSource,
+      createdAtOffsetMs,
+      imageObjectById
+    )
   )
+]
 
 const setFixtureContact = async (userId: string, contactId: string, interaction: FixtureContactData['interaction']) => {
   await UserModel.updateOne(
@@ -391,87 +390,53 @@ const removeFixtureContact = async (userId: string, contactId: string) => {
 }
 
 const ensureFixtureContact = async ({ nickname, interaction, reverseInteraction }: FixtureContactData) => {
-  const fixture = USER_BY_NICKNAME[nickname]
+  const fixture = USER_BY_NICKNAME[nickname]!
 
-  if (!fixture) {
-    return
-  }
-
-  await setFixtureContact(ERLAN_ID, fixture.id, interaction)
+  await setFixtureContact(PRIMARY_FIXTURE_USER_ID, fixture.id, interaction)
 
   if (reverseInteraction) {
-    await setFixtureContact(fixture.id, ERLAN_ID, reverseInteraction)
+    await setFixtureContact(fixture.id, PRIMARY_FIXTURE_USER_ID, reverseInteraction)
     return
   }
 
-  await removeFixtureContact(fixture.id, ERLAN_ID)
+  await removeFixtureContact(fixture.id, PRIMARY_FIXTURE_USER_ID)
 }
 
 const ensureFixtureContacts = async () => {
   await Promise.all(FIXTURE_CONTACTS.map(ensureFixtureContact))
 }
 
-const ensureDirectRoom = async () => {
+const ensureDirectRoom = async (firstUserId: string, secondUserId: string) => {
   const existingRoom = await ChatRoomModel.findOne({
-    users: { $all: [ERLAN_ID, TOLIK_ID], $size: 2 }
+    users: { $all: [firstUserId, secondUserId], $size: 2 }
   })
 
   if (existingRoom) {
-    await UserModel.updateOne({ _id: ERLAN_ID }, { $addToSet: { 'personal.chatRooms': existingRoom.id } })
-    await UserModel.updateOne({ _id: TOLIK_ID }, { $addToSet: { 'personal.chatRooms': existingRoom.id } })
+    await UserModel.updateOne({ _id: firstUserId }, { $addToSet: { 'personal.chatRooms': existingRoom.id } })
+    await UserModel.updateOne({ _id: secondUserId }, { $addToSet: { 'personal.chatRooms': existingRoom.id } })
     return existingRoom
   }
 
   const room = await new ChatRoomModel({
-    adminId: ERLAN_ID,
+    adminId: firstUserId,
     chatKind: CHAT_KIND.DIRECT,
-    users: [ERLAN_ID, TOLIK_ID],
+    users: [firstUserId, secondUserId],
     chatName: '',
     pinnedMessageId: null,
     messages: []
   }).save()
 
-  await UserModel.updateOne({ _id: ERLAN_ID }, { $addToSet: { 'personal.chatRooms': room.id } })
-  await UserModel.updateOne({ _id: TOLIK_ID }, { $addToSet: { 'personal.chatRooms': room.id } })
-
-  return room
-}
-
-const ensureLongPrivateFixtureRoom = async (contactId: string) => {
-  const existingRoom = await ChatRoomModel.findOne({
-    users: { $all: [ERLAN_ID, contactId], $size: 2 }
-  })
-
-  if (existingRoom) {
-    await UserModel.updateOne({ _id: ERLAN_ID }, { $addToSet: { 'personal.chatRooms': existingRoom.id } })
-    await UserModel.updateOne({ _id: contactId }, { $addToSet: { 'personal.chatRooms': existingRoom.id } })
-    return existingRoom
-  }
-
-  const room = await new ChatRoomModel({
-    adminId: ERLAN_ID,
-    chatKind: CHAT_KIND.DIRECT,
-    users: [ERLAN_ID, contactId],
-    chatName: '',
-    pinnedMessageId: null,
-    messages: []
-  }).save()
-
-  await UserModel.updateOne({ _id: ERLAN_ID }, { $addToSet: { 'personal.chatRooms': room.id } })
-  await UserModel.updateOne({ _id: contactId }, { $addToSet: { 'personal.chatRooms': room.id } })
+  await UserModel.updateOne({ _id: firstUserId }, { $addToSet: { 'personal.chatRooms': room.id } })
+  await UserModel.updateOne({ _id: secondUserId }, { $addToSet: { 'personal.chatRooms': room.id } })
 
   return room
 }
 
 const ensureGroupRooms = async () => {
   const rooms = await Promise.all(
-    FIXTURE_GROUPS.map(async ({ key, adminNickname, chatName, nicknames }) => {
-      const users = compact(nicknames.map((nickname) => USER_BY_NICKNAME[nickname]?.id))
-      const adminId = USER_BY_NICKNAME[adminNickname]?.id
-
-      if (!adminId || users.length !== nicknames.length) {
-        return null
-      }
+    FIXTURE_GROUPS.map(async ({ key, adminNickname, chatName, avatarId, avatarPath, nicknames }) => {
+      const users = nicknames.map((nickname) => USER_BY_NICKNAME[nickname]!.id)
+      const adminId = USER_BY_NICKNAME[adminNickname]!.id
 
       const existingRoom = await ChatRoomModel.findOne({
         chatName,
@@ -484,9 +449,12 @@ const ensureGroupRooms = async () => {
           chatKind: CHAT_KIND.GROUP,
           users,
           chatName,
+          avatarId: null,
           pinnedMessageId: null,
           messages: []
         }).save())
+
+      await ensureChatRoomAvatarLoaded(room, avatarId, avatarPath)
 
       await Promise.all(
         users.map(async (userId) => {
@@ -503,7 +471,7 @@ const ensureGroupRooms = async () => {
     })
   )
 
-  return compact(rooms)
+  return rooms
 }
 
 const ensureMessages = async (roomId: string, fixtureMessages: ReturnType<typeof buildFixtureMessages>) => {
@@ -527,39 +495,88 @@ const ensureMessages = async (roomId: string, fixtureMessages: ReturnType<typeof
 }
 
 const loadDialogFixtures = async () => {
-  if (!ERLAN_ID || !TOLIK_ID) {
-    throw new AppError(REQ_STATUS.server, USER_I18N.userNotFound)
-  }
-
   await ensureFixtureContacts()
-  const directRoom = await ensureDirectRoom()
-  const longPrivateFixtureContact = USER_BY_NICKNAME[LONG_PRIVATE_FIXTURE_CONTACT_NICKNAME]
+  const directRoom = await ensureDirectRoom(PRIMARY_FIXTURE_USER_ID, DIRECT_FIXTURE_CONTACT_USER_ID)
+  const secondaryDirectRoom = await ensureDirectRoom(PRIMARY_FIXTURE_USER_ID, SECONDARY_DIRECT_FIXTURE_CONTACT_USER_ID)
+  const tertiaryDirectRoom = await ensureDirectRoom(PRIMARY_FIXTURE_USER_ID, TERTIARY_DIRECT_FIXTURE_CONTACT_USER_ID)
+  const quaternaryDirectRoom = await ensureDirectRoom(
+    PRIMARY_FIXTURE_USER_ID,
+    QUATERNARY_DIRECT_FIXTURE_CONTACT_USER_ID
+  )
 
   await ensureFixtureMessageImagesLoaded()
   const imageObjectById = await loadFixtureMessageImageObjectById()
   await ensureMessages(
     directRoom.id,
-    buildFixtureMessages(DIRECT_FIXTURE_MESSAGE_ID_PREFIX, [ERLAN_ID, TOLIK_ID], ['erlan', 'tolik'], imageObjectById)
+    buildFixtureMessages(
+      DIRECT_FIXTURE_MESSAGE_ID_PREFIX,
+      [PRIMARY_FIXTURE_USER_ID, DIRECT_FIXTURE_CONTACT_USER_ID],
+      [PRIMARY_FIXTURE_NICKNAME, DIRECT_FIXTURE_CONTACT_NICKNAME],
+      DIRECT_FIXTURE_MESSAGES,
+      DIRECT_FIXTURE_CREATED_AT_OFFSET_MS,
+      imageObjectById
+    )
+  )
+  await ensureMessages(
+    secondaryDirectRoom.id,
+    buildFixtureMessages(
+      SECONDARY_DIRECT_FIXTURE_MESSAGE_ID_PREFIX,
+      [PRIMARY_FIXTURE_USER_ID, SECONDARY_DIRECT_FIXTURE_CONTACT_USER_ID],
+      [PRIMARY_FIXTURE_NICKNAME, SECONDARY_DIRECT_FIXTURE_CONTACT_NICKNAME],
+      SECONDARY_DIRECT_FIXTURE_MESSAGES,
+      SECONDARY_DIRECT_FIXTURE_CREATED_AT_OFFSET_MS,
+      imageObjectById
+    )
+  )
+  await ensureMessages(
+    tertiaryDirectRoom.id,
+    buildFixtureMessages(
+      TERTIARY_DIRECT_FIXTURE_MESSAGE_ID_PREFIX,
+      [PRIMARY_FIXTURE_USER_ID, TERTIARY_DIRECT_FIXTURE_CONTACT_USER_ID],
+      [PRIMARY_FIXTURE_NICKNAME, TERTIARY_DIRECT_FIXTURE_CONTACT_NICKNAME],
+      TERTIARY_DIRECT_FIXTURE_MESSAGES,
+      TERTIARY_DIRECT_FIXTURE_CREATED_AT_OFFSET_MS,
+      imageObjectById
+    )
+  )
+  await ensureMessages(
+    quaternaryDirectRoom.id,
+    buildFixtureMessages(
+      QUATERNARY_DIRECT_FIXTURE_MESSAGE_ID_PREFIX,
+      [PRIMARY_FIXTURE_USER_ID, QUATERNARY_DIRECT_FIXTURE_CONTACT_USER_ID],
+      [PRIMARY_FIXTURE_NICKNAME, QUATERNARY_DIRECT_FIXTURE_CONTACT_NICKNAME],
+      QUATERNARY_DIRECT_FIXTURE_MESSAGES,
+      QUATERNARY_DIRECT_FIXTURE_CREATED_AT_OFFSET_MS,
+      imageObjectById
+    )
   )
 
-  if (longPrivateFixtureContact) {
-    const longPrivateRoom = await ensureLongPrivateFixtureRoom(longPrivateFixtureContact.id)
-
-    await ensureMessages(
-      longPrivateRoom.id,
-      buildLongPrivateFixtureMessages(longPrivateFixtureContact.id, longPrivateFixtureContact.nickname)
-    )
-  }
-
   const groupRooms = await ensureGroupRooms()
-  const frontendCoreRoom = groupRooms.find(({ key }) => key === FRONTEND_CORE_FIXTURE_GROUP_KEY)
+  const productStudioRoom = groupRooms.find(({ key }) => key === PRODUCT_STUDIO_FIXTURE_GROUP_KEY)!
+  const weekendHouseRoom = groupRooms.find(({ key }) => key === WEEKEND_HOUSE_FIXTURE_GROUP_KEY)!
 
-  if (frontendCoreRoom) {
-    await ensureMessages(
-      frontendCoreRoom.room.id,
-      buildFrontendCoreFixtureMessages(frontendCoreRoom.users, frontendCoreRoom.nicknames, imageObjectById)
+  await ensureMessages(
+    productStudioRoom.room.id,
+    buildFixtureMessages(
+      PRODUCT_STUDIO_FIXTURE_MESSAGE_ID_PREFIX,
+      productStudioRoom.users,
+      productStudioRoom.nicknames,
+      PRODUCT_STUDIO_FIXTURE_MESSAGES,
+      PRODUCT_STUDIO_FIXTURE_CREATED_AT_OFFSET_MS,
+      imageObjectById
     )
-  }
+  )
+  await ensureMessages(
+    weekendHouseRoom.room.id,
+    buildFixtureMessages(
+      WEEKEND_HOUSE_FIXTURE_MESSAGE_ID_PREFIX,
+      weekendHouseRoom.users,
+      weekendHouseRoom.nicknames,
+      WEEKEND_HOUSE_FIXTURE_MESSAGES,
+      WEEKEND_HOUSE_FIXTURE_CREATED_AT_OFFSET_MS,
+      imageObjectById
+    )
+  )
 }
 
 export const loadFixtures = async () => {
@@ -567,5 +584,6 @@ export const loadFixtures = async () => {
   await ensureUserPersonalContactsState()
   await ensureUserPersonalChatRoomState()
   await ensureChatRoomAvatarState()
+  await cleanupLegacyFixtureData()
   await loadDialogFixtures()
 }

@@ -2,6 +2,7 @@
 import { NmorphBadge, NmorphCard, NmorphButton, NmorphIconExit, NmorphIcon } from '@nmorph/nmorph-ui-kit'
 
 import { useUser } from 'src/entities/user'
+import { ONBOARDING_GUIDE_STEP, OnboardingGuideTarget } from 'src/features/onboarding-guide'
 import { CallActivityPanel } from 'src/features/room-call-session'
 import { AppProfileBasicData } from 'src/shared/ui'
 
@@ -17,18 +18,20 @@ const { socketTag } = useTopBarSocketStatus()
 
 <template>
   <NmorphCard tag="header" class="top-bar" content-class="top-bar__content">
-    <AppProfileBasicData :image-alt="user.nickname" :image-id="avatarId" :title="user.nickname" :name="user.nickname">
-      <template #description>
-        <NmorphBadge
-          v-if="socketTag"
-          :class="{ 'top-bar__socket-badge--blinking': socketTag.isBlinking }"
-          :value="socketTag.value"
-          type="tag"
-          :color="socketTag.color"
-          size="tiny"
-        />
-      </template>
-    </AppProfileBasicData>
+    <OnboardingGuideTarget class="top-bar__profile-guide-target" :name="ONBOARDING_GUIDE_STEP.topBar">
+      <AppProfileBasicData :image-alt="user.nickname" :image-id="avatarId" :title="user.nickname" :name="user.nickname">
+        <template #description>
+          <NmorphBadge
+            v-if="socketTag"
+            :class="{ 'top-bar__socket-badge--blinking': socketTag.isBlinking }"
+            :value="socketTag.value"
+            type="tag"
+            :color="socketTag.color"
+            size="tiny"
+          />
+        </template>
+      </AppProfileBasicData>
+    </OnboardingGuideTarget>
     <div class="top-bar__content-right-side">
       <CallActivityPanel @open-room-call="openRoomCall" />
       <NmorphCard shadow-type="inset" :fill="false">
