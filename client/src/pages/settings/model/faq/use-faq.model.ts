@@ -10,6 +10,10 @@ export const useFaq = () => {
   const { openGuide } = useOnboardingGuide()
   const searchQuery = ref('')
 
+  const contactSupport = () => {
+    window.location.href = `mailto:${__CLIENT_ENV_DATA__.supportEmail}`
+  }
+
   const filteredItems = computed(() => {
     const query = searchQuery.value.toLowerCase()
 
@@ -24,8 +28,10 @@ export const useFaq = () => {
   })
 
   return {
+    contactSupport,
     filteredItems,
     openGuide,
-    searchQuery
+    searchQuery,
+    supportEmail: __CLIENT_ENV_DATA__.supportEmail
   }
 }
