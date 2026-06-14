@@ -178,5 +178,125 @@ export const SETTINGS_PAGE_FAQ_I18N = {
     en: 'First check Settings → Devices in K-Room and the site permissions in the browser address bar. On Windows, open Start → Settings → Privacy & security → Microphone or Camera, then enable device access and desktop app access for the browser. On macOS, open Apple menu → System Settings → Privacy & Security → Microphone, Camera, and Screen & System Audio Recording, then allow your browser.',
     ru: 'Сначала проверьте Настройки → Устройства в K-Room и разрешения сайта в адресной строке браузера. На Windows: Пуск → Параметры → Конфиденциальность и безопасность → Микрофон или Камера; включите доступ к устройству и доступ для классических приложений/браузера. На macOS: меню Apple → Системные настройки → Конфиденциальность и безопасность → Микрофон, Камера, Запись экрана и системного аудио; разрешите доступ браузеру.',
     zh: '先检查 K-Room 的设置 → 设备，以及浏览器地址栏中的网站权限。在 Windows 上，打开开始 → 设置 → 隐私和安全性 → 麦克风或摄像头，然后为浏览器启用设备访问和桌面应用访问。在 macOS 上，打开 Apple 菜单 → 系统设置 → 隐私与安全性 → 麦克风、摄像头、屏幕与系统音频录制，然后允许浏览器访问。'
+  },
+  faqQ16: {
+    en: 'How do I change my email?',
+    ru: 'Как изменить email?',
+    zh: '如何修改 email？'
+  },
+  faqA16: {
+    en: 'Go to Settings → Account. Enter a new email, send the code, then enter the code from the email and click "Validate code".',
+    ru: 'Перейдите в Настройки → Аккаунт. Введите новый email, отправьте код, затем введите код из письма и нажмите «Проверить код».',
+    zh: '前往设置 → 账号。输入新的 email，发送验证码，然后输入邮件中的验证码并点击"验证验证码"。'
+  },
+  faqQ17: {
+    en: 'How do I find and add contacts?',
+    ru: 'Как найти и добавить контакты?',
+    zh: '如何查找并添加联系人？'
+  },
+  faqA17: {
+    en: 'Open Contacts and use search. Global search helps find users outside your contact list. Send an invite; after it is accepted, the user appears in Added.',
+    ru: 'Откройте Контакты и используйте поиск. Глобальный поиск помогает найти пользователей вне вашего списка контактов. Отправьте приглашение; после принятия пользователь появится в Добавленных.',
+    zh: '打开联系人并使用搜索。全局搜索可以查找联系人列表之外的用户。发送邀请；对方接受后，该用户会出现在已添加列表中。'
+  },
+  faqQ18: {
+    en: 'What do contact statuses mean?',
+    ru: 'Что означают статусы контактов?',
+    zh: '联系人状态是什么意思？'
+  },
+  faqA18: {
+    en: 'Invited means you sent a request. Invite received means the request is waiting for Accept or Decline. Blocked contacts move to the blacklist until you unblock them.',
+    ru: '«Приглашен» означает, что вы отправили заявку. «Приглашение» ожидает действия «Принять» или «Отклонить». Заблокированные контакты попадают в черный список, пока вы их не разблокируете.',
+    zh: '"已邀请"表示你已发送请求。"收到邀请"表示请求正在等待接受或拒绝。被拉黑的联系人会进入黑名单，直到你取消拉黑。'
+  },
+  faqQ19: {
+    en: 'How do I create a private or group chat?',
+    ru: 'Как создать личный или групповой чат?',
+    zh: '如何创建私聊或群聊？'
+  },
+  faqA19: {
+    en: 'In Chats, click "Create chat", or use the contact actions menu. Choose one accepted contact for a private chat or several contacts for a group chat. For groups, you can set a name and chat image.',
+    ru: 'В Чатах нажмите «Создать чат» или используйте меню действий контакта. Выберите один подтвержденный контакт для личного чата или несколько контактов для группы. Для группы можно задать название и изображение чата.',
+    zh: '在聊天中点击"创建聊天"，或使用联系人操作菜单。选择一个已接受联系人创建私聊，或选择多个联系人创建群聊。群聊可以设置名称和聊天图片。'
+  },
+  faqQ20: {
+    en: 'What can I do from the chat actions menu?',
+    ru: 'Что можно сделать в меню действий чата?',
+    zh: '聊天操作菜单可以做什么？'
+  },
+  faqA20: {
+    en: 'Open the chat actions menu to open a chat, mark it as read, pin or unpin it, mute or unmute notifications, and start an audio call. In group chats, available actions can also include editing, leaving or deleting the group.',
+    ru: 'Откройте меню действий чата, чтобы открыть чат, отметить его прочитанным, закрепить или открепить, выключить или включить уведомления и начать аудиозвонок. В групповых чатах также могут быть доступны редактирование, выход или удаление группы.',
+    zh: '打开聊天操作菜单，可以打开聊天、标为已读、置顶或取消置顶、静音或取消静音通知，并开始语音通话。在群聊中，还可能有编辑、退出或删除群组等操作。'
+  },
+  faqQ21: {
+    en: 'How do I start a call?',
+    ru: 'Как начать звонок?',
+    zh: '如何开始通话？'
+  },
+  faqA21: {
+    en: 'Use the chat actions menu to start an audio call, or open a chat and switch to the Call view for audio, video and screen sharing controls.',
+    ru: 'Используйте меню действий чата, чтобы начать аудиозвонок, или откройте чат и переключитесь в режим «Звонок» для управления аудио, видео и демонстрацией экрана.',
+    zh: '使用聊天操作菜单可以开始语音通话，或打开聊天并切换到通话视图，以控制语音、视频和屏幕共享。'
+  },
+  faqQ22: {
+    en: 'Where can I see call history and active calls?',
+    ru: 'Где посмотреть историю и активные звонки?',
+    zh: '在哪里查看通话历史和活动通话？'
+  },
+  faqA22: {
+    en: 'Open Calls to see active, missed and finished calls. The top bar also shows active or incoming calls, and you can use it to return to the related chat.',
+    ru: 'Откройте Звонки, чтобы увидеть активные, пропущенные и завершенные звонки. Верхняя панель также показывает активные или входящие звонки и позволяет вернуться в связанный чат.',
+    zh: '打开通话可以查看进行中、未接和已结束的通话。顶部栏也会显示活动或来电通话，并可返回相关聊天。'
+  },
+  faqQ23: {
+    en: 'What can I control during a call?',
+    ru: 'Чем можно управлять во время звонка?',
+    zh: '通话中可以控制什么？'
+  },
+  faqA23: {
+    en: 'In the Call view, you can manage microphone, camera and screen sharing, switch between focus and grid views, and use quick commands such as raise hand, ok, yes and no.',
+    ru: 'В режиме «Звонок» можно управлять микрофоном, камерой и демонстрацией экрана, переключаться между фокусным режимом и сеткой, а также использовать быстрые команды: поднять руку, ок, да и нет.',
+    zh: '在通话视图中，可以管理麦克风、摄像头和屏幕共享，切换焦点视图和网格视图，并使用举手、好、是、否等快捷指令。'
+  },
+  faqQ24: {
+    en: 'How do I reopen the guide?',
+    ru: 'Как снова открыть гид?',
+    zh: '如何重新打开指南？'
+  },
+  faqA24: {
+    en: 'Open Settings → FAQ and click "Show guide". The guide explains the main navigation, top bar, section list and workspace.',
+    ru: 'Откройте Настройки → FAQ и нажмите «Показать гид». Гид объясняет главную навигацию, верхнюю панель, список раздела и рабочую область.',
+    zh: '打开设置 → FAQ，然后点击"显示指南"。指南会说明主导航、顶部栏、分区列表和工作区。'
+  },
+  faqQ25: {
+    en: 'How do I contact support?',
+    ru: 'Как связаться с поддержкой?',
+    zh: '如何联系支持？'
+  },
+  faqA25: {
+    en: 'Open Settings → FAQ and click "Contact support". The support email is shown next to the button, and the button opens it in your email app.',
+    ru: 'Откройте Настройки → FAQ и нажмите «Написать в поддержку». Email поддержки показан рядом с кнопкой, а кнопка открывает его в почтовом приложении.',
+    zh: '打开设置 → FAQ，然后点击"联系客服"。支持 email 会显示在按钮旁边，按钮会在你的邮件应用中打开它。'
+  },
+  faqQ26: {
+    en: 'How do I change the date and time format?',
+    ru: 'Как изменить формат даты и времени?',
+    zh: '如何修改日期和时间格式？'
+  },
+  faqA26: {
+    en: 'Go to Settings → Localization and select a date and time format. Automatic uses the format from your device or browser locale.',
+    ru: 'Перейдите в Настройки → Локализация и выберите формат даты и времени. Автоматический режим использует формат устройства или языка браузера.',
+    zh: '前往设置 → 本地化并选择日期和时间格式。自动模式会使用设备或浏览器语言环境的格式。'
+  },
+  faqQ27: {
+    en: 'What do notification channels mean?',
+    ru: 'Что означают каналы уведомлений?',
+    zh: '通知渠道是什么意思？'
+  },
+  faqA27: {
+    en: 'In Settings → Notifications, you can turn all notifications on or off, or configure separate channels: toasts, sound, vibration, browser push and native push for messages and calls.',
+    ru: 'В Настройках → Уведомления можно включить или отключить все уведомления сразу либо настроить отдельные каналы: тосты, звук, вибрацию, браузерные push и нативные push для сообщений и звонков.',
+    zh: '在设置 → 通知中，可以开启或关闭所有通知，也可以分别配置消息和通话的应用内提示、声音、振动、浏览器推送和原生推送。'
   }
 } as const
