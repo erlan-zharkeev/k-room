@@ -1,5 +1,6 @@
-import { computed, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 
+import { useUser, useUserOnboarding } from 'src/entities/user'
 import { useI18n } from 'src/shared/lib'
 
 import { ONBOARDING_GUIDE_STEP, ONBOARDING_GUIDE_STEP_CONFIGS } from '../config/constants'
@@ -11,6 +12,8 @@ const activeGuideStep = ref<OnboardingGuideStepName>(ONBOARDING_GUIDE_STEP.navig
 
 export const useOnboardingGuide = () => {
   const { t } = useI18n()
+  const { user } = useUser()
+  const { updateUserOnboarding } = useUserOnboarding()
 
   const guideStepMap = computed(() =>
     ONBOARDING_GUIDE_STEP_CONFIGS.reduce((acc, step) => {
@@ -38,8 +41,30 @@ export const useOnboardingGuide = () => {
     isGuideVisible.value = true
   }
 
-  const completeGuide = () => {
+  const openPendingGuide = () => {
+    if (!user.value.onboarding.guideCompleted) {
+      openGuide()
+    }
+  }
+
+  const initializeGuide = () => {
+    onMounted(async () => {
+      await nextTick()
+
+      const { guideCompleted, welcomeCompleted } = user.value.onboarding
+
+      if (welcomeCompleted && !guideCompleted) {
+        openGuide()
+      }
+    })
+  }
+
+  const completeGuide = async () => {
     isGuideVisible.value = false
+
+    if (!user.value.onboarding.guideCompleted) {
+      await updateUserOnboarding({ guideCompleted: true })
+    }
   }
 
   return {
@@ -47,7 +72,9 @@ export const useOnboardingGuide = () => {
     completeGuide,
     guideLabels,
     guideStepMap,
+    initializeGuide,
     isGuideVisible,
-    openGuide
+    openGuide,
+    openPendingGuide
   }
 }
