@@ -84,7 +84,7 @@ export type {
 } from './chat/types'
 
 export { EMAIL_CODE_LENGTH } from './codes/constants'
-export type { Codes, EmailCodeRequestPayload, EmailCodeValidationPayload } from './codes/types'
+export type { EmailCodeRequestPayload, EmailCodeValidationPayload } from './codes/types'
 
 export type {
   Interaction,

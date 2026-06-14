@@ -8,11 +8,6 @@ const mediaMock = vi.hoisted(() => ({
   withUploadedMediaCleanup: vi.fn(async (callback) => callback(vi.fn()))
 }))
 
-const codeModelMock = vi.hoisted(() => ({
-  findOne: vi.fn(),
-  updateOne: vi.fn()
-}))
-
 const userModelMock = vi.hoisted(() => {
   class UserModel {
     static findOne = vi.fn()
@@ -41,7 +36,6 @@ const userModelMock = vi.hoisted(() => {
 })
 
 vi.mock('../media/media.service', () => mediaMock)
-vi.mock('../codes/codes.model', () => ({ CodeModel: codeModelMock }))
 vi.mock('./user.model', () => ({ UserModel: userModelMock.UserModel }))
 
 const userServiceModule = await import('./user.service')
@@ -79,7 +73,7 @@ describe('user.service', () => {
   })
 
   it('finds user by normalized nickname or trimmed email login', async () => {
-    const service = new UserService()
+    const service = new UserService({} as never)
 
     userModelMock.UserModel.findOne.mockResolvedValueOnce({ _id: 'user-by-nickname' })
     userModelMock.UserModel.findOne.mockResolvedValueOnce({ _id: 'user-by-email' })
@@ -146,20 +140,11 @@ describe('user.service', () => {
   })
 
   it('resets password only with valid query token and clears used recovery state', async () => {
-    const service = new UserService()
-
-    vi.spyOn(Date, 'now').mockReturnValue(100_000)
-    codeModelMock.findOne.mockResolvedValue({
-      _id: 'user-1',
-      codes: {
-        passwordRecovery: {
-          query: {
-            value: 'query-token',
-            expiresAt: 100_001
-          }
-        }
-      }
-    })
+    const securityService = {
+      getPasswordRecoveryQueryUserId: vi.fn().mockResolvedValue('user-1'),
+      clearPasswordRecoveryState: vi.fn()
+    }
+    const service = new UserService(securityService as never)
 
     await service.resetPassword({ codeToValidate: 'query-token', password: 'Asdf1234' })
 
@@ -167,25 +152,12 @@ describe('user.service', () => {
       { _id: 'user-1' },
       { 'system.password': expect.any(String) }
     )
-    expect(codeModelMock.updateOne).toHaveBeenCalledWith(
-      {
-        _id: 'user-1'
-      },
-      {
-        $set: {
-          'codes.passwordRecovery.query.value': '',
-          'codes.passwordRecovery.query.expiresAt': 0,
-          'codes.passwordRecovery.email.value': '',
-          'codes.passwordRecovery.email.expiresAt': 0,
-          nextRequestPossibleAt: null
-        }
-      }
-    )
+    expect(securityService.clearPasswordRecoveryState).toHaveBeenCalledWith('user-1')
   })
 
   it('changes user email when target email is free', async () => {
     const updateOne = vi.fn()
-    const service = new UserService()
+    const service = new UserService({} as never)
 
     userModelMock.UserModel.findById.mockResolvedValue({
       personal: { email: 'old@test.com' },
@@ -211,7 +183,7 @@ describe('user.service', () => {
 
   it('updates user onboarding flags and returns mapped user data', async () => {
     const id = new Types.ObjectId('68a09410778b70d522ea8faa')
-    const service = new UserService()
+    const service = new UserService({} as never)
 
     userModelMock.UserModel.findOneAndUpdate.mockResolvedValue({
       _id: id,

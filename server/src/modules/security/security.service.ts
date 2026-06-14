@@ -46,6 +46,18 @@ export class SecurityService {
     return [SECURITY_REDIS_KEY_PREFIX, SECURITY_ACTION.validateChangeEmailCode, 'code', userId].join(':')
   }
 
+  private buildPasswordRecoveryCodeKey(userId: string) {
+    return [SECURITY_REDIS_KEY_PREFIX, SECURITY_ACTION.validatePasswordRecoveryCode, 'code', userId].join(':')
+  }
+
+  private buildPasswordRecoveryQueryKey(query: string) {
+    return [SECURITY_REDIS_KEY_PREFIX, SECURITY_ACTION.validatePasswordRecoveryCode, 'query', query].join(':')
+  }
+
+  private buildPasswordRecoveryUserQueryKey(userId: string) {
+    return [SECURITY_REDIS_KEY_PREFIX, SECURITY_ACTION.validatePasswordRecoveryCode, 'user-query', userId].join(':')
+  }
+
   private buildPayload(
     action: SecurityAction,
     reason: ProtectedActionReason,
@@ -245,6 +257,62 @@ export class SecurityService {
 
   async trackSendPasswordRecoveryAttempt(ip: string, email: string) {
     await this.trackEmailIpAction(SECURITY_ACTION.sendPasswordRecoveryCode, email, ip, EMAIL_ACTION_WINDOW_MS)
+  }
+
+  async getSendPasswordRecoveryCodeCooldown(userId: string) {
+    return this.resolveActionCooldownUntil(SECURITY_ACTION.sendPasswordRecoveryCode, 'cooldown', userId)
+  }
+
+  private async clearPasswordRecoveryQuery(userId: string) {
+    const userQueryKey = this.buildPasswordRecoveryUserQueryKey(userId)
+    const query = await this.redisService.read(userQueryKey)
+    const keys = [userQueryKey]
+
+    if (query) {
+      keys.push(this.buildPasswordRecoveryQueryKey(query))
+    }
+
+    await this.redisService.removeMany(keys)
+  }
+
+  async getPasswordRecoveryCode(userId: string) {
+    return this.redisService.read(this.buildPasswordRecoveryCodeKey(userId))
+  }
+
+  async setPasswordRecoveryCode(userId: string, code: string, codeTtlMs: number, cooldownTtlMs: number) {
+    await this.clearPasswordRecoveryQuery(userId)
+    await Promise.all([
+      this.redisService.write(this.buildPasswordRecoveryCodeKey(userId), code, codeTtlMs),
+      this.redisService.write(
+        this.buildKey(SECURITY_ACTION.sendPasswordRecoveryCode, 'cooldown', userId),
+        '1',
+        cooldownTtlMs
+      )
+    ])
+  }
+
+  async setPasswordRecoveryQuery(userId: string, query: string, ttlMs: number) {
+    await this.clearPasswordRecoveryQuery(userId)
+    await Promise.all([
+      this.redisService.write(this.buildPasswordRecoveryQueryKey(query), userId, ttlMs),
+      this.redisService.write(this.buildPasswordRecoveryUserQueryKey(userId), query, ttlMs)
+    ])
+  }
+
+  async getPasswordRecoveryQueryUserId(query: string) {
+    return this.redisService.read(this.buildPasswordRecoveryQueryKey(query))
+  }
+
+  async clearPasswordRecoveryState(userId: string) {
+    const userQueryKey = this.buildPasswordRecoveryUserQueryKey(userId)
+    const query = await this.redisService.read(userQueryKey)
+    const keys = [this.buildPasswordRecoveryCodeKey(userId), userQueryKey]
+
+    if (query) {
+      keys.push(this.buildPasswordRecoveryQueryKey(query))
+    }
+
+    await this.redisService.removeMany(keys)
   }
 
   async getSendChangeEmailCodeCooldown(userId: string) {

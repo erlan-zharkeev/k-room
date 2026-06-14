@@ -12,10 +12,9 @@ import {
 
 import { AppError } from 'src/shared/lib/app-error'
 
-import { clearPasswordRecoveryCode, findPasswordRecoveryCodeByQuery } from '../codes/lib/code-persistence'
-import { isCodeExpired } from '../codes/lib/is-code-expired'
 import { deleteBucketFileById, withUploadedMediaCleanup } from '../media/media.service'
 import { emitToUsers } from '../presence/presence.utils'
+import { SecurityService } from '../security/security.service'
 
 import { resolveUserRelatedRecipientIds } from './lib/resolve-user-recipient-ids'
 import { mapUserToDto, transformUserToPreview } from './lib/transform-user'
@@ -36,6 +35,8 @@ import { UserModel } from './user.model'
 
 @Injectable()
 export class UserService {
+  constructor(private readonly securityService: SecurityService) {}
+
   mapUserToDto(user: UserSchema): UserData {
     return mapUserToDto(user)
   }
@@ -92,26 +93,16 @@ export class UserService {
   }
 
   async resetPassword({ codeToValidate, password }: CreateNewPasswordPayload) {
-    const code = await findPasswordRecoveryCodeByQuery(codeToValidate)
+    const userId = await this.securityService.getPasswordRecoveryQueryUserId(codeToValidate)
 
-    if (!code) {
+    if (!userId) {
       throw new AppError(REQ_STATUS.badRequest, RESET_PASSWORD_I18N.failed)
-    }
-
-    const { value, expiresAt } = code.codes.passwordRecovery.query
-
-    if (isCodeExpired(expiresAt)) {
-      throw new AppError(REQ_STATUS.badRequest, RESET_PASSWORD_I18N.codeExpired)
-    }
-
-    if (value !== codeToValidate) {
-      throw new AppError(REQ_STATUS.badRequest, RESET_PASSWORD_I18N.codeNotValid)
     }
 
     const hashedPassword = await bcrypt.hash(password, 6)
 
-    await UserModel.findOneAndUpdate({ _id: code._id }, { 'system.password': hashedPassword })
-    await clearPasswordRecoveryCode(String(code._id))
+    await UserModel.findOneAndUpdate({ _id: userId }, { 'system.password': hashedPassword })
+    await this.securityService.clearPasswordRecoveryState(userId)
   }
 
   async changePassword({ userId, currentPassword, password }: ChangePasswordParams) {
