@@ -4,7 +4,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import { useSettings, type DeviceSetting } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
-import { initClientData } from 'src/features/client-session'
+import { initClientData, useLogoutNavigation } from 'src/features/client-session'
 import { CallsPage } from 'src/pages/calls'
 import { ContactsPage } from 'src/pages/contacts'
 import { CreateNewPasswordPage } from 'src/pages/create-new-password'
@@ -152,6 +152,7 @@ export const router = createRouter({
 router.beforeEach(async (to) => {
   const { user } = useUser()
   const { settings, shallowUpdate } = useSettings()
+  const { isLogoutNavigationActive } = useLogoutNavigation()
 
   await initClientData()
   const isUserAuthorized = Boolean(user.value.id)
@@ -165,7 +166,7 @@ router.beforeEach(async (to) => {
     }
   }
 
-  if (to.meta.guestOnly && isUserAuthorized) {
+  if (to.meta.guestOnly && isUserAuthorized && !isLogoutNavigationActive.value) {
     return ROUTE_NAMES.app
   }
 

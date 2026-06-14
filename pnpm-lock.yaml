@@ -89,8 +89,8 @@ importers:
   client:
     dependencies:
       '@nmorph/nmorph-ui-kit':
-        specifier: ^3.0.8
-        version: 3.0.8(typescript@5.9.3)
+        specifier: ^3.0.10
+        version: 3.0.10(vue-i18n@9.14.5(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
       '@tanstack/vue-virtual':
         specifier: ^3.13.24
         version: 3.13.24(vue@3.5.33(typescript@5.9.3))
@@ -2007,11 +2007,13 @@ packages:
       '@nestjs/platform-socket.io':
         optional: true
 
-  '@nmorph/nmorph-ui-kit@3.0.8':
-    resolution: {integrity: sha512-eir/II9eW3hx8vf+9t7gzidY78J1X1e4oimFXsikahgi5xrSrV91Znvp9CfmHWyagXK/T61cL++tDOfTDBMEvg==}
+  '@nmorph/nmorph-ui-kit@3.0.10':
+    resolution: {integrity: sha512-FBJ79GT0Dk6avy74cGXkdsfj0UvbdRCAPm7eqdEyTCnPa/4XuGYkGb8ewDrEwevRYmY4+cov6JD6/eC4Jzvb6Q==}
     engines: {node: '>=18.13.0'}
     peerDependencies:
       nuxt: '>=3.0.0'
+      vue: '>=3.4.0'
+      vue-i18n: '>=9.0.0'
     peerDependenciesMeta:
       nuxt:
         optional: true
@@ -10022,12 +10024,10 @@ snapshots:
     optionalDependencies:
       '@nestjs/platform-socket.io': 10.4.22(@nestjs/common@10.4.22(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/websockets@10.4.22)(rxjs@7.8.2)
 
-  '@nmorph/nmorph-ui-kit@3.0.8(typescript@5.9.3)':
+  '@nmorph/nmorph-ui-kit@3.0.10(vue-i18n@9.14.5(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))':
     dependencies:
       vue: 3.5.33(typescript@5.9.3)
       vue-i18n: 9.14.5(vue@3.5.33(typescript@5.9.3))
-    transitivePeerDependencies:
-      - typescript
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:

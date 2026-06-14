@@ -2,6 +2,13 @@
 import { NmorphCard } from '@nmorph/nmorph-ui-kit'
 import { RouterView } from 'vue-router'
 
+import { AppWelcomeDialog } from 'src/features/app-welcome'
+import {
+  ONBOARDING_GUIDE_STEP,
+  OnboardingGuide,
+  OnboardingGuideTarget,
+  useOnboardingGuide
+} from 'src/features/onboarding-guide'
 import { useAppMonitors } from 'src/pages/app'
 import { useScreen } from 'src/shared/lib'
 import { LeftBar } from 'src/widgets/left-bar'
@@ -14,6 +21,7 @@ import { useAppLayout } from './use-app-layout.model'
 
 useAppMonitors()
 const { isPortraitTabletOrLess } = useScreen()
+const { openGuide } = useOnboardingGuide()
 const {
   showWallpaper,
   wallpaperStyle,
@@ -26,34 +34,49 @@ const {
 </script>
 
 <template>
-  <main class="app-layout" :class="{ 'app-layout--wallpaper': showWallpaper }" :style="wallpaperStyle">
-    <LeftBar v-if="!isPortraitTabletOrLess" class="widget" />
-    <section class="app-layout__workspace">
-      <TopBar class="widget" />
-      <div class="app-layout__content">
-        <NmorphCard v-if="showNavigation" class="app-layout__navigation-widget widget">
-          <ContentNavigationLayout :title-key="navigationTitleKey">
-            <RouterView v-slot="{ Component, route }" name="content-navigation">
-              <Transition name="app-route-motion" mode="out-in">
+  <AppWelcomeDialog @complete="openGuide" />
+  <OnboardingGuide>
+    <main class="app-layout" :class="{ 'app-layout--wallpaper': showWallpaper }" :style="wallpaperStyle">
+      <LeftBar v-if="!isPortraitTabletOrLess" class="widget" />
+      <section class="app-layout__workspace">
+        <TopBar class="widget" />
+        <div class="app-layout__content">
+          <OnboardingGuideTarget
+            v-if="showNavigation"
+            class="app-layout__guide-target"
+            :name="ONBOARDING_GUIDE_STEP.contentNavigation"
+          >
+            <NmorphCard class="app-layout__navigation-widget widget">
+              <ContentNavigationLayout :title-key="navigationTitleKey">
+                <RouterView v-slot="{ Component, route }" name="content-navigation">
+                  <Transition name="app-route-motion" mode="out-in">
+                    <component :is="Component" :key="route.matched[1]?.path ?? route.fullPath" />
+                  </Transition>
+                </RouterView>
+              </ContentNavigationLayout>
+            </NmorphCard>
+          </OnboardingGuideTarget>
+          <OnboardingGuideTarget
+            v-if="showContent"
+            class="app-layout__guide-target"
+            :name="ONBOARDING_GUIDE_STEP.content"
+          >
+            <NmorphCard class="app-layout__content-widget widget">
+              <ContentLayout v-if="isContentLayoutEnabled" :title-key="contentTitleKey">
+                <RouterView v-slot="{ Component, route }" name="content">
+                  <component :is="Component" :key="route.matched[1]?.path ?? route.fullPath" />
+                </RouterView>
+              </ContentLayout>
+              <RouterView v-else v-slot="{ Component, route }" name="content">
                 <component :is="Component" :key="route.matched[1]?.path ?? route.fullPath" />
-              </Transition>
-            </RouterView>
-          </ContentNavigationLayout>
-        </NmorphCard>
-        <NmorphCard v-if="showContent" class="app-layout__content-widget widget">
-          <ContentLayout v-if="isContentLayoutEnabled" :title-key="contentTitleKey">
-            <RouterView v-slot="{ Component, route }" name="content">
-              <component :is="Component" :key="route.matched[1]?.path ?? route.fullPath" />
-            </RouterView>
-          </ContentLayout>
-          <RouterView v-else v-slot="{ Component, route }" name="content">
-            <component :is="Component" :key="route.matched[1]?.path ?? route.fullPath" />
-          </RouterView>
-        </NmorphCard>
-      </div>
-      <MobileNavFooter v-if="isPortraitTabletOrLess" class="widget" />
-    </section>
-  </main>
+              </RouterView>
+            </NmorphCard>
+          </OnboardingGuideTarget>
+        </div>
+        <MobileNavFooter v-if="isPortraitTabletOrLess" class="widget" />
+      </section>
+    </main>
+  </OnboardingGuide>
 </template>
 
 <style lang="scss">
@@ -100,6 +123,24 @@ const {
 .app-layout__content-widget {
   min-width: 0;
   min-height: 0;
+}
+
+.app-layout__guide-target .widget {
+  flex: 1 1 auto;
+}
+
+.app-layout__guide-target.onboarding-guide-target--active .widget::after {
+  pointer-events: none;
+  content: '';
+
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+
+  border: 2px solid var(--app-guide-target-border-color);
+  border-radius: 8px;
+
+  box-shadow: var(--app-guide-target-shadow);
 }
 
 .widget {

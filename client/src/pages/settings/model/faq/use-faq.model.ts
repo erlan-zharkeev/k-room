@@ -1,11 +1,13 @@
 import { computed, ref } from 'vue'
 
+import { useOnboardingGuide } from 'src/features/onboarding-guide'
 import { useI18n } from 'src/shared/lib'
 
 import { FAQ_ITEMS } from '../../config/constants/faq.constants'
 
 export const useFaq = () => {
   const { t } = useI18n()
+  const { openGuide } = useOnboardingGuide()
   const searchQuery = ref('')
 
   const filteredItems = computed(() => {
@@ -22,7 +24,8 @@ export const useFaq = () => {
   })
 
   return {
-    searchQuery,
-    filteredItems
+    filteredItems,
+    openGuide,
+    searchQuery
   }
 }

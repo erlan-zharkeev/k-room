@@ -24,6 +24,11 @@ export const SETTINGS_PAGE_FAQ_I18N = {
     ru: 'Написать в поддержку',
     zh: '联系客服'
   },
+  faqOpenGuide: {
+    en: 'Show guide',
+    ru: 'Показать гид',
+    zh: '显示指南'
+  },
   faqQ1: {
     en: 'How do I change my nickname?',
     ru: 'Как изменить имя пользователя?',
