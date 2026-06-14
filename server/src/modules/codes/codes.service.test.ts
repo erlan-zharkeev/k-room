@@ -7,11 +7,6 @@ const cryptoMock = vi.hoisted(() => ({
   randomUUID: vi.fn(() => 'query-token')
 }))
 
-const codeModelMock = vi.hoisted(() => ({
-  findById: vi.fn(),
-  updateOne: vi.fn()
-}))
-
 vi.mock('node:crypto', async (importOriginal) => ({
   ...(await importOriginal<typeof Crypto>()),
   randomInt: cryptoMock.randomInt,
@@ -22,7 +17,6 @@ vi.mock('../../app/env', () => ({
     isDev: true
   }
 }))
-vi.mock('./codes.model', () => ({ CodeModel: codeModelMock }))
 
 const { CodesService } = await import('./codes.service')
 
@@ -37,31 +31,28 @@ describe('CodesService', () => {
     vi.useRealTimers()
   })
 
-  it('does not resend password recovery code before nextRequestPossibleAt', async () => {
+  it('does not resend password recovery code before redis cooldown ends', async () => {
     const emailService = {
       sendPasswordRecoveryEmail: vi.fn()
     }
     const userService = {
       findByEmail: vi.fn().mockResolvedValue({ _id: 'user-1', public: { nickname: 'tester' } })
     }
+    const securityService = {
+      assertSendPasswordRecoveryAllowed: vi.fn(),
+      trackSendPasswordRecoveryAttempt: vi.fn(),
+      getSendPasswordRecoveryCodeCooldown: vi.fn().mockResolvedValue(200_000),
+      setPasswordRecoveryCode: vi.fn()
+    }
 
-    codeModelMock.findById.mockResolvedValue({ nextRequestPossibleAt: 200_000 })
-
-    const service = new CodesService(
-      emailService as never,
-      userService as never,
-      {
-        assertSendPasswordRecoveryAllowed: vi.fn(),
-        trackSendPasswordRecoveryAttempt: vi.fn()
-      } as never
-    )
+    const service = new CodesService(emailService as never, userService as never, securityService as never)
     const result = await service.sendPasswordRecoveryCode({ email: 'user@test.com' }, {
       language: 'en',
       headers: {}
     } as never)
 
     expect(result).toEqual({ nextRequestTime: 200_000, tooManyRequests: true })
-    expect(codeModelMock.updateOne).not.toHaveBeenCalled()
+    expect(securityService.setPasswordRecoveryCode).not.toHaveBeenCalled()
     expect(emailService.sendPasswordRecoveryEmail).not.toHaveBeenCalled()
   })
 
@@ -75,36 +66,21 @@ describe('CodesService', () => {
         public: { nickname: 'tester' }
       })
     }
+    const securityService = {
+      assertSendPasswordRecoveryAllowed: vi.fn(),
+      trackSendPasswordRecoveryAttempt: vi.fn(),
+      getSendPasswordRecoveryCodeCooldown: vi.fn().mockResolvedValue(null),
+      setPasswordRecoveryCode: vi.fn()
+    }
 
-    codeModelMock.findById.mockResolvedValue(null)
-
-    const service = new CodesService(
-      emailService as never,
-      userService as never,
-      {
-        assertSendPasswordRecoveryAllowed: vi.fn(),
-        trackSendPasswordRecoveryAttempt: vi.fn()
-      } as never
-    )
+    const service = new CodesService(emailService as never, userService as never, securityService as never)
     const result = await service.sendPasswordRecoveryCode({ email: 'user@test.com' }, {
       language: 'en',
       headers: {}
     } as never)
 
     expect(result).toEqual({ nextRequestTime: 280_000, debugCode: '123456', tooManyRequests: false })
-    expect(codeModelMock.updateOne).toHaveBeenCalledWith(
-      { _id: 'user-1' },
-      {
-        $set: {
-          'codes.passwordRecovery.email.value': '123456',
-          'codes.passwordRecovery.email.expiresAt': 1_000_000,
-          'codes.passwordRecovery.query.value': '',
-          'codes.passwordRecovery.query.expiresAt': 0,
-          nextRequestPossibleAt: 280_000
-        }
-      },
-      { upsert: true }
-    )
+    expect(securityService.setPasswordRecoveryCode).toHaveBeenCalledWith('user-1', '123456', 900_000, 180_000)
     expect(emailService.sendPasswordRecoveryEmail).toHaveBeenCalledWith({
       email: 'user@test.com',
       code: '123456',
@@ -178,30 +154,21 @@ describe('CodesService', () => {
   })
 
   it('rejects expired password recovery code without creating query token', async () => {
-    const updateOne = vi.fn()
+    const securityService = {
+      assertValidatePasswordRecoveryCodeAllowed: vi.fn(),
+      getPasswordRecoveryCode: vi.fn().mockResolvedValue(null),
+      trackInvalidPasswordRecoveryCode: vi.fn().mockResolvedValue({ blocked: false }),
+      clearPasswordRecoveryState: vi.fn(),
+      setPasswordRecoveryQuery: vi.fn(),
+      clearPasswordRecoveryCodeFailures: vi.fn()
+    }
     const service = new CodesService(
       {} as never,
       {
         findByEmail: vi.fn().mockResolvedValue({ _id: 'user-1' })
       } as never,
-      {
-        assertValidatePasswordRecoveryCodeAllowed: vi.fn(),
-        clearPasswordRecoveryCodeFailures: vi.fn(),
-        trackInvalidPasswordRecoveryCode: vi.fn()
-      } as never
+      securityService as never
     )
-
-    codeModelMock.findById.mockResolvedValue({
-      codes: {
-        passwordRecovery: {
-          email: {
-            value: '123456',
-            expiresAt: 99_999
-          }
-        }
-      },
-      updateOne
-    })
 
     await expect(
       service.validatePasswordRecoveryCode({ email: 'user@test.com', code: '123456' }, {
@@ -209,34 +176,24 @@ describe('CodesService', () => {
         headers: {}
       } as never)
     ).rejects.toMatchObject({ status: 400 })
-    expect(updateOne).not.toHaveBeenCalled()
+    expect(securityService.setPasswordRecoveryQuery).not.toHaveBeenCalled()
   })
 
   it('converts a valid email code to query token for password reset', async () => {
-    const updateOne = vi.fn()
+    const securityService = {
+      assertValidatePasswordRecoveryCodeAllowed: vi.fn(),
+      getPasswordRecoveryCode: vi.fn().mockResolvedValue('123456'),
+      trackInvalidPasswordRecoveryCode: vi.fn(),
+      setPasswordRecoveryQuery: vi.fn(),
+      clearPasswordRecoveryCodeFailures: vi.fn()
+    }
     const service = new CodesService(
       {} as never,
       {
         findByEmail: vi.fn().mockResolvedValue({ _id: 'user-1' })
       } as never,
-      {
-        assertValidatePasswordRecoveryCodeAllowed: vi.fn(),
-        clearPasswordRecoveryCodeFailures: vi.fn(),
-        trackInvalidPasswordRecoveryCode: vi.fn()
-      } as never
+      securityService as never
     )
-
-    codeModelMock.findById.mockResolvedValue({
-      codes: {
-        passwordRecovery: {
-          email: {
-            value: '123456',
-            expiresAt: 100_001
-          }
-        }
-      },
-      updateOne
-    })
 
     const result = await service.validatePasswordRecoveryCode({ email: 'user@test.com', code: '123456' }, {
       language: 'en',
@@ -244,11 +201,6 @@ describe('CodesService', () => {
     } as never)
 
     expect(result).toEqual({ query: 'query-token' })
-    expect(updateOne).toHaveBeenCalledWith({
-      $set: {
-        'codes.passwordRecovery.query.value': 'query-token',
-        'codes.passwordRecovery.query.expiresAt': 1_300_000
-      }
-    })
+    expect(securityService.setPasswordRecoveryQuery).toHaveBeenCalledWith('user-1', 'query-token', 1_200_000)
   })
 })

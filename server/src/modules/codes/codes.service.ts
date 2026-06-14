@@ -23,9 +23,7 @@ import { UserService } from '../user/user.service'
 
 import { CODE_LIFE_MS, QUERY_LIFE_MS, RESEND_CODE_INTERVAL_MS } from './codes.constants'
 import { VALIDATE_CHANGE_EMAIL_CODE_I18N, VALIDATE_PASSWORD_RECOVERY_CODE_I18N } from './codes.i18n'
-import { CodeModel } from './codes.model'
 import type { SendChangeEmailCodeResult, SendPasswordRecoveryCodeResult } from './codes.types'
-import { isCodeExpired } from './lib/is-code-expired'
 
 @Injectable()
 export class CodesService {
@@ -56,11 +54,11 @@ export class CodesService {
     }
 
     const userId = String(user._id)
-    const existingCode = await CodeModel.findById(userId)
+    const cooldownUntil = await this.securityService.getSendPasswordRecoveryCodeCooldown(userId)
 
-    if (existingCode?.nextRequestPossibleAt && existingCode.nextRequestPossibleAt > nowTimestampMs) {
+    if (cooldownUntil && cooldownUntil > nowTimestampMs) {
       return {
-        nextRequestTime: existingCode.nextRequestPossibleAt,
+        nextRequestTime: cooldownUntil,
         tooManyRequests: true
       }
     }
@@ -68,20 +66,7 @@ export class CodesService {
     const code = String(randomInt(10 ** (EMAIL_CODE_LENGTH - 1), 10 ** EMAIL_CODE_LENGTH))
     const nextRequestTimestampMs = nowTimestampMs + RESEND_CODE_INTERVAL_MS
 
-    await CodeModel.updateOne(
-      { _id: userId },
-      {
-        $set: {
-          'codes.passwordRecovery.email.value': code,
-          'codes.passwordRecovery.email.expiresAt': nowTimestampMs + CODE_LIFE_MS,
-          'codes.passwordRecovery.query.value': '',
-          'codes.passwordRecovery.query.expiresAt': 0,
-          nextRequestPossibleAt: nextRequestTimestampMs
-        }
-      },
-      { upsert: true }
-    )
-
+    await this.securityService.setPasswordRecoveryCode(userId, code, CODE_LIFE_MS, RESEND_CODE_INTERVAL_MS)
     await this.emailService.sendPasswordRecoveryEmail({
       email,
       code,
@@ -217,16 +202,16 @@ export class CodesService {
       throw new AppError(REQ_STATUS.badRequest, VALIDATE_PASSWORD_RECOVERY_CODE_I18N.invalidCode)
     }
 
-    const codeDoc = await CodeModel.findById(String(user._id))
+    const userId = String(user._id)
+    const currentCode = await this.securityService.getPasswordRecoveryCode(userId)
 
-    if (!codeDoc) {
-      await this.securityService.trackInvalidPasswordRecoveryCode(ip, email)
-      throw new AppError(REQ_STATUS.badRequest, VALIDATE_PASSWORD_RECOVERY_CODE_I18N.invalidCode)
-    }
+    if (!currentCode) {
+      const { blocked } = await this.securityService.trackInvalidPasswordRecoveryCode(ip, email)
 
-    const { value: currentCode, expiresAt: currentCodeExpiresAtMs } = codeDoc.codes.passwordRecovery.email
+      if (blocked) {
+        await this.securityService.clearPasswordRecoveryState(userId)
+      }
 
-    if (isCodeExpired(currentCodeExpiresAtMs)) {
       throw new AppError(REQ_STATUS.badRequest, VALIDATE_PASSWORD_RECOVERY_CODE_I18N.expiredCode)
     }
 
@@ -234,14 +219,7 @@ export class CodesService {
       const { blocked } = await this.securityService.trackInvalidPasswordRecoveryCode(ip, email)
 
       if (blocked) {
-        await codeDoc.updateOne({
-          $set: {
-            'codes.passwordRecovery.query.value': '',
-            'codes.passwordRecovery.query.expiresAt': 0,
-            'codes.passwordRecovery.email.value': '',
-            'codes.passwordRecovery.email.expiresAt': 0
-          }
-        })
+        await this.securityService.clearPasswordRecoveryState(userId)
       }
 
       throw new AppError(REQ_STATUS.badRequest, VALIDATE_PASSWORD_RECOVERY_CODE_I18N.invalidCode)
@@ -249,12 +227,7 @@ export class CodesService {
 
     const query = randomUUID()
 
-    await codeDoc.updateOne({
-      $set: {
-        'codes.passwordRecovery.query.value': query,
-        'codes.passwordRecovery.query.expiresAt': Date.now() + QUERY_LIFE_MS
-      }
-    })
+    await this.securityService.setPasswordRecoveryQuery(userId, query, QUERY_LIFE_MS)
     await this.securityService.clearPasswordRecoveryCodeFailures(email)
 
     return {
