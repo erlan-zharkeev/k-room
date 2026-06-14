@@ -21,7 +21,7 @@ import { useAppLayout } from './use-app-layout.model'
 
 useAppMonitors()
 const { isPortraitTabletOrLess } = useScreen()
-const { openGuide } = useOnboardingGuide()
+const { openPendingGuide } = useOnboardingGuide()
 const {
   showWallpaper,
   wallpaperStyle,
@@ -34,7 +34,7 @@ const {
 </script>
 
 <template>
-  <AppWelcomeDialog @complete="openGuide" />
+  <AppWelcomeDialog @complete="openPendingGuide" />
   <OnboardingGuide>
     <main class="app-layout" :class="{ 'app-layout--wallpaper': showWallpaper }" :style="wallpaperStyle">
       <LeftBar v-if="!isPortraitTabletOrLess" class="widget" />

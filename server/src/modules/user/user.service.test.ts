@@ -208,4 +208,54 @@ describe('user.service', () => {
       }
     })
   })
+
+  it('updates user onboarding flags and returns mapped user data', async () => {
+    const id = new Types.ObjectId('68a09410778b70d522ea8faa')
+    const service = new UserService()
+
+    userModelMock.UserModel.findOneAndUpdate.mockResolvedValue({
+      _id: id,
+      public: {
+        avatarId: null,
+        nickname: 'tester',
+        lastSeen: 0
+      },
+      personal: {
+        email: 'tester@test.com',
+        onboarding: {
+          welcomeCompleted: true,
+          guideCompleted: false
+        }
+      },
+      system: {
+        role: 'user'
+      }
+    })
+
+    const result = await service.updateUserOnboarding({
+      userId: 'user-1',
+      welcomeCompleted: true
+    })
+
+    expect(userModelMock.UserModel.findOneAndUpdate).toHaveBeenCalledWith(
+      { _id: 'user-1' },
+      {
+        $set: {
+          'personal.onboarding.welcomeCompleted': true
+        }
+      },
+      { new: true }
+    )
+    expect(result).toEqual({
+      avatarId: null,
+      id: String(id),
+      nickname: 'tester',
+      role: 'user',
+      email: 'tester@test.com',
+      onboarding: {
+        welcomeCompleted: true,
+        guideCompleted: false
+      }
+    })
+  })
 })
