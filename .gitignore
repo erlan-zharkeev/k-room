@@ -41,3 +41,4 @@ scripts/deploy/certs/
 nmorph/
 client/src-tauri/updater.key
 client/src-tauri/updater.key.pub
+.env.secret.b64
