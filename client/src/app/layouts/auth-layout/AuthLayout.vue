@@ -159,7 +159,7 @@ useAuthLayoutNetBackground()
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 420px;
+  max-width: var(--app-card-basic-width);
 }
 
 .auth-layout__tabs {

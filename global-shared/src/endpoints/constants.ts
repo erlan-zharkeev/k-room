@@ -10,13 +10,18 @@ export const AUTH_ROUTE_NAMES = {
   registration: 'registration'
 } as const
 
+export const ROOT_ROUTE_NAMES = {
+  download: '/download',
+  notification: '/notification',
+  notFound: '/not-found'
+} as const
+
 export const PAGE_ROUTE_NAMES = {
   emailConfirmation: 'email-confirmation',
   waitEmailConfirm: 'wait-email-confirm',
   passwordRecovery: 'password-recovery',
   createNewPassword: 'create-new-password',
-  privacyPolicy: 'privacy-policy',
-  notFound: 'not-found'
+  privacyPolicy: 'privacy-policy'
 } as const
 
 export const ROUTE_NAMES = {
@@ -27,9 +32,10 @@ export const ROUTE_NAMES = {
   app: LAYOUT_ROUTE_NAMES.app,
   passwordRecovery: `${LAYOUT_ROUTE_NAMES.page}/${PAGE_ROUTE_NAMES.passwordRecovery}`,
   createNewPassword: `${LAYOUT_ROUTE_NAMES.page}/${PAGE_ROUTE_NAMES.createNewPassword}`,
-  notification: '/notification',
+  download: ROOT_ROUTE_NAMES.download,
+  notification: ROOT_ROUTE_NAMES.notification,
   privacyPolicy: `${LAYOUT_ROUTE_NAMES.docs}/${PAGE_ROUTE_NAMES.privacyPolicy}`,
-  notFound: `/${PAGE_ROUTE_NAMES.notFound}`
+  notFound: ROOT_ROUTE_NAMES.notFound
 } as const
 
 export const AUTH_ENDPOINTS = {

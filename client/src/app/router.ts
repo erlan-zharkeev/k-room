@@ -8,6 +8,7 @@ import { initClientData, useLogoutNavigation } from 'src/features/client-session
 import { CallsPage } from 'src/pages/calls'
 import { ContactsPage } from 'src/pages/contacts'
 import { CreateNewPasswordPage } from 'src/pages/create-new-password'
+import { DownloadPage } from 'src/pages/download'
 import { EmailConfirmationPage } from 'src/pages/email-confirmation'
 import { ErrorPage } from 'src/pages/error'
 import { LoginPage } from 'src/pages/login'
@@ -90,6 +91,10 @@ const routes: RouteRecordRaw[] = [
         component: PrivacyPolicyPage
       }
     ]
+  },
+  {
+    path: ROUTE_NAMES.download,
+    component: DownloadPage
   },
   {
     path: LAYOUT_ROUTE_NAMES.app,
