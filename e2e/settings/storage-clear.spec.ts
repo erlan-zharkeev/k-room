@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 
+import { dismissFirstRunOverlays } from 'e2e/shared/app'
 import { signInWithProvider as signInWithProviderRequest } from 'e2e/shared/auth'
 import { getAppDbName, readStores } from 'e2e/shared/indexed-db'
 
@@ -22,6 +23,7 @@ const signInStorageUser = async (page: Page) => {
 const openStorageSettings = async (page: Page) => {
   await page.goto('/app/settings/storage')
   await expect(page).toHaveURL(/\/app\/settings\/storage/)
+  await dismissFirstRunOverlays(page)
 }
 
 const seedMediaCache = async (page: Page, dbName: string, ids: string[]) => {

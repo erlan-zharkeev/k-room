@@ -148,6 +148,13 @@ describe('fixtures.service', () => {
     userModelMock.findById.mockResolvedValue({
       personal: { email: 'fixture@test.com' },
       public: { avatarId: 'existing-avatar-id', nickname: 'fixture' },
+      set: vi.fn(function (this: { personal: { onboarding?: unknown } }, path: string, value: unknown) {
+        if (path === 'personal.onboarding') {
+          this.personal.onboarding = value
+        }
+
+        return this
+      }),
       system: {
         confirmed: true,
         password: '$2b$06$9zZ6buzV0M3MTyS0wJ7ZUudLN4LxZ4XfN0iDHO8Y1koRaSPo6e7iW'
@@ -184,10 +191,10 @@ describe('fixtures.service', () => {
   it('loads dev fixtures idempotently without duplicating existing users or room message links', async () => {
     await loadFixtures()
 
-    expect(userServiceMock.isUserExist).toHaveBeenCalledTimes(5)
+    expect(userServiceMock.isUserExist).toHaveBeenCalledTimes(7)
     expect(userServiceMock.createUser).not.toHaveBeenCalled()
-    expect(userModelMock.findById).toHaveBeenCalledTimes(5)
-    expect(mediaMock.uploadBufferToBucket).toHaveBeenCalledTimes(12)
+    expect(userModelMock.findById).toHaveBeenCalledTimes(7)
+    expect(mediaMock.uploadBufferToBucket).toHaveBeenCalledTimes(14)
     expect(mediaMock.uploadBufferToBucket).toHaveBeenCalledWith(expect.any(Buffer), 'image', {
       id: '68f100000000000000000001',
       overwrite: true,

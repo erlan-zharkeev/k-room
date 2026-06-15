@@ -33,7 +33,6 @@ export const usePasswordRecovery = () => {
   const { email } = clone(DEFAULT_PASSWORD_RECOVERY_EMAIL_FORM_DATA)
   const { code } = clone(DEFAULT_PASSWORD_RECOVERY_CODE_FORM_DATA)
   const emailFormRef = useTemplateRef<INmorphFormDataExpose>('emailFormRef')
-  const codeFormRef = useTemplateRef<INmorphFormDataExpose>('codeFormRef')
   const emailFormData = reactive({
     email: {
       value: email,
@@ -56,7 +55,7 @@ export const usePasswordRecovery = () => {
   const sendCaptcha = useProtectedActionCaptcha()
   const validateCaptcha = useProtectedActionCaptcha()
   const isEmailFormValid = computed(() => emailFormRef.value?.formData.isFormValid.value ?? false)
-  const isCodeFormValid = computed(() => codeFormRef.value?.formData.isFormValid.value ?? false)
+  const isCodeFormValid = computed(() => NON_EMPTY_PATTERN.test(codeFormData.code.value))
   const { counterValue, syncCounterValue } = useRequestCooldownCounter(PASSWORD_RECOVERY_COUNTER_TICK_MS)
 
   const syncQuery = async (email: string, nextRequestTimestampMs: number) => {

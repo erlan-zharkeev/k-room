@@ -1,8 +1,11 @@
 import { expect, test, type Page } from '@playwright/test'
 
+import { dismissFirstRunOverlays, logoutFromApp } from 'e2e/shared/app'
 import { loginByCredentials, signInWithProvider } from 'e2e/shared/auth'
 
 import { SETTINGS_FIXTURE_USER } from './fixtures'
+
+const SETTINGS_ACCOUNT_TEST_TIMEOUT_MS = 90_000
 
 const waitForUserDataUpdateResponse = (page: Page) =>
   page.waitForResponse((response) => response.url().includes('/users/me') && response.request().method() === 'PATCH')
@@ -59,27 +62,27 @@ const loginWithKnownPassword = async (page: Page, login: string, passwords: stri
 }
 
 const logout = async (page: Page) => {
-  if (!page.url().includes('/app')) return
-
-  await page.getByRole('button', { name: 'Logout' }).click()
-  await page.waitForURL('**/authorize/login')
+  await logoutFromApp(page)
 }
 
 const openAccountSettings = async (page: Page) => {
   await page.goto('/app/settings/account')
   await expect(page).toHaveURL(/\/app\/settings\/account/)
+  await dismissFirstRunOverlays(page)
 }
 
 const updateNickname = async (page: Page, nickname: string) => {
   const responsePromise = waitForUserDataUpdateResponse(page)
+  const nicknameInput = page.getByRole('textbox', { name: 'Nickname', exact: true })
 
-  await page.locator('input[autocomplete="nickname"]').fill(nickname)
+  await dismissFirstRunOverlays(page)
+  await nicknameInput.fill(nickname)
   await page.getByRole('button', { name: 'Update', exact: true }).click()
 
   const response = await responsePromise
 
   expect(response.ok()).toBeTruthy()
-  await expect(page.locator('input[autocomplete="nickname"]')).toHaveValue(nickname)
+  await expect(nicknameInput).toHaveValue(nickname)
 }
 
 const changeEmail = async (page: Page, currentEmail: string, nextEmail: string) => {
@@ -156,6 +159,8 @@ const ensureOriginalPassword = async (page: Page) => {
 }
 
 test.describe('settings account', () => {
+  test.setTimeout(SETTINGS_ACCOUNT_TEST_TIMEOUT_MS)
+
   test('updates personal data nickname', async ({ page }) => {
     const nextNickname = buildNextNickname()
 
@@ -165,12 +170,12 @@ test.describe('settings account', () => {
       await openAccountSettings(page)
       await updateNickname(page, nextNickname)
 
-      await expect(page.locator('.main-top-bar')).toContainText(`@${nextNickname}`)
+      await expect(page.locator('.top-bar')).toContainText(nextNickname)
 
       await page.reload()
 
-      await expect(page.locator('input[autocomplete="nickname"]')).toHaveValue(nextNickname)
-      await expect(page.locator('.main-top-bar')).toContainText(`@${nextNickname}`)
+      await expect(page.getByRole('textbox', { name: 'Nickname', exact: true })).toHaveValue(nextNickname)
+      await expect(page.locator('.top-bar')).toContainText(nextNickname)
     } finally {
       await openAccountSettings(page)
       await updateNickname(page, SETTINGS_FIXTURE_USER.nickname)

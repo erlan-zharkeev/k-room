@@ -41,6 +41,7 @@ const SOCKET_PATH = getEnv('SOCKET_PATH', sharedEnvs)
 const packageData = JSON.parse(fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')) as PackageData
 
 const isDev = stage !== 'production'
+const isE2E = process.env.SERVER_E2E === 'true'
 const TURNSTILE_TEST_SITE_KEY = '1x00000000000000000000AA'
 const TURNSTILE_TEST_SECRET_KEY = '1x0000000000000000000000000000000AA'
 const redisUrl = getEnv('REDIS_URL', envs) || (isDev ? 'redis://127.0.0.1:6379' : '')
@@ -59,6 +60,7 @@ const devOrigins = [
 export const SERVER_ENV = {
   stage,
   isDev,
+  isE2E,
   appHost: APP_HOST,
   apiHost: API_HOST,
   apiPath: API_PATH,

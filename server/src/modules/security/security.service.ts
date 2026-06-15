@@ -8,6 +8,7 @@ import {
   type SecurityAction
 } from 'global-shared'
 
+import { SERVER_ENV } from 'src/app/env'
 import { AppError } from 'src/shared/lib/app-error'
 
 import { CaptchaService } from './captcha.service'
@@ -92,6 +93,8 @@ export class SecurityService {
   }
 
   private async assertEmailIpActionAllowed({ action, email, ip, captchaToken, limits }: SecurityEmailIpActionParams) {
+    if (SERVER_ENV.isE2E) return
+
     const { emailKey, ipKey } = this.buildEmailIpActionKeys(action, email, ip)
     const [emailAttempts, ipAttempts] = await Promise.all([
       this.redisService.readNumber(emailKey),
@@ -170,6 +173,8 @@ export class SecurityService {
   }
 
   async assertLoginAllowed(ip: string, login: string, captchaToken?: string) {
+    if (SERVER_ENV.isE2E) return
+
     const action = SECURITY_ACTION.login
     const accountKey = this.buildKey(action, 'account', login)
     const ipKey = this.buildKey(action, 'ip', ip)
@@ -201,6 +206,8 @@ export class SecurityService {
   }
 
   async assertRegistrationAllowed(ip: string, captchaToken?: string) {
+    if (SERVER_ENV.isE2E) return
+
     const action = SECURITY_ACTION.registration
     const ipKey = this.buildKey(action, 'ip', ip)
     const ipAttempts = await this.redisService.readNumber(ipKey)

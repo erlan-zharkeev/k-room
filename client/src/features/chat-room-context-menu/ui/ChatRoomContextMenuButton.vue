@@ -7,22 +7,17 @@ import { useChatRoomContextMenu } from '../model/use-chat-room-context-menu.mode
 
 const props = defineProps<ChatRoomContextMenuProps>()
 const emit = defineEmits<ChatRoomContextMenuEmits>()
-const { contextMenuOptions, isContextMenuOpen, selectChatRoomAction, updateContextMenuOpen } = useChatRoomContextMenu(
-  props,
-  emit
-)
+const { contextMenuOptions, selectChatRoomAction } = useChatRoomContextMenu(props, emit)
 </script>
 
 <template>
   <NmorphContextMenu
     placement="bottom-end"
-    :model-value="isContextMenuOpen"
     class="chat-room-context-menu"
     trigger="click"
     :options="contextMenuOptions"
     :aria-label="$t(CHAT_ROOM_CONTEXT_MENU_I18N.chatActions)"
     hide-shadow
-    @update:model-value="updateContextMenuOpen"
     @select="selectChatRoomAction"
   >
     <NmorphButton
