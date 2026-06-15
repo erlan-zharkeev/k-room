@@ -15,9 +15,13 @@ COPY .env.production ./.env.production
 COPY global-shared ./global-shared
 
 COPY client/package.json ./client/package.json
+COPY client/client-env.types.ts ./client/client-env.types.ts
+COPY client/create-client-env-data.ts ./client/create-client-env-data.ts
 COPY client/tsconfig.json ./client/tsconfig.json
 COPY client/vite.config.ts ./client/vite.config.ts
+COPY client/vite.pwa.config.ts ./client/vite.pwa.config.ts
 COPY client/index.html ./client/index.html
+COPY client/public ./client/public
 COPY client/src ./client/src
 
 RUN pnpm install --frozen-lockfile --filter ./client...

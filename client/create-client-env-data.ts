@@ -26,7 +26,10 @@ export const createClientEnvData = (mode: string, envDir: string): ClientEnv => 
   const themeBg = '#1c1f21'
   const themeAccent = '#006cb6'
   const themeText = '#778288'
-  const packageData = JSON.parse(fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')) as PackageData
+  const rootPackageData = JSON.parse(fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')) as PackageData
+  const clientPackageData = JSON.parse(
+    fs.readFileSync(path.resolve(envDir, 'client/package.json'), 'utf-8')
+  ) as PackageData
 
   return {
     apiPath,
@@ -36,8 +39,8 @@ export const createClientEnvData = (mode: string, envDir: string): ClientEnv => 
     isTauriDev,
     isE2E,
     tauriDevHost,
-    appName: formatAppName(packageData.name),
-    appVersion: packageData.version,
+    appName: formatAppName(rootPackageData.name),
+    appVersion: clientPackageData.version,
     supportEmail: getEnv('SUPPORT_EMAIL', sharedEnv),
     socketBaseUrl: isDev ? `${apiHost}:${serverPort}` : apiHost,
     serverPort,

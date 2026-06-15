@@ -30,6 +30,9 @@ describe('global-shared contracts', () => {
     expect(ROUTE_NAMES.authRegistration).toBe('/authorize/registration')
     expect(ROUTE_NAMES.app).toBe('/app')
     expect(ROUTE_NAMES.emailConfirmation).toBe('/page/email-confirmation')
+    expect(ROUTE_NAMES.download).toBe('/download')
+    expect(ROUTE_NAMES.notification).toBe('/notification')
+    expect(ROUTE_NAMES.notFound).toBe('/not-found')
   })
 
   it('validates registration payloads with shared schema rules', () => {

@@ -41,7 +41,7 @@ import { AppLogo } from 'src/shared/ui'
 .page-layout__card {
   overflow-y: auto;
   place-self: center;
-  width: min(420px, 100%);
+  width: min(var(--app-card-basic-width), 100%);
   min-width: 0;
 }
 

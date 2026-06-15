@@ -11,6 +11,7 @@
   --app-guide-target-shadow: inset 0 0 16px var(--app-guide-target-shadow-inner-color),
     0 0 18px var(--app-guide-target-shadow-outer-color);
   --app-muted-surface-soft: color-mix(in srgb, var(--nmorph-placeholder-text-color), transparent 78%);
+  --app-card-basic-width: 420px;
   --app-shadow-dark: color-mix(in srgb, var(--nmorph-dark-shade-color), transparent 20%);
   --app-shadow-dark-soft: color-mix(in srgb, var(--nmorph-dark-shade-color), transparent 32%);
 }
