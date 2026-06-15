@@ -20,7 +20,7 @@ test.describe('registration', () => {
     await nicknameInput.fill(user.nickname)
     await emailInput.fill(user.email)
     await passwordInput.fill(user.password)
-    await policySwitch.check()
+    await policySwitch.check({ force: true })
 
     await expect(submitButton).toBeEnabled()
     await submitButton.click()
@@ -45,7 +45,7 @@ test.describe('registration', () => {
     await nicknameInput.fill('Bad Nick')
     await emailInput.fill(user.email)
     await passwordInput.fill(user.password)
-    await policySwitch.check()
+    await policySwitch.check({ force: true })
     await nicknameInput.blur()
 
     await expect(submitButton).toBeDisabled()

@@ -34,6 +34,7 @@ import {
   FIXTURE_CONTACTS,
   FIXTURE_GROUPS,
   FIXTURE_MESSAGE_IMAGE_FILES,
+  FIXTURE_USER_ONBOARDING,
   LEGACY_FIXTURE_EMPTY_ROOM_CHAT_NAME_PATTERN,
   LEGACY_FIXTURE_MESSAGE_ID_PATTERN,
   LEGACY_FIXTURE_ROOM_CHAT_NAMES,
@@ -129,6 +130,16 @@ const loadUserFixture = async (data: FixtureUserData) => {
         wasUpdated = true
       }
 
+      const existingOnboarding = existingUser.personal.onboarding
+      const hasFixtureWelcomeState = existingOnboarding?.welcomeCompleted === FIXTURE_USER_ONBOARDING.welcomeCompleted
+      const hasFixtureGuideState = existingOnboarding?.guideCompleted === FIXTURE_USER_ONBOARDING.guideCompleted
+      const shouldUpdateOnboarding = !hasFixtureWelcomeState || !hasFixtureGuideState
+
+      if (shouldUpdateOnboarding) {
+        existingUser.set('personal.onboarding', { ...FIXTURE_USER_ONBOARDING })
+        wasUpdated = true
+      }
+
       if (!(await bcrypt.compare(pass, existingUser.system.password))) {
         existingUser.system.password = await bcrypt.hash(pass, 6)
         wasUpdated = true
@@ -154,6 +165,7 @@ const loadUserFixture = async (data: FixtureUserData) => {
   }
 
   user.public.nickname = nickname
+  user.set('personal.onboarding', { ...FIXTURE_USER_ONBOARDING })
   await user.set('system.confirmed', true).save()
   await ensureAvatarLoaded(user, avatarId, avatarPath)
 

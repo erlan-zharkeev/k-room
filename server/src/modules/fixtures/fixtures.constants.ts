@@ -4,6 +4,10 @@ import keyBy from 'lodash/keyBy'
 import type { FixtureContactData, FixtureGroupData, FixtureMessageData, FixtureUserData } from './fixtures.types'
 
 const FIXTURE_PASSWORD = 'Asdf1234'
+export const FIXTURE_USER_ONBOARDING = {
+  welcomeCompleted: true,
+  guideCompleted: true
+} as const
 
 const FIXTURE_USERS = [
   {
@@ -30,6 +34,18 @@ const FIXTURE_USERS = [
     nickname: 'Lucas',
     avatarId: '68f100000000000000000005',
     avatarPath: 'lucas.png'
+  },
+  {
+    id: '68f100000000000000000007',
+    nickname: 'alex',
+    avatarId: '68f100000000000000000007',
+    avatarPath: 'ethan.png'
+  },
+  {
+    id: '68f100000000000000000008',
+    nickname: 'sam',
+    avatarId: '68f100000000000000000008',
+    avatarPath: 'olivia.png'
   }
 ] as const
 
@@ -37,14 +53,18 @@ const buildFixtureId = (index: number) =>
   (BigInt('0x68a09410778b70d522ea8fa0') + BigInt(index)).toString(16).padStart(24, '0')
 
 export const BASE_FIXTURE_TIMESTAMP_MS = Date.UTC(2026, 5, 12, 15, 0, 0)
-export const USER_FIXTURES = FIXTURE_USERS.map(({ nickname, avatarId, avatarPath }, index) => ({
-  id: buildFixtureId(index),
-  email: `${nickname.toLowerCase()}@gmail.com`,
-  nickname,
-  pass: FIXTURE_PASSWORD,
-  avatarId,
-  avatarPath
-})) satisfies FixtureUserData[]
+export const USER_FIXTURES = FIXTURE_USERS.map((user, index) => {
+  const { nickname, avatarId, avatarPath } = user
+
+  return {
+    id: 'id' in user ? user.id : buildFixtureId(index),
+    email: `${nickname.toLowerCase()}@gmail.com`,
+    nickname,
+    pass: FIXTURE_PASSWORD,
+    avatarId,
+    avatarPath
+  }
+}) satisfies FixtureUserData[]
 export const PRIMARY_FIXTURE_USERNAMES = {
   ethan: 'Ethan',
   olivia: 'Olivia',

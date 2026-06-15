@@ -3,6 +3,7 @@ import { expect, test, type Browser, type Locator, type Page } from '@playwright
 import { CHAT_KIND } from 'global-shared'
 
 import { E2E_ENV } from 'e2e/config'
+import { dismissFirstRunOverlays } from 'e2e/shared/app'
 import { signInWithProvider as signInWithProviderRequest } from 'e2e/shared/auth'
 import { getAppDbName, readStores } from 'e2e/shared/indexed-db'
 
@@ -74,6 +75,7 @@ const openContactsPage = async (page: Page) => {
   await page.goto(CONTACTS_PAGE_PATH)
   await expect(page).toHaveURL(new RegExp(CONTACTS_PAGE_PATH))
   await expect(page.getByPlaceholder(CONTACTS_SEARCH_PLACEHOLDER)).toBeVisible()
+  await dismissFirstRunOverlays(page)
 }
 
 const getContactListRow = (page: Page, nickname: string) =>

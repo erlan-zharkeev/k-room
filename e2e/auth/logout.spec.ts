@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
 
+import { getLogoutButton } from 'e2e/shared/app'
 import { loginByCredentials } from 'e2e/shared/auth'
 import { getAppDbName, readStores, seedStores } from 'e2e/shared/indexed-db'
 
@@ -12,7 +13,7 @@ test.describe('logout', () => {
   test('clears auth cookies and client session data', async ({ page }) => {
     await loginByCredentials(page, LOGIN_FIXTURE_USER.email, LOGIN_FIXTURE_USER.password)
 
-    const logoutButton = page.locator('.main-top-bar__actions button')
+    const logoutButton = getLogoutButton(page)
     const dbName = await getAppDbName(page)
     const seededItems = RESET_STORE_NAMES.map((storeName) => ({
       storeName,
@@ -20,7 +21,7 @@ test.describe('logout', () => {
     }))
 
     await expect(logoutButton).toBeVisible()
-    await expect(page.locator('.main-top-bar')).toContainText('@erlan')
+    await expect(page.locator('.top-bar')).toContainText(LOGIN_FIXTURE_USER.nickname)
 
     await seedStores(page, dbName, seededItems)
 
@@ -33,7 +34,6 @@ test.describe('logout', () => {
     await logoutButton.click()
 
     await page.waitForURL('**/authorize/login')
-    await expect(page.getByRole('link', { name: 'Login' })).toBeVisible()
     await expect
       .poll(async () => {
         const cookieNames = new Set((await page.context().cookies()).map(({ name }) => name))

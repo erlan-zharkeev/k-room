@@ -11,7 +11,7 @@ const { chatRoomListGroups, canReorderPinnedChatRooms, reorderPinnedChatRooms } 
 <template>
   <div class="chat-room-list">
     <Draggable
-      v-if="chatRoomListGroups.pinnedChatRoomList.length"
+      v-if="canReorderPinnedChatRooms"
       class="chat-room-list__pinned app-list-motion-container"
       :model-value="chatRoomListGroups.pinnedChatRoomList"
       item-key="id"
@@ -32,6 +32,17 @@ const { chatRoomListGroups, canReorderPinnedChatRooms, reorderPinnedChatRooms } 
         </div>
       </template>
     </Draggable>
+
+    <TransitionGroup
+      v-else-if="chatRoomListGroups.pinnedChatRoomList.length"
+      class="chat-room-list__pinned app-list-motion-container"
+      name="app-list-motion"
+      tag="div"
+    >
+      <div v-for="item in chatRoomListGroups.pinnedChatRoomList" :key="item.id" class="app-list-motion-item">
+        <ChatRoomListItem :item="item" />
+      </div>
+    </TransitionGroup>
 
     <TransitionGroup
       v-if="chatRoomListGroups.regularChatRoomList.length"

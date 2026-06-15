@@ -19,6 +19,10 @@ export class EmailService {
   }
 
   private createResendClient() {
+    if (SERVER_ENV.stage === 'test' || SERVER_ENV.isE2E) {
+      return null
+    }
+
     if (resendClient) {
       return resendClient
     }

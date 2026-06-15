@@ -1,4 +1,4 @@
-import { nextTick, onMounted, ref } from 'vue'
+import { ref, watch } from 'vue'
 
 import { useUser, useUserOnboarding } from 'src/entities/user'
 
@@ -7,7 +7,7 @@ import type { AppWelcomeDialogEmit } from '../config/types'
 const isAppWelcomeVisible = ref(false)
 
 export const useAppWelcome = () => {
-  const { user } = useUser()
+  const { isAuthorized, user } = useUser()
 
   const openAppWelcome = () => {
     isAppWelcomeVisible.value = true
@@ -18,13 +18,21 @@ export const useAppWelcome = () => {
   }
 
   const initializeAppWelcome = () => {
-    onMounted(async () => {
-      await nextTick()
+    watch(
+      () => ({
+        isAuthorized: isAuthorized.value,
+        welcomeCompleted: user.value.onboarding.welcomeCompleted
+      }),
+      ({ isAuthorized, welcomeCompleted }) => {
+        if (!isAuthorized || welcomeCompleted) {
+          closeAppWelcome()
+          return
+        }
 
-      if (!user.value.onboarding.welcomeCompleted) {
         openAppWelcome()
-      }
-    })
+      },
+      { immediate: true }
+    )
   }
 
   return {

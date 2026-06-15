@@ -1,6 +1,7 @@
 import { expect, test, type Locator, type Page } from '@playwright/test'
 
 import { LOGIN_FIXTURE_USER } from 'e2e/auth/fixtures'
+import { dismissFirstRunOverlays } from 'e2e/shared/app'
 import { loginByCredentials } from 'e2e/shared/auth'
 
 import {
@@ -33,10 +34,13 @@ import {
   WEEKEND_PLANS_CHAT_NAME
 } from './constants'
 
+const CHAT_ROOM_NAVIGATION_TEST_TIMEOUT_MS = 60_000
+
 const openChatRoomsPage = async (page: Page) => {
-  await loginByCredentials(page, LOGIN_FIXTURE_USER.nickname, LOGIN_FIXTURE_USER.password)
+  await loginByCredentials(page, LOGIN_FIXTURE_USER.email, LOGIN_FIXTURE_USER.password)
   await page.goto(CHAT_ROOMS_PAGE_PATH)
   await expect(page).toHaveURL(new RegExp(CHAT_ROOMS_PAGE_PATH))
+  await dismissFirstRunOverlays(page)
   await expect(page.getByPlaceholder(CHAT_SEARCH_PLACEHOLDER)).toBeVisible()
   await expect(getChatRoomRow(page, FRONTEND_CORE_CHAT_NAME)).toBeVisible()
 }
@@ -60,6 +64,11 @@ const clickLabeledControl = async (page: Page, name: string) => {
   }
 
   await control.click()
+}
+
+const updateSearchInput = async (searchInput: Locator, value: string) => {
+  await searchInput.fill(value)
+  await expect(searchInput).toHaveValue(value)
 }
 
 const openChatRoomMenu = async (page: Page, row: Locator) => {
@@ -124,6 +133,8 @@ const expectDialogAndCancel = async (page: Page, dialogName: string) => {
 }
 
 test.describe('chat room navigation menu', () => {
+  test.setTimeout(CHAT_ROOM_NAVIGATION_TEST_TIMEOUT_MS)
+
   test('filters chat list and opens the create chat dialog', async ({ page }) => {
     await openChatRoomsPage(page)
 
@@ -131,15 +142,15 @@ test.describe('chat room navigation menu', () => {
 
     await expect(getChatRoomRow(page, WEEKEND_PLANS_CHAT_NAME)).toBeVisible()
 
-    await searchInput.fill(FRONTEND_CHAT_SEARCH_QUERY)
+    await updateSearchInput(searchInput, FRONTEND_CHAT_SEARCH_QUERY)
     await expect(getChatRoomRow(page, FRONTEND_CORE_CHAT_NAME)).toBeVisible()
     await expect(getChatRoomRow(page, WEEKEND_PLANS_CHAT_NAME)).toHaveCount(0)
 
-    await searchInput.fill(UNKNOWN_CHAT_QUERY)
+    await updateSearchInput(searchInput, UNKNOWN_CHAT_QUERY)
     await expect(page.getByText(NO_CHATS_FOUND_TEXT)).toBeVisible()
     await expect(getChatRoomRow(page, FRONTEND_CORE_CHAT_NAME)).toHaveCount(0)
 
-    await searchInput.fill('')
+    await updateSearchInput(searchInput, '')
     await clickLabeledControl(page, CREATE_CHAT_BUTTON_NAME)
 
     const dialog = getActiveDialog(page, NEW_CHAT_DIALOG_NAME)

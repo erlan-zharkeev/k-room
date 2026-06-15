@@ -2,6 +2,8 @@ import { expect, type Page } from '@playwright/test'
 
 import { E2E_ENV } from 'e2e/config'
 
+import { dismissFirstRunOverlays } from './app'
+
 export const fillLoginForm = async (page: Page, login: string, password: string) => {
   await page.getByPlaceholder('Enter email or nickname').fill(login)
   await page.getByPlaceholder('Enter your password').fill(password)
@@ -14,10 +16,12 @@ export const loginByCredentials = async (page: Page, login: string, password: st
 
   if (timeoutMs === undefined) {
     await page.waitForURL('**/app/**')
+    await dismissFirstRunOverlays(page)
     return
   }
 
   await page.waitForURL('**/app/**', { timeout: timeoutMs })
+  await dismissFirstRunOverlays(page)
 }
 
 export const signInWithProvider = async (page: Page, nickname: string, email: string, provider = 'google') => {
