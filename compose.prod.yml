@@ -1,6 +1,6 @@
 services:
   client:
-    image: ketjo/k-room_client:latest
+    image: erlan1/k-room_client:latest
     restart: unless-stopped
     healthcheck:
       test: ['CMD-SHELL', 'wget -q -O /dev/null http://127.0.0.1/ || exit 1']
@@ -10,7 +10,7 @@ services:
       start_period: 10s
 
   server:
-    image: ketjo/k-room_server:latest
+    image: erlan1/k-room_server:latest
     restart: unless-stopped
     env_file:
       - path: ./.env.production
