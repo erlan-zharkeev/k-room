@@ -28,6 +28,7 @@ export const useFaq = () => {
   })
 
   return {
+    appVersion: __CLIENT_ENV_DATA__.appVersion,
     contactSupport,
     filteredItems,
     openGuide,

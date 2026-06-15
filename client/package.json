@@ -11,6 +11,7 @@
     "test": "vitest run --config vitest.config.mts",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "typecheck:test": "vue-tsc --noEmit -p tsconfig.test.json",
+    "check:version": "node scripts/check-client-version.cjs",
     "lint:fsd": "cross-env CHOKIDAR_USEPOLLING=1 steiger ./src",
     "lint:fsd:watch": "cross-env CHOKIDAR_USEPOLLING=1 steiger ./src --watch",
     "lint:style": "pnpm --dir .. exec stylelint \"client/src/**/*.{css,vue}\"",
@@ -21,11 +22,14 @@
     "lint:fix-all": "pnpm run lint:fix-es && pnpm run lint:fix-style",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build"
+    "tauri:build": "pnpm run check:version && tauri build"
   },
   "dependencies": {
     "@nmorph/nmorph-ui-kit": "^3.0.11",
     "@tanstack/vue-virtual": "^3.13.24",
+    "@tauri-apps/api": "^2.11.0",
+    "@tauri-apps/plugin-process": "^2.3.1",
+    "@tauri-apps/plugin-updater": "^2.10.1",
     "@vueuse/core": "^14.2.1",
     "axios": "^1.15.2",
     "dexie": "^4.4.2",

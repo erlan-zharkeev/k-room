@@ -39,3 +39,5 @@ e2e/test-results/
 
 scripts/deploy/certs/
 nmorph/
+client/src-tauri/updater.key
+client/src-tauri/updater.key.pub
