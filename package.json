@@ -2,7 +2,7 @@
   "name": "k-room",
   "private": true,
   "version": "1.0.0",
-  "repository": "git@gitlab.com:k-room/k-room.git",
+  "repository": "git@github.com:erlan-zharkeev/k-room.git",
   "author": "<erlan.zharkeev@gmail.com>",
   "license": "MIT",
   "packageManager": "pnpm@10.33.0",

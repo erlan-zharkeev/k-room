@@ -9,6 +9,7 @@ COPY pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY pnpm-lock.yaml ./pnpm-lock.yaml
 COPY tsconfig.base.json ./tsconfig.base.json
 COPY tsconfig.node.json ./tsconfig.node.json
+COPY tsconfig.bundler.json ./tsconfig.bundler.json
 
 COPY global-shared ./global-shared
 
@@ -21,6 +22,10 @@ COPY server/tsconfig.json ./server/tsconfig.json
 COPY server/src ./server/src
 
 RUN pnpm install --frozen-lockfile --filter ./server...
+
+WORKDIR /app/global-shared
+
+RUN pnpm run build
 
 WORKDIR /app/server
 
@@ -54,7 +59,7 @@ RUN pnpm install --frozen-lockfile --prod --filter ./server...
 
 WORKDIR /app/server
 
-COPY --from=build /app/global-shglobal-shared-share
+COPY --from=build /app/global-shared/dist /app/global-shared/dist
 COPY --from=build /app/server/build ./build
 
 EXPOSE ${SERVER_PORT}

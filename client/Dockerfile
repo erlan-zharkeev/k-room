@@ -26,6 +26,10 @@ COPY client/src ./client/src
 
 RUN pnpm install --frozen-lockfile --filter ./client...
 
+WORKDIR /app/global-shared
+
+RUN pnpm run build
+
 WORKDIR /app/client
 
 RUN pnpm run build
