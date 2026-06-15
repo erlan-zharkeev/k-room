@@ -2,6 +2,8 @@
 import { NmorphNotificationProvider } from '@nmorph/nmorph-ui-kit'
 import { RouterView } from 'vue-router'
 
+import { NativeDesktopUpdateBanner } from 'src/features/native-desktop-update'
+
 import UnsupportedResolutionGuard from './guards/UnsupportedResolutionGuard.vue'
 import { useDexieCacheTrimProvider } from './providers/use-dexie-cache-trim-provider'
 import { useLanguageProvider } from './providers/use-language-provider'
@@ -21,6 +23,7 @@ const { toasts } = useToastProvider()
 
 <template>
   <UnsupportedResolutionGuard />
+  <NativeDesktopUpdateBanner />
   <NmorphNotificationProvider :notifications="toasts" placement="top-center" />
   <RouterView v-slot="{ Component, route }">
     <Transition name="app-root-route-motion" mode="out-in">

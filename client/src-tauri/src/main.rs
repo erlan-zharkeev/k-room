@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-  k_room_client_lib::run();
+    k_room_client_lib::run();
 }

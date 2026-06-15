@@ -7,7 +7,7 @@ import { SETTINGS_PAGE_FAQ_I18N } from '../../config/i18n/faq.i18n'
 import { useFaq } from '../../model/faq/use-faq.model'
 import SettingsCard from '../SettingsCard.vue'
 
-const { contactSupport, filteredItems, openGuide, searchQuery, supportEmail } = useFaq()
+const { appVersion, contactSupport, filteredItems, openGuide, searchQuery, supportEmail } = useFaq()
 </script>
 
 <template>
@@ -29,6 +29,7 @@ const { contactSupport, filteredItems, openGuide, searchQuery, supportEmail } = 
         <NmorphButton :text="$t(SETTINGS_PAGE_FAQ_I18N.faqOpenGuide)" @click="openGuide" />
         <NmorphButton :text="$t(SETTINGS_PAGE_FAQ_I18N.faqContactSupport)" @click="contactSupport" />
         <AppText :text="supportEmail" />
+        <AppText color="semi-contrast-text" :text="`v${appVersion}`" />
       </div>
     </SettingsCard>
   </div>
