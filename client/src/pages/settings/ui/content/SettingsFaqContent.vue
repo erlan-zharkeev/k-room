@@ -17,8 +17,8 @@ const { appVersion, contactSupport, filteredItems, openGuide, searchQuery, suppo
 
       <div v-if="filteredItems.length">
         <div v-for="item in filteredItems" :key="item.id" class="settings-faq-content__item">
-          <AppText color="contrast-text" :text="$t(item.question)" />
-          <AppText :text="$t(item.answer)" />
+          <AppText color="contrast-text" :text="item.question" />
+          <AppText :text="item.answer" />
           <NmorphDivider class="settings-faq-content__list-divider" />
         </div>
       </div>

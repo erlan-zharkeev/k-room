@@ -7,8 +7,8 @@ import { AppHeader, AppText } from 'src/shared/ui'
 import { DOWNLOAD_PAGE_I18N } from '../config/i18n'
 import { useDownloadPage } from '../model/use-download-page.model'
 
+const { appName } = __CLIENT_ENV_DATA__
 const {
-  appName,
   appVersion,
   downloadPlatformItem,
   hasLoadError,

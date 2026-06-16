@@ -4,7 +4,8 @@ import { RouterLink } from 'vue-router'
 
 import { useAppLogo } from './use-app-logo.model'
 
-const { appName, defaultSrc, to } = useAppLogo()
+const { appName } = __CLIENT_ENV_DATA__
+const { defaultSrc, to } = useAppLogo()
 </script>
 
 <template>

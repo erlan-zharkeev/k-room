@@ -30,6 +30,7 @@ export const createClientEnvData = (mode: string, envDir: string): ClientEnv => 
   const clientPackageData = JSON.parse(
     fs.readFileSync(path.resolve(envDir, 'client/package.json'), 'utf-8')
   ) as PackageData
+  const appName = getEnv('APP_NAME', sharedEnv) || formatAppName(rootPackageData.name)
 
   return {
     apiPath,
@@ -39,7 +40,7 @@ export const createClientEnvData = (mode: string, envDir: string): ClientEnv => 
     isTauriDev,
     isE2E,
     tauriDevHost,
-    appName: formatAppName(rootPackageData.name),
+    appName,
     appVersion: clientPackageData.version,
     supportEmail: getEnv('SUPPORT_EMAIL', sharedEnv),
     socketBaseUrl: isDev ? `${apiHost}:${serverPort}` : apiHost,

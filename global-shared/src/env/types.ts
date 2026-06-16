@@ -23,6 +23,7 @@ export interface EnvVariables {
 }
 
 export interface EnvSharedVariables {
+  APP_NAME: string
   SERVER_PORT: string
   CLIENT_PORT: string
   SOCKET_PATH: string

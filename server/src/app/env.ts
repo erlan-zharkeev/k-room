@@ -39,6 +39,7 @@ const SERVER_PORT = getEnv('SERVER_PORT', sharedEnvs)
 const SOCKET_PATH = getEnv('SOCKET_PATH', sharedEnvs)
 
 const packageData = JSON.parse(fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')) as PackageData
+const APP_NAME = getEnv('APP_NAME', sharedEnvs) || formatAppName(packageData.name)
 
 const isDev = stage !== 'production'
 const isE2E = process.env.SERVER_E2E === 'true'
@@ -79,7 +80,7 @@ export const SERVER_ENV = {
     resendApiKey: RESEND_API_KEY
   },
   info: {
-    appName: formatAppName(packageData.name),
+    appName: APP_NAME,
     appVersion: packageData.version
   },
   mongo: {

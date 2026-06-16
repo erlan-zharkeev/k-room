@@ -6,6 +6,7 @@ import { AppText } from 'src/shared/ui'
 import { NATIVE_DESKTOP_UPDATE_I18N } from '../config/i18n'
 import { useNativeDesktopUpdate } from '../model/use-native-desktop-update.model'
 
+const { appName } = __CLIENT_ENV_DATA__
 const {
   dismissNativeDesktopUpdate,
   downloadProgress,
@@ -20,7 +21,7 @@ const {
 <template>
   <aside v-if="showNativeDesktopUpdateBanner" class="native-desktop-update-banner" aria-live="polite">
     <div class="native-desktop-update-banner__content">
-      <AppText color="contrast-text" bold :text="$t(NATIVE_DESKTOP_UPDATE_I18N.title)(updateVersion)" />
+      <AppText color="contrast-text" bold :text="$t(NATIVE_DESKTOP_UPDATE_I18N.title)(appName, updateVersion)" />
       <AppText
         v-if="isInstalling"
         color="semi-contrast-text"

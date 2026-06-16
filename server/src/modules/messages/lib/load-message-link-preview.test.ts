@@ -68,6 +68,7 @@ const mockHttpsResponses = (
     (
       url: URL,
       options: {
+        headers: Record<string, string>
         lookup: (
           hostname: string,
           requestOptions: { all: true },
@@ -146,9 +147,12 @@ describe('loadMessageLinkPreview', () => {
     ])
 
     const preview = await loadMessageLinkPreview({
-      url: 'https://example.com/',
-      host: 'example.com',
-      status: MESSAGE_LINK_PREVIEW_STATUS.PENDING
+      appName: 'Test App',
+      preview: {
+        url: 'https://example.com/',
+        host: 'example.com',
+        status: MESSAGE_LINK_PREVIEW_STATUS.PENDING
+      }
     })
 
     expect(preview).toEqual({
@@ -168,6 +172,13 @@ describe('loadMessageLinkPreview', () => {
       [{ address: '93.184.216.34', family: 4 }]
     ])
     expect(mediaMock.uploadBufferToBucketWithFileData).toHaveBeenCalledWith(Buffer.from('image-data'), 'image')
+    expect(httpsMock.request).toHaveBeenCalledWith(
+      expect.any(URL),
+      expect.objectContaining({
+        headers: expect.objectContaining({ 'user-agent': 'Test App link preview bot' })
+      }),
+      expect.any(Function)
+    )
   })
 
   it('fails preview loading when resolved address is private', async () => {
@@ -181,9 +192,12 @@ describe('loadMessageLinkPreview', () => {
     ])
 
     const preview = await loadMessageLinkPreview({
-      url: 'https://example.com/',
-      host: 'example.com',
-      status: MESSAGE_LINK_PREVIEW_STATUS.PENDING
+      appName: 'Test App',
+      preview: {
+        url: 'https://example.com/',
+        host: 'example.com',
+        status: MESSAGE_LINK_PREVIEW_STATUS.PENDING
+      }
     })
 
     expect(preview.status).toBe(MESSAGE_LINK_PREVIEW_STATUS.FAILED)

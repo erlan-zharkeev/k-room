@@ -8,8 +8,7 @@ export const useDownloadPage = () => {
   const releasesManifest = ref<DownloadReleasesManifest | null>(null)
   const isLoading = ref(false)
   const hasLoadError = ref(false)
-  const appName = __CLIENT_ENV_DATA__.appName
-  const appVersion = __CLIENT_ENV_DATA__.appVersion
+  const { appVersion } = __CLIENT_ENV_DATA__
 
   const loadReleasesManifest = async () => {
     isLoading.value = true
@@ -73,7 +72,6 @@ export const useDownloadPage = () => {
   onMounted(loadReleasesManifest)
 
   return {
-    appName,
     appVersion,
     downloadPlatformItem,
     hasLoadError,

@@ -2,9 +2,9 @@ import { defineI18n } from 'global-shared'
 
 export const NATIVE_DESKTOP_UPDATE_I18N = defineI18n({
   title: {
-    en: (version: string) => `K-Room ${version} is available`,
-    ru: (version: string) => `Доступен K-Room ${version}`,
-    zh: (version: string) => `K-Room ${version} 可用`
+    en: (appName: string, version: string) => `${appName} ${version} is available`,
+    ru: (appName: string, version: string) => `Доступен ${appName} ${version}`,
+    zh: (appName: string, version: string) => `${appName} ${version} 可用`
   },
   description: {
     en: 'Install the desktop update and restart the app.',

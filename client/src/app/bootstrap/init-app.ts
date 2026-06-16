@@ -11,7 +11,9 @@ import { initNmorphUi } from './init-nmorph-ui'
 import type { VueApp } from './types'
 
 export const initApp = async (app: VueApp) => {
-  document.title = __CLIENT_ENV_DATA__.appName
+  const { appName } = __CLIENT_ENV_DATA__
+
+  document.title = appName
   initFirebase()
   app.use(pinia)
   await app.runWithContext(initClientIndexedDbData)

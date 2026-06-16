@@ -3,7 +3,7 @@ import { AppHeader, AppText } from 'src/shared/ui'
 
 import { LEGAL_INFO_PAGE_I18N } from '../config/i18n'
 
-const appName = __CLIENT_ENV_DATA__.appName
+const { appName } = __CLIENT_ENV_DATA__
 </script>
 
 <template>

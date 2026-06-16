@@ -26,10 +26,16 @@ export interface ResolveRepliedMessageParams {
 }
 
 export interface RefreshMessageLinkPreviewParams {
+  appName: string
   linkPreview: MessageLinkPreview | null
   messageId: string
   roomId: string
   userIds: string[]
+}
+
+export interface LoadMessageLinkPreviewParams {
+  appName: string
+  preview: MessageLinkPreview
 }
 
 export type MessageIdProjection = Pick<MessageDocument, '_id'>

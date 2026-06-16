@@ -32,6 +32,7 @@ import {
   isString
 } from 'global-shared'
 
+import { SERVER_ENV } from 'src/app/env'
 import { AppError } from 'src/shared/lib/app-error'
 import { stringifyMongoId, stringifyMongoIds } from 'src/shared/lib/normalize-object-id'
 
@@ -152,6 +153,7 @@ export const editMessage = async (userId: string, { body, images, messageId, roo
 
   emitToUsers(stringifyMongoIds(room.users), 'message-edited', payload)
   refreshMessageLinkPreview({
+    appName: SERVER_ENV.info.appName,
     linkPreview,
     messageId,
     roomId,
@@ -585,6 +587,7 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
     })
   )
   refreshMessageLinkPreview({
+    appName: SERVER_ENV.info.appName,
     linkPreview,
     messageId: newDbMessage.id,
     roomId,

@@ -10,6 +10,7 @@ import type { RefreshMessageLinkPreviewParams } from '../messages.types'
 import { loadMessageLinkPreview } from './load-message-link-preview'
 
 const updateMessageLinkPreview = async ({
+  appName,
   linkPreview,
   messageId,
   roomId,
@@ -17,7 +18,7 @@ const updateMessageLinkPreview = async ({
 }: RefreshMessageLinkPreviewParams) => {
   if (!linkPreview) return
 
-  const loadedLinkPreview = await loadMessageLinkPreview(linkPreview)
+  const loadedLinkPreview = await loadMessageLinkPreview({ appName, preview: linkPreview })
   const uploadedImageId = loadedLinkPreview.image?.src
 
   try {

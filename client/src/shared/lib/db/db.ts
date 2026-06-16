@@ -3,6 +3,8 @@ import type { ChatRoom, Message, RoomCall } from 'global-shared'
 
 import type { ContactRecord, MediaRecord, KnownUserRecord, KvItem } from './types'
 
+const { appName } = __CLIENT_ENV_DATA__
+
 export class KRoomDB extends Dexie {
   settings!: Table<KvItem<object>>
   contacts!: Table<ContactRecord>
@@ -13,7 +15,7 @@ export class KRoomDB extends Dexie {
   messages!: Table<Message>
 
   constructor() {
-    super(__CLIENT_ENV_DATA__.appName.toLocaleLowerCase())
+    super(appName.toLocaleLowerCase())
     this.version(19).stores({
       settings: '__key',
       contacts: '&id',

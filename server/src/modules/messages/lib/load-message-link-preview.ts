@@ -32,9 +32,11 @@ import {
   MESSAGE_LINK_PREVIEW_PRIVATE_IPV6_PREFIXES,
   MESSAGE_LINK_PREVIEW_TITLE_META_KEYS,
   MESSAGE_LINK_PREVIEW_TITLE_TAG_PATTERN,
-  MESSAGE_LINK_PREVIEW_USER_AGENT,
   MESSAGE_LINK_PREVIEW_WHITESPACE_PATTERN
 } from '../constants'
+import type { LoadMessageLinkPreviewParams } from '../messages.types'
+
+import { buildMessageLinkPreviewUserAgent } from './build-message-link-preview-user-agent'
 
 const parseIpv4Address = (address: string) => {
   const parts = address.split('.').map(Number)
@@ -139,14 +141,14 @@ const getHeaderValue = (value: number | string | string[] | undefined) => {
   return ''
 }
 
-const fetchMessageLinkPreviewBuffer = (url: URL, maxBytes: number) =>
+const fetchMessageLinkPreviewBuffer = (url: URL, maxBytes: number, userAgent: string) =>
   new Promise<{ body: Buffer; contentType: string; location: string; statusCode: number }>((resolve, reject) => {
     const request = httpsRequest(
       url,
       {
         headers: {
           accept: 'text/html,image/*',
-          'user-agent': MESSAGE_LINK_PREVIEW_USER_AGENT
+          'user-agent': userAgent
         },
         lookup: createMessageLinkPreviewLookup(),
         signal: AbortSignal.timeout(MESSAGE_LINK_PREVIEW_FETCH_TIMEOUT_MS)
@@ -200,10 +202,10 @@ const fetchMessageLinkPreviewBuffer = (url: URL, maxBytes: number) =>
     request.end()
   })
 
-const fetchMessageLinkPreviewUrl = async (url: URL, maxBytes: number, redirectCount = 0) => {
+const fetchMessageLinkPreviewUrl = async (url: URL, maxBytes: number, userAgent: string, redirectCount = 0) => {
   if (!isAllowedMessageLinkPreviewUrl(url)) throw new Error('Unsupported link preview URL')
 
-  const response = await fetchMessageLinkPreviewBuffer(url, maxBytes)
+  const response = await fetchMessageLinkPreviewBuffer(url, maxBytes, userAgent)
   const hasRedirectStatus = isHttpRedirectStatus(response.statusCode)
   const hasRedirectLocation = Boolean(response.location)
   const hasAvailableRedirectAttempt = redirectCount < MESSAGE_LINK_PREVIEW_FETCH_MAX_REDIRECTS
@@ -213,7 +215,7 @@ const fetchMessageLinkPreviewUrl = async (url: URL, maxBytes: number, redirectCo
 
   const redirectUrl = new URL(response.location, url)
 
-  return fetchMessageLinkPreviewUrl(redirectUrl, maxBytes, redirectCount + 1)
+  return fetchMessageLinkPreviewUrl(redirectUrl, maxBytes, userAgent, redirectCount + 1)
 }
 
 const isHtmlContentType = (contentType: string) =>
@@ -283,9 +285,9 @@ const resolveMessageLinkPreviewImageUrl = (value: string, baseUrl: URL) => {
   return isAllowedMessageLinkPreviewUrl(url) ? url : null
 }
 
-const loadMessageLinkPreviewImage = async (imageUrl: URL) => {
+const loadMessageLinkPreviewImage = async (imageUrl: URL, userAgent: string) => {
   try {
-    const response = await fetchMessageLinkPreviewUrl(imageUrl, MESSAGE_LINK_PREVIEW_IMAGE_MAX_BYTES)
+    const response = await fetchMessageLinkPreviewUrl(imageUrl, MESSAGE_LINK_PREVIEW_IMAGE_MAX_BYTES, userAgent)
     const isImageResponse = isHttpSuccessStatus(response.statusCode) && response.contentType.startsWith('image/')
 
     if (!isImageResponse) return undefined
@@ -302,10 +304,14 @@ const loadMessageLinkPreviewImage = async (imageUrl: URL) => {
   }
 }
 
-export const loadMessageLinkPreview = async (preview: MessageLinkPreview): Promise<MessageLinkPreview> => {
+export const loadMessageLinkPreview = async ({
+  appName,
+  preview
+}: LoadMessageLinkPreviewParams): Promise<MessageLinkPreview> => {
   try {
     const url = new URL(preview.url)
-    const response = await fetchMessageLinkPreviewUrl(url, MESSAGE_LINK_PREVIEW_HTML_MAX_BYTES)
+    const userAgent = buildMessageLinkPreviewUserAgent(appName)
+    const response = await fetchMessageLinkPreviewUrl(url, MESSAGE_LINK_PREVIEW_HTML_MAX_BYTES, userAgent)
     const canReadHtml = isHttpSuccessStatus(response.statusCode) && isHtmlContentType(response.contentType)
 
     if (!canReadHtml) throw new Error('Link preview HTML is unavailable')
@@ -317,7 +323,7 @@ export const loadMessageLinkPreview = async (preview: MessageLinkPreview): Promi
       readMetaValueByKeys(html, MESSAGE_LINK_PREVIEW_IMAGE_META_KEYS),
       url
     )
-    const image = imageUrl ? await loadMessageLinkPreviewImage(imageUrl) : undefined
+    const image = imageUrl ? await loadMessageLinkPreviewImage(imageUrl, userAgent) : undefined
 
     return {
       ...preview,

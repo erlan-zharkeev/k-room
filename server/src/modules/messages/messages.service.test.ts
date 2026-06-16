@@ -127,6 +127,7 @@ describe('messages.service', () => {
       })
     )
     expect(refreshLinkPreviewMock.refreshMessageLinkPreview).toHaveBeenCalledWith({
+      appName: 'K-Room',
       linkPreview,
       messageId: payload.messageId,
       roomId: payload.roomId,

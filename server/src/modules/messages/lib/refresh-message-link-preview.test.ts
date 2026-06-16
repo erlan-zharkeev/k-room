@@ -54,6 +54,7 @@ describe('refreshMessageLinkPreview', () => {
     messageModelMock.updateOne.mockResolvedValue({ modifiedCount: 1 })
 
     refreshMessageLinkPreview({
+      appName: 'Test App',
       linkPreview: pendingPreview,
       messageId: 'message-1',
       roomId: 'room-1',
@@ -62,6 +63,10 @@ describe('refreshMessageLinkPreview', () => {
 
     await vi.waitFor(() => expect(messageModelMock.updateOne).toHaveBeenCalled())
 
+    expect(loadPreviewMock.loadMessageLinkPreview).toHaveBeenCalledWith({
+      appName: 'Test App',
+      preview: pendingPreview
+    })
     expect(messageModelMock.updateOne).toHaveBeenCalledWith(
       {
         _id: 'message-1',
@@ -81,6 +86,7 @@ describe('refreshMessageLinkPreview', () => {
     messageModelMock.updateOne.mockResolvedValue({ modifiedCount: 0 })
 
     refreshMessageLinkPreview({
+      appName: 'Test App',
       linkPreview: pendingPreview,
       messageId: 'message-1',
       roomId: 'room-1',
@@ -97,6 +103,7 @@ describe('refreshMessageLinkPreview', () => {
     loadPreviewMock.loadMessageLinkPreview.mockRejectedValue(new Error('network failed'))
 
     refreshMessageLinkPreview({
+      appName: 'Test App',
       linkPreview: pendingPreview,
       messageId: 'message-1',
       roomId: 'room-1',
