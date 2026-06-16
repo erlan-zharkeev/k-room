@@ -158,21 +158,24 @@ jobs:
           LIGHTSAIL_USER: ${{ secrets.LIGHTSAIL_USER }}
           LIGHTSAIL_APP_PATH: ${{ secrets.LIGHTSAIL_APP_PATH }}
         run: |
-          SSH_OPTIONS=(-o ServerAliveInterval=20 -o ServerAliveCountMax=30 -o TCPKeepAlive=yes -o ConnectTimeout=30)
+          set -euo pipefail
 
-          ssh "${SSH_OPTIONS[@]}" "$LIGHTSAIL_USER@$LIGHTSAIL_HOST" "mkdir -p $LIGHTSAIL_APP_PATH/scripts/deploy $LIGHTSAIL_APP_PATH/nginx $LIGHTSAIL_APP_PATH/scripts/deploy/certs"
-
-          scp "${SSH_OPTIONS[@]}" compose.prod.yml "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/compose.prod.yml"
-          scp "${SSH_OPTIONS[@]}" .env.shared "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.shared"
-          scp "${SSH_OPTIONS[@]}" .env.production "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.production"
-          scp "${SSH_OPTIONS[@]}" scripts/deploy/deploy.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/scripts/deploy/deploy.sh"
-          scp "${SSH_OPTIONS[@]}" scripts/deploy/sync-certs.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/scripts/deploy/sync-certs.sh"
-          scp "${SSH_OPTIONS[@]}" scripts/deploy/install-certbot-renew-hook.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/scripts/deploy/install-certbot-renew-hook.sh"
-          scp "${SSH_OPTIONS[@]}" nginx/webserver.conf "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/nginx/webserver.conf"
+          SSH_OPTIONS=(-o ServerAliveInterval=60 -o ServerAliveCountMax=20 -o TCPKeepAlive=yes -o ConnectTimeout=30)
+          DEPLOY_FILES=(
+            compose.prod.yml
+            .env.shared
+            .env.production
+            scripts/deploy/deploy.sh
+            scripts/deploy/sync-certs.sh
+            scripts/deploy/install-certbot-renew-hook.sh
+            nginx/webserver.conf
+          )
 
           if [ -f .env.secret ]; then
-            scp "${SSH_OPTIONS[@]}" .env.secret "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.secret"
+            DEPLOY_FILES+=(.env.secret)
           fi
+
+          tar -czf - "${DEPLOY_FILES[@]}" | ssh "${SSH_OPTIONS[@]}" "$LIGHTSAIL_USER@$LIGHTSAIL_HOST" "mkdir -p $LIGHTSAIL_APP_PATH/scripts/deploy/certs $LIGHTSAIL_APP_PATH/nginx && tar -xzf - -C $LIGHTSAIL_APP_PATH"
 
       - name: Run deployment
         env:
@@ -182,6 +185,8 @@ jobs:
           LIGHTSAIL_USER: ${{ secrets.LIGHTSAIL_USER }}
           LIGHTSAIL_APP_PATH: ${{ secrets.LIGHTSAIL_APP_PATH }}
         run: |
-          SSH_OPTIONS=(-o ServerAliveInterval=20 -o ServerAliveCountMax=30 -o TCPKeepAlive=yes -o ConnectTimeout=30)
+          set -euo pipefail
+
+          SSH_OPTIONS=(-o ServerAliveInterval=60 -o ServerAliveCountMax=20 -o TCPKeepAlive=yes -o ConnectTimeout=30)
 
           ssh "${SSH_OPTIONS[@]}" "$LIGHTSAIL_USER@$LIGHTSAIL_HOST" "cd $LIGHTSAIL_APP_PATH && DOCKERHUB_USERNAME=\"$DOCKERHUB_USERNAME\" DOCKERHUB_TOKEN=\"$DOCKERHUB_TOKEN\" sh ./scripts/deploy/deploy.sh"
