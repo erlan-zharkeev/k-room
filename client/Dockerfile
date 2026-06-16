@@ -24,7 +24,7 @@ COPY client/index.html ./client/index.html
 COPY client/public ./client/public
 COPY client/src ./client/src
 
-RUN pnpm install --frozen-lockfile --filter ./client...
+RUN pnpm install --frozen-lockfile --filter ./global-shared --filter ./client...
 
 WORKDIR /app/global-shared
 
