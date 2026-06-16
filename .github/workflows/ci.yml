@@ -158,18 +158,20 @@ jobs:
           LIGHTSAIL_USER: ${{ secrets.LIGHTSAIL_USER }}
           LIGHTSAIL_APP_PATH: ${{ secrets.LIGHTSAIL_APP_PATH }}
         run: |
-          ssh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST" "mkdir -p $LIGHTSAIL_APP_PATH/scripts/deploy $LIGHTSAIL_APP_PATH/nginx $LIGHTSAIL_APP_PATH/scripts/deploy/certs"
+          SSH_OPTIONS=(-o ServerAliveInterval=20 -o ServerAliveCountMax=30 -o TCPKeepAlive=yes -o ConnectTimeout=30)
 
-          scp compose.prod.yml "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/compose.prod.yml"
-          scp .env.shared "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.shared"
-          scp .env.production "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.production"
-          scp scripts/deploy/deploy.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/scripts/deploy/deploy.sh"
-          scp scripts/deploy/sync-certs.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/scripts/deploy/sync-certs.sh"
-          scp scripts/deploy/install-certbot-renew-hook.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/scripts/deploy/install-certbot-renew-hook.sh"
-          scp nginx/webserver.conf "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/nginx/webserver.conf"
+          ssh "${SSH_OPTIONS[@]}" "$LIGHTSAIL_USER@$LIGHTSAIL_HOST" "mkdir -p $LIGHTSAIL_APP_PATH/scripts/deploy $LIGHTSAIL_APP_PATH/nginx $LIGHTSAIL_APP_PATH/scripts/deploy/certs"
+
+          scp "${SSH_OPTIONS[@]}" compose.prod.yml "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/compose.prod.yml"
+          scp "${SSH_OPTIONS[@]}" .env.shared "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.shared"
+          scp "${SSH_OPTIONS[@]}" .env.production "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.production"
+          scp "${SSH_OPTIONS[@]}" scripts/deploy/deploy.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/scripts/deploy/deploy.sh"
+          scp "${SSH_OPTIONS[@]}" scripts/deploy/sync-certs.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/scripts/deploy/sync-certs.sh"
+          scp "${SSH_OPTIONS[@]}" scripts/deploy/install-certbot-renew-hook.sh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/scripts/deploy/install-certbot-renew-hook.sh"
+          scp "${SSH_OPTIONS[@]}" nginx/webserver.conf "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/nginx/webserver.conf"
 
           if [ -f .env.secret ]; then
-            scp .env.secret "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.secret"
+            scp "${SSH_OPTIONS[@]}" .env.secret "$LIGHTSAIL_USER@$LIGHTSAIL_HOST:$LIGHTSAIL_APP_PATH/.env.secret"
           fi
 
       - name: Run deployment
@@ -180,4 +182,6 @@ jobs:
           LIGHTSAIL_USER: ${{ secrets.LIGHTSAIL_USER }}
           LIGHTSAIL_APP_PATH: ${{ secrets.LIGHTSAIL_APP_PATH }}
         run: |
-          ssh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST" "cd $LIGHTSAIL_APP_PATH && DOCKERHUB_USERNAME=\"$DOCKERHUB_USERNAME\" DOCKERHUB_TOKEN=\"$DOCKERHUB_TOKEN\" sh ./scripts/deploy/deploy.sh"
+          SSH_OPTIONS=(-o ServerAliveInterval=20 -o ServerAliveCountMax=30 -o TCPKeepAlive=yes -o ConnectTimeout=30)
+
+          ssh "${SSH_OPTIONS[@]}" "$LIGHTSAIL_USER@$LIGHTSAIL_HOST" "cd $LIGHTSAIL_APP_PATH && DOCKERHUB_USERNAME=\"$DOCKERHUB_USERNAME\" DOCKERHUB_TOKEN=\"$DOCKERHUB_TOKEN\" sh ./scripts/deploy/deploy.sh"
