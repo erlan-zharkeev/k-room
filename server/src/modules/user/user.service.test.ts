@@ -27,7 +27,7 @@ const userModelMock = vi.hoisted(() => {
     constructor(data: UnknownObject) {
       Object.assign(this, data)
       this._id = data._id ?? 'generated-id'
-      this.createdAt = new Date(1000)
+      this.createdAt = new Date(1_000)
       this.save.mockResolvedValue(this)
     }
   }

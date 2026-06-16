@@ -1,7 +1,7 @@
 import { DAY_IN_MS, HOUR_IN_MS, MINUTE_IN_MS, SECOND_IN_MS } from 'global-shared'
 
 export const DEFAULT_COOKIE_MAX_AGE_MS = 30 * DAY_IN_MS
-export const DEVICE_COOKIE_MAX_AGE_MS = 36500 * DAY_IN_MS
+export const DEVICE_COOKIE_MAX_AGE_MS = 36_500 * DAY_IN_MS
 export const TOKEN_EXPIRES_PATTERN = /^(\d+)([smhd])$/
 export const TOKEN_EXPIRES_UNIT_TO_MS = {
   s: SECOND_IN_MS,

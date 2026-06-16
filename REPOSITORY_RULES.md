@@ -76,6 +76,21 @@ Allowed locations:
 
 8. Do not use `enum`. Use `as const` objects and derived union types.
 
+## Numeric Literals
+
+1. Use numeric separators for real numeric values in TS, JS, Vue script, and Rust code when they improve readability.
+
+Use:
+
+```ts
+const TIMEOUT_MS = 10_000
+const MAX_BYTES = 1_024 * 1_024
+```
+
+2. Use separators for millisecond values, TTLs, timestamps, limits, byte sizes, and breakpoints with four or more digits.
+
+3. Do not use separators for ports, years, versions, hex colors, confirmation codes, external IDs, URLs, env values, JSON, YAML, CSS, SVG, or generated files.
+
 ## Config And I18n
 
 1. Put constants and defaults in config/constants files.

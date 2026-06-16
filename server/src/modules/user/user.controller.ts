@@ -70,7 +70,7 @@ export class UserController {
     FileInterceptor('file', {
       storage: memoryStorage(),
       limits: {
-        fileSize: 1024 * 1024 * 1024
+        fileSize: 1_024 * 1_024 * 1_024
       }
     })
   )

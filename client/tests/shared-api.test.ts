@@ -100,7 +100,7 @@ describe('shared API helpers', () => {
 
   it('transforms media response headers to cache metadata', () => {
     vi.useFakeTimers()
-    vi.setSystemTime(1234)
+    vi.setSystemTime(1_234)
 
     const result = transformHeadersToMediaData({
       headers: {
@@ -115,7 +115,7 @@ describe('shared API helpers', () => {
       etag: 'etag-1, etag-2',
       contentType: 'image/png',
       lastModified: 'Mon, 01 Jan 2024 00:00:00 GMT',
-      lastChecked: 1234,
+      lastChecked: 1_234,
       kind: 'image',
       status: 'ready'
     })

@@ -107,7 +107,7 @@ describe('PresenceService', () => {
     const firstSocket = createSocket('socket-1')
     const secondSocket = createSocket('socket-2')
 
-    vi.setSystemTime(1000)
+    vi.setSystemTime(1_000)
 
     await service.markSocketConnected(firstSocket as never)
     await service.markSocketConnected(secondSocket as never)
@@ -121,12 +121,12 @@ describe('PresenceService', () => {
     await service.markSocketDisconnected(secondSocket as never)
 
     expect(redisService.removeSetValue).toHaveBeenCalledWith(PRESENCE_ONLINE_USERS_KEY, 'user-1')
-    expect(userPersistenceMock.updateUserLastSeen).toHaveBeenCalledWith('user-1', 1000)
+    expect(userPersistenceMock.updateUserLastSeen).toHaveBeenCalledWith('user-1', 1_000)
     expect(presenceUtilsMock.emitToUsers).toHaveBeenCalledWith(['contact-1'], 'contact-status-updated', {
       interlocutorId: 'user-1',
       online: false,
-      onlineStatusUpdatedTimestamp: 1000,
-      lastSeen: 1000
+      onlineStatusUpdatedTimestamp: 1_000,
+      lastSeen: 1_000
     })
 
     service.onModuleDestroy()

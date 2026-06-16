@@ -1,8 +1,8 @@
 export const TOAST_LIFE_MS = {
-  success: 2000,
-  info: 2000,
-  warning: 60000,
-  error: 30000
+  success: 2_000,
+  info: 2_000,
+  warning: 60_000,
+  error: 30_000
 } as const
 
 export const TOAST_PLACEMENT = {
