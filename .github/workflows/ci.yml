@@ -90,12 +90,28 @@ jobs:
           LIGHTSAIL_HOST: ${{ secrets.LIGHTSAIL_HOST }}
           LIGHTSAIL_SSH_PRIVATE_KEY_B64: ${{ secrets.LIGHTSAIL_SSH_PRIVATE_KEY_B64 }}
         run: |
+          set -euo pipefail
+
+          if [ -z "$LIGHTSAIL_SSH_PRIVATE_KEY_B64" ]; then
+            echo "LIGHTSAIL_SSH_PRIVATE_KEY_B64 is empty" >&2
+            exit 1
+          fi
+
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          printf '%s' "$LIGHTSAIL_SSH_PRIVATE_KEY_B64" | base64 --decode | tr -d '\r' > ~/.ssh/id_ed25519
+
+          if ! printf '%s' "$LIGHTSAIL_SSH_PRIVATE_KEY_B64" | base64 --decode | tr -d '\r' > ~/.ssh/id_ed25519; then
+            echo "LIGHTSAIL_SSH_PRIVATE_KEY_B64 must contain base64 of the private SSH key file" >&2
+            exit 1
+          fi
+
           chmod 600 ~/.ssh/id_ed25519
           ssh-keygen -y -f ~/.ssh/id_ed25519 > /dev/null
-          ssh-keyscan -H "$LIGHTSAIL_HOST" >> ~/.ssh/known_hosts
+
+          if ! ssh-keyscan -T 20 -H "$LIGHTSAIL_HOST" >> ~/.ssh/known_hosts; then
+            echo "Could not read SSH host key. Check LIGHTSAIL_HOST value and that port 22 is open for GitHub Actions." >&2
+            exit 1
+          fi
 
       - name: Restore production secret env
         env:
