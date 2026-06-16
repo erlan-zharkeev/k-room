@@ -1,8 +1,7 @@
 import { computed, onMounted, ref } from 'vue'
 
-import { DOWNLOAD_RELEASES_MANIFEST_URL } from '../config/constants'
 import type { DownloadPlatformItem, DownloadReleasesManifest } from '../config/types'
-import { parseDownloadReleasesManifest } from '../lib/parse-download-releases-manifest'
+import { loadDownloadReleasesManifest } from '../lib/load-download-releases-manifest'
 
 export const useDownloadPage = () => {
   const releasesManifest = ref<DownloadReleasesManifest | null>(null)
@@ -15,16 +14,7 @@ export const useDownloadPage = () => {
     hasLoadError.value = false
 
     try {
-      const response = await fetch(DOWNLOAD_RELEASES_MANIFEST_URL)
-
-      if (!response.ok) {
-        hasLoadError.value = true
-
-        return
-      }
-
-      const source: unknown = await response.json()
-      const parsedManifest = parseDownloadReleasesManifest(source)
+      const parsedManifest = await loadDownloadReleasesManifest()
 
       if (!parsedManifest) {
         hasLoadError.value = true

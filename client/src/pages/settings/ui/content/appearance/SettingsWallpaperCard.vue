@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { NmorphFileUpload, NmorphSelectButton, NmorphSlider } from '@nmorph/nmorph-ui-kit'
-import { computed } from 'vue'
 
-import { useSettings } from 'src/entities/setting'
-import { useI18n } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui'
 
 import {
@@ -13,29 +10,26 @@ import {
   SETTINGS_WALLPAPER_SCALE_MAX,
   SETTINGS_WALLPAPER_SCALE_MIN,
   SETTINGS_WALLPAPER_DARKNESS_MAX,
-  SETTINGS_WALLPAPER_DARKNESS_MIN,
-  SETTINGS_WALLPAPER_VISIBILITY_OPTIONS
+  SETTINGS_WALLPAPER_DARKNESS_MIN
 } from '../../../config/constants/wallpaper.constants'
 import { SETTINGS_PAGE_APPEARANCE_I18N } from '../../../config/i18n/appearance.i18n'
-import { useWallpaper } from '../../../model/appearance/use-wallpaper.model'
+import { useWallpaperCard } from '../../../model/appearance/use-wallpaper-card.model'
 import SettingsCard from '../../SettingsCard.vue'
 
-const { t } = useI18n()
 const {
-  uploadKey,
-  setWallpaperVisibility,
+  effectiveTheme,
+  isSelectedThemeCustom,
   setAngle,
-  setScale,
   setDarkness,
+  setScale,
   showUnsupportedWallpaperFormatError,
   updateWallpaper,
-  wallpaperUploadValue
-} = useWallpaper()
-const { effectiveTheme, settings, isSelectedThemeCustom } = useSettings()
-
-const visibilityOptions = computed(() =>
-  SETTINGS_WALLPAPER_VISIBILITY_OPTIONS.map((option) => ({ ...option, label: t(option.label) }))
-)
+  updateWallpaperVisibility,
+  uploadKey,
+  visibilityOptions,
+  wallpaperUploadValue,
+  wallpaperVisibilityValue
+} = useWallpaperCard()
 </script>
 
 <template>
@@ -45,9 +39,9 @@ const visibilityOptions = computed(() =>
         <AppText :selectable="false" :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperEnabled)" />
         <NmorphSelectButton
           thickness="thick"
-          :model-value="settings.appearance.showWallpaper ? 'show' : 'hide'"
+          :model-value="wallpaperVisibilityValue"
           :options="visibilityOptions"
-          @update:model-value="setWallpaperVisibility($event === 'show')"
+          @update:model-value="updateWallpaperVisibility"
         />
       </div>
 

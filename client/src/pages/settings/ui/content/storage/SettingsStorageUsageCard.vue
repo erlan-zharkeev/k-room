@@ -1,18 +1,13 @@
 <script setup lang="ts">
 import { NmorphProgress } from '@nmorph/nmorph-ui-kit'
-import { computed } from 'vue'
 
-import { formatBytes, useStorageEstimate } from 'src/shared/lib'
 import { AppText } from 'src/shared/ui'
 
 import { SETTINGS_PAGE_STORAGE_I18N } from '../../../config/i18n/storage.i18n'
+import { useStorageUsage } from '../../../model/storage/use-storage-usage.model'
 import SettingsCard from '../../SettingsCard.vue'
 
-const { usageBytes, quotaBytes, usagePercent, isStorageUsageWarning } = useStorageEstimate()
-
-const usageFormatted = computed(() => formatBytes(usageBytes.value))
-const availableFormatted = computed(() => formatBytes(quotaBytes.value - usageBytes.value))
-const quotaFormatted = computed(() => formatBytes(quotaBytes.value))
+const { availableFormatted, isStorageUsageWarning, quotaFormatted, usageFormatted, usagePercent } = useStorageUsage()
 </script>
 
 <template>

@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { NmorphButton, NmorphForm, NmorphFormItem, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES, SECURITY_ACTION } from 'global-shared'
-import { computed, onMounted } from 'vue'
-import { RouterLink, useRoute } from 'vue-router'
+import { RouterLink } from 'vue-router'
 
 import { AppCaptcha, AppHeader, AppText } from 'src/shared/ui'
 
@@ -15,37 +14,22 @@ const {
   counterValue,
   debugCode,
   emailFormData,
-  initializePasswordRecovery,
   isCodeFormValid,
+  isEmailInputDisabled,
   isEmailFormValid,
+  isSendCodeBlocked,
   isSendingEmailCode,
+  isValidateCodeBlocked,
   isValidatingCode,
-  sendCaptcha,
+  sendCaptchaRequired,
+  sendCaptchaResetKey,
+  sendCaptchaToken,
   sendEmailCode,
-  validateCaptcha,
+  validateCaptchaRequired,
+  validateCaptchaResetKey,
+  validateCaptchaToken,
   validateCode
 } = usePasswordRecovery()
-const route = useRoute()
-const hasPresetEmail = computed(() => Boolean(route.query['user-email']))
-const {
-  captchaRequired: sendCaptchaRequired,
-  captchaToken: sendCaptchaToken,
-  captchaResetKey: sendCaptchaResetKey
-} = sendCaptcha
-const {
-  captchaRequired: validateCaptchaRequired,
-  captchaToken: validateCaptchaToken,
-  captchaResetKey: validateCaptchaResetKey
-} = validateCaptcha
-const isEmailInputDisabled = computed(() => isSendingEmailCode.value || hasPresetEmail.value)
-const isSendCodeCaptchaBlocked = computed(() => sendCaptchaRequired.value && !sendCaptchaToken.value)
-const isValidateCodeCaptchaBlocked = computed(() => validateCaptchaRequired.value && !validateCaptchaToken.value)
-const isSendCodeBlocked = computed(
-  () => isSendingEmailCode.value || counterValue.value > 0 || isSendCodeCaptchaBlocked.value
-)
-const isValidateCodeBlocked = computed(() => isValidatingCode.value || isValidateCodeCaptchaBlocked.value)
-
-onMounted(initializePasswordRecovery)
 </script>
 
 <template>

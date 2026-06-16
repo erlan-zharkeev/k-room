@@ -8,16 +8,14 @@ import { log } from 'src/shared/lib/log'
 
 import { EMAIL_I18N } from './email.i18n'
 import type { SendEmailCodeEmailPayload, SendEmailConfirmationEmailPayload } from './email.types'
-import { renderEmailConfirmationHtml } from './render-email-confirmation-html'
+import { buildEmailGreeting } from './lib/build-email-greeting'
+import { renderEmailCodeHtml } from './lib/render-email-code-html'
+import { renderEmailConfirmationHtml } from './lib/render-email-confirmation-html'
 
 let resendClient: Resend | null = null
 
 @Injectable()
 export class EmailService {
-  private get appName() {
-    return SERVER_ENV.info.appName
-  }
-
   private createResendClient() {
     if (SERVER_ENV.stage === 'test' || SERVER_ENV.isE2E) {
       return null
@@ -58,6 +56,7 @@ export class EmailService {
 
     const resend = this.createResendClient()
     const confirmUrl = this.buildEmailConfirmationLink(token)
+    const { appName } = SERVER_ENV.info
 
     if (!resend) {
       log.warn(`-Mock confirmation email for ${email}: ${confirmUrl}`)
@@ -65,13 +64,20 @@ export class EmailService {
     }
 
     const { data, error } = await resend.emails.send({
-      from: `${this.appName} <no-reply@k-room.space>`,
+      from: `${appName} <no-reply@k-room.space>`,
       to: email,
-      subject: `${this.appName}: Confirm your email`,
+      subject: `${appName}: ${EMAIL_I18N.emailConfirmationSubject.en}`,
       html: renderEmailConfirmationHtml({
-        appName: this.appName,
+        appName,
+        confirmEmailButtonText: EMAIL_I18N.emailConfirmationButton.en,
+        confirmationText: EMAIL_I18N.emailConfirmationText.en,
         confirmUrl,
-        nickname
+        fallbackLinkText: EMAIL_I18N.emailConfirmationFallbackLink.en,
+        greeting: buildEmailGreeting({
+          greeting: EMAIL_I18N.emailConfirmationGreeting.en,
+          nickname,
+          punctuation: '!'
+        })
       })
     })
 
@@ -90,15 +96,18 @@ export class EmailService {
     }
 
     const resend = this.createResendClient()
-    const html = `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-        <h2>Password recovery</h2>
-        <p>Hello${nickname ? `, ${nickname}` : ''}.</p>
-        <p>Use this code to continue resetting your password:</p>
-        <p style="font-size: 24px; font-weight: bold; letter-spacing: 4px;">${code}</p>
-        <p>If you did not request password recovery, you can ignore this message.</p>
-      </div>
-    `
+    const { appName } = SERVER_ENV.info
+    const html = renderEmailCodeHtml({
+      code,
+      greeting: buildEmailGreeting({
+        greeting: EMAIL_I18N.emailGreeting.en,
+        nickname,
+        punctuation: '.'
+      }),
+      ignoreText: EMAIL_I18N.passwordRecoveryIgnoreText.en,
+      text: EMAIL_I18N.passwordRecoveryCodeText.en,
+      title: EMAIL_I18N.passwordRecoveryTitle.en
+    })
 
     if (!resend) {
       log.warn(`-Mock password recovery email for ${email}: ${code}`)
@@ -106,9 +115,9 @@ export class EmailService {
     }
 
     const { data, error } = await resend.emails.send({
-      from: `${this.appName} <no-reply@k-room.space>`,
+      from: `${appName} <no-reply@k-room.space>`,
       to: email,
-      subject: `${this.appName}: Password recovery code`,
+      subject: `${appName}: ${EMAIL_I18N.passwordRecoveryCodeSubject.en}`,
       html
     })
 
@@ -127,15 +136,18 @@ export class EmailService {
     }
 
     const resend = this.createResendClient()
-    const html = `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-        <h2>Email change</h2>
-        <p>Hello${nickname ? `, ${nickname}` : ''}.</p>
-        <p>Use this code to confirm your new email address:</p>
-        <p style="font-size: 24px; font-weight: bold; letter-spacing: 4px;">${code}</p>
-        <p>If you did not request an email change, you can ignore this message.</p>
-      </div>
-    `
+    const { appName } = SERVER_ENV.info
+    const html = renderEmailCodeHtml({
+      code,
+      greeting: buildEmailGreeting({
+        greeting: EMAIL_I18N.emailGreeting.en,
+        nickname,
+        punctuation: '.'
+      }),
+      ignoreText: EMAIL_I18N.emailChangeIgnoreText.en,
+      text: EMAIL_I18N.emailChangeCodeText.en,
+      title: EMAIL_I18N.emailChangeTitle.en
+    })
 
     if (!resend) {
       log.warn(`-Mock email change code for ${email}: ${code}`)
@@ -143,9 +155,9 @@ export class EmailService {
     }
 
     const { data, error } = await resend.emails.send({
-      from: `${this.appName} <no-reply@k-room.space>`,
+      from: `${appName} <no-reply@k-room.space>`,
       to: email,
-      subject: `${this.appName}: Email change code`,
+      subject: `${appName}: ${EMAIL_I18N.emailChangeCodeSubject.en}`,
       html
     })
 

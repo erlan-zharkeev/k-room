@@ -1,3 +1,4 @@
+import { useIntervalFn } from '@vueuse/core'
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 import {
@@ -19,7 +20,6 @@ const isStorageUsageWarning = computed(() => {
 })
 
 let storageEstimateSubscribers = 0
-let storageEstimateIntervalId: number | undefined
 
 export const loadStorageEstimate = async () => {
   if (!navigator.storage?.estimate) return
@@ -37,24 +37,31 @@ export const loadStorageEstimate = async () => {
   }
 }
 
+const { pause: pauseStorageEstimateInterval, resume: resumeStorageEstimateInterval } = useIntervalFn(
+  () => {
+    void loadStorageEstimate()
+  },
+  STORAGE_ESTIMATE_REFRESH_INTERVAL_MS,
+  {
+    immediate: false
+  }
+)
+
 const startStorageEstimateSubscription = () => {
   storageEstimateSubscribers += 1
 
   if (storageEstimateSubscribers > 1) return
 
   void loadStorageEstimate()
-  storageEstimateIntervalId = window.setInterval(() => {
-    void loadStorageEstimate()
-  }, STORAGE_ESTIMATE_REFRESH_INTERVAL_MS)
+  resumeStorageEstimateInterval()
 }
 
 const stopStorageEstimateSubscription = () => {
   storageEstimateSubscribers = Math.max(0, storageEstimateSubscribers - 1)
 
-  if (storageEstimateSubscribers || storageEstimateIntervalId === undefined) return
+  if (storageEstimateSubscribers) return
 
-  window.clearInterval(storageEstimateIntervalId)
-  storageEstimateIntervalId = undefined
+  pauseStorageEstimateInterval()
 }
 
 export const useStorageEstimate = () => {

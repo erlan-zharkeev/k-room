@@ -11,7 +11,7 @@ import {
   type ValidatePasswordRecoveryCodeResponse
 } from 'global-shared'
 import clone from 'lodash/clone'
-import { computed, reactive, ref, useTemplateRef } from 'vue'
+import { computed, onMounted, reactive, ref, useTemplateRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useHttp, useProtectedActionCaptcha } from 'src/shared/api'
@@ -54,9 +54,27 @@ export const usePasswordRecovery = () => {
   const debugCode = ref('')
   const sendCaptcha = useProtectedActionCaptcha()
   const validateCaptcha = useProtectedActionCaptcha()
+  const {
+    captchaRequired: sendCaptchaRequired,
+    captchaToken: sendCaptchaToken,
+    captchaResetKey: sendCaptchaResetKey
+  } = sendCaptcha
+  const {
+    captchaRequired: validateCaptchaRequired,
+    captchaToken: validateCaptchaToken,
+    captchaResetKey: validateCaptchaResetKey
+  } = validateCaptcha
+  const { counterValue, syncCounterValue } = useRequestCooldownCounter(PASSWORD_RECOVERY_COUNTER_TICK_MS)
+  const hasPresetEmail = computed(() => Boolean(route.query['user-email']))
   const isEmailFormValid = computed(() => emailFormRef.value?.formData.isFormValid.value ?? false)
   const isCodeFormValid = computed(() => NON_EMPTY_PATTERN.test(codeFormData.code.value))
-  const { counterValue, syncCounterValue } = useRequestCooldownCounter(PASSWORD_RECOVERY_COUNTER_TICK_MS)
+  const isEmailInputDisabled = computed(() => isSendingEmailCode.value || hasPresetEmail.value)
+  const isSendCodeCaptchaBlocked = computed(() => sendCaptchaRequired.value && !sendCaptchaToken.value)
+  const isValidateCodeCaptchaBlocked = computed(() => validateCaptchaRequired.value && !validateCaptchaToken.value)
+  const isSendCodeBlocked = computed(
+    () => isSendingEmailCode.value || counterValue.value > 0 || isSendCodeCaptchaBlocked.value
+  )
+  const isValidateCodeBlocked = computed(() => isValidatingCode.value || isValidateCodeCaptchaBlocked.value)
 
   const syncQuery = async (email: string, nextRequestTimestampMs: number) => {
     await router.replace({
@@ -156,20 +174,28 @@ export const usePasswordRecovery = () => {
     }
   }
 
+  onMounted(initializePasswordRecovery)
+
   return {
     codeFormData,
     codeSent,
     counterValue,
     debugCode,
     emailFormData,
-    initializePasswordRecovery,
     isCodeFormValid,
+    isEmailInputDisabled,
     isEmailFormValid,
+    isSendCodeBlocked,
     isSendingEmailCode,
+    isValidateCodeBlocked,
     isValidatingCode,
-    sendCaptcha,
+    sendCaptchaRequired,
+    sendCaptchaResetKey,
+    sendCaptchaToken,
     sendEmailCode,
-    validateCaptcha,
+    validateCaptchaRequired,
+    validateCaptchaResetKey,
+    validateCaptchaToken,
     validateCode
   }
 }

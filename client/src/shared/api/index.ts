@@ -1,6 +1,7 @@
 export { createHttpError, getHandledErrorMessage, isHttpError, isHandledError } from './http/create-http-error'
 export { allowAuthRefresh, blockAuthRefresh } from './http/auth-refresh'
 export { getHeaderValue } from './http/get-header-value'
+export { loadPublicJson } from './http/load-public-json'
 export { setHttpClientLanguage } from './http/http-client'
 export { useHttp } from './http/use-http'
 export { useHttpInterceptor } from './http/use-http-interceptor'

@@ -33,7 +33,7 @@ vi.mock('resend', () => ({
 }))
 
 const { EmailService } = await import('./email.service')
-const { renderEmailConfirmationHtml } = await import('./render-email-confirmation-html')
+const { renderEmailConfirmationHtml } = await import('./lib/render-email-confirmation-html')
 
 describe('email.service', () => {
   beforeEach(() => {
@@ -47,8 +47,11 @@ describe('email.service', () => {
   it('renders confirmation html with confirm url and nickname', () => {
     const html = renderEmailConfirmationHtml({
       appName: 'K Room',
+      confirmEmailButtonText: 'Confirm email',
+      confirmationText: 'Please confirm your email address to finish registration.',
       confirmUrl: 'https://localhost/confirm?token=abc',
-      nickname: 'Tester'
+      fallbackLinkText: 'If the button does not work, open this link manually:',
+      greeting: 'Hi, Tester!'
     })
 
     expect(html).toContain('K Room')
