@@ -21,7 +21,7 @@ COPY server/nest-cli.json ./server/nest-cli.json
 COPY server/tsconfig.json ./server/tsconfig.json
 COPY server/src ./server/src
 
-RUN pnpm install --frozen-lockfile --filter ./server...
+RUN pnpm install --frozen-lockfile --filter ./global-shared --filter ./server...
 
 WORKDIR /app/global-shared
 
