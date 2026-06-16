@@ -55,7 +55,7 @@ COPY .env.production ./.env.production
 COPY server/package.json ./server/package.json
 COPY server/nest-cli.json ./server/nest-cli.json
 
-RUN pnpm install --frozen-lockfile --prod --filter ./server...
+RUN pnpm install --frozen-lockfile --prod --filter ./global-shared --filter ./server...
 
 WORKDIR /app/server
 
