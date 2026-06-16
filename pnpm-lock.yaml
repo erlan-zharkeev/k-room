@@ -237,9 +237,15 @@ importers:
       bcryptjs:
         specifier: ^3.0.2
         version: 3.0.3
+      cli-color:
+        specifier: ^2.0.3
+        version: 2.0.4
       connect-mongo:
         specifier: ^5.1.0
         version: 5.1.0(express-session@1.19.0)(mongodb@6.20.0)
+      cookie:
+        specifier: ^1.0.2
+        version: 1.1.1
       cookie-parser:
         specifier: ^1.4.6
         version: 1.4.7
@@ -300,6 +306,9 @@ importers:
       sharp:
         specifier: ^0.32.1
         version: 0.32.6
+      socket.io:
+        specifier: ^4.5.1
+        version: 4.8.3
       uuid:
         specifier: ^9.0.0
         version: 9.0.1
@@ -355,18 +364,9 @@ importers:
       body-parser:
         specifier: ^1.20.1
         version: 1.20.4
-      cli-color:
-        specifier: ^2.0.3
-        version: 2.0.4
-      cookie:
-        specifier: ^1.0.2
-        version: 1.1.1
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
-      socket.io:
-        specifier: ^4.5.1
-        version: 4.8.3
       source-map-support:
         specifier: ^0.5.21
         version: 0.5.21
