@@ -48,7 +48,7 @@ describe('chat-rooms.socket', () => {
 
     chatRoomsServiceMock.createChatRoom.mockResolvedValue({ roomId: 'room-1' })
 
-    const payload = { memberIds: ['user-1', 'user-2'] }
+    const payload = { memberIds: ['user-2'] }
     const response = await handlers['create-chat-room'](payload as never)
 
     expect(chatRoomsServiceMock.createChatRoom).toHaveBeenCalledWith('user-1', payload, presenceService)

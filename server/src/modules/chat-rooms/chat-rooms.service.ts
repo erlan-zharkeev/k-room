@@ -62,6 +62,7 @@ import type {
   TransformRoomForUserParams
 } from './chat-rooms.types'
 import { assertCreateChatRoomLimits, assertUpdateChatRoomData } from './lib/assert-chat-room-limits'
+import { resolveChatRoomMemberIds } from './lib/resolve-chat-room-member-ids'
 import { resolvePinnedChatRoomOrder, resolveToggledRoomIds } from './lib/resolve-toggled-room-ids'
 
 export const createChatRoom = async (
@@ -69,14 +70,14 @@ export const createChatRoom = async (
   { memberIds, chatName, avatarFile }: EventCreateRoom,
   presenceService: PresenceService
 ): Promise<CreateRoomAckPayload> => {
-  const otherMemberIds = getRoomOtherUserIds({ users: memberIds }, userId)
-  const hasCurrentUser = memberIds.includes(userId)
+  const roomMemberIds = resolveChatRoomMemberIds(userId, memberIds)
+  const otherMemberIds = getRoomOtherUserIds({ users: roomMemberIds }, userId)
 
-  if (!hasCurrentUser || !otherMemberIds.length) {
+  if (!otherMemberIds.length) {
     throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.createChatRoomFailed)
   }
 
-  await assertCreateChatRoomLimits(memberIds, chatName)
+  await assertCreateChatRoomLimits(roomMemberIds, chatName)
 
   const usersAccepted = await checkUsersAcceptedContacts(userId, otherMemberIds)
 
@@ -85,10 +86,10 @@ export const createChatRoom = async (
   }
 
   const roomData: ChatRoomSchema = {
-    users: memberIds,
+    users: roomMemberIds,
     adminId: userId,
     createdAt: Date.now(),
-    chatKind: memberIds.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT,
+    chatKind: roomMemberIds.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT,
     avatarId: null,
     pinnedMessageId: null,
     messages: []
@@ -112,8 +113,8 @@ export const createChatRoom = async (
 
     await room.save()
   })
-  await addChatRoomToUsers(roomId, memberIds)
-  await emitNewRoomToUsers(memberIds, room.toObject(), presenceService)
+  await addChatRoomToUsers(roomId, roomMemberIds)
+  await emitNewRoomToUsers(roomMemberIds, room.toObject(), presenceService)
   await delay(ROOM_CREATED_EVENT_DELAY_MS)
 
   return { roomId }
@@ -241,10 +242,11 @@ export const updateChatRoom = async (
   }
 
   const currentMemberIds = stringifyMongoIds(room.users)
+  const nextMemberIds = resolveChatRoomMemberIds(userId, memberIds)
   const nextChatName = chatName.trim()
-  const addedUserIds = memberIds.filter((id) => !currentMemberIds.includes(id))
-  const removedUserIds = currentMemberIds.filter((id) => !memberIds.includes(id))
-  const affectedMemberIds = union(currentMemberIds, memberIds)
+  const addedUserIds = nextMemberIds.filter((id) => !currentMemberIds.includes(id))
+  const removedUserIds = currentMemberIds.filter((id) => !nextMemberIds.includes(id))
+  const affectedMemberIds = union(currentMemberIds, nextMemberIds)
   const usersAccepted = await checkUsersAcceptedContacts(userId, addedUserIds)
   const currentAvatarId = room.avatarId
   let nextAvatarId = currentAvatarId
@@ -253,7 +255,7 @@ export const updateChatRoom = async (
     throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.updateChatRoomFailed)
   }
 
-  await assertUpdateChatRoomData(userId, addedUserIds, memberIds, nextChatName)
+  await assertUpdateChatRoomData(userId, addedUserIds, nextMemberIds, nextChatName)
 
   if (avatarFile === null) {
     nextAvatarId = null
@@ -274,7 +276,7 @@ export const updateChatRoom = async (
         $set: {
           avatarId: nextAvatarId,
           chatName: nextChatName,
-          users: memberIds
+          users: nextMemberIds
         }
       },
       { new: true }
@@ -294,7 +296,7 @@ export const updateChatRoom = async (
   }
 
   if (updatedRoom) {
-    await emitRoomDataToUsers(memberIds, updatedRoom, presenceService)
+    await emitRoomDataToUsers(nextMemberIds, updatedRoom, presenceService)
   }
 
   if (deletedAvatarId) {

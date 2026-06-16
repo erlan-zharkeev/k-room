@@ -245,7 +245,7 @@ export const useChatRoomFormDialog = (
     }
 
     const payload: EventCreateRoom = {
-      memberIds: chatRoomFormData.selectedMemberIds,
+      memberIds: selectedOtherMemberIds.value,
       ...(isGroupChat.value ? { chatName: chatRoomNameInputValue.value.trim() } : {}),
       ...(avatarFile ? { avatarFile } : {})
     }
@@ -277,7 +277,7 @@ export const useChatRoomFormDialog = (
 
     const payload: EventUpdateChatRoom = {
       roomId: room.id,
-      memberIds: chatRoomFormData.selectedMemberIds,
+      memberIds: selectedOtherMemberIds.value,
       chatName: chatRoomNameInputValue.value.trim(),
       ...(chatRoomFormState.chatAvatarWasDeleted ? { avatarFile: null } : {}),
       ...(avatarFile ? { avatarFile } : {})

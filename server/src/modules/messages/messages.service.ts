@@ -495,9 +495,12 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
 
   assertMessageContentLimits(message.body, messageImages, messageDocuments, messageAudios, messageVideos)
 
-  const room = await findRoomUsersAndMessagesByUser(roomId, userId)
+  const [room, author] = await Promise.all([
+    findRoomUsersAndMessagesByUser(roomId, userId),
+    loadUserPublicNicknameById(userId)
+  ])
 
-  if (!room) {
+  if (!room || !author) {
     return
   }
 
@@ -534,9 +537,14 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
     return
   }
 
+  const trustedMessage: Message = {
+    ...message,
+    authorId: userId,
+    authorNickname: author.public.nickname
+  }
   const newDbMessage = await new MessageModel({
     _id: message.id,
-    ...message,
+    ...trustedMessage,
     reactions: [],
     images,
     documents,
@@ -560,7 +568,7 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
       const payload: EventMessageDelivered = {
         roomId,
         message: {
-          ...message,
+          ...trustedMessage,
           id: newDbMessage.id,
           images,
           documents,
@@ -568,7 +576,7 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
           videos,
           linkPreview,
           repliedMessage,
-          isSelf: isMessageAuthor(message, userId),
+          isSelf: isMessageAuthor(trustedMessage, userId),
           status: MESSAGE_STATUS_VALUE.DELIVERED
         }
       }

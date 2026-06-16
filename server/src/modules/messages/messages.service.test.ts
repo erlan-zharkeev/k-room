@@ -6,12 +6,21 @@ import {
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const chatRoomModelMock = vi.hoisted(() => ({
-  findOne: vi.fn()
-}))
-
-const messageModelMock = vi.hoisted(() => ({
+  findOne: vi.fn(),
   updateOne: vi.fn()
 }))
+
+const messageModelMock = vi.hoisted(() =>
+  Object.assign(
+    vi.fn((data: { _id: string }) => ({
+      id: data._id,
+      save: vi.fn().mockResolvedValue({ id: data._id })
+    })),
+    {
+      updateOne: vi.fn()
+    }
+  )
+)
 
 const userModelMock = vi.hoisted(() => ({
   findById: vi.fn()
@@ -37,7 +46,7 @@ vi.mock('../media/media.service', () => mediaMock)
 vi.mock('../presence/presence.utils', () => presenceMock)
 vi.mock('./lib/refresh-message-link-preview', () => refreshLinkPreviewMock)
 
-const { editMessage, emitRoomTypingStatus, toggleMessageReaction } = await import('./messages.service')
+const { editMessage, emitRoomTypingStatus, sendMessage, toggleMessageReaction } = await import('./messages.service')
 
 const createLeanQuery = (value: unknown) => ({
   select: vi.fn().mockReturnThis(),
@@ -135,6 +144,55 @@ describe('messages.service', () => {
       roomId: 'room-1',
       contactId: 'user-1',
       isTyping: true
+    })
+  })
+
+  it('sends message with author resolved from authenticated user', async () => {
+    const payload = {
+      roomId: 'room-1',
+      userId: 'user-1',
+      message: {
+        id: 'message-1',
+        authorId: 'spoofed-user',
+        authorNickname: 'spoofed',
+        body: 'hello',
+        createdAt: 1,
+        images: [],
+        reactions: []
+      }
+    }
+
+    chatRoomModelMock.findOne.mockReturnValue(createLeanQuery({ users: ['user-1', 'user-2'], messages: [] }))
+    userModelMock.findById.mockReturnValue(createLeanQuery({ public: { nickname: 'tester' } }))
+    chatRoomModelMock.updateOne.mockResolvedValueOnce({ modifiedCount: 1 })
+    messageModelMock.updateOne.mockResolvedValue({ modifiedCount: 1 })
+
+    await sendMessage(payload)
+
+    expect(messageModelMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        _id: 'message-1',
+        authorId: 'user-1',
+        authorNickname: 'tester'
+      })
+    )
+    expect(presenceMock.emitToUsers).toHaveBeenCalledWith(['user-1'], 'message-delivered', {
+      roomId: 'room-1',
+      message: expect.objectContaining({
+        id: 'message-1',
+        authorId: 'user-1',
+        authorNickname: 'tester',
+        isSelf: true
+      })
+    })
+    expect(presenceMock.emitToUsers).toHaveBeenCalledWith(['user-2'], 'message-delivered', {
+      roomId: 'room-1',
+      message: expect.objectContaining({
+        id: 'message-1',
+        authorId: 'user-1',
+        authorNickname: 'tester',
+        isSelf: false
+      })
     })
   })
 

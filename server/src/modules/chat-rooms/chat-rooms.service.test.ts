@@ -1,10 +1,28 @@
 import { CHAT_KIND, PINNED_CHAT_ROOM_LIMIT, REQ_STATUS } from 'global-shared'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-const chatRoomModelMock = vi.hoisted(() => ({
-  findOne: vi.fn(),
-  deleteOne: vi.fn()
+vi.mock('timers/promises', () => ({
+  setTimeout: vi.fn().mockResolvedValue(undefined)
 }))
+
+const chatRoomModelMock = vi.hoisted(() =>
+  Object.assign(
+    vi.fn((data: Record<string, unknown>) => ({
+      _id: 'room-created',
+      ...data,
+      save: vi.fn().mockResolvedValue(undefined),
+      toObject: vi.fn(() => ({
+        _id: 'room-created',
+        ...data
+      }))
+    })),
+    {
+      findOne: vi.fn(),
+      findOneAndUpdate: vi.fn(),
+      deleteOne: vi.fn()
+    }
+  )
+)
 
 const mediaServiceMock = vi.hoisted(() => ({
   deleteBucketFileById: vi.fn(),
@@ -31,6 +49,7 @@ const userPersistenceMock = vi.hoisted(() => ({
   loadUserPinnedChatRoomsForRoom: vi.fn(),
   loadUserPublicById: vi.fn(),
   loadUserRoomPreferences: vi.fn(),
+  loadUsersChatRoomsByIds: vi.fn(),
   loadUsersPublicByIds: vi.fn(),
   removeChatRoomFromUser: vi.fn(),
   removeChatRoomFromUsersByIds: vi.fn(),
@@ -55,7 +74,14 @@ vi.mock('../user/lib/user-persistence', () => userPersistenceMock)
 
 const serviceModule = await import('./chat-rooms.service')
 const helperModule = await import('./lib/resolve-toggled-room-ids')
-const { deleteChatRoom, updateMutedChatRoom, updatePinnedChatRoom, updatePinnedChatRoomOrder } = serviceModule
+const {
+  createChatRoom,
+  deleteChatRoom,
+  updateChatRoom,
+  updateMutedChatRoom,
+  updatePinnedChatRoom,
+  updatePinnedChatRoomOrder
+} = serviceModule
 const { resolvePinnedChatRoomOrder, resolveToggledRoomIds } = helperModule
 
 const createLeanQuery = <T>(value: T) => ({
@@ -143,6 +169,77 @@ describe('chat-rooms.service', () => {
       isMuted: true,
       mutedChatRoomIds: ['room-2', 'room-1']
     })
+  })
+
+  it('creates room with authenticated user added to members server-side', async () => {
+    userPersistenceMock.checkUsersAcceptedContacts.mockResolvedValue(true)
+    userPersistenceMock.loadUsersChatRoomsByIds.mockResolvedValue([
+      { personal: { chatRooms: [] } },
+      { personal: { chatRooms: [] } }
+    ])
+    userPersistenceMock.loadUserRoomPreferences.mockResolvedValue(null)
+
+    await createChatRoom('user-1', { memberIds: ['user-2'] }, {} as never)
+
+    expect(userPersistenceMock.checkUsersAcceptedContacts).toHaveBeenCalledWith('user-1', ['user-2'])
+    expect(chatRoomModelMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        users: ['user-1', 'user-2'],
+        adminId: 'user-1',
+        chatKind: CHAT_KIND.DIRECT
+      })
+    )
+    expect(userPersistenceMock.addChatRoomToUsers).toHaveBeenCalledWith('room-created', ['user-1', 'user-2'])
+  })
+
+  it('updates room with authenticated admin preserved in members server-side', async () => {
+    const room = {
+      _id: 'room-1',
+      adminId: 'user-1',
+      avatarId: null,
+      chatKind: CHAT_KIND.GROUP,
+      chatName: 'Old chat',
+      users: ['user-1', 'user-2'],
+      messages: []
+    }
+    const updatedRoom = {
+      ...room,
+      chatName: 'Next chat',
+      users: ['user-1', 'user-2', 'user-3']
+    }
+
+    chatRoomModelMock.findOne.mockReturnValueOnce(createLeanQuery(room))
+    chatRoomModelMock.findOneAndUpdate.mockReturnValueOnce(createLeanQuery(updatedRoom))
+    userPersistenceMock.checkUsersAcceptedContacts.mockResolvedValue(true)
+    userPersistenceMock.loadUsersChatRoomsByIds.mockResolvedValue([{ personal: { chatRooms: [] } }])
+    userPersistenceMock.addChatRoomToUsersByIds.mockResolvedValue({ modifiedCount: 1 })
+    userPersistenceMock.removeChatRoomFromUsersByIds.mockResolvedValue({ modifiedCount: 0 })
+    userPersistenceMock.loadUserRoomPreferences.mockResolvedValue(null)
+
+    await updateChatRoom(
+      'user-1',
+      {
+        roomId: 'room-1',
+        memberIds: ['user-2', 'user-3'],
+        chatName: ' Next chat '
+      },
+      {} as never
+    )
+
+    expect(userPersistenceMock.checkUsersAcceptedContacts).toHaveBeenCalledWith('user-1', ['user-3'])
+    expect(chatRoomModelMock.findOneAndUpdate).toHaveBeenCalledWith(
+      { _id: 'room-1' },
+      {
+        $set: {
+          avatarId: null,
+          chatName: 'Next chat',
+          users: ['user-1', 'user-2', 'user-3']
+        }
+      },
+      { new: true }
+    )
+    expect(userPersistenceMock.addChatRoomToUsersByIds).toHaveBeenCalledWith('room-1', ['user-3'])
+    expect(userPersistenceMock.removeChatRoomFromUsersByIds).toHaveBeenCalledWith('room-1', [])
   })
 
   it('deletes direct chat room with messages for all room users', async () => {
