@@ -26,7 +26,7 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
 const { hasInteracted } = useSystem()
 const isSubmitBtnDisabled = computed(() => {
   if (!hasInteracted.value) return false
-  else return isSubmitDisabled.value || !isFormValid
+  else return isSubmitDisabled.value || !isFormValid.value
 })
 </script>
 

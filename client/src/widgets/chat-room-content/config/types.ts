@@ -452,12 +452,35 @@ export interface MessageListBuildParams {
 export interface MessageContextMenuOption {
   label?: string
   value: MessageContextMenuAction
-  icon?: Component
   component?: Component
   componentProps?: Record<string, unknown>
   closeOnClick?: boolean
   disabled?: boolean
 }
+
+export interface MessageContextMenuActionButtonProps {
+  label: string
+  disabled?: boolean
+}
+
+export interface MessageContextMenuActionButtonEmits {
+  select: []
+}
+
+export interface MessageContextMenuActionItemProps {
+  message: Message
+  room: ChatRoom
+}
+
+export interface MessageContextMenuDialogActionItemProps extends MessageContextMenuActionItemProps {
+  openDialog: () => void
+}
+
+export interface MessageContextMenuActionItemEmits {
+  select: []
+}
+
+export type MessageContextMenuActionItemEmit = (event: 'select') => void
 
 export interface MessageReactionPickerProps {
   message: Message

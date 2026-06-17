@@ -1,20 +1,12 @@
 import fs from 'node:fs/promises'
-import path from 'node:path'
 
 import bcrypt from 'bcryptjs'
-import {
-  CHAT_KIND,
-  type ImageObject,
-  MEDIA_AVATAR_VALIDATION_OPTIONS,
-  MESSAGE_STATUS_VALUE,
-  MINUTE_IN_MS
-} from 'global-shared'
+import { CHAT_KIND, MEDIA_AVATAR_VALIDATION_OPTIONS } from 'global-shared'
 import countBy from 'lodash/countBy'
 import { Types, type HydratedDocument } from 'mongoose'
 
 import { ChatRoomModel } from 'src/modules/chat-rooms/chat-rooms.model'
 import type { ChatRoomDocument, ChatRoomSchema } from 'src/modules/chat-rooms/chat-rooms.types'
-import { buildImageAspectRatioDetails } from 'src/modules/media/lib/build-image-aspect-ratio-details'
 import { uploadBufferToBucket } from 'src/modules/media/media.service'
 import type { StreamMediaFileData } from 'src/modules/media/media.types'
 import { MessageModel } from 'src/modules/messages/messages.model'
@@ -25,7 +17,6 @@ import { log } from 'src/shared/lib/log'
 import { stringifyMongoIds } from 'src/shared/lib/normalize-object-id'
 
 import {
-  BASE_FIXTURE_TIMESTAMP_MS,
   DIRECT_FIXTURE_CONTACT_NICKNAME,
   DIRECT_FIXTURE_CONTACT_USER_ID,
   DIRECT_FIXTURE_CREATED_AT_OFFSET_MS,
@@ -67,9 +58,10 @@ import {
   WEEKEND_HOUSE_FIXTURE_MESSAGE_ID_PREFIX,
   WEEKEND_HOUSE_FIXTURE_MESSAGES
 } from './fixtures.constants'
-import type { FixtureContactData, FixtureMessageData, FixtureUserData } from './fixtures.types'
-
-const resolveFixtureImagePath = (imagePath: string) => path.resolve(__dirname, 'images', imagePath)
+import type { FixtureContactData, FixtureUserData } from './fixtures.types'
+import { buildFixtureMessageImageObject, buildFixtureMessages } from './lib/build-fixture-messages'
+import { buildLegacyFixtureContactUnset } from './lib/build-legacy-fixture-contact-unset'
+import { resolveFixtureImagePath } from './lib/resolve-fixture-image-path'
 
 const ensureAvatarLoaded = async (user: HydratedDocument<UserSchema>, avatarId: string, avatarPath: string) => {
   const buffer = await fs.readFile(resolveFixtureImagePath(avatarPath))
@@ -217,9 +209,6 @@ const ensureChatRoomAvatarState = async () => {
   log.info(`-Chat room avatar state normalized: updated=${result.modifiedCount}`)
 }
 
-const buildLegacyFixtureContactUnset = () =>
-  Object.fromEntries(LEGACY_FIXTURE_USER_IDS.map((id) => [`personal.contacts.${id}`, '']))
-
 const cleanupLegacyFixtureData = async () => {
   const legacyRooms = await ChatRoomModel.find({
     $or: [
@@ -258,8 +247,6 @@ const cleanupLegacyFixtureData = async () => {
   log.info(`-Legacy fixtures cleaned: deleted=${deletedCount}`)
 }
 
-const buildFixtureMessageId = (prefix: string, idx: number) => `${prefix}-${String(idx).padStart(3, '0')}`
-
 const ensureMessageImageLoaded = async (id: string, imagePath: string) => {
   const buffer = await fs.readFile(resolveFixtureImagePath(imagePath))
 
@@ -276,12 +263,6 @@ const ensureFixtureMessageImagesLoaded = async () => {
   await Promise.all(FIXTURE_MESSAGE_IMAGE_FILES.map((image) => ensureMessageImageLoaded(image.id, image.path)))
 }
 
-const buildFixtureMessageImageObject = (id: string, file: StreamMediaFileData): ImageObject => ({
-  src: id,
-  name: file.filename,
-  ...buildImageAspectRatioDetails(file.metadata)
-})
-
 const loadFixtureMessageImageObjectById = async () => {
   const imageIds = FIXTURE_MESSAGE_IMAGE_FILES.map(({ id }) => new Types.ObjectId(id))
   const files = await UserModel.db
@@ -291,96 +272,6 @@ const loadFixtureMessageImageObjectById = async () => {
 
   return new Map(files.map((file) => [String(file._id), buildFixtureMessageImageObject(String(file._id), file)]))
 }
-
-const resolveFixtureMessageImages = (
-  imageIds: readonly string[],
-  imageObjectById: ReadonlyMap<string, ImageObject>
-): ImageObject[] => imageIds.map((id) => imageObjectById.get(id)!)
-
-const buildFixtureMessageReactions = (reactions: FixtureMessageData['reactions'], roomNicknames: readonly string[]) => {
-  const roomNicknameSet = new Set(roomNicknames)
-
-  return reactions.flatMap(({ nickname, glyphKey }) => {
-    if (!roomNicknameSet.has(nickname)) {
-      return []
-    }
-
-    return [
-      {
-        nickname,
-        authorId: USER_BY_NICKNAME[nickname]!.id,
-        glyphKey
-      }
-    ]
-  })
-}
-
-const buildFixtureRepliedMessage = (
-  prefix: string,
-  messageSources: readonly FixtureMessageData[],
-  replyToIndex: number,
-  imageObjectById: ReadonlyMap<string, ImageObject>
-) => {
-  const targetMessage = messageSources[replyToIndex - 1]!
-
-  return {
-    id: buildFixtureMessageId(prefix, replyToIndex),
-    authorNickname: targetMessage.authorNickname,
-    authorId: USER_BY_NICKNAME[targetMessage.authorNickname]!.id,
-    body: targetMessage.body,
-    images: resolveFixtureMessageImages(targetMessage.imageIds, imageObjectById)
-  }
-}
-
-const buildFixtureMessage = (
-  idx: number,
-  prefix: string,
-  roomUserIds: readonly string[],
-  roomNicknames: readonly string[],
-  messageSources: readonly FixtureMessageData[],
-  messageSource: FixtureMessageData,
-  createdAtOffsetMs: number,
-  imageObjectById: ReadonlyMap<string, ImageObject>
-) => {
-  const { authorNickname, body, imageIds, reactions, replyToIndex } = messageSource
-  const createdAt = BASE_FIXTURE_TIMESTAMP_MS + createdAtOffsetMs + idx * (11 * MINUTE_IN_MS)
-
-  return {
-    _id: buildFixtureMessageId(prefix, idx),
-    authorId: USER_BY_NICKNAME[authorNickname]!.id,
-    authorNickname,
-    body,
-    createdAt,
-    reactions: buildFixtureMessageReactions(reactions, roomNicknames),
-    images: resolveFixtureMessageImages(imageIds, imageObjectById),
-    usersMetaData: roomUserIds.map((id) => ({ id, status: MESSAGE_STATUS_VALUE.DELIVERED })),
-    repliedMessage: replyToIndex
-      ? buildFixtureRepliedMessage(prefix, messageSources, replyToIndex, imageObjectById)
-      : null
-  }
-}
-
-const buildFixtureMessages = (
-  prefix: string,
-  roomUserIds: readonly string[],
-  roomNicknames: readonly string[],
-  messageSources: readonly FixtureMessageData[],
-  createdAtOffsetMs: number,
-  imageObjectById: ReadonlyMap<string, ImageObject>
-) => [
-  ...messageSources.map((messageSource, index) =>
-    buildFixtureMessage(
-      index + 1,
-      prefix,
-      roomUserIds,
-      roomNicknames,
-      messageSources,
-      messageSource,
-      createdAtOffsetMs,
-      imageObjectById
-    )
-  )
-]
 
 const setFixtureContact = async (userId: string, contactId: string, interaction: FixtureContactData['interaction']) => {
   await UserModel.updateOne(

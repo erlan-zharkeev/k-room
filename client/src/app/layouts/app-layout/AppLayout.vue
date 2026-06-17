@@ -158,17 +158,17 @@ const {
   top: 50%;
   left: 50%;
   transform-origin: center;
-  transform: var(--app-layout-wallpaper-transform, translate(-50%, -50%));
+  transform: var(--app-layout-wallpaper-transform);
 
   display: none;
 
-  width: var(--app-layout-wallpaper-width, 240vmax);
-  height: var(--app-layout-wallpaper-height, 240vmax);
+  width: 240vmax;
+  height: 240vmax;
 
   opacity: 0.7;
   background-image: var(--app-layout-wallpaper);
-  background-size: var(--app-layout-wallpaper-size, 280px auto);
-  filter: var(--app-layout-wallpaper-brightness, brightness(100%));
+  background-size: 280px auto;
+  filter: var(--app-layout-wallpaper-brightness);
 }
 
 .app-layout--wallpaper .widget::before {

@@ -1,86 +1,40 @@
-import type { EventAuthError, EventErrorMessage } from 'global-shared'
-
-import { TOAST_I18N } from 'src/shared/lib'
-import { useI18n } from 'src/shared/lib'
-import { useAppToast } from 'src/shared/lib'
-
 import { socket } from './socket'
-import { setSocketConnected, setSocketReconnecting } from './socket-status'
-import { useSocketConnect } from './use-socket-connect'
-import { useSocketReconnect } from './use-socket-reconnect'
+import { useSocketConnectionSync } from './use-socket-connection-sync.model'
 
 let isMonitorActive = false
 let disposeSocketConnectionMonitorListeners: (() => void) | null = null
 
 export const useSocketConnectionMonitor = () => {
-  const { t } = useI18n()
-  const toast = useAppToast()
-  const { actualizeSocketData } = useSocketConnect()
-  const { socketReconnect } = useSocketReconnect()
+  const {
+    syncSocketConnected,
+    syncSocketDisconnected,
+    showSocketErrorMessage,
+    syncSocketAuthError,
+    syncSocketReconnectAttempt,
+    syncSocketReconnectFailed
+  } = useSocketConnectionSync()
 
   const initializeSocketConnectionMonitor = () => {
     if (isMonitorActive) return
 
     isMonitorActive = true
 
-    const handleConnect = () => {
-      setSocketConnected(true)
-      setSocketReconnecting(false)
-      actualizeSocketData()
-    }
-
-    const handleDisconnect = () => {
-      setSocketConnected(false)
-    }
-
-    const handleErrorMessage = ({ message, silent }: EventErrorMessage) => {
-      if (silent) return
-
-      toast.add({
-        type: 'error',
-        title: t(TOAST_I18N.error),
-        content: message
-      })
-    }
-
-    const handleAuthError = async ({ event, payload }: EventAuthError) => {
-      await socketReconnect()
-
-      if (event === 'connection') return
-
-      socket.emit(event, payload as never)
-    }
-
-    const handleReconnect = () => {
-      setSocketConnected(true)
-      setSocketReconnecting(false)
-      actualizeSocketData()
-    }
-
-    const handleReconnectAttempt = () => {
-      setSocketReconnecting(true)
-    }
-
-    const handleReconnectFailed = () => {
-      setSocketReconnecting(false)
-    }
-
-    socket.on('connect', handleConnect)
-    socket.on('disconnect', handleDisconnect)
-    socket.on('error-message', handleErrorMessage)
-    socket.on('auth-error', handleAuthError)
-    socket.io.on('reconnect', handleReconnect)
-    socket.io.on('reconnect_attempt', handleReconnectAttempt)
-    socket.io.on('reconnect_failed', handleReconnectFailed)
+    socket.on('connect', syncSocketConnected)
+    socket.on('disconnect', syncSocketDisconnected)
+    socket.on('error-message', showSocketErrorMessage)
+    socket.on('auth-error', syncSocketAuthError)
+    socket.io.on('reconnect', syncSocketConnected)
+    socket.io.on('reconnect_attempt', syncSocketReconnectAttempt)
+    socket.io.on('reconnect_failed', syncSocketReconnectFailed)
 
     disposeSocketConnectionMonitorListeners = () => {
-      socket.off('connect', handleConnect)
-      socket.off('disconnect', handleDisconnect)
-      socket.off('error-message', handleErrorMessage)
-      socket.off('auth-error', handleAuthError)
-      socket.io.off('reconnect', handleReconnect)
-      socket.io.off('reconnect_attempt', handleReconnectAttempt)
-      socket.io.off('reconnect_failed', handleReconnectFailed)
+      socket.off('connect', syncSocketConnected)
+      socket.off('disconnect', syncSocketDisconnected)
+      socket.off('error-message', showSocketErrorMessage)
+      socket.off('auth-error', syncSocketAuthError)
+      socket.io.off('reconnect', syncSocketConnected)
+      socket.io.off('reconnect_attempt', syncSocketReconnectAttempt)
+      socket.io.off('reconnect_failed', syncSocketReconnectFailed)
     }
   }
 

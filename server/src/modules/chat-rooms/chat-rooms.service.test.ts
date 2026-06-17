@@ -66,7 +66,7 @@ vi.mock('../messages/lib/message-persistence', () => messagePersistenceMock)
 vi.mock('../messages/lib/resolve-visible-message-ids', () => ({
   resolveVisibleMessageIds: vi.fn((_userId: string, messageIds: string[]) => messageIds)
 }))
-vi.mock('../messages/messages.service', () => ({
+vi.mock('../messages/lib/transform-message-for-user', () => ({
   transformMessageForUser: vi.fn((message) => ({ id: message._id ?? message.id }))
 }))
 vi.mock('../presence/presence.utils', () => presenceUtilsMock)

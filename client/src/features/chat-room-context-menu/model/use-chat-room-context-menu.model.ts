@@ -5,18 +5,15 @@ import { useI18n } from 'src/shared/lib'
 
 import { CHAT_ROOM_CONTEXT_MENU_I18N } from '../config/i18n'
 import type { ChatRoomContextMenuEmitFn, ChatRoomContextMenuOption, ChatRoomContextMenuProps } from '../config/types'
+import ChatRoomMarkAsReadContextMenuItem from '../ui/ChatRoomMarkAsReadContextMenuItem.vue'
+import ChatRoomMuteContextMenuItem from '../ui/ChatRoomMuteContextMenuItem.vue'
+import ChatRoomPinContextMenuItem from '../ui/ChatRoomPinContextMenuItem.vue'
 
-import { useChatRoomMarkAsRead } from './use-chat-room-mark-as-read.model'
-import { useChatRoomMute } from './use-chat-room-mute.model'
 import { useChatRoomPermissions } from './use-chat-room-permissions.model'
-import { useChatRoomPin } from './use-chat-room-pin.model'
 
 export const useChatRoomContextMenu = (props: ChatRoomContextMenuProps, emit: ChatRoomContextMenuEmitFn) => {
   const { t } = useI18n()
   const item = toRef(props, 'item')
-  const { canMarkChatRoomAsRead, markChatRoomAsRead } = useChatRoomMarkAsRead(item)
-  const { canUpdateMutedChatRoom, toggleMutedChatRoom } = useChatRoomMute(item)
-  const { canUpdatePinnedChatRoom, togglePinnedChatRoom } = useChatRoomPin(item)
   const { canEditGroupChatRoom, canShowDeleteChatRoom, canShowLeaveChatRoom } = useChatRoomPermissions(item)
   const isContextMenuOpen = ref(false)
 
@@ -31,19 +28,31 @@ export const useChatRoomContextMenu = (props: ChatRoomContextMenuProps, emit: Ch
   const contextMenuOptions = computed<ChatRoomContextMenuOption[]>(() => {
     const options: ChatRoomContextMenuOption[] = [
       {
-        label: item.value.isPinned ? t(CHAT_ROOM_CONTEXT_MENU_I18N.unpinChat) : t(CHAT_ROOM_CONTEXT_MENU_I18N.pinChat),
         value: item.value.isPinned ? 'unpin-chat' : 'pin-chat',
-        disabled: !canUpdatePinnedChatRoom.value
+        component: ChatRoomPinContextMenuItem,
+        componentProps: {
+          item: item.value,
+          onSelect: closeContextMenu
+        },
+        closeOnClick: false
       },
       {
-        label: item.value.isMuted ? t(CHAT_ROOM_CONTEXT_MENU_I18N.unmuteChat) : t(CHAT_ROOM_CONTEXT_MENU_I18N.muteChat),
         value: item.value.isMuted ? 'unmute-chat' : 'mute-chat',
-        disabled: !canUpdateMutedChatRoom.value
+        component: ChatRoomMuteContextMenuItem,
+        componentProps: {
+          item: item.value,
+          onSelect: closeContextMenu
+        },
+        closeOnClick: false
       },
       {
-        label: t(CHAT_ROOM_CONTEXT_MENU_I18N.markAsRead),
         value: 'mark-as-read',
-        disabled: !canMarkChatRoomAsRead.value
+        component: ChatRoomMarkAsReadContextMenuItem,
+        componentProps: {
+          item: item.value,
+          onSelect: closeContextMenu
+        },
+        closeOnClick: false
       }
     ]
 
@@ -87,17 +96,6 @@ export const useChatRoomContextMenu = (props: ChatRoomContextMenuProps, emit: Ch
     if (!isUnknownObject(option)) return
 
     switch (option.value) {
-      case 'mark-as-read':
-        markChatRoomAsRead()
-        break
-      case 'pin-chat':
-      case 'unpin-chat':
-        togglePinnedChatRoom()
-        break
-      case 'mute-chat':
-      case 'unmute-chat':
-        toggleMutedChatRoom()
-        break
       case 'edit-group':
         emit('edit-group')
         break

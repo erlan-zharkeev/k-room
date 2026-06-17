@@ -7,8 +7,9 @@ import {
 } from 'global-shared'
 import uniq from 'lodash/uniq'
 
-import { resolveKnownUsers, transformRoomForUser } from '../../chat-rooms/chat-rooms.service'
 import { loadChatRoomsByIds } from '../../chat-rooms/lib/chat-room-persistence'
+import { resolveKnownUsers } from '../../chat-rooms/lib/resolve-known-users'
+import { transformRoomForUser } from '../../chat-rooms/lib/transform-room-for-user'
 import type { PresenceService } from '../../presence/presence.service'
 import { loadUserRoomCalls } from '../../room-calls/lib/load-user-room-calls'
 import { filterAvailableRoomCallsForUser } from '../../room-calls/lib/room-call-decline-state'

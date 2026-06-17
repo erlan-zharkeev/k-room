@@ -136,10 +136,10 @@ useAuthLayoutNetBackground()
 }
 
 .auth-layout__net-background > canvas {
-  position: fixed !important;
+  position: fixed;
   inset: 0;
-  width: 100vw !important;
-  height: 100dvh !important;
+  width: 100vw;
+  height: 100dvh;
 }
 
 .auth-layout__top-side {

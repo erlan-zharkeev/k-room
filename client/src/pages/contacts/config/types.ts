@@ -1,6 +1,8 @@
 import type { LocalizedText } from 'global-shared'
+import type { Component } from 'vue'
 
 import type { ContactRecord } from 'src/shared/lib'
+import type { AppTextColor } from 'src/shared/ui'
 
 export interface ContactsSearchProps {
   loadingContactIds: Set<string>
@@ -39,6 +41,15 @@ export interface ContactContextMenuProps {
   personalChatRoomId?: string
 }
 
+export type ContactContextMenuAction =
+  | 'accept'
+  | 'block'
+  | 'create-chat'
+  | 'delete'
+  | 'go-to-chat'
+  | 'invite'
+  | 'unblock'
+
 export interface ContactContextMenuEmits {
   'create-chat': [id: string]
   delete: [id: string]
@@ -47,9 +58,12 @@ export interface ContactContextMenuEmits {
 }
 
 export interface ContactContextMenuOption {
-  label: string
-  value: 'accept' | 'block' | 'create-chat' | 'delete' | 'go-to-chat' | 'invite' | 'unblock'
-  color?: string
+  label?: string
+  value: ContactContextMenuAction
+  component?: Component
+  componentProps?: Record<string, unknown>
+  closeOnClick?: boolean
+  color?: AppTextColor
   disabled?: boolean
 }
 
@@ -59,6 +73,25 @@ export interface ContactContextMenuEmitFn {
   (event: 'go-to-chat', id?: string): void
   (event: 'update-interaction', id: string, interaction: ContactRecord['interactionType']): void
 }
+
+export interface ContactContextMenuActionItemProps {
+  action: ContactContextMenuAction
+  color?: AppTextColor
+  contactId: string
+  createChat: (id: string) => void
+  deleteContact: (id: string) => void
+  disabled?: boolean
+  goToChat: (id?: string) => void
+  label: string
+  personalChatRoomId?: string
+  updateInteraction: (id: string, interaction: ContactRecord['interactionType']) => void
+}
+
+export interface ContactContextMenuActionItemEmits {
+  select: []
+}
+
+export type ContactContextMenuActionItemEmitFn = (event: 'select') => void
 
 export interface ContactsDeleteDialogEmits {
   cancel: []

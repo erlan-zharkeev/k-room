@@ -43,6 +43,25 @@ export interface ChatRoomContextMenuEmitFn {
   (event: 'leave-group'): void
 }
 
+export interface ChatRoomContextMenuActionButtonProps {
+  label: string
+  disabled?: boolean
+}
+
+export interface ChatRoomContextMenuActionButtonEmits {
+  select: []
+}
+
+export interface ChatRoomContextMenuActionItemProps {
+  item: ChatRoomContextMenuItem
+}
+
+export interface ChatRoomContextMenuActionItemEmits {
+  select: []
+}
+
+export type ChatRoomContextMenuActionItemEmit = (event: 'select') => void
+
 export interface ChatRoomDeleteDialogProps {
   item: ChatRoomContextMenuItem
 }

@@ -76,6 +76,24 @@ vi.mock('../src/widgets/chat-room-content/model/use-message-pin.model', () => ({
 }))
 
 const { useMessageContextMenu } = await import('../src/widgets/chat-room-content/model/use-message-context-menu.model')
+const { useMessageCopyTextContextMenuItem } = await import(
+  '../src/widgets/chat-room-content/model/use-message-copy-text-context-menu-item.model'
+)
+const { useMessageDeleteContextMenuItem } = await import(
+  '../src/widgets/chat-room-content/model/use-message-delete-context-menu-item.model'
+)
+const { useMessageEditContextMenuItem } = await import(
+  '../src/widgets/chat-room-content/model/use-message-edit-context-menu-item.model'
+)
+const { useMessageForwardContextMenuItem } = await import(
+  '../src/widgets/chat-room-content/model/use-message-forward-context-menu-item.model'
+)
+const { useMessagePinContextMenuItem } = await import(
+  '../src/widgets/chat-room-content/model/use-message-pin-context-menu-item.model'
+)
+const { useMessageReplyContextMenuItem } = await import(
+  '../src/widgets/chat-room-content/model/use-message-reply-context-menu-item.model'
+)
 
 const createMessage = (patch: Partial<Message> = {}): Message =>
   ({
@@ -125,27 +143,16 @@ describe('useMessageContextMenu', () => {
   })
 
   it('updates conditional option states', () => {
-    contextMenuMocks.canCopyMessageText.value = false
-    contextMenuMocks.canStartMessageEdit.mockReturnValue(false)
-    contextMenuMocks.canUpdatePinnedMessage.value = false
     contextMenuMocks.isMessagePinned.value = true
 
     const model = useMessageContextMenu({
-      message: createMessage(),
+      message: createMessage({ isSelf: false }),
       room: createRoom({ pinnedMessageId: 'message-1' })
     })
     const values = model.messageContextMenuOptions.value.map(({ value }) => value)
-    const copyOption = model.messageContextMenuOptions.value.find(
-      ({ value }) => value === MESSAGE_CONTEXT_MENU_ACTION.COPY_TEXT
-    )
-    const pinOption = model.messageContextMenuOptions.value.find(
-      ({ value }) => value === MESSAGE_CONTEXT_MENU_ACTION.UNPIN_MESSAGE
-    )
 
     expect(values).not.toContain(MESSAGE_CONTEXT_MENU_ACTION.EDIT_MESSAGE)
     expect(values).toContain(MESSAGE_CONTEXT_MENU_ACTION.UNPIN_MESSAGE)
-    expect(copyOption?.disabled).toBe(true)
-    expect(pinOption?.disabled).toBe(true)
   })
 
   it('uses long press trigger for touch input', () => {
@@ -156,24 +163,32 @@ describe('useMessageContextMenu', () => {
     expect(model.messageContextMenuTrigger.value).toBe(MESSAGE_CONTEXT_MENU_TRIGGER.LONG_PRESS)
   })
 
-  it('routes selected context menu actions to item-specific models', () => {
+  it('routes selected context menu actions to item-specific models', async () => {
     const message = createMessage()
     const room = createRoom()
-    const model = useMessageContextMenu({ message, room })
+    const emit = vi.fn()
+    const openForwardDialog = vi.fn()
+    const openDeleteDialog = vi.fn()
 
-    model.updateMessageContextMenuOpen(true)
-    model.selectMessageContextMenuAction({ value: MESSAGE_CONTEXT_MENU_ACTION.COPY_TEXT })
-    model.selectMessageContextMenuAction({ value: MESSAGE_CONTEXT_MENU_ACTION.REPLY_MESSAGE })
-    model.selectMessageContextMenuAction({ value: MESSAGE_CONTEXT_MENU_ACTION.FORWARD_MESSAGE })
-    model.selectMessageContextMenuAction({ value: MESSAGE_CONTEXT_MENU_ACTION.EDIT_MESSAGE })
-    model.selectMessageContextMenuAction({ value: MESSAGE_CONTEXT_MENU_ACTION.PIN_MESSAGE })
-    model.selectMessageContextMenuAction({ value: MESSAGE_CONTEXT_MENU_ACTION.DELETE_MESSAGE })
+    await useMessageCopyTextContextMenuItem({ message, room }, emit).selectMessageCopyTextContextMenuItem()
+    useMessageReplyContextMenuItem({ message, room }, emit).selectMessageReplyContextMenuItem()
+    useMessageForwardContextMenuItem(
+      { message, room, openDialog: openForwardDialog },
+      emit
+    ).selectMessageForwardContextMenuItem()
+    useMessageEditContextMenuItem({ message, room }, emit).selectMessageEditContextMenuItem()
+    useMessagePinContextMenuItem({ message, room }, emit).selectMessagePinContextMenuItem()
+    useMessageDeleteContextMenuItem(
+      { message, room, openDialog: openDeleteDialog },
+      emit
+    ).selectMessageDeleteContextMenuItem()
 
     expect(contextMenuMocks.copyMessageText).toHaveBeenCalled()
     expect(contextMenuMocks.startMessageReply).toHaveBeenCalledWith(message, room.id)
-    expect(model.isMessageForwardDialogOpen.value).toBe(true)
+    expect(openForwardDialog).toHaveBeenCalled()
     expect(contextMenuMocks.startMessageEdit).toHaveBeenCalledWith(message, room.id)
     expect(contextMenuMocks.togglePinnedMessage).toHaveBeenCalled()
-    expect(contextMenuMocks.openDeleteMessageDialog).toHaveBeenCalled()
+    expect(openDeleteDialog).toHaveBeenCalled()
+    expect(emit).toHaveBeenCalledWith('select')
   })
 })

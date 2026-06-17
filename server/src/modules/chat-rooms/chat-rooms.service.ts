@@ -7,19 +7,16 @@ import {
   type EventCreateRoom,
   type EventChatRoomLeft,
   type EventDeleteChatRoom,
+  type EventPinnedChatRoomsUpdated,
   type EventLeaveChatRoom,
   type EventMutedChatRoomsUpdated,
   type EventUpdateChatRoom,
-  type KnownUser,
-  type EventGetRoom,
-  type EventPinnedChatRoomsUpdated,
   type EventUpdateMutedChatRoom,
   type EventUpdatePinnedChatRoom,
   type EventUpdatePinnedChatRoomOrder,
   MEDIA_AVATAR_VALIDATION_OPTIONS,
   PINNED_CHAT_ROOM_LIMIT,
   REQ_STATUS,
-  getRoomInterlocutorId,
   getRoomOtherUserIds,
   isRoomAdmin,
   isRoomGroup,
@@ -31,9 +28,7 @@ import { AppError } from 'src/shared/lib/app-error'
 import { stringifyMongoId, stringifyMongoIds } from 'src/shared/lib/normalize-object-id'
 
 import { deleteBucketFileById, uploadBufferToBucket, withUploadedMediaCleanup } from '../media/media.service'
-import { countUnreadMessagesByIds, deleteMessagesByIds, loadMessageById } from '../messages/lib/message-persistence'
-import { resolveVisibleMessageIds } from '../messages/lib/resolve-visible-message-ids'
-import { transformMessageForUser } from '../messages/messages.service'
+import { deleteMessagesByIds } from '../messages/lib/message-persistence'
 import type { PresenceService } from '../presence/presence.service'
 import { emitToUsers } from '../presence/presence.utils'
 import {
@@ -43,9 +38,6 @@ import {
   loadUserMutedChatRoomsForRoom,
   loadUserPinnedChatRooms,
   loadUserPinnedChatRoomsForRoom,
-  loadUserPublicById,
-  loadUserRoomPreferences,
-  loadUsersPublicByIds,
   removeChatRoomFromUser,
   removeChatRoomFromUsersByIds,
   setUserMutedChatRoomIds,
@@ -55,13 +47,9 @@ import {
 import { ROOM_CREATED_EVENT_DELAY_MS } from './chat-rooms.constants'
 import { CHAT_ROOMS_I18N } from './chat-rooms.i18n'
 import { ChatRoomModel } from './chat-rooms.model'
-import type {
-  ChatRoomDeleteProjection,
-  ChatRoomDocument,
-  ChatRoomSchema,
-  TransformRoomForUserParams
-} from './chat-rooms.types'
+import type { ChatRoomDeleteProjection, ChatRoomDocument, ChatRoomSchema } from './chat-rooms.types'
 import { assertCreateChatRoomLimits, assertUpdateChatRoomData } from './lib/assert-chat-room-limits'
+import { emitNewRoomToUsers, emitRoomDataToUsers } from './lib/emit-room-data-to-users'
 import { resolveChatRoomMemberIds } from './lib/resolve-chat-room-member-ids'
 import { resolvePinnedChatRoomOrder, resolveToggledRoomIds } from './lib/resolve-toggled-room-ids'
 
@@ -118,39 +106,6 @@ export const createChatRoom = async (
   await delay(ROOM_CREATED_EVENT_DELAY_MS)
 
   return { roomId }
-}
-
-export const resolveKnownUsers = async (userIds: string[], presenceService: PresenceService): Promise<KnownUser[]> => {
-  if (!userIds.length) return []
-
-  const [users, onlineMap] = await Promise.all([
-    loadUsersPublicByIds(userIds),
-    presenceService.onlineMapByUserIds(userIds)
-  ])
-  const userById = new Map(users.map((user) => [stringifyMongoId(user._id), user]))
-
-  const knownUsers = userIds.map((id) => {
-    const user = userById.get(id)
-
-    if (!user) return null
-
-    return {
-      avatarId: user.public.avatarId,
-      id,
-      nickname: user.public.nickname,
-      online: onlineMap.get(id) ?? false,
-      lastSeen: user.public.lastSeen
-    } satisfies KnownUser
-  })
-
-  return knownUsers.filter((user): user is KnownUser => Boolean(user))
-}
-
-const emitKnownUsersToUser = async (userId: string, roomUserIds: string[], presenceService: PresenceService) => {
-  const otherUserIds = getRoomOtherUserIds({ users: roomUserIds }, userId)
-  const knownUsers = await resolveKnownUsers(otherUserIds, presenceService)
-
-  emitToUsers([userId], 'known-users-updated', knownUsers)
 }
 
 export const updatePinnedChatRoom = async (userId: string, { roomId, isPinned }: EventUpdatePinnedChatRoom) => {
@@ -353,97 +308,6 @@ export const deleteChatRoom = async (userId: string, { roomId }: EventDeleteChat
   }
 }
 
-export const transformRoomForUser = async ({
-  userId,
-  room,
-  pinnedChatRoomIds,
-  mutedChatRoomIds
-}: TransformRoomForUserParams): Promise<EventGetRoom> => {
-  const normalizedRoom = room
-  const {
-    _id,
-    adminId,
-    avatarId: roomAvatarId,
-    chatKind: roomChatKind,
-    chatName,
-    createdAt,
-    messages,
-    pinnedMessageId: roomPinnedMessageId,
-    users: roomUsers
-  } = normalizedRoom
-  const roomId = stringifyMongoId(_id)
-  const users = stringifyMongoIds(roomUsers)
-  const chatKind = roomChatKind ?? (roomUsers.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT)
-  const isDirectRoom = isRoomPrivate({ chatKind })
-  const interlocutorId = isDirectRoom ? getRoomInterlocutorId({ users }, userId) : ''
-  const interlocutor = isDirectRoom ? await loadUserPublicById(interlocutorId) : null
-  const avatarId = isDirectRoom ? interlocutor?.public.avatarId ?? null : roomAvatarId
-  const visibleMessageIds = await resolveVisibleMessageIds(userId, messages)
-  const lastMessageId = visibleMessageIds[visibleMessageIds.length - 1] ?? null
-  const pinnedMessageId =
-    roomPinnedMessageId && visibleMessageIds.includes(roomPinnedMessageId) ? roomPinnedMessageId : null
-  const pinnedOrder = pinnedChatRoomIds.indexOf(roomId)
-  const [unreadMessagesQuantity, previewMessage, pinnedMessage] = await Promise.all([
-    countUnreadMessagesByIds(userId, visibleMessageIds),
-    lastMessageId ? loadMessageById(lastMessageId) : null,
-    pinnedMessageId ? loadMessageById(pinnedMessageId) : null
-  ])
-
-  return {
-    id: roomId,
-    adminId,
-    createdAt,
-    chatName,
-    chatKind,
-    avatarId,
-    lastMessageId,
-    pinnedMessageId,
-    unreadMessagesQuantity,
-    isPinned: pinnedOrder !== -1,
-    pinnedOrder: pinnedOrder === -1 ? null : pinnedOrder,
-    isMuted: mutedChatRoomIds.includes(roomId),
-    users,
-    messages: visibleMessageIds,
-    previewMessage: previewMessage ? transformMessageForUser(previewMessage, userId) : null,
-    pinnedMessage: pinnedMessage ? transformMessageForUser(pinnedMessage, userId) : null
-  } satisfies EventGetRoom
-}
-
-const emitRoomToUsers = async (
-  userIds: string[],
-  room: ChatRoomDocument,
-  presenceService: PresenceService,
-  eventName: 'room-data-updated' | 'new-room-added'
-) => {
-  await Promise.all(
-    userIds.map(async (userId) => {
-      const userData = await loadUserRoomPreferences(userId)
-
-      if (!userData) {
-        return
-      }
-
-      const transformedRoom = await transformRoomForUser({
-        userId,
-        room,
-        pinnedChatRoomIds: userData.personal.pinnedChatRoomIds,
-        mutedChatRoomIds: userData.personal.mutedChatRoomIds
-      })
-
-      await emitKnownUsersToUser(userId, room.users, presenceService)
-      emitToUsers([userId], eventName, transformedRoom)
-    })
-  )
-}
-
-export const emitRoomDataToUsers = async (
-  userIds: string[],
-  room: ChatRoomDocument,
-  presenceService: PresenceService
-) => {
-  await emitRoomToUsers(userIds, room, presenceService, 'room-data-updated')
-}
-
 export const leaveChatRoom = async (
   userId: string,
   { roomId, nextAdminId }: EventLeaveChatRoom,
@@ -504,12 +368,4 @@ export const leaveChatRoom = async (
   if (updatedRoom) {
     await emitRoomDataToUsers(remainingUserIds, updatedRoom, presenceService)
   }
-}
-
-export const emitNewRoomToUsers = async (
-  userIds: string[],
-  room: ChatRoomDocument,
-  presenceService: PresenceService
-) => {
-  await emitRoomToUsers(userIds, room, presenceService, 'new-room-added')
 }

@@ -16,8 +16,7 @@ const {
   isMessageContextMenuOpen,
   messageContextMenuTrigger,
   messageContextMenuOptions,
-  updateMessageContextMenuOpen,
-  selectMessageContextMenuAction
+  updateMessageContextMenuOpen
 } = useMessageContextMenu(props)
 </script>
 
@@ -33,7 +32,6 @@ const {
     :close-on-scroll="false"
     hide-shadow
     @update:model-value="updateMessageContextMenuOpen"
-    @select="selectMessageContextMenuAction"
   >
     <slot />
   </NmorphContextMenu>

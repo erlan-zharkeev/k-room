@@ -7,8 +7,10 @@ import { useContactContextMenu } from '../model/use-contact-context-menu.model'
 
 const props = defineProps<ContactContextMenuProps>()
 const emit = defineEmits<ContactContextMenuEmits>()
-const { isContextMenuOpen, showContactActionBadge, contextMenuOptions, setContextMenuOpen, selectContactAction } =
-  useContactContextMenu(props, emit)
+const { isContextMenuOpen, showContactActionBadge, contextMenuOptions, setContextMenuOpen } = useContactContextMenu(
+  props,
+  emit
+)
 </script>
 
 <template>
@@ -21,7 +23,6 @@ const { isContextMenuOpen, showContactActionBadge, contextMenuOptions, setContex
     :aria-label="$t(CONTACTS_PAGE_I18N.contactActions)"
     hide-shadow
     @update:model-value="setContextMenuOpen"
-    @select="selectContactAction"
   >
     <NmorphBadge
       type="dot"

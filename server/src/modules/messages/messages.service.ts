@@ -8,7 +8,6 @@ import {
   type EventMessageDeleted,
   type EventMessageDelivered,
   type EventMessagesStatusUpdated,
-  type EventPinnedMessageUpdated,
   type EventRoomTypingStatus,
   type EventRoomMessagesLoaded,
   type EventUpdatedMessageReactions,
@@ -28,8 +27,7 @@ import {
   buildPendingMessageLinkPreview,
   getRoomOtherUserIds,
   isMessageAuthor,
-  isMessageReadStatus,
-  isString
+  isMessageReadStatus
 } from 'global-shared'
 
 import { SERVER_ENV } from 'src/app/env'
@@ -52,52 +50,14 @@ import { loadUserPublicNicknameById } from '../user/lib/user-persistence'
 import { assertMessageContentLimits } from './lib/assert-message-content-limits'
 import { refreshMessageLinkPreview } from './lib/refresh-message-link-preview'
 import { resolveRoomMessageWindowIds } from './lib/resolve-message-window-ids'
+import { resolvePinnedMessageUpdatedPayload } from './lib/resolve-pinned-message-updated-payload'
 import { resolveRepliedMessage } from './lib/resolve-replied-message'
 import { resolveVisibleMessageIds } from './lib/resolve-visible-message-ids'
+import { transformMessageForUser } from './lib/transform-message-for-user'
 import { uploadMessageMediaObjects } from './lib/upload-message-media-objects'
 import { MESSAGES_I18N } from './messages.i18n'
 import { MessageModel } from './messages.model'
 import type { MessageDocument, MessageIdProjection, SendMessageParams } from './messages.types'
-
-export const transformMessageForUser = (message: MessageDocument, userId: string): Message => {
-  const {
-    _id,
-    authorId,
-    authorNickname,
-    body,
-    createdAt,
-    editedAt,
-    reactions,
-    repliedMessage,
-    linkPreview,
-    documents,
-    audios,
-    videos,
-    usersMetaData
-  } = message
-  const readBySomeone = usersMetaData.some((data) => isMessageReadStatus(data.status))
-  const selfStatus = usersMetaData.find((user) => user.id === userId)?.status
-  const status = isMessageAuthor(message, userId) && readBySomeone ? MESSAGE_STATUS_VALUE.READ : selfStatus
-  const images = (message.images ?? []) as Array<string | ImageObject>
-
-  return {
-    id: stringifyMongoId(_id),
-    authorId,
-    authorNickname,
-    body,
-    createdAt,
-    editedAt,
-    reactions,
-    images: images.map((image) => (isString(image) ? { src: image, name: image } : image)),
-    documents,
-    audios,
-    videos,
-    linkPreview,
-    status,
-    isSelf: isMessageAuthor(message, userId),
-    repliedMessage
-  }
-}
 
 export const editMessage = async (userId: string, { body, images, messageId, roomId }: EventEditMessage) => {
   const normalizedBody = body.trim()
@@ -345,33 +305,6 @@ export const deleteMessage = async (userId: string, { deleteForEveryone, roomId,
 
   await Promise.all([removeMessageFromRoom(roomId, messageId), clearPinnedMessageFromRoom(roomId, messageId)])
   emitToUsers(userIds, 'message-deleted', payload)
-}
-
-const resolvePinnedMessageUpdatedPayload = async (
-  userId: string,
-  roomId: string,
-  pinnedMessageId: string | null
-): Promise<EventPinnedMessageUpdated> => {
-  if (!pinnedMessageId) {
-    return {
-      roomId,
-      pinnedMessageId: null,
-      pinnedMessage: null
-    }
-  }
-
-  const pinnedMessage = await MessageModel.findOne({
-    _id: pinnedMessageId,
-    deletedForUserIds: { $ne: userId }
-  })
-    .select('-__v')
-    .lean<MessageDocument>()
-
-  return {
-    roomId,
-    pinnedMessageId: pinnedMessage ? pinnedMessageId : null,
-    pinnedMessage: pinnedMessage ? transformMessageForUser(pinnedMessage, userId) : null
-  }
 }
 
 export const updatePinnedMessage = async (
