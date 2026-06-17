@@ -48,6 +48,7 @@ export {
   dexieKeyValueStore,
   initializeDexieCollectionStores,
   openDexieDatabase,
+  subscribeDexieLiveQuery,
   useDexieLiveQuery
 } from './db/lib'
 export { DEXIE_CACHE_TRIMMER_IDS, DEXIE_CACHE_TRIMMER_PRIORITIES } from './db/constants'

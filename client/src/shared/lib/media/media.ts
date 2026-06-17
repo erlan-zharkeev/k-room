@@ -1,7 +1,6 @@
-import { liveQuery } from 'dexie'
 import { getCurrentScope, nextTick, onScopeDispose, shallowRef, toValue, watch, type MaybeRefOrGetter } from 'vue'
 
-import { getDexieMediaRecord, getDexieMediaRecords } from '../db/lib'
+import { getDexieMediaRecord, getDexieMediaRecords, subscribeDexieLiveQuery } from '../db/lib'
 
 import type { MediaUrlCacheKeyParams, MediaUrlCacheValue } from './types'
 
@@ -83,7 +82,7 @@ export const useLiveMediaUrl = (id: MaybeRefOrGetter<string | null | undefined>)
 
       if (!mediaId) return
 
-      const subscription = liveQuery(() => getDexieMediaRecord(mediaId)).subscribe({
+      const unsubscribe = subscribeDexieLiveQuery(() => getDexieMediaRecord(mediaId), {
         next: (record) => {
           if (!record?.blob) {
             clearUrl()
@@ -109,7 +108,7 @@ export const useLiveMediaUrl = (id: MaybeRefOrGetter<string | null | undefined>)
       })
 
       onCleanup(() => {
-        subscription.unsubscribe()
+        unsubscribe()
         clearUrl()
       })
     },
@@ -146,7 +145,7 @@ export const useLiveMediaUrls = (ids: MaybeRefOrGetter<readonly string[]>) => {
 
       if (!mediaIds.length) return
 
-      const subscription = liveQuery(() => getDexieMediaRecords(mediaIds)).subscribe({
+      const unsubscribe = subscribeDexieLiveQuery(() => getDexieMediaRecords(mediaIds), {
         next: (records) => {
           const entries = records.flatMap((record, index) => {
             if (!record?.blob) return []
@@ -172,7 +171,7 @@ export const useLiveMediaUrls = (ids: MaybeRefOrGetter<readonly string[]>) => {
       })
 
       onCleanup(() => {
-        subscription.unsubscribe()
+        unsubscribe()
         clearUrls()
       })
     },
@@ -209,7 +208,7 @@ export const useLiveMediaUrlMap = (ids: MaybeRefOrGetter<readonly string[]>) => 
 
       if (!mediaIds.length) return
 
-      const subscription = liveQuery(() => getDexieMediaRecords(mediaIds)).subscribe({
+      const unsubscribe = subscribeDexieLiveQuery(() => getDexieMediaRecords(mediaIds), {
         next: (records) => {
           const entries = records.flatMap((record, index) => {
             if (!record?.blob) return []
@@ -235,7 +234,7 @@ export const useLiveMediaUrlMap = (ids: MaybeRefOrGetter<readonly string[]>) => 
       })
 
       onCleanup(() => {
-        subscription.unsubscribe()
+        unsubscribe()
         clearUrls()
       })
     },

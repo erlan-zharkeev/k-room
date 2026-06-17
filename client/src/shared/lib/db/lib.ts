@@ -42,6 +42,21 @@ export const useDexieLiveQuery = <T>(query: () => Promise<T> | T, initialValue: 
   }
 }
 
+export const subscribeDexieLiveQuery = <T>(
+  query: () => Promise<T> | T,
+  handlers: {
+    next: (value: T) => void
+    error?: () => void
+  }
+) => {
+  const subscription = liveQuery(query).subscribe({
+    next: handlers.next,
+    error: handlers.error
+  })
+
+  return () => subscription.unsubscribe()
+}
+
 export const cloneMutable = <T>(value: T): Mutable<T> => cloneDeep(value) as Mutable<T>
 
 export const openDexieDatabase = () => db.open()
@@ -98,7 +113,7 @@ export const dexieCollectionStore = <T extends DbCollectionItem>(table: Table<T>
 
   const useIndexedList = (defaults: T[] = []) => {
     const items = use(defaults)
-    const itemMap = computed(() => new Map(items.value.map((item) => [item.id, item])))
+    const itemMap = computed(() => new Map<T['id'], T>(items.value.map((item) => [item.id, item])))
     const hasById = (id: T['id']) => itemMap.value.has(id)
 
     return {

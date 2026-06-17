@@ -12,51 +12,16 @@ import { useSocketAction, useSocketAvailability } from 'src/shared/api'
 
 import { ROOM_MESSAGES_PAGE_LIMIT } from '../config/constants'
 import type { MessageLoadedRange } from '../config/types'
+import {
+  buildLoadedMessageRangesFromIndexes,
+  buildRoomMessageLoadKey,
+  mergeLoadedMessageRanges,
+  resolveLoadedRoomMessageIndexes,
+  resolveReconciledLoadedMessageRanges
+} from '../lib/message-loaded-ranges'
 
 const loadingRoomMessageRanges = reactive(new Set<string>())
 const loadedMessageRangesByRoomId = reactive<Record<string, MessageLoadedRange[] | undefined>>({})
-
-const createLoadKey = (roomId: string, direction: MessageLoadDirection, anchorMessageId = '') =>
-  `${roomId}:${direction}:${anchorMessageId}`
-
-const createLoadedRangesFromIndexes = (indexes: number[]) => {
-  const sortedIndexes = [...new Set(indexes)].sort((current, next) => current - next)
-
-  return sortedIndexes.reduce<MessageLoadedRange[]>((ranges, index) => {
-    const currentRange = ranges[ranges.length - 1]
-
-    if (currentRange && index <= currentRange.endIndex + 1) {
-      currentRange.endIndex = Math.max(currentRange.endIndex, index)
-
-      return ranges
-    }
-
-    ranges.push({
-      startIndex: index,
-      endIndex: index
-    })
-
-    return ranges
-  }, [])
-}
-
-const normalizeLoadedMessageRanges = (ranges: MessageLoadedRange[]) => {
-  const sortedRanges = [...ranges].sort((current, next) => current.startIndex - next.startIndex)
-
-  return sortedRanges.reduce<MessageLoadedRange[]>((normalizedRanges, range) => {
-    const currentRange = normalizedRanges[normalizedRanges.length - 1]
-
-    if (currentRange && range.startIndex <= currentRange.endIndex + 1) {
-      currentRange.endIndex = Math.max(currentRange.endIndex, range.endIndex)
-
-      return normalizedRanges
-    }
-
-    normalizedRanges.push({ ...range })
-
-    return normalizedRanges
-  }, [])
-}
 
 const selectLoadedMessageRanges = (roomId: string) => loadedMessageRangesByRoomId[roomId] ?? []
 
@@ -64,63 +29,22 @@ const updateLoadedMessageRanges = (roomId: string, indexes: number[]) => {
   if (!indexes.length) return
 
   const currentRanges = selectLoadedMessageRanges(roomId)
-  const loadedRanges = createLoadedRangesFromIndexes(indexes)
+  const loadedRanges = buildLoadedMessageRangesFromIndexes(indexes)
 
-  loadedMessageRangesByRoomId[roomId] = normalizeLoadedMessageRanges([...currentRanges, ...loadedRanges])
+  loadedMessageRangesByRoomId[roomId] = mergeLoadedMessageRanges([...currentRanges, ...loadedRanges])
 }
-
-const resolveMessageIndexes = (room: ChatRoom, messages: EventRoomMessagesLoaded['messages']) =>
-  messages.flatMap(({ id }) => {
-    const index = room.messages.indexOf(id)
-
-    return index === -1 ? [] : [index]
-  })
 
 const findLoadedRangeByMessageIndex = (roomId: string, index: number) =>
   selectLoadedMessageRanges(roomId).find((range) => index >= range.startIndex && index <= range.endIndex)
-
-const isMessageIndexLoaded = (roomId: string, index: number) => Boolean(findLoadedRangeByMessageIndex(roomId, index))
 
 const isRoomMessagesLoading = (roomId: string) =>
   Array.from(loadingRoomMessageRanges).some((key) => key.startsWith(`${roomId}:`))
 
 const reconcileLoadedMessageRanges = (roomId: string, previousMessageIds: string[], currentMessageIds: string[]) => {
   const currentRanges = selectLoadedMessageRanges(roomId)
-  const hasCurrentRanges = Boolean(currentRanges.length)
-  const hadMessages = Boolean(previousMessageIds.length)
-  const hasCurrentMessages = Boolean(currentMessageIds.length)
-  const shouldCreateInitialRange = !hasCurrentRanges && !hadMessages && hasCurrentMessages
+  const reconciledRanges = resolveReconciledLoadedMessageRanges(currentRanges, previousMessageIds, currentMessageIds)
 
-  if (shouldCreateInitialRange) {
-    loadedMessageRangesByRoomId[roomId] = [
-      {
-        startIndex: 0,
-        endIndex: currentMessageIds.length - 1
-      }
-    ]
-
-    return
-  }
-
-  if (!hasCurrentRanges) return
-
-  const loadedMessageIds = new Set(
-    currentRanges.flatMap(({ startIndex, endIndex }) => previousMessageIds.slice(startIndex, endIndex + 1))
-  )
-  const previousLastMessageIndex = previousMessageIds.length - 1
-  const previousLastMessageId = previousMessageIds[previousLastMessageIndex]
-  const previousLastCurrentIndex = previousLastMessageId ? currentMessageIds.indexOf(previousLastMessageId) : -1
-  const isPreviousLastMessageLoaded = isMessageIndexLoaded(roomId, previousLastMessageIndex)
-
-  if (isPreviousLastMessageLoaded && previousLastCurrentIndex !== -1) {
-    currentMessageIds.slice(previousLastCurrentIndex + 1).forEach((messageId) => loadedMessageIds.add(messageId))
-  }
-
-  const loadedIndexes = currentMessageIds.flatMap((messageId, index) =>
-    loadedMessageIds.has(messageId) ? [index] : []
-  )
-
-  loadedMessageRangesByRoomId[roomId] = createLoadedRangesFromIndexes(loadedIndexes)
+  loadedMessageRangesByRoomId[roomId] = reconciledRanges
 }
 
 export const useLoadRoomMessages = (room?: Ref<ChatRoom>) => {
@@ -134,7 +58,7 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoom>) => {
 
   const saveLoadedRoomMessages = async (targetRoom: ChatRoom, payload: EventRoomMessagesLoaded) => {
     await bulkPut(payload.messages)
-    updateLoadedMessageRanges(targetRoom.id, resolveMessageIndexes(targetRoom, payload.messages))
+    updateLoadedMessageRanges(targetRoom.id, resolveLoadedRoomMessageIndexes(targetRoom, payload.messages))
   }
 
   const restoreCachedLoadedMessageRanges = (targetRoom: ChatRoom) => {
@@ -146,11 +70,11 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoom>) => {
       messageById.value.has(messageId) ? [index] : []
     )
 
-    loadedMessageRangesByRoomId[targetRoom.id] = createLoadedRangesFromIndexes(loadedIndexes)
+    loadedMessageRangesByRoomId[targetRoom.id] = buildLoadedMessageRangesFromIndexes(loadedIndexes)
   }
 
   const loadRoomMessages = async (targetRoom: ChatRoom, direction: MessageLoadDirection, anchorMessageId?: string) => {
-    const loadKey = createLoadKey(targetRoom.id, direction, anchorMessageId)
+    const loadKey = buildRoomMessageLoadKey(targetRoom.id, direction, anchorMessageId)
 
     if (loadingRoomMessageRanges.has(loadKey)) return
 

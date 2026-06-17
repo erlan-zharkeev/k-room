@@ -36,14 +36,6 @@
 - `server/src/modules/chat-rooms/chat-rooms.service.ts` - helper flow функции рядом с service orchestration, например `emitKnownUsersToUser`, `emitRoomToUsers`.
 - `server/src/modules/messages/messages.service.ts` - helper `resolvePinnedMessageUpdatedPayload` в service-файле.
 
-## Client Model Helpers
-
-Правило: client model-файлы держат Vue/composition orchestration, stateless data transformation/building выносится в `lib`.
-
-Главный пример:
-
-- `client/src/widgets/chat-room-content/model/use-load-room-messages.model.ts` содержит чистые функции для load keys, range normalization и reconciliation: `createLoadKey`, `createLoadedRangesFromIndexes`, `normalizeLoadedMessageRanges`, `reconcileLoadedMessageRanges`.
-
 ## Context Menu Models
 
 Правило: context menu model не должен содержать domain action logic для custom menu items.
@@ -70,15 +62,6 @@
 - `client/src/pages/app/model/use-media-update-monitor.model.ts`
 
 Они в основном подписывают/отписывают handlers, а sync logic вынесена отдельно.
-
-## Dexie And Reactive Wrappers
-
-Правило: Dexie wrapper уже reactive, не делать лишние computed wrappers.
-
-Расхождения:
-
-- `client/src/entities/message/model/use-message.model.ts` вручную строит `computed(() => new Map(messages.value.map(...)))`, хотя `dexieCollectionStore().useIndexedList()` уже умеет отдавать reactive `itemMap`.
-- Прямой `liveQuery` используется вне `shared/lib/db` в `client/src/shared/lib/media/media.ts`. Возможно это осознанный media helper, но место спорное относительно правила про direct Dexie wrappers.
 
 ## Vue Component Logic
 
@@ -134,6 +117,4 @@
 
 1. Сначала синхронизировать `AGENTS.md` и `REPOSITORY_RULES.md`.
 2. Исправить реальные архитектурные кластеры: context menu models, socket connection monitor, server service helpers.
-3. Вынести чистые helper/data transformation функции из client model файлов в `lib`.
-4. Разобрать Dexie wrapper usage и direct `liveQuery` в media helpers.
-5. После этого отдельно решать массовую формальную миграцию типов/интерфейсов/констант, если правила остаются такими же.
+3. После этого отдельно решать массовую формальную миграцию типов/интерфейсов/констант, если правила остаются такими же.
