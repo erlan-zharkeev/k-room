@@ -3,11 +3,11 @@ import { isString, isUnknownObject } from 'global-shared'
 import { loadStorageEstimate } from '../storage/storage'
 
 import { DEXIE_CACHE_TRIM_EVENT_COOLDOWN_MS, DEXIE_QUOTA_ERROR_NAME_SET } from './constants'
-import type { DexieCacheTrimEvent, DexieCacheTrimEventType, DexieCacheTrimmer, DexieErrorLike } from './types'
+import type { DexieCacheTrimEvent, DexieCacheTrimEventKind, DexieCacheTrimmer, DexieErrorLike } from './types'
 
 const cacheTrimmerById = new Map<string, DexieCacheTrimmer>()
 const cacheTrimEventListeners = new Set<(event: DexieCacheTrimEvent) => void>()
-const lastCacheTrimEventTimeByType: Partial<Record<DexieCacheTrimEventType, number>> = {}
+const lastCacheTrimEventTimeByKind: Partial<Record<DexieCacheTrimEventKind, number>> = {}
 
 let trimPromise: Promise<boolean> | undefined
 let isTrimmingCache = false
@@ -20,11 +20,11 @@ const readErrorData = (error: unknown): DexieErrorLike | undefined => {
 
 const emitCacheTrimEvent = (event: DexieCacheTrimEvent) => {
   const now = Date.now()
-  const lastEventTime = lastCacheTrimEventTimeByType[event.type] ?? 0
+  const lastEventTime = lastCacheTrimEventTimeByKind[event.type] ?? 0
 
   if (now - lastEventTime < DEXIE_CACHE_TRIM_EVENT_COOLDOWN_MS) return
 
-  lastCacheTrimEventTimeByType[event.type] = now
+  lastCacheTrimEventTimeByKind[event.type] = now
   cacheTrimEventListeners.forEach((listener) => listener(event))
 }
 

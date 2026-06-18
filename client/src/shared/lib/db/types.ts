@@ -36,7 +36,7 @@ export interface CollectionBulkUpdateItem<T extends DbCollectionItem> {
   changes: Partial<T>
 }
 
-export type DexieCacheTrimEventType = 'cache-trimmed' | 'cache-trim-failed'
+export type DexieCacheTrimEventKind = 'cache-trimmed' | 'cache-trim-failed'
 
 export interface DexieCacheTrimResult {
   trimmed: boolean
@@ -55,7 +55,7 @@ export interface DexieErrorLike extends UnknownObject {
 }
 
 export interface DexieCacheTrimEvent {
-  type: DexieCacheTrimEventType
+  type: DexieCacheTrimEventKind
 }
 
 export type ContactRecord = Contact & ContactLocalState
