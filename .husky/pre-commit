@@ -12,8 +12,6 @@ trap cleanup EXIT INT TERM
 git diff --cached --name-only --diff-filter=d -z > "$STAGED_FILES"
 
 pnpm run sync:public-config &&
-  pnpm run lint:fix &&
-  pnpm run format:fix &&
   if [ -s "$STAGED_FILES" ]; then
     git add --pathspec-from-file="$STAGED_FILES" --pathspec-file-nul
   fi &&

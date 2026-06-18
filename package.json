@@ -48,6 +48,7 @@
     "e2e:ui": "playwright test -c playwright.config.ts --ui",
     "smoke": "playwright test -c playwright.config.ts --grep @smoke",
     "check": "turbo run lint:fsd lint:es lint:style typecheck typecheck:test build test && prettier --check .",
+    "deploy": "node scripts/deploy/create-production-deploy-commit.mjs",
     "test": "turbo run test"
   },
   "devDependencies": {

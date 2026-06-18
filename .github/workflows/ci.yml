@@ -50,7 +50,7 @@ jobs:
     name: Publish Docker Images
     needs: verify
     runs-on: ubuntu-latest
-    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/production'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/production' && startsWith(github.event.head_commit.message, 'deploy(production):')
 
     steps:
       - name: Checkout
@@ -78,7 +78,7 @@ jobs:
     name: Deploy Production
     needs: publish-images
     runs-on: ubuntu-latest
-    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/production'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/production' && startsWith(github.event.head_commit.message, 'deploy(production):')
     environment: production
 
     steps:
