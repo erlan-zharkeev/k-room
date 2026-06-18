@@ -26,6 +26,16 @@ export interface CollectionMergeManyOptions<
   removeMissing?: boolean
 }
 
+export interface DexieLiveQueryHandlers<T> {
+  next: (value: T) => void
+  error?: () => void
+}
+
+export interface CollectionBulkUpdateItem<T extends DbCollectionItem> {
+  id: T['id']
+  changes: Partial<T>
+}
+
 export type DexieCacheTrimEventType = 'cache-trimmed' | 'cache-trim-failed'
 
 export interface DexieCacheTrimResult {

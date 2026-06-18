@@ -8,6 +8,7 @@ import type {
 } from 'global-shared'
 
 import type { SOCKET_AVAILABILITY_STATUS } from './constants'
+import type { socket } from './socket'
 
 export type SocketAvailabilityStatus = (typeof SOCKET_AVAILABILITY_STATUS)[keyof typeof SOCKET_AVAILABILITY_STATUS]
 
@@ -21,3 +22,7 @@ export type EmitSocketActionWithAck = <TEvent extends ClientToServerSocketAckAct
   event: TEvent,
   payload: ClientToServerSocketPayloadMap[TEvent]
 ) => Promise<SocketAckResponse<ClientToServerSocketAckPayloadMap[TEvent], TReason>>
+
+export type SocketWithAck = typeof socket & {
+  emitWithAck: EmitSocketActionWithAck
+}

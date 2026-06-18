@@ -1,4 +1,11 @@
-import type { ImageObject, Message, MessageLinkPreview, MessageMetadata, RepliedMessage } from 'global-shared'
+import type {
+  ImageObject,
+  MediaObject,
+  Message,
+  MessageLinkPreview,
+  MessageMetadata,
+  RepliedMessage
+} from 'global-shared'
 
 export interface MessageSchema extends Omit<Message, 'id' | 'tempId' | 'isSelf' | 'status' | 'images'> {
   _id?: string
@@ -36,6 +43,17 @@ export interface RefreshMessageLinkPreviewParams {
 export interface LoadMessageLinkPreviewParams {
   appName: string
   preview: MessageLinkPreview
+}
+
+export interface MessageLinkPreviewFetchResponse {
+  body: Buffer
+  contentType: string
+  location: string
+  statusCode: number
+}
+
+export type MessageMediaFileObject = MediaObject & {
+  contentType?: string
 }
 
 export type MessageIdProjection = Pick<MessageDocument, '_id'>

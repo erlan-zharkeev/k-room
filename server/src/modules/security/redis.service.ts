@@ -4,7 +4,7 @@ import { createClient, type RedisClientType } from 'redis'
 import { SERVER_ENV } from 'src/app/env'
 import { log } from 'src/shared/lib/log'
 
-import type { RedisAdapterClients } from './types'
+import type { RedisAdapterClients, RedisCommandClient } from './types'
 
 @Injectable()
 export class RedisService implements OnModuleInit, OnModuleDestroy {
@@ -136,9 +136,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
   }
 
   async runCommand(command: string[]) {
-    const client = (await this.clientOrThrow()) as unknown as {
-      sendCommand(command: string[]): Promise<unknown>
-    }
+    const client = (await this.clientOrThrow()) as unknown as RedisCommandClient
 
     return client.sendCommand(command)
   }

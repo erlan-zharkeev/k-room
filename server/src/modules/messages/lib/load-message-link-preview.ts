@@ -34,7 +34,7 @@ import {
   MESSAGE_LINK_PREVIEW_TITLE_TAG_PATTERN,
   MESSAGE_LINK_PREVIEW_WHITESPACE_PATTERN
 } from '../constants'
-import type { LoadMessageLinkPreviewParams } from '../messages.types'
+import type { LoadMessageLinkPreviewParams, MessageLinkPreviewFetchResponse } from '../messages.types'
 
 import { buildMessageLinkPreviewUserAgent } from './build-message-link-preview-user-agent'
 
@@ -142,7 +142,7 @@ const getHeaderValue = (value: number | string | string[] | undefined) => {
 }
 
 const fetchMessageLinkPreviewBuffer = (url: URL, maxBytes: number, userAgent: string) =>
-  new Promise<{ body: Buffer; contentType: string; location: string; statusCode: number }>((resolve, reject) => {
+  new Promise<MessageLinkPreviewFetchResponse>((resolve, reject) => {
     const request = httpsRequest(
       url,
       {

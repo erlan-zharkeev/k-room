@@ -6,6 +6,10 @@ export interface RedisAdapterClients {
   subscribeClient: RedisClientType
 }
 
+export interface RedisCommandClient {
+  sendCommand(command: string[]): Promise<unknown>
+}
+
 export interface ProtectedActionDecision {
   action: SecurityAction
   reason: ProtectedActionReason

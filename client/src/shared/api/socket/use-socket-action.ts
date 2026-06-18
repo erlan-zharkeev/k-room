@@ -8,7 +8,7 @@ import type {
 
 import { SOCKET_ACTION_ACK_TIMEOUT_MS } from './constants'
 import { socket } from './socket'
-import type { EmitSocketActionOptions, EmitSocketActionWithAck } from './types'
+import type { EmitSocketActionOptions, SocketWithAck } from './types'
 import { useSocketAvailability } from './use-socket-availability'
 import { useSocketTransportErrorToast } from './use-socket-transport-error-toast'
 
@@ -36,9 +36,7 @@ export const useSocketAction = () => {
       return response
     }
 
-    const emitWithAckSocket = socket.timeout(SOCKET_ACTION_ACK_TIMEOUT_MS) as typeof socket & {
-      emitWithAck: EmitSocketActionWithAck
-    }
+    const emitWithAckSocket = socket.timeout(SOCKET_ACTION_ACK_TIMEOUT_MS) as SocketWithAck
 
     try {
       const response = await emitWithAckSocket.emitWithAck<TEvent, TReason>(event, payload)

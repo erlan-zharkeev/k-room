@@ -60,7 +60,7 @@ export interface IUserSchema { ... }
 export interface IAppTextProps { ... }
 ```
 
-4. Define named types only in dedicated type files.
+4. Define named shared/exported types only in dedicated type files.
 
 Allowed locations:
 
@@ -68,13 +68,19 @@ Allowed locations:
 - `*.types.ts`
 - files inside a `types` directory
 
-5. Do not use inline object types in logic files. Move them to a type file and import them.
+5. Use `types.ts` for small modules, `*.types.ts` or a local `types` directory for larger independent type domains.
 
-6. Reuse shared types such as `UnknownObjectType`.
+6. Do not move unrelated types into one giant file.
 
-7. Use shared guards for `typeof` checks when one exists.
+7. Do not use shared/exported inline object types in logic files. Move them to a type file and import them.
 
-8. Do not use `enum`. Use `as const` objects and derived union types.
+8. Local non-exported helper types may stay near implementation only when they are tiny and not reused.
+
+9. Reuse shared types such as `UnknownObjectType`.
+
+10. Use shared guards for `typeof` checks when one exists.
+
+11. Do not use `enum`. Use `as const` objects and derived union types.
 
 ## Numeric Literals
 

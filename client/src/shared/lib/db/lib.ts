@@ -9,8 +9,10 @@ import { runDexieCacheTrimGuard } from './cache-trim'
 import { db } from './db'
 import type {
   CollectionIncomingItem,
+  CollectionBulkUpdateItem,
   CollectionMergeManyOptions,
   DbCollectionItem,
+  DexieLiveQueryHandlers,
   UseStateResult,
   KvItem,
   Mutable,
@@ -42,13 +44,7 @@ export const useDexieLiveQuery = <T>(query: () => Promise<T> | T, initialValue: 
   }
 }
 
-export const subscribeDexieLiveQuery = <T>(
-  query: () => Promise<T> | T,
-  handlers: {
-    next: (value: T) => void
-    error?: () => void
-  }
-) => {
+export const subscribeDexieLiveQuery = <T>(query: () => Promise<T> | T, handlers: DexieLiveQueryHandlers<T>) => {
   const subscription = liveQuery(query).subscribe({
     next: handlers.next,
     error: handlers.error
@@ -156,7 +152,7 @@ export const dexieCollectionStore = <T extends DbCollectionItem>(table: Table<T>
     return updated
   }
 
-  const bulkUpdate = async (data: readonly { id: T['id']; changes: Partial<T> }[]) => {
+  const bulkUpdate = async (data: readonly CollectionBulkUpdateItem<T>[]) => {
     if (!data.length) return 0
 
     const updated = await runDexieCacheTrimGuard(() =>
