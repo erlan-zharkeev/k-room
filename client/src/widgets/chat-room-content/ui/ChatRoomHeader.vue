@@ -8,7 +8,6 @@ import { ROOM_CALL_SESSION_I18N, RoomCallMediaButtons } from 'src/features/room-
 import { UserActivityStatus } from 'src/features/user-activity-status'
 import { AppProfileBasicData, AppText } from 'src/shared/ui'
 
-import { CHAT_ROOM_CONTENT_VIEW } from '../config/constants'
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { ChatRoomHeaderEmits, ChatRoomHeaderProps } from '../config/types'
 import { useChatRoomHeader } from '../model/use-chat-room-header.model'
@@ -66,10 +65,10 @@ const { interlocutor, isPortraitTabletOrLess, membersQuantityText, updateChatRoo
           :aria-label="$t(CHAT_ROOM_CONTENT_I18N.selectChatRoomContentView)"
           @update:model-value="updateChatRoomContentView"
         >
-          <NmorphSelectButtonItem :value="CHAT_ROOM_CONTENT_VIEW.TEXT">
+          <NmorphSelectButtonItem :value="'text'">
             {{ $t(CHAT_ROOM_CONTENT_I18N.textChatView) }}
           </NmorphSelectButtonItem>
-          <NmorphSelectButtonItem :value="CHAT_ROOM_CONTENT_VIEW.CALL">
+          <NmorphSelectButtonItem :value="'call'">
             {{ $t(CHAT_ROOM_CONTENT_I18N.roomCallView) }}
           </NmorphSelectButtonItem>
         </NmorphSelectButton>

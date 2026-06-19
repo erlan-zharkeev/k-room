@@ -1,6 +1,6 @@
-import { defineI18n } from 'global-shared'
+import { defineI18n } from 'src/shared/lib'
 
-export const ERROR_PAGE_I18N = defineI18n({
+export const ERROR_PAGE_I18N = defineI18n('errorPage', {
   description: {
     en: 'The page does not exist or has been moved.',
     ru: 'Страница не существует или была перемещена.',

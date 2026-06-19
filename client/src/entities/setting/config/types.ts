@@ -5,8 +5,8 @@ import type { IoDevicesSettings } from './io-devices.types'
 import type { DeviceLocalizationSettings } from './localization.types'
 import type { DeviceNotificationSettings } from './notification.types'
 
-export type ContentNavigationScrollTab = Extract<ContentTab, 'chat-rooms' | 'contacts'>
-export type ContentNavigationScrollByTab = Record<ContentNavigationScrollTab, number>
+export type ScrollContentNavigationTab = Extract<ContentTab, 'chat-rooms' | 'contacts'>
+export type ScrollContentNavigationByTab = Record<ScrollContentNavigationTab, number>
 
 export interface MessageScrollBottomState {
   mode: 'bottom'
@@ -24,7 +24,7 @@ export type MessageScrollByRoom = Record<string, MessageScrollState>
 export interface DeviceSetting {
   contentTab: ContentTab
   chatRoomId: string
-  contentNavigationScrollByTab: ContentNavigationScrollByTab
+  scrollContentNavigationByTab: ScrollContentNavigationByTab
   messageScrollByRoom: MessageScrollByRoom
   quickReactions: string[]
   localization: DeviceLocalizationSettings

@@ -1,7 +1,6 @@
 import { isNumber, type ImageObject, type VideoObject } from 'global-shared'
 
 import {
-  MESSAGE_MEDIA_GALLERY_ITEM_KIND,
   MESSAGE_MEDIA_GALLERY_ITEM_MAX_ASPECT_RATIO,
   MESSAGE_MEDIA_GALLERY_ITEM_MIN_ASPECT_RATIO
 } from '../config/constants'
@@ -37,8 +36,8 @@ const buildMessageImageMediaGalleryItems = (
       {
         alt: name,
         downloadHref: mediaUrl,
-        id: `${MESSAGE_MEDIA_GALLERY_ITEM_KIND.IMAGE}:${src}`,
-        kind: MESSAGE_MEDIA_GALLERY_ITEM_KIND.IMAGE,
+        id: `${'image'}:${src}`,
+        kind: 'image',
         mediaId: src,
         name,
         size,
@@ -61,8 +60,8 @@ const buildMessageVideoMediaGalleryItems = (
       {
         controls: true,
         downloadHref: mediaUrl,
-        id: `${MESSAGE_MEDIA_GALLERY_ITEM_KIND.VIDEO}:${src}`,
-        kind: MESSAGE_MEDIA_GALLERY_ITEM_KIND.VIDEO,
+        id: `${'video'}:${src}`,
+        kind: 'video',
         mediaId: src,
         muted: false,
         name,

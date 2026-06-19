@@ -10,7 +10,6 @@ import { useChatRoom } from 'src/entities/chat-room'
 import { useAppSound, useSettings } from 'src/entities/setting'
 import { useSystem } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
-import { APP_SOUND_KIND } from 'src/shared/lib'
 
 export const useRoomCallNotification = () => {
   const { getById } = useChatRoom()
@@ -47,12 +46,12 @@ export const useRoomCallNotification = () => {
     startedRoomCallSoundRoomCallId = roomCall.id
 
     try {
-      await startLoopAppSound(APP_SOUND_KIND.ROOM_CALL_RING)
+      await startLoopAppSound('call-ring')
       const isCurrentStartedRoomCallSound = startedRoomCallSoundRoomCallId === roomCall.id
 
       if (!isCurrentStartedRoomCallSound) {
         if (!startedRoomCallSoundRoomCallId) {
-          stopAppSound(APP_SOUND_KIND.ROOM_CALL_RING)
+          stopAppSound('call-ring')
         }
 
         return
@@ -67,7 +66,7 @@ export const useRoomCallNotification = () => {
   }
 
   const stopStartedRoomCallSound = () => {
-    stopAppSound(APP_SOUND_KIND.ROOM_CALL_RING)
+    stopAppSound('call-ring')
     startedRoomCallSoundRoomCallId = ''
   }
 

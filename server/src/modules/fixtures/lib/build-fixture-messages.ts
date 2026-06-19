@@ -1,4 +1,4 @@
-import { type ImageObject, MESSAGE_STATUS_VALUE, MINUTE_IN_MS } from 'global-shared'
+import { type ImageObject, MINUTE_IN_MS } from 'global-shared'
 
 import { buildImageAspectRatioDetails } from 'src/modules/media/lib/build-image-aspect-ratio-details'
 import type { StreamMediaFileData } from 'src/modules/media/media.types'
@@ -75,7 +75,7 @@ const buildFixtureMessage = (
     createdAt,
     reactions: buildFixtureMessageReactions(reactions, roomNicknames),
     images: resolveFixtureMessageImages(imageIds, imageObjectById),
-    usersMetaData: roomUserIds.map((id) => ({ id, status: MESSAGE_STATUS_VALUE.DELIVERED })),
+    usersMetaData: roomUserIds.map((id) => ({ id, status: 'delivered' })),
     repliedMessage: replyToIndex
       ? buildFixtureRepliedMessage(prefix, messageSources, replyToIndex, imageObjectById)
       : null

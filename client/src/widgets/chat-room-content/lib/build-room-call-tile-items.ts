@@ -1,4 +1,4 @@
-import { ROOM_CALL_SCREEN_TILE_ID_SUFFIX, ROOM_CALL_TILE_KIND } from '../config/constants'
+import { ROOM_CALL_SCREEN_TILE_ID_SUFFIX } from '../config/constants'
 import type { BuildRoomCallTileItemsParams, RoomCallTileItem } from '../config/types'
 
 const buildRoomCallScreenTileId = (userId: string) => `${userId}:${ROOM_CALL_SCREEN_TILE_ID_SUFFIX}`
@@ -87,7 +87,7 @@ export const buildRoomCallTileItems = ({
         id: participant.userId,
         isHandRaised: Boolean(handRaisedByUserId[participant.userId]),
         isLocal,
-        kind: ROOM_CALL_TILE_KIND.PARTICIPANT,
+        kind: 'participant',
         mediaState: participantTileMediaState,
         mirrored,
         name: resolveParticipantName(participant.userId),
@@ -113,7 +113,7 @@ export const buildRoomCallTileItems = ({
           id: buildRoomCallScreenTileId(participant.userId),
           isHandRaised: false,
           isLocal,
-          kind: ROOM_CALL_TILE_KIND.SCREEN,
+          kind: 'screen',
           mediaState: buildRoomCallScreenTileMediaState(mediaState),
           mirrored: false,
           name: resolveParticipantName(participant.userId),

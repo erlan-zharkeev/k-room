@@ -63,18 +63,20 @@ export const useRegistration = () => {
     }
   })
   const {
-    buildCaptchaPayload,
     captchaRequired,
     captchaResetKey,
     captchaToken,
+    createProtectedActionPayload,
     handleProtectedActionError,
-    resetCaptcha
+    resetCaptchaByPayload
   } = useProtectedActionCaptcha()
   const isFormValid = computed(() => formRef.value?.formData.isFormValid.value ?? false)
+  const isFormDisabled = computed(() => isLoading.value)
+  const isCaptchaBlocked = computed(() => captchaRequired.value && !captchaToken.value)
+  const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked.value)
 
   const register = async (payload: AuthRegistrationPayload) => {
     isLoading.value = true
-    const shouldResetCaptcha = Boolean(payload.captchaToken)
 
     try {
       const response = await doHttpRequest<SendConfirmationLinkResponse>('post', AUTH_ENDPOINTS.registration, payload)
@@ -84,10 +86,7 @@ export const useRegistration = () => {
     } catch (error) {
       handleProtectedActionError(error)
     } finally {
-      if (shouldResetCaptcha) {
-        resetCaptcha()
-      }
-
+      resetCaptchaByPayload(payload)
       isLoading.value = false
     }
   }
@@ -95,12 +94,13 @@ export const useRegistration = () => {
   const submit = () => {
     if (!isFormValid.value) return
 
-    register({
+    const { requestPayload } = createProtectedActionPayload({
       email: formData.email.value.trim(),
       nickname: formData.nickname.value,
-      password: formData.password.value,
-      ...buildCaptchaPayload()
+      password: formData.password.value
     })
+
+    register(requestPayload)
   }
 
   return {
@@ -108,8 +108,10 @@ export const useRegistration = () => {
     captchaResetKey,
     captchaToken,
     formData,
+    isFormDisabled,
     isFormValid,
     isLoading,
+    isSubmitDisabled,
     register,
     submit
   }

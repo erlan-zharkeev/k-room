@@ -1,19 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useSettingsContentPage } from '../model/use-settings-content-page.model'
 
-import { SETTINGS_CONTENT_COMPONENTS } from '../config/constants/content.constants'
-import { getSettingsContentId } from '../lib/get-settings-content-id'
-
-const route = useRoute()
-
-const selectedSettingsId = computed(() => {
-  const { settingsId } = route.params
-
-  return getSettingsContentId(settingsId)
-})
-
-const selectedSettingsComponent = computed(() => SETTINGS_CONTENT_COMPONENTS[selectedSettingsId.value])
+const { selectedSettingsComponent } = useSettingsContentPage()
 </script>
 
 <template>

@@ -34,20 +34,7 @@ import type {
 } from 'src/features/room-call-session'
 import type { AudioMeterAnalyser } from 'src/shared/lib'
 
-import type {
-  CHAT_ROOM_CONTENT_VIEW,
-  MESSAGE_ATTACHMENT_DRAFT_KIND,
-  MESSAGE_CONTEXT_MENU_ACTION,
-  MESSAGE_DRAFT_REFERENCE_KIND,
-  MESSAGE_MEDIA_GALLERY_ITEM_KIND,
-  MESSAGE_STATUS_DOT_TONE,
-  MESSAGE_TEXT_SEGMENT_KIND,
-  ROOM_CALL_PANEL_DISPLAY_MODE,
-  ROOM_CALL_QUICK_COMMAND,
-  ROOM_CALL_TILE_KIND
-} from './constants'
-
-export type ChatRoomContentView = (typeof CHAT_ROOM_CONTENT_VIEW)[keyof typeof CHAT_ROOM_CONTENT_VIEW]
+export type ChatRoomContentView = 'text' | 'call'
 
 export interface ChatRoomMessagesProps {
   room: ChatRoom
@@ -113,11 +100,11 @@ export type RoomCallPanelEmit = {
   (event: 'leave'): void
 }
 
-export type RoomCallPanelDisplayMode = (typeof ROOM_CALL_PANEL_DISPLAY_MODE)[keyof typeof ROOM_CALL_PANEL_DISPLAY_MODE]
+export type RoomCallPanelDisplayMode = 'focus' | 'grid'
 
-export type RoomCallQuickCommand = (typeof ROOM_CALL_QUICK_COMMAND)[keyof typeof ROOM_CALL_QUICK_COMMAND]
+export type RoomCallQuickCommand = 'no' | 'ok' | 'raise-hand' | 'yes'
 
-export type RoomCallTileKind = (typeof ROOM_CALL_TILE_KIND)[keyof typeof ROOM_CALL_TILE_KIND]
+export type RoomCallTileKind = 'participant' | 'screen'
 
 export interface RoomCallTileItem {
   audioActivityStream?: MediaStream | null
@@ -193,7 +180,7 @@ export interface EditingMessageState {
   initialImages: ImageObject[]
 }
 
-export type MessageDraftReferenceKind = (typeof MESSAGE_DRAFT_REFERENCE_KIND)[keyof typeof MESSAGE_DRAFT_REFERENCE_KIND]
+export type MessageDraftReferenceKind = 'reply' | 'forward'
 
 export interface MessageDraftReferenceState {
   roomId: string
@@ -237,17 +224,17 @@ export interface MessageTextProps {
   text: string
 }
 
-export type MessageTextSegmentKind = (typeof MESSAGE_TEXT_SEGMENT_KIND)[keyof typeof MESSAGE_TEXT_SEGMENT_KIND]
+export type MessageTextSegmentKind = 'text' | 'link'
 
 export interface MessageTextPlainSegment {
   id: string
-  kind: typeof MESSAGE_TEXT_SEGMENT_KIND.TEXT
+  kind: 'text'
   text: string
 }
 
 export interface MessageTextLinkSegment {
   id: string
-  kind: typeof MESSAGE_TEXT_SEGMENT_KIND.LINK
+  kind: 'link'
   text: string
   href: string
 }
@@ -340,8 +327,7 @@ export interface MessageMediaGalleryProps {
   videos: VideoObject[]
 }
 
-export type MessageMediaGalleryItemKind =
-  (typeof MESSAGE_MEDIA_GALLERY_ITEM_KIND)[keyof typeof MESSAGE_MEDIA_GALLERY_ITEM_KIND]
+export type MessageMediaGalleryItemKind = 'image' | 'video'
 
 export type MessageMediaGalleryItem = NmorphMediaGalleryItem & {
   id: string
@@ -355,13 +341,10 @@ export interface MessageAttachmentDraftListBaseItem extends Pick<MediaObject, 'n
 }
 
 export interface MessageAttachmentDraftListImageItem extends MessageAttachmentDraftListBaseItem {
-  kind: typeof MESSAGE_ATTACHMENT_DRAFT_KIND.IMAGE
+  kind: 'image'
 }
 
-export type MessageAttachmentDraftListFileKind =
-  | typeof MESSAGE_ATTACHMENT_DRAFT_KIND.DOCUMENT
-  | typeof MESSAGE_ATTACHMENT_DRAFT_KIND.AUDIO
-  | typeof MESSAGE_ATTACHMENT_DRAFT_KIND.VIDEO
+export type MessageAttachmentDraftListFileKind = 'document' | 'audio' | 'video'
 
 export interface MessageAttachmentDraftListFileItem extends MessageAttachmentDraftListBaseItem {
   kind: MessageAttachmentDraftListFileKind
@@ -409,8 +392,17 @@ export interface MessageAttachmentUploadGroups {
   limitRejectedUploadValues: INmorphCustomFileData[]
 }
 
-export type MessageContextMenuAction = (typeof MESSAGE_CONTEXT_MENU_ACTION)[keyof typeof MESSAGE_CONTEXT_MENU_ACTION]
-export type MessageStatusDotTone = (typeof MESSAGE_STATUS_DOT_TONE)[keyof typeof MESSAGE_STATUS_DOT_TONE]
+export type MessageContextMenuAction =
+  | 'copy-text'
+  | 'edit-message'
+  | 'reply-message'
+  | 'forward-message'
+  | 'reaction-picker'
+  | 'pin-message'
+  | 'unpin-message'
+  | 'delete-message'
+
+export type MessageStatusDotTone = 'text' | 'accent' | 'error'
 
 export interface MessageContextMenuProps {
   message: Message

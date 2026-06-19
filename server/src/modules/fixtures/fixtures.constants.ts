@@ -1,4 +1,3 @@
-import { CONTACT_INTERACTION } from 'global-shared'
 import keyBy from 'lodash/keyBy'
 
 import type { FixtureContactData, FixtureGroupData, FixtureMessageData, FixtureUserData } from './fixtures.types'
@@ -158,23 +157,23 @@ export const FIXTURE_MESSAGE_IMAGE_FILES = [
 export const FIXTURE_CONTACTS = [
   {
     nickname: PRIMARY_FIXTURE_USERNAMES.olivia,
-    interaction: CONTACT_INTERACTION.INVITE_ACCEPTED,
-    reverseInteraction: CONTACT_INTERACTION.INVITE_ACCEPTED
+    interaction: 'invite-accepted',
+    reverseInteraction: 'invite-accepted'
   },
   {
     nickname: PRIMARY_FIXTURE_USERNAMES.maya,
-    interaction: CONTACT_INTERACTION.INVITE_ACCEPTED,
-    reverseInteraction: CONTACT_INTERACTION.INVITE_ACCEPTED
+    interaction: 'invite-accepted',
+    reverseInteraction: 'invite-accepted'
   },
   {
     nickname: PRIMARY_FIXTURE_USERNAMES.noah,
-    interaction: CONTACT_INTERACTION.INVITE_ACCEPTED,
-    reverseInteraction: CONTACT_INTERACTION.INVITE_ACCEPTED
+    interaction: 'invite-accepted',
+    reverseInteraction: 'invite-accepted'
   },
   {
     nickname: PRIMARY_FIXTURE_USERNAMES.lucas,
-    interaction: CONTACT_INTERACTION.INVITE_ACCEPTED,
-    reverseInteraction: CONTACT_INTERACTION.INVITE_ACCEPTED
+    interaction: 'invite-accepted',
+    reverseInteraction: 'invite-accepted'
   }
 ] as const satisfies FixtureContactData[]
 

@@ -1,12 +1,13 @@
 import type { INmorphGuideStepItem } from '@nmorph/nmorph-ui-kit'
-import type { LocalizedText } from 'global-shared'
+
+import type { I18nKey } from 'src/shared/lib'
 
 export type OnboardingGuideStepName = 'navigation' | 'topBar' | 'contentNavigation' | 'content'
 
 export interface OnboardingGuideStepConfig {
   name: OnboardingGuideStepName
-  title: LocalizedText<string>
-  text: LocalizedText<string>
+  title: I18nKey
+  text: I18nKey
   position: INmorphGuideStepItem['position']
   order: number
 }

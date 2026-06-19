@@ -24,4 +24,9 @@ export const isHttpError = (error: unknown): error is HttpError => {
 export const isHandledError = (error: unknown): error is HttpError | Error =>
   isHttpError(error) || error instanceof Error
 
-export const getHandledErrorMessage = (error: unknown) => (isHandledError(error) ? error.message : 'Unknown error')
+export const getHandledErrorMessage = (error: unknown) => {
+  if (isHttpError(error)) return error.silent ? '' : error.message
+  if (error instanceof Error) return error.message
+
+  return ''
+}

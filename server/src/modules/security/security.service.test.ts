@@ -1,4 +1,4 @@
-import { PROTECTED_ACTION_REASON, REQ_STATUS, SECURITY_ACTION } from 'global-shared'
+import { REQ_STATUS } from 'global-shared'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { AppError } from 'src/shared/lib/app-error'
@@ -9,7 +9,7 @@ import {
   LOGIN_FAILURE_WINDOW_MS,
   PASSWORD_RECOVERY_CODE_WINDOW_MS,
   SEND_CONFIRMATION_LINK_COOLDOWN_MS
-} from './constants'
+} from './security.constants'
 import { SecurityService } from './security.service'
 
 const createSecurityService = () => {
@@ -48,8 +48,8 @@ describe('SecurityService', () => {
     await expect(service.assertLoginAllowed('127.0.0.1', ' Tester ')).rejects.toMatchObject({
       status: REQ_STATUS.forbidden,
       payload: {
-        action: SECURITY_ACTION.login,
-        reason: PROTECTED_ACTION_REASON.captchaRequired,
+        action: 'login',
+        reason: 'captcha-required',
         captchaAvailable: true
       }
     })
@@ -59,7 +59,7 @@ describe('SecurityService', () => {
 
     await service.assertLoginAllowed('127.0.0.1', ' Tester ', 'captcha-token')
 
-    expect(captchaService.validateToken).toHaveBeenCalledWith('captcha-token', '127.0.0.1', SECURITY_ACTION.login)
+    expect(captchaService.validateToken).toHaveBeenCalledWith('captcha-token', '127.0.0.1', 'login')
   })
 
   it('blocks login when account failures reach block threshold', async () => {
@@ -73,8 +73,8 @@ describe('SecurityService', () => {
     await expect(service.assertLoginAllowed('127.0.0.1', 'tester')).rejects.toMatchObject({
       status: REQ_STATUS.tooManyRequests,
       payload: {
-        action: SECURITY_ACTION.login,
-        reason: PROTECTED_ACTION_REASON.temporarilyBlocked,
+        action: 'login',
+        reason: 'temporarily-blocked',
         nextTryAt: 15_000
       }
     })

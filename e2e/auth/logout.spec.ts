@@ -4,7 +4,7 @@ import { getLogoutButton } from 'e2e/shared/app'
 import { loginByCredentials } from 'e2e/shared/auth'
 import { getAppDbName, readStores, seedStores } from 'e2e/shared/indexed-db'
 
-import { LOGIN_FIXTURE_USER } from './fixtures'
+import { LOGIN_FIXTURE_USER } from './constants'
 
 const AUTH_COOKIE_NAMES = ['jwt', 'refresh-jwt', 'device-id'] as const
 const RESET_STORE_NAMES = ['contacts', 'media', 'chat-rooms'] as const

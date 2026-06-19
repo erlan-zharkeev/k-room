@@ -1,4 +1,5 @@
-export const SETTINGS_PAGE_STORAGE_I18N = {
+import { defineI18n } from 'src/shared/lib'
+export const SETTINGS_PAGE_STORAGE_I18N = defineI18n('settingsPageStorage', {
   storage: {
     en: 'Storage',
     ru: 'Хранилище',
@@ -84,4 +85,4 @@ export const SETTINGS_PAGE_STORAGE_I18N = {
     ru: 'Очистить',
     zh: '清除'
   }
-} as const
+})

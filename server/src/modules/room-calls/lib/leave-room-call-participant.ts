@@ -1,4 +1,4 @@
-import { ROOM_CALL_STATUS, type RoomCallLeaveReason } from 'global-shared'
+import { type RoomCallLeaveReason } from 'global-shared'
 
 import { emitToUsers } from 'src/modules/presence/presence.utils'
 import type { RedisService } from 'src/modules/security/redis.service'
@@ -24,7 +24,7 @@ export const finishRoomCall = async (
   const updatedRoomCall = await updateActiveRoomCall(redisService, roomCall.id, (currentRoomCall) => ({
     ...currentRoomCall,
     finishedAt,
-    status: ROOM_CALL_STATUS.FINISHED,
+    status: 'finished',
     participants: currentRoomCall.participants.map((participant) =>
       participant.leftAt ? participant : { ...participant, leftAt: finishedAt }
     )
@@ -85,7 +85,7 @@ export const leaveRoomCallParticipant = async (
     return {
       ...currentRoomCall,
       finishedAt: leftAt,
-      status: ROOM_CALL_STATUS.FINISHED,
+      status: 'finished',
       participants
     }
   })

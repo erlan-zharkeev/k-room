@@ -1,12 +1,8 @@
-import {
-  CONTACT_INTERACTION,
-  type Interaction,
-  isAcceptedContactInteraction,
-  normalizeNicknameKey
-} from 'global-shared'
+import { type Interaction, isAcceptedContactInteraction, normalizeNicknameKey } from 'global-shared'
 
 import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 
+import { UserModel } from '../user.model'
 import type {
   UserChatRoomsProjection,
   UserContactInteractionProjection,
@@ -16,8 +12,7 @@ import type {
   UserPinnedChatRoomIdsProjection,
   UserPublicNicknameProjection,
   UserPublicProjection
-} from '../types'
-import { UserModel } from '../user.model'
+} from '../user.types'
 
 export const findUserById = (userId: string) => {
   return UserModel.findById(userId)
@@ -229,7 +224,7 @@ export const setDefaultUserContact = (userId: string, contactId: string) => {
       $set: {
         [`personal.contacts.${contactId}`]: {
           id: contactId,
-          interaction: CONTACT_INTERACTION.DEFAULT,
+          interaction: 'default',
           updatedAt: Date.now()
         }
       }

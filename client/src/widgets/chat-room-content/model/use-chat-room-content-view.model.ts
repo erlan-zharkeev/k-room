@@ -1,7 +1,7 @@
 import { computed, type ComputedRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { CHAT_ROOM_CONTENT_VIEW, CHAT_ROOM_CONTENT_VIEW_QUERY_KEY } from '../config/constants'
+import { CHAT_ROOM_CONTENT_VIEW_QUERY_KEY } from '../config/constants'
 import type { ChatRoomContentView } from '../config/types'
 
 export const useChatRoomContentView = (hasSelectedRoomCall: ComputedRef<boolean>) => {
@@ -10,10 +10,10 @@ export const useChatRoomContentView = (hasSelectedRoomCall: ComputedRef<boolean>
 
   const changeChatRoomContentView = (view: ChatRoomContentView) => {
     const query = { ...route.query }
-    const shouldSaveTextView = view === CHAT_ROOM_CONTENT_VIEW.TEXT && hasSelectedRoomCall.value
+    const shouldSaveTextView = view === 'text' && hasSelectedRoomCall.value
 
     if (shouldSaveTextView) {
-      query[CHAT_ROOM_CONTENT_VIEW_QUERY_KEY] = CHAT_ROOM_CONTENT_VIEW.TEXT
+      query[CHAT_ROOM_CONTENT_VIEW_QUERY_KEY] = 'text'
     } else {
       delete query[CHAT_ROOM_CONTENT_VIEW_QUERY_KEY]
     }
@@ -21,12 +21,12 @@ export const useChatRoomContentView = (hasSelectedRoomCall: ComputedRef<boolean>
     router.replace({ query })
   }
   const chatRoomContentView = computed<ChatRoomContentView>(() => {
-    const isTextViewRequested = route.query[CHAT_ROOM_CONTENT_VIEW_QUERY_KEY] === CHAT_ROOM_CONTENT_VIEW.TEXT
+    const isTextViewRequested = route.query[CHAT_ROOM_CONTENT_VIEW_QUERY_KEY] === 'text'
 
-    return hasSelectedRoomCall.value && !isTextViewRequested ? CHAT_ROOM_CONTENT_VIEW.CALL : CHAT_ROOM_CONTENT_VIEW.TEXT
+    return hasSelectedRoomCall.value && !isTextViewRequested ? 'call' : 'text'
   })
 
-  const isChatRoomTextView = computed(() => chatRoomContentView.value === CHAT_ROOM_CONTENT_VIEW.TEXT)
+  const isChatRoomTextView = computed(() => chatRoomContentView.value === 'text')
 
   return {
     chatRoomContentView,

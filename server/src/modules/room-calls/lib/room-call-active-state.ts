@@ -9,7 +9,7 @@ import {
   ROOM_CALL_ACTIVE_STATE_TTL_MS,
   ROOM_CALL_ACTIVE_STATE_UPDATE_SCRIPT,
   ROOM_CALL_SERVER_INSTANCE_HEARTBEAT_TTL_MS
-} from '../constants'
+} from '../room-calls.constants'
 import type { RoomCallActiveState } from '../room-calls.types'
 
 const buildActiveRoomCallKey = (roomCallId: string) => `${ROOM_CALL_ACTIVE_STATE_KEY_PREFIX.CALL}:${roomCallId}`

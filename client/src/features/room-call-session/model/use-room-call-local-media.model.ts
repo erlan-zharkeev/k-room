@@ -1,5 +1,5 @@
 import { useUserMedia } from '@vueuse/core'
-import { ROOM_CALL_MEDIA_KIND, type RoomCallMediaKind, type RoomCallParticipantMediaState } from 'global-shared'
+import { type RoomCallMediaKind, type RoomCallParticipantMediaState } from 'global-shared'
 import { onBeforeUnmount, ref, shallowRef } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
@@ -120,11 +120,11 @@ export const useRoomCallLocalMedia = () => {
   const startRoomCallLocalMedia = async (mediaKind: RoomCallMediaKind) => {
     await startAudio()
 
-    if (mediaKind === ROOM_CALL_MEDIA_KIND.VIDEO) {
+    if (mediaKind === 'video') {
       await startVideo()
     }
 
-    if (mediaKind === ROOM_CALL_MEDIA_KIND.SCREEN) {
+    if (mediaKind === 'screen') {
       await startScreen()
     }
   }

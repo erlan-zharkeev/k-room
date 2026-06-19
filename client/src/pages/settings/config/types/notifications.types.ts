@@ -1,19 +1,17 @@
-import type { LocalizedText } from 'global-shared'
-
 import type { NotificationSettingGroup, NotificationSettingKey } from 'src/entities/setting'
-import type { ClientPlatform } from 'src/shared/lib'
+import type { ClientPlatform, I18nKey } from 'src/shared/lib'
 
 export type SettingsNotificationOptionId = 'enabled' | NotificationSettingKey
 
 export interface SettingsNotificationSection {
   id: NotificationSettingGroup
-  title: LocalizedText<string>
+  title: I18nKey
 }
 
 export interface SettingsNotificationOption {
   id: SettingsNotificationOptionId
-  label: LocalizedText<string>
-  description: LocalizedText<string>
+  label: I18nKey
+  description: I18nKey
   visibility?: ClientPlatform
   mobileOnly?: boolean
 }

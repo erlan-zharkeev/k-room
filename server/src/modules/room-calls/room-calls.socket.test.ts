@@ -1,4 +1,3 @@
-import { ROOM_CALL_ACK_FAILURE_REASON } from 'global-shared'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const activeStateMock = vi.hoisted(() => ({
@@ -103,7 +102,7 @@ describe('room-calls.socket', () => {
 
     expect(response).toEqual({
       ok: false,
-      reason: ROOM_CALL_ACK_FAILURE_REASON.JOIN_FAILED
+      reason: 'join-failed'
     })
   })
 

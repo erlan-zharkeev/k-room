@@ -1,4 +1,4 @@
-import { ROOM_CALL_MEDIA_KIND, ROOM_CALL_STATUS } from 'global-shared'
+import { ROOM_CALL_MEDIA_KIND_VALUES, ROOM_CALL_STATUS_VALUES } from 'global-shared'
 import { model, Schema } from 'mongoose'
 
 import type { RoomCallParticipantMediaStateSchema, RoomCallParticipantSchema, RoomCallSchema } from './room-calls.types'
@@ -71,12 +71,12 @@ const roomCallSchema = new Schema<RoomCallSchema>(
     },
     status: {
       type: String,
-      enum: Object.values(ROOM_CALL_STATUS),
+      enum: ROOM_CALL_STATUS_VALUES,
       required: true
     },
     mediaKind: {
       type: String,
-      enum: Object.values(ROOM_CALL_MEDIA_KIND),
+      enum: ROOM_CALL_MEDIA_KIND_VALUES,
       required: true
     },
     participants: {

@@ -20,6 +20,8 @@ import { resolveUserRelatedRecipientIds } from './lib/resolve-user-recipient-ids
 import { mapUserToDto, transformUserToPreview } from './lib/transform-user'
 import { updateUserAvatar } from './lib/update-user-avatar'
 import { createUser, isUserExist } from './lib/user-existence'
+import { CHANGE_PASSWORD_I18N, RESET_PASSWORD_I18N, UPDATE_USER_DATA_I18N, USER_I18N } from './user.i18n'
+import { UserModel } from './user.model'
 import type {
   ChangeEmailParams,
   ChangePasswordParams,
@@ -29,9 +31,7 @@ import type {
   UserExistParams,
   UserExistState,
   UserSchema
-} from './types'
-import { CHANGE_PASSWORD_I18N, RESET_PASSWORD_I18N, UPDATE_USER_DATA_I18N, USER_I18N } from './user.i18n'
-import { UserModel } from './user.model'
+} from './user.types'
 
 @Injectable()
 export class UserService {

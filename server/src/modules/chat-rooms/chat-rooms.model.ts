@@ -1,4 +1,4 @@
-import { CHAT_KIND, CHAT_ROOM_NAME_MAX_LENGTH } from 'global-shared'
+import { CHAT_KIND_VALUES, CHAT_ROOM_NAME_MAX_LENGTH } from 'global-shared'
 import { model, Schema } from 'mongoose'
 
 import type { ChatRoomSchema } from './chat-rooms.types'
@@ -22,7 +22,7 @@ const chatRoomSchema = new Schema<ChatRoomSchema>(
     },
     chatKind: {
       type: String,
-      enum: Object.values(CHAT_KIND),
+      enum: CHAT_KIND_VALUES,
       required: true
     },
     avatarId: {

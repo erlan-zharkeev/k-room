@@ -4,7 +4,7 @@ import { createClient, type RedisClientType } from 'redis'
 import { SERVER_ENV } from 'src/app/env'
 import { log } from 'src/shared/lib/log'
 
-import type { RedisAdapterClients, RedisCommandClient } from './types'
+import type { RedisAdapterClients, RedisCommandClient } from './security.types'
 
 @Injectable()
 export class RedisService implements OnModuleInit, OnModuleDestroy {

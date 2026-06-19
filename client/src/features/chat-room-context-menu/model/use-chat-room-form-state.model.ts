@@ -31,7 +31,7 @@ export const useChatRoomFormState = () => {
       rules: [
         {
           fileMaxSize: CREATE_CHAT_ROOM_AVATAR_MAX_FILE_SIZE,
-          error: t(CHAT_ROOM_CONTEXT_MENU_I18N.chatImageInvalidSize)(CREATE_CHAT_ROOM_AVATAR_MAX_MB)
+          error: t(CHAT_ROOM_CONTEXT_MENU_I18N.chatImageInvalidSize, { size: CREATE_CHAT_ROOM_AVATAR_MAX_MB })
         }
       ]
     },

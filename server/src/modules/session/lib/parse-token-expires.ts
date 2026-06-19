@@ -1,6 +1,6 @@
 import { isNumber, SECOND_IN_MS } from 'global-shared'
 
-import { DEFAULT_COOKIE_MAX_AGE_MS, TOKEN_EXPIRES_PATTERN, TOKEN_EXPIRES_UNIT_TO_MS } from '../constants'
+import { DEFAULT_COOKIE_MAX_AGE_MS, TOKEN_EXPIRES_PATTERN, TOKEN_EXPIRES_UNIT_TO_MS } from '../session.constants'
 
 export const parseTokenExpires = (expires: string | number) => {
   if (isNumber(expires)) {

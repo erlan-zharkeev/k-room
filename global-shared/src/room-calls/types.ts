@@ -1,27 +1,16 @@
-import type {
-  ROOM_CALL_ACK_FAILURE_REASON,
-  ROOM_CALL_LEAVE_REASON,
-  ROOM_CALL_MEDIA_KIND,
-  ROOM_CALL_QUICK_COMMAND,
-  ROOM_CALL_SIGNAL_KIND,
-  ROOM_CALL_STATUS,
-  ROOM_CALL_TEMPORARY_QUICK_COMMAND
-} from './constants'
+export type RoomCallStatus = 'calling' | 'in-progress' | 'finished'
 
-export type RoomCallStatus = (typeof ROOM_CALL_STATUS)[keyof typeof ROOM_CALL_STATUS]
+export type RoomCallMediaKind = 'audio' | 'video' | 'screen'
 
-export type RoomCallMediaKind = (typeof ROOM_CALL_MEDIA_KIND)[keyof typeof ROOM_CALL_MEDIA_KIND]
+export type RoomCallSignalKind = 'offer' | 'answer' | 'ice-candidate'
 
-export type RoomCallSignalKind = (typeof ROOM_CALL_SIGNAL_KIND)[keyof typeof ROOM_CALL_SIGNAL_KIND]
+export type RoomCallQuickCommand = 'no' | 'ok' | 'raise-hand' | 'yes'
 
-export type RoomCallQuickCommand = (typeof ROOM_CALL_QUICK_COMMAND)[keyof typeof ROOM_CALL_QUICK_COMMAND]
+export type RoomCallTemporaryQuickCommand = 'no' | 'ok' | 'yes'
 
-export type RoomCallTemporaryQuickCommand =
-  (typeof ROOM_CALL_TEMPORARY_QUICK_COMMAND)[keyof typeof ROOM_CALL_TEMPORARY_QUICK_COMMAND]
+export type RoomCallLeaveReason = 'declined' | 'disconnected' | 'left'
 
-export type RoomCallLeaveReason = (typeof ROOM_CALL_LEAVE_REASON)[keyof typeof ROOM_CALL_LEAVE_REASON]
-
-export type RoomCallAckFailureReason = (typeof ROOM_CALL_ACK_FAILURE_REASON)[keyof typeof ROOM_CALL_ACK_FAILURE_REASON]
+export type RoomCallAckFailureReason = 'access-failed' | 'already-active' | 'join-failed' | 'limit-reached'
 
 export interface RoomCallParticipantMediaState {
   audio: boolean

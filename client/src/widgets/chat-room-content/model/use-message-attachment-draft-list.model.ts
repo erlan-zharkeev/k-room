@@ -2,7 +2,6 @@ import { computed } from 'vue'
 
 import { useLiveMediaUrlMap } from 'src/shared/lib'
 
-import { MESSAGE_ATTACHMENT_DRAFT_KIND } from '../config/constants'
 import type { MessageAttachmentDraftListItem, MessageAttachmentDraftListProps } from '../config/types'
 
 export const useMessageAttachmentDraftList = (props: MessageAttachmentDraftListProps) => {
@@ -14,7 +13,7 @@ export const useMessageAttachmentDraftList = (props: MessageAttachmentDraftListP
   }
 
   const openAttachmentPreview = (attachment: MessageAttachmentDraftListItem, previewSrc?: string) => {
-    if (attachment.kind === MESSAGE_ATTACHMENT_DRAFT_KIND.IMAGE) return
+    if (attachment.kind === 'image') return
     if (!previewSrc) return
 
     window.open(previewSrc, '_blank', 'noopener,noreferrer')

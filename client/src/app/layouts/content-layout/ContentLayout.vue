@@ -1,18 +1,15 @@
 <script setup lang="ts">
 import { NmorphCard, NmorphScroll } from '@nmorph/nmorph-ui-kit'
-import { computed } from 'vue'
 
 import { ContentNavigationBackButton } from 'src/features/content-navigation-back-button'
 import { SETTINGS_CONTENT_TITLE } from 'src/pages/settings'
-import { useScreen } from 'src/shared/lib'
 import { AppHeader } from 'src/shared/ui'
 
 import { type ContentLayoutProps } from './types'
+import { useContentLayout } from './use-content-layout.model'
 
 const props = defineProps<ContentLayoutProps>()
-
-const { isPortraitTabletOrLess } = useScreen()
-const showHeader = computed(() => isPortraitTabletOrLess.value || Boolean(props.titleKey))
+const { isPortraitTabletOrLess, showHeader } = useContentLayout(props)
 </script>
 
 <template>

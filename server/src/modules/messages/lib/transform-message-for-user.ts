@@ -1,11 +1,4 @@
-import {
-  type ImageObject,
-  type Message,
-  MESSAGE_STATUS_VALUE,
-  isMessageAuthor,
-  isMessageReadStatus,
-  isString
-} from 'global-shared'
+import { type ImageObject, type Message, isMessageAuthor, isMessageReadStatus, isString } from 'global-shared'
 
 import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 
@@ -29,7 +22,7 @@ export const transformMessageForUser = (message: MessageDocument, userId: string
   } = message
   const readBySomeone = usersMetaData.some((data) => isMessageReadStatus(data.status))
   const selfStatus = usersMetaData.find((user) => user.id === userId)?.status
-  const status = isMessageAuthor(message, userId) && readBySomeone ? MESSAGE_STATUS_VALUE.READ : selfStatus
+  const status = isMessageAuthor(message, userId) && readBySomeone ? 'read' : selfStatus
   const images = (message.images ?? []) as Array<string | ImageObject>
 
   return {

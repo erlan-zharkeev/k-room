@@ -1,65 +1,18 @@
-import type { NmorphSelectModelValueType } from '@nmorph/nmorph-ui-kit'
-import { useDevicesList, useUserMedia } from '@vueuse/core'
-import { computed, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
+import { ref, shallowRef } from 'vue'
 
-import { useSettings } from 'src/entities/setting'
-import {
-  calculateAudioVolumeDb,
-  createAudioMeterAnalyser,
-  log,
-  useI18n,
-  useMediaDevicePermission
-} from 'src/shared/lib'
+import { calculateAudioVolumeDb, createAudioMeterAnalyser, log, useMediaDevicePermission } from 'src/shared/lib'
 
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
 
-import {
-  resolveSingleSelectValue,
-  syncSelectedDeviceId,
-  useDevicePermissionStatus,
-  useDeviceWarning
-} from './use-device-settings.model'
+import { useDeviceWarning } from './use-device-settings.model'
+import { useMediaInputDevice } from './use-media-input-device.model'
 
 export const useAudioInputDevice = () => {
-  const { t } = useI18n()
-  const { settings, setByPath } = useSettings()
   const { audioInputPermission, hasAudioInputPermissionWarning } = useMediaDevicePermission()
   const { showDeviceWarning } = useDeviceWarning('Audio input device request failed')
-  const {
-    audioInputs: audioInputDevices,
-    devices: audioInputAllDevices,
-    isSupported: isAudioInputSupported
-  } = useDevicesList({
-    constraints: { audio: true, video: false }
-  })
-  const audioInputUserMedia = useUserMedia({
-    autoSwitch: false,
-    constraints: { audio: false, video: false }
-  })
-
-  const audioInputLoading = ref(false)
-  const audioInputCheckLoading = ref(false)
   const audioVolumeDb = ref(Number.NEGATIVE_INFINITY)
   const audioFrameId = ref(0)
   const audioContext = shallowRef<AudioContext | null>(null)
-  const audioInputStream = audioInputUserMedia.stream
-
-  const { permissionCalloutType: audioInputPermissionCalloutType, permissionStatus: audioInputPermissionStatus } =
-    useDevicePermissionStatus(isAudioInputSupported, audioInputPermission)
-  const audioInputOptions = computed(() =>
-    audioInputDevices.value.map(({ deviceId, label }, index) => ({
-      value: deviceId,
-      label: label || t(SETTINGS_PAGE_DEVICES_I18N.deviceLabel)(index + 1)
-    }))
-  )
-
-  const isAudioInputChecking = computed(() => Boolean(audioInputStream.value))
-  const isAudioInputCheckDisabled = computed(
-    () =>
-      audioInputCheckLoading.value ||
-      !isAudioInputSupported.value ||
-      (audioInputPermission.value === 'granted' && audioInputDevices.value.length === 0)
-  )
 
   const stopAudioVolume = () => {
     if (audioFrameId.value) {
@@ -91,91 +44,27 @@ export const useAudioInputDevice = () => {
     updateAudioVolume(analyser, data)
   }
 
-  const stopAudioInputCheck = () => {
-    audioInputUserMedia.stop()
-    stopAudioVolume()
-  }
-
-  const getAudioInputConstraints = (deviceId: string) => {
-    if (deviceId && audioInputDevices.value.some((device) => device.deviceId === deviceId)) {
-      return { deviceId: { exact: deviceId } }
-    }
-
-    return true
-  }
-
-  const startAudioInputCheck = async (deviceId = settings.value.ioDevices.audioInputDeviceId) => {
-    stopAudioInputCheck()
-
-    try {
-      audioInputCheckLoading.value = true
-      audioInputUserMedia.constraints.value = {
-        audio: getAudioInputConstraints(deviceId),
-        video: false
-      }
-
-      const stream = await audioInputUserMedia.start()
-
-      if (stream) {
-        await refreshAudioInputDevices(true)
-        startAudioVolume(stream)
-      }
-    } catch (error) {
-      stopAudioInputCheck()
-      showDeviceWarning(error)
-    } finally {
-      audioInputCheckLoading.value = false
-    }
-  }
-
-  const setAudioInputChecking = async (value: boolean) => {
-    if (!value) {
-      stopAudioInputCheck()
-      return
-    }
-
-    await startAudioInputCheck()
-  }
-
-  const syncSelectedAudioInputDevice = async (clearMissing = false) => {
-    return syncSelectedDeviceId(
-      audioInputDevices.value,
-      settings.value.ioDevices.audioInputDeviceId,
-      clearMissing ? '' : settings.value.ioDevices.audioInputDeviceId,
-      (deviceId) => setByPath('ioDevices.audioInputDeviceId', deviceId)
-    )
-  }
-
-  const refreshAudioInputDevices = async (clearMissing = false) => {
-    try {
-      audioInputLoading.value = true
-      if (isAudioInputSupported.value) {
-        audioInputAllDevices.value = await navigator.mediaDevices.enumerateDevices()
-      }
-
-      return await syncSelectedAudioInputDevice(clearMissing)
-    } finally {
-      audioInputLoading.value = false
-    }
-  }
-
-  const setSelectedAudioInputDevice = async (value: NmorphSelectModelValueType = '') => {
-    const deviceId = resolveSingleSelectValue(value)
-    const shouldRestartCheck = isAudioInputChecking.value
-
-    await setByPath('ioDevices.audioInputDeviceId', deviceId)
-
-    if (shouldRestartCheck) {
-      await startAudioInputCheck(deviceId)
-    }
-  }
-
-  onBeforeUnmount(() => {
-    stopAudioInputCheck()
-  })
-
-  watch(audioInputDevices, () => {
-    void syncSelectedAudioInputDevice(audioInputPermission.value === 'granted')
+  const {
+    inputCheckLabel: audioInputCheckLabel,
+    inputCheckLoading: audioInputCheckLoading,
+    inputLoading: audioInputLoading,
+    inputOptions: audioInputOptions,
+    isInputCheckDisabled: isAudioInputCheckDisabled,
+    isInputChecking: isAudioInputChecking,
+    permissionCalloutType: audioInputPermissionCalloutType,
+    permissionStatus: audioInputPermissionStatus,
+    setInputChecking: setAudioInputChecking,
+    setSelectedInputDevice: setSelectedAudioInputDevice,
+    settings
+  } = useMediaInputDevice({
+    kind: 'audio',
+    onStopCheck: stopAudioVolume,
+    onStreamStarted: startAudioVolume,
+    permission: audioInputPermission,
+    settingKey: 'audioInputDeviceId',
+    showDeviceWarning,
+    startCheckLabel: SETTINGS_PAGE_DEVICES_I18N.testAudioInput,
+    stopCheckLabel: SETTINGS_PAGE_DEVICES_I18N.stopAudioInputCheck
   })
 
   return {
@@ -189,6 +78,7 @@ export const useAudioInputDevice = () => {
     hasAudioInputPermissionWarning,
     audioVolumeDb,
     isAudioInputChecking,
+    audioInputCheckLabel,
     setAudioInputChecking,
     setSelectedAudioInputDevice
   }

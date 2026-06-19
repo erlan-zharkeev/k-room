@@ -3,7 +3,6 @@ import { computed, type Ref, ref } from 'vue'
 
 import { useI18n } from 'src/shared/lib'
 
-import { MESSAGE_DRAFT_REFERENCE_KIND } from '../config/constants'
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { MessageDraftReferenceKind, MessageDraftReferenceState } from '../config/types'
 import { buildRepliedMessage, cloneRepliedMessage } from '../lib/build-replied-message'
@@ -29,7 +28,7 @@ export const useMessageDraftReference = (room?: Ref<ChatRoom>) => {
 
     if (!kind) return ''
 
-    const isForwardReference = kind === MESSAGE_DRAFT_REFERENCE_KIND.FORWARD
+    const isForwardReference = kind === 'forward'
 
     return t(isForwardReference ? CHAT_ROOM_CONTENT_I18N.forwardMessage : CHAT_ROOM_CONTENT_I18N.replyMessage)
   })
@@ -46,11 +45,11 @@ export const useMessageDraftReference = (room?: Ref<ChatRoom>) => {
   }
 
   const startMessageReply = (message: Message, roomId: string) => {
-    startMessageDraftReference(message, roomId, MESSAGE_DRAFT_REFERENCE_KIND.REPLY)
+    startMessageDraftReference(message, roomId, 'reply')
   }
 
   const startMessageForward = (message: Message, roomId: string) => {
-    startMessageDraftReference(message, roomId, MESSAGE_DRAFT_REFERENCE_KIND.FORWARD)
+    startMessageDraftReference(message, roomId, 'forward')
   }
 
   const cancelMessageDraftReference = () => {

@@ -1,6 +1,6 @@
-import { defineI18n } from 'global-shared'
+import { defineI18n } from 'src/shared/lib'
 
-export const CHAT_ROOMS_NAVIGATION_I18N = defineI18n({
+export const CHAT_ROOMS_NAVIGATION_I18N = defineI18n('chatRoomsNavigation', {
   search: {
     en: 'Search chat',
     ru: 'Поиск чата',

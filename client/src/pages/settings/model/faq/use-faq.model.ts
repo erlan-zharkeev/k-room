@@ -5,7 +5,6 @@ import { useI18n } from 'src/shared/lib'
 
 import { FAQ_ITEMS } from '../../config/constants/faq.constants'
 import type { FaqItem, ResolvedFaqItem } from '../../config/types/faq.types'
-import { resolveFaqText } from '../../lib/resolve-faq-text'
 
 export const useFaq = () => {
   const { t } = useI18n()
@@ -19,8 +18,8 @@ export const useFaq = () => {
 
   const resolveFaqItem = (item: FaqItem): ResolvedFaqItem => ({
     id: item.id,
-    question: resolveFaqText(t(item.question), appName),
-    answer: resolveFaqText(t(item.answer), appName)
+    question: t(item.question, { appName }),
+    answer: t(item.answer, { appName })
   })
 
   const resolvedItems = computed(() => FAQ_ITEMS.map(resolveFaqItem))

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-import { buildRegistrationFixtureUser } from './fixtures'
+import { buildRegistrationFixtureUser } from './lib'
 
 test.describe('registration', () => {
   test('registers a new user and redirects to wait email confirmation page', async ({ page }) => {

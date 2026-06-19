@@ -1,6 +1,5 @@
 import { EventEmitter } from 'node:events'
 
-import { MESSAGE_LINK_PREVIEW_STATUS } from 'global-shared'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const dnsMock = vi.hoisted(() => ({
@@ -151,14 +150,14 @@ describe('loadMessageLinkPreview', () => {
       preview: {
         url: 'https://example.com/',
         host: 'example.com',
-        status: MESSAGE_LINK_PREVIEW_STATUS.PENDING
+        status: 'pending'
       }
     })
 
     expect(preview).toEqual({
       url: 'https://example.com/',
       host: 'example.com',
-      status: MESSAGE_LINK_PREVIEW_STATUS.LOADED,
+      status: 'loaded',
       title: 'Example title',
       description: 'Example description',
       image: {
@@ -196,11 +195,11 @@ describe('loadMessageLinkPreview', () => {
       preview: {
         url: 'https://example.com/',
         host: 'example.com',
-        status: MESSAGE_LINK_PREVIEW_STATUS.PENDING
+        status: 'pending'
       }
     })
 
-    expect(preview.status).toBe(MESSAGE_LINK_PREVIEW_STATUS.FAILED)
+    expect(preview.status).toBe('failed')
     expect(mediaMock.uploadBufferToBucketWithFileData).not.toHaveBeenCalled()
   })
 })

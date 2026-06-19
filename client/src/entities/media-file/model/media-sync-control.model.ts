@@ -1,6 +1,6 @@
 import { allowMediaSyncQueue, blockMediaSyncQueue } from '../lib/media-sync-queue'
 
-import { abortMediaRequests, resetMediaRequests } from './use-load-media.model'
+import { abortMediaRequests, resetMediaRequests } from './media-request-control.model'
 
 export const blockMediaSync = () => {
   blockMediaSyncQueue()

@@ -1,4 +1,4 @@
-import { CONTACT_INTERACTION, CONTACT_SEARCH_QUERY_MAX_LENGTH, REQ_STATUS } from 'global-shared'
+import { CONTACT_SEARCH_QUERY_MAX_LENGTH, REQ_STATUS } from 'global-shared'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const ioMock = vi.hoisted(() => ({
@@ -79,8 +79,8 @@ describe('contacts.service', () => {
       _id: 'user-1',
       personal: {
         contacts: {
-          'user-2': { interaction: CONTACT_INTERACTION.INVITE_RECEIVED },
-          'user-3': { interaction: CONTACT_INTERACTION.INVITE_ACCEPTED }
+          'user-2': { interaction: 'invite-received' },
+          'user-3': { interaction: 'invite-accepted' }
         }
       }
     }
@@ -104,7 +104,7 @@ describe('contacts.service', () => {
     expect(result.contacts[0]).toMatchObject({
       id: 'user-2',
       nickname: 'Alice',
-      interactionType: CONTACT_INTERACTION.INVITE_RECEIVED,
+      interactionType: 'invite-received',
       online: true
     })
     expect(result.total).toBe(2)
@@ -143,7 +143,7 @@ describe('contacts.service', () => {
     expect(result?.contactData).toMatchObject({
       id: 'user-2',
       nickname: 'Alice',
-      interactionType: CONTACT_INTERACTION.DEFAULT,
+      interactionType: 'default',
       online: true
     })
   })
@@ -157,39 +157,39 @@ describe('contacts.service', () => {
         contacts: {}
       }
     })
-    persistenceMock.loadUserContactInteraction.mockResolvedValue(CONTACT_INTERACTION.DEFAULT)
+    persistenceMock.loadUserContactInteraction.mockResolvedValue('default')
     persistenceMock.createUserContactInteraction.mockResolvedValue(contactSide)
     persistenceMock.setExistingUserContactInteraction.mockResolvedValue(author)
     presenceService.isUserOnline.mockResolvedValue(true)
 
-    await updateContactInteractionType('user-1', 'user-2', CONTACT_INTERACTION.INVITED, presenceService as never)
+    await updateContactInteractionType('user-1', 'user-2', 'invited', presenceService as never)
 
     expect(presenceUtilsMock.emitToUsers).toHaveBeenCalledWith(
       ['user-2'],
       'invite-received',
       expect.objectContaining({
         id: 'user-1',
-        interactionType: CONTACT_INTERACTION.INVITE_RECEIVED,
+        interactionType: 'invite-received',
         online: true
       })
     )
     expect(presenceUtilsMock.emitToUsers).toHaveBeenCalledWith(['user-1'], 'contact-interaction-updated', {
       contactId: 'user-2',
-      interaction: CONTACT_INTERACTION.INVITED
+      interaction: 'invited'
     })
   })
 
   it('restores current interaction when blocked contact update is ignored', async () => {
     persistenceMock.loadUserContactInteraction
-      .mockResolvedValueOnce(CONTACT_INTERACTION.BLOCKED)
-      .mockResolvedValueOnce(CONTACT_INTERACTION.DEFAULT)
-      .mockResolvedValueOnce(CONTACT_INTERACTION.BLOCKED)
+      .mockResolvedValueOnce('blocked')
+      .mockResolvedValueOnce('default')
+      .mockResolvedValueOnce('blocked')
 
-    await updateContactInteractionType('user-1', 'user-2', CONTACT_INTERACTION.INVITED, presenceService as never)
+    await updateContactInteractionType('user-1', 'user-2', 'invited', presenceService as never)
 
     expect(presenceUtilsMock.emitToUsers).toHaveBeenCalledWith(['user-1'], 'contact-interaction-updated', {
       contactId: 'user-2',
-      interaction: CONTACT_INTERACTION.BLOCKED
+      interaction: 'blocked'
     })
   })
 
@@ -199,7 +199,7 @@ describe('contacts.service', () => {
       personal: {
         contacts: {
           'user-1': {
-            interaction: CONTACT_INTERACTION.INVITE_ACCEPTED
+            interaction: 'invite-accepted'
           }
         }
       }
@@ -208,18 +208,14 @@ describe('contacts.service', () => {
     await deleteContactById('user-1', 'user-2')
 
     expect(persistenceMock.deleteUserContact).toHaveBeenCalledWith('user-1', 'user-2')
-    expect(persistenceMock.setExistingUserContactInteraction).toHaveBeenCalledWith(
-      'user-2',
-      'user-1',
-      CONTACT_INTERACTION.DEFAULT
-    )
+    expect(persistenceMock.setExistingUserContactInteraction).toHaveBeenCalledWith('user-2', 'user-1', 'default')
     expect(presenceUtilsMock.emitToUsers).toHaveBeenCalledWith(['user-1'], 'contact-delete-success', {
       deletedContactId: 'user-2',
       silent: false
     })
     expect(presenceUtilsMock.emitToUsers).toHaveBeenCalledWith(['user-2'], 'contact-interaction-updated', {
       contactId: 'user-1',
-      interaction: CONTACT_INTERACTION.DEFAULT
+      interaction: 'default'
     })
   })
 })

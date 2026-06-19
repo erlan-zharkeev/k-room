@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { NmorphCard, NmorphStepper } from '@nmorph/nmorph-ui-kit'
-import { computed, toRef } from 'vue'
 
 import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
 import type { CallActivityPanelEmits, CallActivityPanelProps } from '../config/types'
-import { useRoomCallActivity } from '../model/use-room-call-activity.model'
+import { useCallActivityPanel } from '../model/use-call-activity-panel.model'
 
 import CallActivityPanelItem from './CallActivityPanelItem.vue'
 
@@ -13,8 +12,6 @@ const props = withDefaults(defineProps<CallActivityPanelProps>(), {
   openable: true
 })
 const emit = defineEmits<CallActivityPanelEmits>()
-const roomId = toRef(props, 'roomId')
-const isOpenEnabled = computed(() => props.openable)
 const {
   activityItem,
   activityItems,
@@ -27,14 +24,9 @@ const {
   joinCurrentRoomCallWithAudio,
   joinCurrentRoomCallWithVideo,
   leaveCurrentRoomCall,
-  openCurrentRoomCall
-} = useRoomCallActivity({
-  roomId,
-  isOpenEnabled,
-  openRoomCall: (targetRoomId) => emit('open-room-call', targetRoomId)
-})
-
-const hasMultipleActivityItems = computed(() => activityItems.value.length > 1)
+  openCurrentRoomCall,
+  hasMultipleActivityItems
+} = useCallActivityPanel(props, emit)
 </script>
 
 <template>

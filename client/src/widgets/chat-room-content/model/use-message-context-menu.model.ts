@@ -2,7 +2,6 @@ import { computed, ref, toRef } from 'vue'
 
 import { useTouchInput } from 'src/shared/lib'
 
-import { MESSAGE_CONTEXT_MENU_ACTION, MESSAGE_CONTEXT_MENU_TRIGGER } from '../config/constants'
 import type { MessageContextMenuOption, MessageContextMenuProps } from '../config/types'
 import { canStartMessageEdit } from '../lib/can-start-message-edit'
 import MessageCopyTextContextMenuItem from '../ui/MessageCopyTextContextMenuItem.vue'
@@ -23,9 +22,7 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
   const isMessageForwardDialogOpen = ref(false)
   const isMessageContextMenuOpen = ref(false)
   const isMessagePinned = computed(() => room.value.pinnedMessageId === message.value.id)
-  const messageContextMenuTrigger = computed(() =>
-    isTouchInput.value ? MESSAGE_CONTEXT_MENU_TRIGGER.LONG_PRESS : MESSAGE_CONTEXT_MENU_TRIGGER.CONTEXT_MENU
-  )
+  const messageContextMenuTrigger = computed(() => (isTouchInput.value ? 'longpress' : 'contextmenu'))
 
   const updateMessageContextMenuOpen = (value: boolean) => {
     isMessageContextMenuOpen.value = value
@@ -42,7 +39,7 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
   const messageContextMenuOptions = computed<MessageContextMenuOption[]>(() => {
     const options: MessageContextMenuOption[] = [
       {
-        value: MESSAGE_CONTEXT_MENU_ACTION.REACTION_PICKER,
+        value: 'reaction-picker',
         component: MessageReactionPicker,
         componentProps: {
           message: message.value,
@@ -52,7 +49,7 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
         closeOnClick: false
       },
       {
-        value: MESSAGE_CONTEXT_MENU_ACTION.COPY_TEXT,
+        value: 'copy-text',
         component: MessageCopyTextContextMenuItem,
         componentProps: {
           message: message.value,
@@ -62,7 +59,7 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
         closeOnClick: false
       },
       {
-        value: MESSAGE_CONTEXT_MENU_ACTION.REPLY_MESSAGE,
+        value: 'reply-message',
         component: MessageReplyContextMenuItem,
         componentProps: {
           message: message.value,
@@ -72,7 +69,7 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
         closeOnClick: false
       },
       {
-        value: MESSAGE_CONTEXT_MENU_ACTION.FORWARD_MESSAGE,
+        value: 'forward-message',
         component: MessageForwardContextMenuItem,
         componentProps: {
           message: message.value,
@@ -86,7 +83,7 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
 
     if (canStartMessageEdit(message.value)) {
       options.push({
-        value: MESSAGE_CONTEXT_MENU_ACTION.EDIT_MESSAGE,
+        value: 'edit-message',
         component: MessageEditContextMenuItem,
         componentProps: {
           message: message.value,
@@ -98,9 +95,7 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
     }
 
     options.push({
-      value: isMessagePinned.value
-        ? MESSAGE_CONTEXT_MENU_ACTION.UNPIN_MESSAGE
-        : MESSAGE_CONTEXT_MENU_ACTION.PIN_MESSAGE,
+      value: isMessagePinned.value ? 'unpin-message' : 'pin-message',
       component: MessagePinContextMenuItem,
       componentProps: {
         message: message.value,
@@ -111,7 +106,7 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
     })
 
     options.push({
-      value: MESSAGE_CONTEXT_MENU_ACTION.DELETE_MESSAGE,
+      value: 'delete-message',
       component: MessageDeleteContextMenuItem,
       componentProps: {
         message: message.value,

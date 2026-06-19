@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ThemeSelect } from 'src/features/theme-select'
+import { SelectTheme } from 'src/features/select-theme'
 
 import { SETTINGS_PAGE_APPEARANCE_I18N } from '../../../config/i18n/appearance.i18n'
 import SettingsCard from '../../SettingsCard.vue'
@@ -11,7 +11,7 @@ import SettingsWallpaperCard from './SettingsWallpaperCard.vue'
 <template>
   <div class="settings-appearance-content settings-content-grid">
     <SettingsCard :title="$t(SETTINGS_PAGE_APPEARANCE_I18N.theme)">
-      <ThemeSelect />
+      <SelectTheme />
     </SettingsCard>
     <SettingsThemeCard />
     <SettingsWallpaperCard />

@@ -1,19 +1,13 @@
 <script setup lang="ts">
-import { useWindowSize } from '@vueuse/core'
-import { computed } from 'vue'
-
 import { useI18n } from 'src/shared/lib'
 import { AppHeader, AppText } from 'src/shared/ui'
 
-import { MIN_APP_VIEWPORT_HEIGHT_PX, MIN_APP_VIEWPORT_WIDTH_PX } from '../config/constants'
 import { APP_I18N } from '../config/i18n'
 
-const { t } = useI18n()
-const { height, width } = useWindowSize()
+import { useUnsupportedResolutionGuard } from './use-unsupported-resolution-guard.model'
 
-const isUnsupportedResolution = computed(
-  () => width.value < MIN_APP_VIEWPORT_WIDTH_PX || height.value < MIN_APP_VIEWPORT_HEIGHT_PX
-)
+const { t } = useI18n()
+const { isUnsupportedResolution } = useUnsupportedResolutionGuard()
 </script>
 
 <template>

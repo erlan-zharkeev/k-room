@@ -1,4 +1,5 @@
-export const SETTINGS_PAGE_GENERAL_I18N = {
+import { defineI18n } from 'src/shared/lib'
+export const SETTINGS_PAGE_GENERAL_I18N = defineI18n('settingsPageGeneral', {
   notifications: {
     en: 'Notifications',
     ru: 'Уведомления',
@@ -19,4 +20,4 @@ export const SETTINGS_PAGE_GENERAL_I18N = {
     ru: 'Устройства ввода/вывода',
     zh: '输入/输出设备'
   }
-} as const
+})

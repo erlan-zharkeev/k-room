@@ -3,15 +3,16 @@ import { useDevicesList, useTimeoutFn } from '@vueuse/core'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 import { useAppSound, useSettings } from 'src/entities/setting'
-import { APP_SOUND_KIND, useI18n } from 'src/shared/lib'
+import { useI18n } from 'src/shared/lib'
 
 import {
   DEFAULT_AUDIO_OUTPUT_SELECT_VALUE,
   SETTINGS_DEVICES_OUTPUT_INDICATOR_TIME_MS
 } from '../../config/constants/devices.constants'
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
+import { resolveSingleSelectValue, syncSelectedDeviceId } from '../../lib/device-selection'
 
-import { resolveSingleSelectValue, syncSelectedDeviceId, useDeviceWarning } from './use-device-settings.model'
+import { useDeviceWarning } from './use-device-settings.model'
 
 export const useAudioOutputDevice = () => {
   const { t } = useI18n()
@@ -31,7 +32,7 @@ export const useAudioOutputDevice = () => {
   const audioOutputOptions = computed(() =>
     audioOutputDevices.value.map(({ deviceId, label }, index) => ({
       value: deviceId || DEFAULT_AUDIO_OUTPUT_SELECT_VALUE,
-      label: label || t(SETTINGS_PAGE_DEVICES_I18N.deviceLabel)(index + 1)
+      label: label || t(SETTINGS_PAGE_DEVICES_I18N.deviceLabel, { index: index + 1 })
     }))
   )
   const audioOutputSelectValue = computed(() =>
@@ -40,19 +41,19 @@ export const useAudioOutputDevice = () => {
       : ''
   )
   const audioOutputPermissionStatus = computed(() =>
-    t(SETTINGS_PAGE_DEVICES_I18N.permissionStatus)(
-      t(
+    t(SETTINGS_PAGE_DEVICES_I18N.permissionStatus, {
+      status: t(
         isAudioOutputSupported.value
           ? SETTINGS_PAGE_DEVICES_I18N.permissionBrowserControlled
           : SETTINGS_PAGE_DEVICES_I18N.permissionUnsupported
       )
-    )
+    })
   )
   const audioOutputPermissionCalloutType = computed(() => (isAudioOutputSupported.value ? 'info' : 'warning'))
 
   const stopAudioOutput = () => {
     stopOutputIndicatorTimer()
-    stopAppSound(APP_SOUND_KIND.MESSAGE)
+    stopAppSound('message')
   }
 
   const setSelectedAudioOutputDevice = async (value: NmorphSelectModelValueType = '') => {
@@ -87,7 +88,7 @@ export const useAudioOutputDevice = () => {
       audioOutputTestLoading.value = true
       stopAudioOutput()
 
-      await playAppSound(APP_SOUND_KIND.MESSAGE)
+      await playAppSound('message')
       startOutputIndicatorTimer()
     } catch (error) {
       stopAudioOutput()

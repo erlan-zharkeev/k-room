@@ -1,4 +1,5 @@
-export const SETTINGS_ACCOUNT_PERSONAL_DATA_I18N = {
+import { defineI18n, i18nFormatter } from 'src/shared/lib'
+export const SETTINGS_ACCOUNT_PERSONAL_DATA_I18N = defineI18n('settingsAccountPersonalData', {
   personalData: {
     en: 'Personal data',
     ru: 'Персональные данные',
@@ -15,9 +16,9 @@ export const SETTINGS_ACCOUNT_PERSONAL_DATA_I18N = {
     zh: '上传照片'
   },
   uploadPhotoHint: {
-    en: (formats: string, maxMb: number) => `${formats} up to ${maxMb} MB`,
-    ru: (formats: string, maxMb: number) => `${formats} до ${maxMb} МБ`,
-    zh: (formats: string, maxMb: number) => `支持 ${formats}，最大 ${maxMb} MB`
+    en: i18nFormatter(['formats', 'maxMb'], (formats: string, maxMb: number) => `${formats} up to ${maxMb} MB`),
+    ru: i18nFormatter(['formats', 'maxMb'], (formats: string, maxMb: number) => `${formats} до ${maxMb} МБ`),
+    zh: i18nFormatter(['formats', 'maxMb'], (formats: string, maxMb: number) => `支持 ${formats}，最大 ${maxMb} MB`)
   },
   uploadPhotoRequirements: {
     en: 'Photo requirements',
@@ -44,4 +45,4 @@ export const SETTINGS_ACCOUNT_PERSONAL_DATA_I18N = {
     ru: 'ID скопирован в буфер обмена',
     zh: '用户 ID 已复制到剪贴板'
   }
-} as const
+})

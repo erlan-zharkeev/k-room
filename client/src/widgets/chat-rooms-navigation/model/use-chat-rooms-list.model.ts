@@ -5,7 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { getRoomDisplayedLastMessageId, useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
-import { useChatRoomPinnedOrder } from 'src/features/chat-room-pinning'
+import { usePinChatRoomOrder } from 'src/features/pin-chat-room'
 import { socket, useSocketAction, useSocketAvailability } from 'src/shared/api'
 import { useI18n, useScreen } from 'src/shared/lib'
 
@@ -26,7 +26,7 @@ export const useChatRoomsList = () => {
   const { getById } = useMessage()
   const { emitSocketAction } = useSocketAction()
   const { isSocketOnlineActionAvailable } = useSocketAvailability()
-  const { updatePinnedOrder } = useChatRoomPinnedOrder()
+  const { updatePinnedChatRoomOrder } = usePinChatRoomOrder()
 
   const normalizedSearchQuery = computed(() => searchQuery.value.trim().toLowerCase())
 
@@ -115,7 +115,7 @@ export const useChatRoomsList = () => {
   const reorderPinnedChatRooms = async (items: ChatRoomNavigationItem[]) => {
     const pinnedChatRoomIds = items.map(({ id }) => id)
 
-    await updatePinnedOrder(pinnedChatRoomIds)
+    await updatePinnedChatRoomOrder(pinnedChatRoomIds)
     void emitSocketAction(
       'update-pinned-chat-room-order',
       { pinnedChatRoomIds },

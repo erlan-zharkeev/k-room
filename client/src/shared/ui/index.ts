@@ -1,4 +1,5 @@
 export { AppCaptcha } from './AppCaptcha'
+export { APP_CAPTCHA_I18N } from './AppCaptcha'
 export { AppHeader } from './AppHeader'
 export { AppLogo } from './AppLogo'
 export { AppMediaImage } from './AppMediaImage'

@@ -1,4 +1,4 @@
-import { CHAT_KIND, PINNED_CHAT_ROOM_LIMIT, REQ_STATUS } from 'global-shared'
+import { PINNED_CHAT_ROOM_LIMIT, REQ_STATUS } from 'global-shared'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 vi.mock('timers/promises', () => ({
@@ -186,7 +186,7 @@ describe('chat-rooms.service', () => {
       expect.objectContaining({
         users: ['user-1', 'user-2'],
         adminId: 'user-1',
-        chatKind: CHAT_KIND.DIRECT
+        chatKind: 'direct'
       })
     )
     expect(userPersistenceMock.addChatRoomToUsers).toHaveBeenCalledWith('room-created', ['user-1', 'user-2'])
@@ -197,7 +197,7 @@ describe('chat-rooms.service', () => {
       _id: 'room-1',
       adminId: 'user-1',
       avatarId: null,
-      chatKind: CHAT_KIND.GROUP,
+      chatKind: 'group',
       chatName: 'Old chat',
       users: ['user-1', 'user-2'],
       messages: []
@@ -247,7 +247,7 @@ describe('chat-rooms.service', () => {
     const room = {
       adminId: 'user-1',
       avatarId: 'avatar-1',
-      chatKind: CHAT_KIND.DIRECT,
+      chatKind: 'direct',
       users: ['user-1', 'user-2'],
       messages: ['message-1', 'message-2']
     }
@@ -272,7 +272,7 @@ describe('chat-rooms.service', () => {
       createLeanQuery({
         adminId: 'user-1',
         avatarId: 'avatar-1',
-        chatKind: CHAT_KIND.GROUP,
+        chatKind: 'group',
         users: ['user-1', 'user-2'],
         messages: ['message-1']
       })

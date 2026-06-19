@@ -9,7 +9,7 @@ import { AppHeader, AppText } from 'src/shared/ui'
 import { EMAIL_CONFIRMATION_I18N } from '../config/i18n'
 import { useEmailConfirmation } from '../model/use-email-confirmation.model'
 
-const { confirmEmail, email, failureMessage, isConfirmed, isLoading } = useEmailConfirmation()
+const { confirmEmail, email, failureMessage, isConfirmed, isLoading, successMessage } = useEmailConfirmation()
 
 onMounted(confirmEmail)
 </script>
@@ -24,8 +24,12 @@ onMounted(confirmEmail)
     </template>
 
     <template v-else>
-      <AppHeader :text="isConfirmed ? $t(EMAIL_CONFIRMATION_I18N.title) : failureMessage" />
-      <AppText v-if="isConfirmed" :text="`Email ${email} ${$t(EMAIL_CONFIRMATION_I18N.confirmed)}`" />
+      <AppHeader
+        v-if="isConfirmed || failureMessage"
+        :text="isConfirmed ? $t(EMAIL_CONFIRMATION_I18N.title) : failureMessage"
+      />
+      <AppText v-if="isConfirmed && successMessage" :text="successMessage" />
+      <AppText v-if="isConfirmed && email" bold color="accent" :text="email" />
       <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ navigate }">
         <NmorphButton
           :text="$t(EMAIL_CONFIRMATION_I18N.back)"

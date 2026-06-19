@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { NmorphButton, NmorphForm, NmorphFormItem, NmorphSwitch, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
-import { ROUTE_NAMES, SECURITY_ACTION } from 'global-shared'
-import { computed } from 'vue'
+import { ROUTE_NAMES } from 'global-shared'
 import { RouterLink } from 'vue-router'
 
 import { AppCaptcha, AppText } from 'src/shared/ui'
@@ -10,10 +9,17 @@ import { REGISTRATION_NICKNAME_INPUT_ATTRS } from '../config/constants'
 import { REGISTRATION_FORM_I18N } from '../config/i18n'
 import { useRegistration } from '../model/use-registration.model'
 
-const { captchaRequired, captchaResetKey, captchaToken, formData, isFormValid, isLoading, submit } = useRegistration()
-const isFormDisabled = computed(() => isLoading.value)
-const isCaptchaBlocked = computed(() => captchaRequired.value && !captchaToken.value)
-const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked.value)
+const {
+  captchaRequired,
+  captchaResetKey,
+  captchaToken,
+  formData,
+  isFormDisabled,
+  isFormValid,
+  isLoading,
+  isSubmitDisabled,
+  submit
+} = useRegistration()
 </script>
 
 <template>
@@ -58,12 +64,7 @@ const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked
       </div>
     </NmorphFormItem>
 
-    <AppCaptcha
-      v-if="captchaRequired"
-      :action="SECURITY_ACTION.registration"
-      v-model="captchaToken"
-      :reset-key="captchaResetKey"
-    />
+    <AppCaptcha v-if="captchaRequired" :action="'registration'" v-model="captchaToken" :reset-key="captchaResetKey" />
 
     <NmorphButton
       :disabled="isSubmitDisabled || !isFormValid"

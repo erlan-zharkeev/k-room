@@ -42,8 +42,10 @@ export interface DexieCacheTrimResult {
   trimmed: boolean
 }
 
+export type DexieCacheTrimmerId = 'media' | 'messages' | 'room-calls' | 'known-users' | 'contacts' | 'chat-rooms'
+
 export interface DexieCacheTrimmer {
-  id: string
+  id: DexieCacheTrimmerId
   priority: number
   trim: () => Promise<DexieCacheTrimResult>
 }

@@ -1,5 +1,3 @@
-import { MESSAGE_STATUS_VALUE } from 'global-shared'
-
 import { MessageModel } from '../messages.model'
 import type { MessageDocument } from '../messages.types'
 
@@ -13,7 +11,7 @@ export const countUnreadMessagesByIds = (userId: string, messageIds: string[]) =
     usersMetaData: {
       $elemMatch: {
         id: userId,
-        status: MESSAGE_STATUS_VALUE.DELIVERED
+        status: 'delivered'
       }
     }
   })

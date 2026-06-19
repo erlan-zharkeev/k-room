@@ -1,6 +1,6 @@
 import { getCurrentScope, nextTick, onScopeDispose, shallowRef, toValue, watch, type MaybeRefOrGetter } from 'vue'
 
-import { getDexieMediaRecord, getDexieMediaRecords, subscribeDexieLiveQuery } from '../db/lib'
+import { getDexieMediaRecord, getDexieMediaRecords, subscribeDexieLiveQuery } from '../db/db.model'
 
 import type { MediaUrlCacheKeyParams, MediaUrlCacheValue } from './types'
 

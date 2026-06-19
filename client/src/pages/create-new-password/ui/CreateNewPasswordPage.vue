@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NmorphButton, NmorphForm, NmorphFormItem, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES } from 'global-shared'
-import { computed, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import { AppHeader, AppText } from 'src/shared/ui'
@@ -12,14 +12,13 @@ import { useCreateNewPassword } from '../model/use-create-new-password.model'
 const {
   formData,
   initializeCreateNewPassword,
-  isFormValid,
   isLoading,
   isPasswordChanged,
-  passwordMismatch,
+  isSubmitDisabled,
   passwordMismatchText,
-  submit
+  submit,
+  successMessage
 } = useCreateNewPassword()
-const isSubmitDisabled = computed(() => isLoading.value || passwordMismatch.value || !isFormValid.value)
 
 onMounted(initializeCreateNewPassword)
 </script>
@@ -29,7 +28,7 @@ onMounted(initializeCreateNewPassword)
     <AppHeader :text="$t(CREATE_NEW_PASSWORD_I18N.title)" />
 
     <template v-if="isPasswordChanged">
-      <AppText tag="p" :text="$t(CREATE_NEW_PASSWORD_I18N.success)" />
+      <AppText v-if="successMessage" tag="p" :text="successMessage" />
       <div class="create-new-password-page__action-btns">
         <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ navigate }">
           <NmorphButton :text="$t(CREATE_NEW_PASSWORD_I18N.toLogin)" @click="navigate" />

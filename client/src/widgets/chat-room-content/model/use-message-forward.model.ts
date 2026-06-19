@@ -1,4 +1,4 @@
-import { type ChatRoom, type EventSendMessage, type Message, MESSAGE_STATUS_VALUE } from 'global-shared'
+import { type ChatRoom, type EventSendMessage, type Message } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 import { computed, type Ref, ref, toRef, watch } from 'vue'
 
@@ -8,7 +8,6 @@ import { useUser } from 'src/entities/user'
 import { socket, useSocketAvailability, useSocketTransportErrorToast } from 'src/shared/api'
 import type { AppProfilePickerItem } from 'src/shared/ui'
 
-import { MESSAGE_DRAFT_REFERENCE_KIND } from '../config/constants'
 import type { MessageForwardDialogProps } from '../config/types'
 import { buildChatRoomTitle } from '../lib/build-chat-room-title'
 import { buildRepliedMessage } from '../lib/build-replied-message'
@@ -97,11 +96,7 @@ export const useMessageForward = (props: MessageForwardDialogProps, isMessageFor
       return
     }
 
-    const repliedMessage = buildRepliedMessage(
-      forwardedMessage.value,
-      MESSAGE_DRAFT_REFERENCE_KIND.FORWARD,
-      sourceRoomId.value
-    )
+    const repliedMessage = buildRepliedMessage(forwardedMessage.value, 'forward', sourceRoomId.value)
     const message: Message = {
       id: uuidv4(),
       authorId,
@@ -109,7 +104,7 @@ export const useMessageForward = (props: MessageForwardDialogProps, isMessageFor
       body: '',
       createdAt: Date.now(),
       isSelf: true,
-      status: MESSAGE_STATUS_VALUE.SENDING,
+      status: 'sending',
       reactions: [],
       images: [],
       repliedMessage

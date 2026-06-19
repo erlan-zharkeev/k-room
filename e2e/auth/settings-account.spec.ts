@@ -3,7 +3,7 @@ import { expect, test, type Page } from '@playwright/test'
 import { dismissFirstRunOverlays, logoutFromApp } from 'e2e/shared/app'
 import { loginByCredentials, signInWithProvider } from 'e2e/shared/auth'
 
-import { SETTINGS_FIXTURE_USER } from './fixtures'
+import { SETTINGS_FIXTURE_USER } from './constants'
 
 const SETTINGS_ACCOUNT_TEST_TIMEOUT_MS = 90_000
 

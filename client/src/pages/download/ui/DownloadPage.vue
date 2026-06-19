@@ -32,7 +32,12 @@ const {
       <PageBackButton />
 
       <header class="download-page__header">
-        <AppHeader tag="h1" alignment="center" color="contrast-text" :text="$t(DOWNLOAD_PAGE_I18N.title)(appName)" />
+        <AppHeader
+          tag="h1"
+          alignment="center"
+          color="contrast-text"
+          :text="$t(DOWNLOAD_PAGE_I18N.title, { appName: appName })"
+        />
         <AppText tag="p" alignment="center" color="semi-contrast-text" :text="$t(DOWNLOAD_PAGE_I18N.description)" />
       </header>
 
@@ -65,7 +70,7 @@ const {
           fill
           :key="item.platformId"
           class="download-page__download-button"
-          :aria-label="$t(DOWNLOAD_PAGE_I18N.downloadAction)(item.label)"
+          :aria-label="$t(DOWNLOAD_PAGE_I18N.downloadAction, { platformLabel: item.label })"
           @click="downloadPlatformItem(item)"
         >
           <span class="download-page__download-button-content">

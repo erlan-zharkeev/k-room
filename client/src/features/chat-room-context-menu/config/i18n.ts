@@ -1,6 +1,6 @@
-import { defineI18n } from 'global-shared'
+import { defineI18n, i18nFormatter } from 'src/shared/lib'
 
-export const CHAT_ROOM_CONTEXT_MENU_I18N = defineI18n({
+export const CHAT_ROOM_CONTEXT_MENU_I18N = defineI18n('chatRoomContextMenu', {
   createChat: {
     en: 'Create chat',
     ru: 'Создать чат',
@@ -132,9 +132,9 @@ export const CHAT_ROOM_CONTEXT_MENU_I18N = defineI18n({
     zh: '仅支持图片文件'
   },
   chatImageInvalidSize: {
-    en: (size: number) => `Chat image must be less than ${size} MB`,
-    ru: (size: number) => `Изображение чата должно быть меньше ${size} МБ`,
-    zh: (size: number) => `聊天图片必须小于 ${size} MB`
+    en: i18nFormatter(['size'], (size: number) => `Chat image must be less than ${size} MB`),
+    ru: i18nFormatter(['size'], (size: number) => `Изображение чата должно быть меньше ${size} МБ`),
+    zh: i18nFormatter(['size'], (size: number) => `聊天图片必须小于 ${size} MB`)
   },
   chatImageReadFailed: {
     en: 'Failed to prepare chat image',

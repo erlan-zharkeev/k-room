@@ -1,4 +1,4 @@
-import { MESSAGE_LINK_PREVIEW_STATUS, type MessageLinkPreview } from 'global-shared'
+import { type MessageLinkPreview } from 'global-shared'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const messageModelMock = vi.hoisted(() => ({
@@ -32,12 +32,12 @@ const { refreshMessageLinkPreview } = await import('./refresh-message-link-previ
 const pendingPreview: MessageLinkPreview = {
   url: 'https://example.com/',
   host: 'example.com',
-  status: MESSAGE_LINK_PREVIEW_STATUS.PENDING
+  status: 'pending'
 }
 
 const loadedPreview: MessageLinkPreview = {
   ...pendingPreview,
-  status: MESSAGE_LINK_PREVIEW_STATUS.LOADED,
+  status: 'loaded',
   title: 'Example',
   image: {
     src: 'image-id',
@@ -71,7 +71,7 @@ describe('refreshMessageLinkPreview', () => {
       {
         _id: 'message-1',
         'linkPreview.url': pendingPreview.url,
-        'linkPreview.status': MESSAGE_LINK_PREVIEW_STATUS.PENDING
+        'linkPreview.status': 'pending'
       },
       { $set: { linkPreview: loadedPreview } }
     )

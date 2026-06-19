@@ -1,6 +1,5 @@
-import { useBreakpoints, useMediaQuery, usePermission } from '@vueuse/core'
+import { useBreakpoints } from '@vueuse/core'
 import { isString, MB_IN_BYTES } from 'global-shared'
-import { computed } from 'vue'
 
 import { CONSOLE_COLOR_MAP, GB, IMAGE_RESOLUTIONS, SCREEN_BREAKPOINTS } from './constants'
 import { BROWSER_I18N } from './i18n'
@@ -39,7 +38,7 @@ export const imageToBase64 = ({
   const isGreaterThanAllowed = image.size / MB_IN_BYTES > maxImageSizeInMb
 
   if (isGreaterThanAllowed) {
-    warnings.push(t(BROWSER_I18N.imageSizeMustBeLess)(maxImageSizeInMb))
+    warnings.push(t(BROWSER_I18N.imageSizeMustBeLess, { size: maxImageSizeInMb }))
   }
 
   if (warnings.length) return
@@ -86,52 +85,6 @@ export const useScreen = () => {
     isPortraitTabletOrLess: breakpoints.smaller('tablet'),
     isDesktopOrMore: breakpoints.greaterOrEqual('desktop')
   }
-}
-
-export const useTouchInput = () => {
-  const isCoarsePointer = useMediaQuery('(pointer: coarse)')
-  const hasHover = useMediaQuery('(hover: hover)')
-  const isTouchAvailable = computed(() => navigator.maxTouchPoints > 0)
-  const hasPrimaryTouchSignals = computed(() => isTouchAvailable.value && isCoarsePointer.value)
-  const isTouchInput = computed(() => hasPrimaryTouchSignals.value && !hasHover.value)
-
-  return {
-    hasHover,
-    isCoarsePointer,
-    isTouchAvailable,
-    isTouchInput
-  }
-}
-
-const isMediaDevicePermissionWarning = (permission: PermissionState | undefined) => permission !== 'granted'
-
-const createMediaDevicePermission = () => {
-  const audioInputPermission = usePermission('microphone')
-  const videoInputPermission = usePermission('camera')
-
-  const hasAudioInputPermissionWarning = computed(() => isMediaDevicePermissionWarning(audioInputPermission.value))
-  const hasVideoInputPermissionWarning = computed(() => isMediaDevicePermissionWarning(videoInputPermission.value))
-  const hasMediaDevicePermissionWarning = computed(
-    () => hasAudioInputPermissionWarning.value || hasVideoInputPermissionWarning.value
-  )
-
-  return {
-    audioInputPermission,
-    videoInputPermission,
-    hasAudioInputPermissionWarning,
-    hasVideoInputPermissionWarning,
-    hasMediaDevicePermissionWarning
-  }
-}
-
-let mediaDevicePermission: ReturnType<typeof createMediaDevicePermission> | undefined
-
-export const useMediaDevicePermission = () => {
-  if (!mediaDevicePermission) {
-    mediaDevicePermission = createMediaDevicePermission()
-  }
-
-  return mediaDevicePermission
 }
 
 export const clearCookie = () => {

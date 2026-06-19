@@ -1,9 +1,4 @@
-import {
-  MESSAGE_LINK_PREVIEW_STATUS,
-  buildPendingMessageLinkPreview,
-  isHttpRedirectStatus,
-  isHttpSuccessStatus
-} from 'global-shared'
+import { buildPendingMessageLinkPreview, isHttpRedirectStatus, isHttpSuccessStatus } from 'global-shared'
 import { describe, expect, it } from 'vitest'
 
 describe('message link preview shared helpers', () => {
@@ -13,7 +8,7 @@ describe('message link preview shared helpers', () => {
     expect(preview).toEqual({
       url: 'https://example.com/path?q=1',
       host: 'example.com',
-      status: MESSAGE_LINK_PREVIEW_STATUS.PENDING
+      status: 'pending'
     })
   })
 

@@ -4,8 +4,8 @@ import { Injectable } from '@nestjs/common'
 
 import { SERVER_ENV } from 'src/app/env'
 
-import { TURNSTILE_VERIFY_TIMEOUT_MS, TURNSTILE_VERIFY_URL } from './constants'
-import type { TurnstileVerificationResponse } from './types'
+import { TURNSTILE_VERIFY_TIMEOUT_MS, TURNSTILE_VERIFY_URL } from './security.constants'
+import type { TurnstileVerificationResponse } from './security.types'
 
 @Injectable()
 export class CaptchaService {

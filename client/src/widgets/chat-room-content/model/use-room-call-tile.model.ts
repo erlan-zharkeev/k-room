@@ -4,10 +4,7 @@ import { calculateAudioVolumeDb, createAudioMeterAnalyser, log, useLiveMediaUrl 
 
 import {
   ROOM_CALL_TEMPORARY_QUICK_COMMAND_I18N_BY_COMMAND,
-  ROOM_CALL_TEMPORARY_QUICK_COMMAND_TEXT_COLOR_BY_COMMAND,
-  ROOM_CALL_TILE_KIND,
-  ROOM_CALL_TILE_MEDIA_FIT,
-  ROOM_CALL_TILE_REMOTE_ACTION_TEXT
+  ROOM_CALL_TEMPORARY_QUICK_COMMAND_TEXT_COLOR_BY_COMMAND
 } from '../config/constants'
 import type { RoomCallTileAudioActivityMonitor, RoomCallTileProps } from '../config/types'
 
@@ -19,7 +16,7 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
   let audioActivityMonitor: RoomCallTileAudioActivityMonitor | null = null
   let monitoredStream: MediaStream | null = null
   const hasStream = computed(() => Boolean(props.item.stream))
-  const isRoomCallScreenTile = computed(() => props.item.kind === ROOM_CALL_TILE_KIND.SCREEN)
+  const isRoomCallScreenTile = computed(() => props.item.kind === 'screen')
   const hasEnabledVideo = computed(() =>
     isRoomCallScreenTile.value ? props.item.mediaState.screen : props.item.mediaState.video
   )
@@ -28,13 +25,9 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
 
     return hasEnabledVideo.value && hasStream.value && hasLocalVideoVisibility
   })
-  const isRoomCallParticipantTile = computed(() => props.item.kind === ROOM_CALL_TILE_KIND.PARTICIPANT)
-  const remoteHideButtonText = computed(() =>
-    isRemoteVideoHidden.value ? ROOM_CALL_TILE_REMOTE_ACTION_TEXT.SHOW : ROOM_CALL_TILE_REMOTE_ACTION_TEXT.HIDE
-  )
-  const remoteMuteButtonText = computed(() =>
-    isRemoteAudioMuted.value ? ROOM_CALL_TILE_REMOTE_ACTION_TEXT.UNMUTE : ROOM_CALL_TILE_REMOTE_ACTION_TEXT.MUTE
-  )
+  const isRoomCallParticipantTile = computed(() => props.item.kind === 'participant')
+  const remoteHideButtonText = computed(() => (isRemoteVideoHidden.value ? 'show' : 'hide'))
+  const remoteMuteButtonText = computed(() => (isRemoteAudioMuted.value ? 'unmute' : 'mute'))
   const isMediaTileVideoOff = computed(() => !hasVisibleVideo.value)
   const isMediaTileMuted = computed(() => props.item.isLocal || isRoomCallScreenTile.value || isRemoteAudioMuted.value)
   const isRoomCallTileAudioMeterVisible = computed(() => isRoomCallParticipantTile.value)
@@ -42,9 +35,7 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
     () => isRoomCallParticipantTile.value && Boolean(props.item.isHandRaised || props.item.temporaryQuickCommand)
   )
   const isRoomCallTileRemoteActionsVisible = computed(() => !props.self && isRoomCallParticipantTile.value)
-  const roomCallTileMediaFit = computed(() =>
-    isRoomCallScreenTile.value ? ROOM_CALL_TILE_MEDIA_FIT.CONTAIN : ROOM_CALL_TILE_MEDIA_FIT.COVER
-  )
+  const roomCallTileMediaFit = computed(() => (isRoomCallScreenTile.value ? 'contain' : 'cover'))
   const temporaryQuickCommandI18n = computed(() => {
     const quickCommand = props.item.temporaryQuickCommand?.command
 

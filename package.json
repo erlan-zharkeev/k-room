@@ -38,30 +38,27 @@
     "format:fix": "prettier --write .",
     "build": "turbo run build",
     "typecheck": "turbo run typecheck typecheck:test",
-    "lint:es": "turbo run lint:es",
+    "lint:es": "turbo run lint:es && eslint --config .eslintrc.cjs \"e2e/**/*.ts\" playwright.config.ts",
     "lint:style": "turbo run lint:style",
     "lint:fsd": "turbo run lint:fsd",
-    "lint:all": "turbo run lint:fsd lint:es lint:style",
+    "lint:all": "pnpm run lint:fsd && pnpm run lint:es && pnpm run lint:style",
     "lint:fsd:watch": "pnpm --dir client run lint:fsd:watch",
     "lint:fix": "turbo run lint:fix-es && turbo run lint:fix-style",
     "e2e": "playwright test -c playwright.config.ts",
     "e2e:ui": "playwright test -c playwright.config.ts --ui",
     "smoke": "playwright test -c playwright.config.ts --grep @smoke",
-    "check": "turbo run lint:fsd lint:es lint:style typecheck typecheck:test build test && prettier --check .",
+    "check": "pnpm run lint:fsd && pnpm run lint:es && pnpm run lint:style && turbo run typecheck typecheck:test build test && prettier --check .",
     "deploy": "node scripts/deploy/create-production-deploy-commit.mjs",
     "test": "turbo run test"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
     "@types/node": "^25.5.0",
-    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.58.0",
     "@typescript-eslint/parser": "^8.58.0",
     "eslint": "8.57.1",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-react": "^7.30.1",
     "eslint-plugin-vue": "^10.9.0",
     "husky": "^8.0.2",
     "postcss-html": "^1.8.1",
@@ -73,11 +70,5 @@
     "turbo": "^2.9.6",
     "vitest": "^3.2.4",
     "vue-eslint-parser": "^10.4.0"
-  },
-  "dependencies": {
-    "@tiptap/core": "2.27.2",
-    "@tiptap/pm": "2.27.2",
-    "date-fns": "^4.1.0",
-    "uuid": "^9.0.1"
   }
 }

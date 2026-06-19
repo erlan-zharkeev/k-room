@@ -4,20 +4,19 @@ import {
   MESSAGE_LINK_TRAILING_PUNCTUATION_PATTERN
 } from 'global-shared'
 
-import { MESSAGE_TEXT_SEGMENT_KIND } from '../config/constants'
 import type { MessageTextSegment } from '../config/types'
 
 const createMessageTextSegmentId = (kind: string, index: number) => `${kind}-${index}`
 
 const createMessageTextPlainSegment = (text: string, index: number): MessageTextSegment => ({
-  id: createMessageTextSegmentId(MESSAGE_TEXT_SEGMENT_KIND.TEXT, index),
-  kind: MESSAGE_TEXT_SEGMENT_KIND.TEXT,
+  id: createMessageTextSegmentId('text', index),
+  kind: 'text',
   text
 })
 
 const createMessageTextLinkSegment = (text: string, href: string, index: number): MessageTextSegment => ({
-  id: createMessageTextSegmentId(MESSAGE_TEXT_SEGMENT_KIND.LINK, index),
-  kind: MESSAGE_TEXT_SEGMENT_KIND.LINK,
+  id: createMessageTextSegmentId('link', index),
+  kind: 'link',
   text,
   href
 })

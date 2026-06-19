@@ -1,5 +1,3 @@
-import { MESSAGE_LINK_PREVIEW_STATUS } from 'global-shared'
-
 import { log } from 'src/shared/lib/log'
 
 import { deleteBucketFileById } from '../../media/media.service'
@@ -26,7 +24,7 @@ const updateMessageLinkPreview = async ({
       {
         _id: messageId,
         'linkPreview.url': linkPreview.url,
-        'linkPreview.status': MESSAGE_LINK_PREVIEW_STATUS.PENDING
+        'linkPreview.status': 'pending'
       },
       { $set: { linkPreview: loadedLinkPreview } }
     )

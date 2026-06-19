@@ -7,7 +7,6 @@ import {
   NmorphIconStop,
   NmorphSelect
 } from '@nmorph/nmorph-ui-kit'
-import { computed } from 'vue'
 
 import { AppText } from 'src/shared/ui'
 
@@ -26,15 +25,10 @@ const {
   hasAudioInputPermissionWarning,
   audioVolumeDb,
   isAudioInputChecking,
+  audioInputCheckLabel,
   setAudioInputChecking,
   setSelectedAudioInputDevice
 } = useAudioInputDevice()
-
-const audioInputCheckLabel = computed(() =>
-  isAudioInputChecking.value
-    ? SETTINGS_PAGE_DEVICES_I18N.stopAudioInputCheck
-    : SETTINGS_PAGE_DEVICES_I18N.testAudioInput
-)
 </script>
 
 <template>

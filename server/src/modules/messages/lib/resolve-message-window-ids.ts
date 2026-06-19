@@ -1,4 +1,4 @@
-import { MESSAGE_LOAD_DIRECTION, type EventLoadRoomMessages } from 'global-shared'
+import { type EventLoadRoomMessages } from 'global-shared'
 
 const resolveAroundMessageIds = (messageIds: string[], anchorIndex: number, limit: number) => {
   const previousMessagesQuantity = Math.floor((limit - 1) / 2)
@@ -22,7 +22,7 @@ export const resolveRoomMessageWindowIds = (
   messageIds: string[],
   { anchorMessageId, direction, limit }: EventLoadRoomMessages
 ) => {
-  if (direction === MESSAGE_LOAD_DIRECTION.LATEST) {
+  if (direction === 'latest') {
     return messageIds.slice(-limit)
   }
 
@@ -33,11 +33,11 @@ export const resolveRoomMessageWindowIds = (
   if (anchorIndex === -1) return []
 
   switch (direction) {
-    case MESSAGE_LOAD_DIRECTION.BEFORE:
+    case 'before':
       return messageIds.slice(Math.max(0, anchorIndex - limit), anchorIndex)
-    case MESSAGE_LOAD_DIRECTION.AFTER:
+    case 'after':
       return messageIds.slice(anchorIndex + 1, anchorIndex + 1 + limit)
-    case MESSAGE_LOAD_DIRECTION.AROUND:
+    case 'around':
       return resolveAroundMessageIds(messageIds, anchorIndex, limit)
   }
 }

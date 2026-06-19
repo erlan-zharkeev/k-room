@@ -1,10 +1,7 @@
 import type { MediaId, RoomCallMediaKind } from 'global-shared'
 import type { Component } from 'vue'
 
-import type { ROOM_CALL_HISTORY_STATUS_KIND } from './constants'
-
-export type RoomCallHistoryStatusKind =
-  (typeof ROOM_CALL_HISTORY_STATUS_KIND)[keyof typeof ROOM_CALL_HISTORY_STATUS_KIND]
+export type RoomCallHistoryStatusKind = 'active' | 'finished' | 'missed'
 
 export interface RoomCallHistoryItem {
   id: string

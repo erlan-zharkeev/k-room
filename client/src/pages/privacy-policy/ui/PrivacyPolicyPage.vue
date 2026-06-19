@@ -8,18 +8,18 @@ const { appName } = __CLIENT_ENV_DATA__
 
 <template>
   <div class="privacy-policy-page">
-    <AppHeader tag="h1" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.title)(appName)" />
+    <AppHeader tag="h1" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.title, { appName: appName })" />
 
     <AppText tag="p" color="semi-contrast-text">
       <AppText bold color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.lastUpdatedLabel)" />
       June 1, 2026
     </AppText>
 
-    <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.intro)(appName)" />
+    <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.intro, { appName: appName })" />
 
     <AppText tag="p" color="semi-contrast-text">
       <AppText bold color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.warning)" />
-      {{ $t(LEGAL_INFO_PAGE_I18N.warningText)(appName) }}
+      {{ $t(LEGAL_INFO_PAGE_I18N.warningText, { appName: appName }) }}
     </AppText>
 
     <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.storageRisk)" />
@@ -91,7 +91,7 @@ const { appName } = __CLIENT_ENV_DATA__
 
     <section>
       <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section9Title)" />
-      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section9Text)(appName)" />
+      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section9Text, { appName: appName })" />
     </section>
 
     <section>

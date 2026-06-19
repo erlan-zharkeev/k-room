@@ -1,7 +1,6 @@
-export const CHAT_KIND = {
-  DIRECT: 'direct',
-  GROUP: 'group'
-} as const
+import type { ChatKind } from './types'
+
+export const CHAT_KIND_VALUES = ['direct', 'group'] as const satisfies readonly ChatKind[]
 
 export const USER_CHAT_ROOM_LIMIT = 100
 export const PINNED_CHAT_ROOM_LIMIT = 10

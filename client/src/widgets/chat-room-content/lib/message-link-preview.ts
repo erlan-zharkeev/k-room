@@ -1,4 +1,4 @@
-import { MESSAGE_LINK_PREVIEW_STATUS, MESSAGE_LINK_PROTOCOL, type MessageLinkPreview } from 'global-shared'
+import { MESSAGE_LINK_PROTOCOL, type MessageLinkPreview } from 'global-shared'
 
 const isMessageLinkPreviewHttpsUrl = (url: string) => {
   try {
@@ -9,7 +9,7 @@ const isMessageLinkPreviewHttpsUrl = (url: string) => {
 }
 
 export const canShowMessageLinkPreview = (preview: MessageLinkPreview) => {
-  const isLoadedPreview = preview.status === MESSAGE_LINK_PREVIEW_STATUS.LOADED
+  const isLoadedPreview = preview.status === 'loaded'
   const hasPreviewTitle = Boolean(preview.title)
   const hasPreviewDescription = Boolean(preview.description)
   const hasPreviewImage = Boolean(preview.image)

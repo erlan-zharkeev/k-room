@@ -1,6 +1,6 @@
-import { defineI18n } from 'global-shared'
+import { defineI18n } from 'src/shared/lib'
 
-export const TOP_BAR_I18N = defineI18n({
+export const TOP_BAR_I18N = defineI18n('topBar', {
   logout: {
     en: 'Logout',
     ru: 'Выйти',

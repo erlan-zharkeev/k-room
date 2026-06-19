@@ -1,14 +1,9 @@
 import { useFullscreen } from '@vueuse/core'
-import { ROOM_CALL_STATUS } from 'global-shared'
 import { computed, ref, useTemplateRef } from 'vue'
 
 import { useUser } from 'src/entities/user'
 
-import {
-  ROOM_CALL_PANEL_DISPLAY_MODE,
-  ROOM_CALL_PANEL_DISPLAY_MODE_TOGGLE_I18N,
-  ROOM_CALL_QUICK_COMMAND
-} from '../config/constants'
+import { ROOM_CALL_PANEL_DISPLAY_MODE_TOGGLE_I18N } from '../config/constants'
 import type {
   RoomCallPanelDisplayMode,
   RoomCallPanelEmit,
@@ -26,7 +21,7 @@ import { useChatRoomUserLookup } from './use-chat-room-user-lookup.model'
 
 export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelEmit) => {
   const roomCallPanelRef = useTemplateRef<HTMLElement>('roomCallPanel')
-  const roomCallPanelDisplayMode = ref<RoomCallPanelDisplayMode>(ROOM_CALL_PANEL_DISPLAY_MODE.GRID)
+  const roomCallPanelDisplayMode = ref<RoomCallPanelDisplayMode>('grid')
   const selectedRoomCallTileId = ref<string>()
   const isRoomCallQuickCommandsExpanded = ref(false)
   const { user } = useUser()
@@ -58,9 +53,7 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
       videoStream: props.videoStream
     })
   )
-  const isRoomCallFocusDisplayMode = computed(
-    () => roomCallPanelDisplayMode.value === ROOM_CALL_PANEL_DISPLAY_MODE.FOCUS
-  )
+  const isRoomCallFocusDisplayMode = computed(() => roomCallPanelDisplayMode.value === 'focus')
   const localRoomCallTileItem = computed(() => roomCallTileItems.value.find(({ isLocal }) => isLocal))
   const roomCallMainTileItem = computed(
     () =>
@@ -98,13 +91,13 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
       return hasActiveScreenSharing && isAnotherParticipant
     })
   )
-  const isScreenSharingControlVisible = computed(() => props.roomCall.status === ROOM_CALL_STATUS.IN_PROGRESS)
+  const isScreenSharingControlVisible = computed(() => props.roomCall.status === 'in-progress')
   const isScreenSharingControlDisabled = computed(() => {
     const isScreenSharingBlockedByParticipant = !props.localMediaState.screen && isAnotherParticipantScreenSharing.value
 
     return props.isBusy || isScreenSharingBlockedByParticipant
   })
-  const isRoomCallQuickCommandsAvailable = computed(() => props.roomCall.status === ROOM_CALL_STATUS.IN_PROGRESS)
+  const isRoomCallQuickCommandsAvailable = computed(() => props.roomCall.status === 'in-progress')
   const isLocalHandRaised = computed(() => Boolean(props.handRaisedByUserId[user.value.id]))
 
   const updateAudioEnabled = () => {
@@ -141,7 +134,7 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
       return
     }
 
-    if (command === ROOM_CALL_QUICK_COMMAND.RAISE_HAND) {
+    if (command === 'raise-hand') {
       emit('set-hand-raised', !isLocalHandRaised.value)
       return
     }
@@ -151,18 +144,18 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
 
   const toggleRoomCallPanelDisplayMode = () => {
     if (isRoomCallFocusDisplayMode.value) {
-      roomCallPanelDisplayMode.value = ROOM_CALL_PANEL_DISPLAY_MODE.GRID
+      roomCallPanelDisplayMode.value = 'grid'
       return
     }
 
     selectedRoomCallTileId.value = user.value.id
-    roomCallPanelDisplayMode.value = ROOM_CALL_PANEL_DISPLAY_MODE.FOCUS
+    roomCallPanelDisplayMode.value = 'focus'
   }
 
   const focusRoomCallTile = (item: RoomCallTileItem) => {
     selectedRoomCallTileId.value = item.id
 
-    roomCallPanelDisplayMode.value = ROOM_CALL_PANEL_DISPLAY_MODE.FOCUS
+    roomCallPanelDisplayMode.value = 'focus'
   }
 
   return {

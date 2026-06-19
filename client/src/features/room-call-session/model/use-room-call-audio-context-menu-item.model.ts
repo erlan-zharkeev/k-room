@@ -1,4 +1,3 @@
-import { ROOM_CALL_MEDIA_KIND } from 'global-shared'
 import { computed, toRef } from 'vue'
 
 import type { RoomCallAudioContextMenuItemEmit, RoomCallAudioContextMenuItemProps } from '../config/types'
@@ -18,7 +17,7 @@ export const useRoomCallAudioContextMenuItem = (
       return null
     }
 
-    const roomCallId = await startActiveRoomCall(roomId.value, ROOM_CALL_MEDIA_KIND.AUDIO)
+    const roomCallId = await startActiveRoomCall(roomId.value, 'audio')
 
     emit('select')
 

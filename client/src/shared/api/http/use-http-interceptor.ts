@@ -6,17 +6,30 @@ import { TOAST_I18N } from 'src/shared/lib'
 import { log, useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
 
+import { API_I18N } from '../i18n'
+
 import { createHttpError } from './create-http-error'
 import { extractErrorPayload } from './extract-error-payload'
-import { HTTP_I18N } from './i18n'
 import { isMediaRequestError } from './is-media-request-error'
+import type { HttpRequestOptions } from './types'
 
 export const useHttpInterceptor = () => {
   const { t } = useI18n()
   const toast = useAppToast()
   const router = useRouter()
 
-  const interceptError = async (error: unknown) => {
+  const showSharedErrorToast = (content: string) => {
+    toast.add({
+      type: 'error',
+      title: t(TOAST_I18N.error),
+      content
+    })
+  }
+
+  const interceptError = async (error: unknown, options: Pick<HttpRequestOptions, 'showErrorToast'> = {}) => {
+    const { showErrorToast = true } = options
+    const fallbackMessage = t(API_I18N.operationFailed)
+
     if (error instanceof AxiosError) {
       const status = error.response?.status as ReqStatus | undefined
       const mediaRequestError = isMediaRequestError(error)
@@ -41,7 +54,7 @@ export const useHttpInterceptor = () => {
         }
       }
 
-      const message = text ?? t(HTTP_I18N.genericError)(error.message)
+      const message = !silent && text ? text : fallbackMessage
 
       if (mediaRequestError) {
         return createHttpError({
@@ -53,7 +66,7 @@ export const useHttpInterceptor = () => {
       }
 
       if (silent) {
-        log('error', text ?? t(HTTP_I18N.unknownError))
+        log('error', text ?? fallbackMessage)
 
         return createHttpError({
           message,
@@ -63,11 +76,9 @@ export const useHttpInterceptor = () => {
         })
       }
 
-      toast.add({
-        type: 'error',
-        title: t(TOAST_I18N.error),
-        content: message
-      })
+      if (showErrorToast) {
+        showSharedErrorToast(message)
+      }
 
       return createHttpError({
         message,
@@ -79,11 +90,11 @@ export const useHttpInterceptor = () => {
 
     log('error', 'HTTP request failed', error)
 
-    if (error instanceof Error) {
-      return createHttpError({ message: error.message })
+    if (showErrorToast) {
+      showSharedErrorToast(fallbackMessage)
     }
 
-    return createHttpError({ message: t(HTTP_I18N.unknownError) })
+    return createHttpError({ message: fallbackMessage })
   }
 
   return {

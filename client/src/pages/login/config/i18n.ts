@@ -1,6 +1,6 @@
-import { defineI18n } from 'global-shared'
+import { defineI18n } from 'src/shared/lib'
 
-export const LOGIN_FORM_I18N = defineI18n({
+export const LOGIN_FORM_I18N = defineI18n('loginForm', {
   loginPlaceholder: {
     en: 'Enter email or nickname',
     ru: 'Введите email или никнейм',

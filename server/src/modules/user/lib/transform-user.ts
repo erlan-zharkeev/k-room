@@ -1,5 +1,4 @@
 import {
-  CONTACT_INTERACTION,
   USER_DEFAULT_ONBOARDING,
   type Contact,
   type Interaction,
@@ -10,8 +9,8 @@ import {
 import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 
 import type { PresenceService } from '../../presence/presence.service'
-import type { UserContact, UserSchema } from '../types'
 import { UserModel } from '../user.model'
+import type { UserContact, UserSchema } from '../user.types'
 
 export const transformUserToPreview = (user: UserSchema) => {
   const userId = stringifyMongoId(user._id)
@@ -41,7 +40,7 @@ export const mapUserToDto = (user: UserSchema): UserData => {
 
 export const transformUserToContact = (
   user: UserSchema,
-  interactionType: Interaction = CONTACT_INTERACTION.DEFAULT,
+  interactionType: Interaction = 'default',
   online = false
 ): Contact => {
   return {
@@ -64,7 +63,7 @@ export const transformUserToFrontendContact = async (
 
   return users.map((user) => {
     const userId = stringifyMongoId(user._id)
-    const interactionType = contacts[userId]?.interaction ?? CONTACT_INTERACTION.DEFAULT
+    const interactionType = contacts[userId]?.interaction ?? 'default'
 
     return transformUserToContact(user, interactionType, onlineMap.get(userId) ?? false)
   })

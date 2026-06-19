@@ -1,6 +1,6 @@
-import { defineI18n } from 'global-shared'
+import { defineI18n, i18nFormatter } from 'src/shared/lib'
 
-export const WAIT_EMAIL_CONFIRM_I18N = defineI18n({
+export const WAIT_EMAIL_CONFIRM_I18N = defineI18n('waitEmailConfirm', {
   title: {
     en: 'Email confirmation',
     ru: 'Подтверждение email',
@@ -32,9 +32,9 @@ export const WAIT_EMAIL_CONFIRM_I18N = defineI18n({
     zh: '如果没有收到邮件，可以尝试重新发送请求'
   },
   resendInSeconds: {
-    en: (seconds: number) => `You can send a confirmation email in ${seconds} seconds`,
-    ru: (seconds: number) => `Отправить письмо повторно можно через ${seconds} сек.`,
-    zh: (seconds: number) => `${seconds} 秒后可以重新发送确认邮件`
+    en: i18nFormatter(['seconds'], (seconds: number) => `You can send a confirmation email in ${seconds} seconds`),
+    ru: i18nFormatter(['seconds'], (seconds: number) => `Отправить письмо повторно можно через ${seconds} сек.`),
+    zh: i18nFormatter(['seconds'], (seconds: number) => `${seconds} 秒后可以重新发送确认邮件`)
   },
   resend: {
     en: 'Send confirmation link',

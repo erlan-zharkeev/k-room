@@ -1,7 +1,6 @@
-import type { LocalizedText } from 'global-shared'
 import type { Component } from 'vue'
 
-import type { ContactRecord } from 'src/shared/lib'
+import type { ContactRecord, I18nKey } from 'src/shared/lib'
 import type { AppTextColor } from 'src/shared/ui'
 
 export interface ContactsSearchProps {
@@ -14,7 +13,7 @@ export interface ContactsSearchEmits {
 
 export interface ContactsSearchBadgeData {
   color: string
-  label: LocalizedText
+  label: I18nKey
   visible: boolean
 }
 

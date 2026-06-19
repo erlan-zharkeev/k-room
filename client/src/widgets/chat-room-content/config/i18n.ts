@@ -1,6 +1,8 @@
-import { defineI18n, formatPlural } from 'global-shared'
+import { formatPlural } from 'global-shared'
 
-export const CHAT_ROOM_CONTENT_I18N = defineI18n({
+import { defineI18n, i18nFormatter } from 'src/shared/lib'
+
+export const CHAT_ROOM_CONTENT_I18N = defineI18n('chatRoomContent', {
   noRoomSelected: {
     en: 'Select a chat to start messaging',
     ru: 'Выберите чат, чтобы начать переписку',
@@ -167,29 +169,29 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     zh: '不支持该文件格式。支持的扩展名：jpg、jpeg、png、gif、svg、webp、pdf、zip、rar、7z、mp3、ogg、wav、mp4、webm、mov。'
   },
   messageImageInvalidSize: {
-    en: (size: number) => `Image must be less than ${size} MB`,
-    ru: (size: number) => `Изображение должно быть меньше ${size} МБ`,
-    zh: (size: number) => `图片必须小于 ${size} MB`
+    en: i18nFormatter(['size'], (size: number) => `Image must be less than ${size} MB`),
+    ru: i18nFormatter(['size'], (size: number) => `Изображение должно быть меньше ${size} МБ`),
+    zh: i18nFormatter(['size'], (size: number) => `图片必须小于 ${size} MB`)
   },
   messageDocumentInvalidSize: {
-    en: (size: number) => `Document must be less than ${size} MB`,
-    ru: (size: number) => `Документ должен быть меньше ${size} МБ`,
-    zh: (size: number) => `文档必须小于 ${size} MB`
+    en: i18nFormatter(['size'], (size: number) => `Document must be less than ${size} MB`),
+    ru: i18nFormatter(['size'], (size: number) => `Документ должен быть меньше ${size} МБ`),
+    zh: i18nFormatter(['size'], (size: number) => `文档必须小于 ${size} MB`)
   },
   messageAudioInvalidSize: {
-    en: (size: number) => `Audio must be less than ${size} MB`,
-    ru: (size: number) => `Аудио должно быть меньше ${size} МБ`,
-    zh: (size: number) => `音频必须小于 ${size} MB`
+    en: i18nFormatter(['size'], (size: number) => `Audio must be less than ${size} MB`),
+    ru: i18nFormatter(['size'], (size: number) => `Аудио должно быть меньше ${size} МБ`),
+    zh: i18nFormatter(['size'], (size: number) => `音频必须小于 ${size} MB`)
   },
   messageVideoInvalidSize: {
-    en: (size: number) => `Video must be less than ${size} MB`,
-    ru: (size: number) => `Видео должно быть меньше ${size} МБ`,
-    zh: (size: number) => `视频必须小于 ${size} MB`
+    en: i18nFormatter(['size'], (size: number) => `Video must be less than ${size} MB`),
+    ru: i18nFormatter(['size'], (size: number) => `Видео должно быть меньше ${size} МБ`),
+    zh: i18nFormatter(['size'], (size: number) => `视频必须小于 ${size} MB`)
   },
   messageAttachmentLimitReached: {
-    en: (limit: number) => `You can attach up to ${limit} files. The list was reduced.`,
-    ru: (limit: number) => `Можно прикрепить до ${limit} файлов. Список сокращен.`,
-    zh: (limit: number) => `最多可附加 ${limit} 个文件。列表已缩减。`
+    en: i18nFormatter(['limit'], (limit: number) => `You can attach up to ${limit} files. The list was reduced.`),
+    ru: i18nFormatter(['limit'], (limit: number) => `Можно прикрепить до ${limit} файлов. Список сокращен.`),
+    zh: i18nFormatter(['limit'], (limit: number) => `最多可附加 ${limit} 个文件。列表已缩减。`)
   },
   selectEmoji: {
     en: 'Select emoji',
@@ -237,14 +239,17 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n({
     zh: '发送消息'
   },
   membersQuantity: {
-    en: (quantity: number) => formatPlural('en', quantity, { one: 'member', other: 'members' }),
-    ru: (quantity: number) =>
+    en: i18nFormatter(['quantity'], (quantity: number) =>
+      formatPlural('en', quantity, { one: 'member', other: 'members' })
+    ),
+    ru: i18nFormatter(['quantity'], (quantity: number) =>
       formatPlural('ru', quantity, {
         few: 'участника',
         many: 'участников',
         one: 'участник',
         other: 'участника'
-      }),
-    zh: (quantity: number) => formatPlural('zh', quantity, { other: '名成员' })
+      })
+    ),
+    zh: i18nFormatter(['quantity'], (quantity: number) => formatPlural('zh', quantity, { other: '名成员' }))
   }
 })

@@ -3,8 +3,8 @@ import { NmorphCard } from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES } from 'global-shared'
 import { RouterLink, RouterView, useRoute } from 'vue-router'
 
-import { LanguageSelect } from 'src/features/language-select'
-import { ThemeSelect } from 'src/features/theme-select'
+import { SelectLanguage } from 'src/features/select-language'
+import { SelectTheme } from 'src/features/select-theme'
 import { AppLogo, AppHeader } from 'src/shared/ui'
 
 import { AUTH_LAYOUT_TABS } from './constants'
@@ -22,8 +22,8 @@ useAuthLayoutNetBackground()
     <div class="auth-layout__top-side">
       <AppLogo />
       <div class="auth-layout__controls">
-        <LanguageSelect compact class="auth-layout__language" />
-        <ThemeSelect compact />
+        <SelectLanguage compact class="auth-layout__language" />
+        <SelectTheme compact />
       </div>
     </div>
     <div class="auth-layout__card">

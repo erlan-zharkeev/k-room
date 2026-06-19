@@ -16,7 +16,9 @@ export const useHttp = () => {
   const toast = useAppToast()
   const { interceptError } = useHttpInterceptor()
 
-  const successMessageHandler = (response: AxiosResponse<BackendResponse<unknown>>) => {
+  const successMessageHandler = (response: AxiosResponse<BackendResponse<unknown>>, showSuccessToast: boolean) => {
+    if (!showSuccessToast) return
+
     const contentType = getHeaderValue(response.headers?.['content-type'])
     const isJson = contentType.includes('application/json')
 
@@ -40,7 +42,14 @@ export const useHttp = () => {
     data: HttpRequestPayload = {},
     opts: HttpRequestOptions<R> = {}
   ): Promise<R extends 'json' ? AxiosResponse<BackendResponse<T>> : AxiosResponse<Blob>> => {
-    const { contentType = 'application/json', headers = {}, signal, skipAuthRefresh = false } = opts
+    const {
+      contentType = 'application/json',
+      headers = {},
+      signal,
+      skipAuthRefresh = false,
+      showErrorToast = true,
+      showSuccessToast = true
+    } = opts
     const responseType = (opts.responseType ?? 'json') as ResponseType
 
     const requestConfig: AxiosRequestConfig<HttpRequestPayload> = {
@@ -64,7 +73,7 @@ export const useHttp = () => {
         throw new Error('No response')
       }
 
-      successMessageHandler(response as AxiosResponse<BackendResponse<unknown>>)
+      successMessageHandler(response as AxiosResponse<BackendResponse<unknown>>, showSuccessToast)
 
       return response as R extends 'json' ? AxiosResponse<BackendResponse<T>> : AxiosResponse<Blob>
     } catch (error) {
@@ -79,15 +88,15 @@ export const useHttp = () => {
 
           const response = await request()
 
-          successMessageHandler(response as AxiosResponse<BackendResponse<unknown>>)
+          successMessageHandler(response as AxiosResponse<BackendResponse<unknown>>, showSuccessToast)
 
           return response as R extends 'json' ? AxiosResponse<BackendResponse<T>> : AxiosResponse<Blob>
         } catch (retryError) {
-          throw await interceptError(retryError)
+          throw await interceptError(retryError, { showErrorToast })
         }
       }
 
-      throw await interceptError(error)
+      throw await interceptError(error, { showErrorToast })
     }
   }
 

@@ -2,7 +2,7 @@ import { USER_DEFAULT_ONBOARDING, USER_NICKNAME_MAX_LENGTH, USER_NICKNAME_MIN_LE
 import type { UserOnboardingData } from 'global-shared'
 import { model, Schema } from 'mongoose'
 
-import type { UserPersonalData, UserPublicData, UserSchema, UserSystemData } from './types'
+import type { UserPersonalData, UserPublicData, UserSchema, UserSystemData } from './user.types'
 
 const systemSchema = new Schema<UserSystemData>(
   {

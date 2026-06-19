@@ -19,7 +19,9 @@ export const useChatRoomHeader = (props: ChatRoomHeaderProps, emit: ChatRoomHead
   const otherUserIds = computed(() => getRoomOtherUserIds(props.room, user.value.id))
   const users = computed(() => getUsersByIds(otherUserIds.value))
   const interlocutor = computed(() => getRoomInterlocutor(props.room, user.value.id))
-  const membersQuantityText = computed(() => t(CHAT_ROOM_CONTENT_I18N.membersQuantity)(props.room.users.length))
+  const membersQuantityText = computed(() =>
+    t(CHAT_ROOM_CONTENT_I18N.membersQuantity, { quantity: props.room.users.length })
+  )
   const title = computed(() => buildChatRoomTitle(props.room, users.value, props.isPrivateRoom))
   const updateChatRoomContentView = (view: string) => {
     emit('update-content-view', view as ChatRoomContentView)

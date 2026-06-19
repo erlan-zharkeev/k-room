@@ -7,10 +7,9 @@ import type {
   SocketAckSuccess
 } from 'global-shared'
 
-import type { SOCKET_AVAILABILITY_STATUS } from './constants'
 import type { socket } from './socket'
 
-export type SocketAvailabilityStatus = (typeof SOCKET_AVAILABILITY_STATUS)[keyof typeof SOCKET_AVAILABILITY_STATUS]
+export type SocketAvailabilityStatus = 'online' | 'reconnecting' | 'offline'
 
 export interface EmitSocketActionOptions<TResponsePayload = void, TReason extends string = string> {
   onSuccess?: (response: SocketAckSuccess<TResponsePayload>) => void

@@ -1,6 +1,5 @@
 import type { Message, RepliedMessage } from 'global-shared'
 
-import { MESSAGE_DRAFT_REFERENCE_KIND } from '../config/constants'
 import type { MessageDraftReferenceKind } from '../config/types'
 
 import { cloneMediaObjects } from './clone-media-objects'
@@ -30,6 +29,6 @@ export const buildRepliedMessage = (
     ...(documents && { documents: cloneMediaObjects(documents) }),
     ...(audios && { audios: cloneMediaObjects(audios) }),
     ...(videos && { videos: cloneMediaObjects(videos) }),
-    ...(kind === MESSAGE_DRAFT_REFERENCE_KIND.FORWARD && { forward: true })
+    ...(kind === 'forward' && { forward: true })
   }
 }

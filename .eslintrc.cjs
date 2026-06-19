@@ -138,6 +138,13 @@ module.exports = {
         ...sharedTypeScriptOverride.parserOptions,
         project: [path.join(__dirname, 'tsconfig.json')]
       },
+      rules: {
+        ...sharedRules,
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          { varsIgnorePattern: '^_', argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }
+        ]
+      },
       settings: createTypeScriptResolver('tsconfig.json')
     },
     {

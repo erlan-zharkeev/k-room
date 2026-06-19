@@ -3,12 +3,7 @@ import type { Virtualizer } from '@tanstack/vue-virtual'
 import type { ChatRoom } from 'global-shared'
 import { nextTick, onBeforeUnmount, ref, useTemplateRef, watch, type ComputedRef, type Ref } from 'vue'
 
-import {
-  MESSAGE_SCROLL_STATE_MODE,
-  useSettings,
-  type MessageScrollAnchorState,
-  type MessageScrollBottomState
-} from 'src/entities/setting'
+import { useSettings, type MessageScrollAnchorState, type MessageScrollBottomState } from 'src/entities/setting'
 
 import { MESSAGE_BACK_TO_BOTTOM_VISIBLE_OFFSET } from '../config/constants'
 import type { MessageListItem } from '../config/types'
@@ -77,7 +72,7 @@ export const useChatRoomMessageScrollManager = (
   const getSavedMessagesScrollAnchorMessageId = (roomId = room.value.id) => {
     const scrollState = resolveMessageScrollState(settings.value.messageScrollByRoom[roomId])
 
-    if (scrollState?.mode !== MESSAGE_SCROLL_STATE_MODE.ANCHOR) return null
+    if (scrollState?.mode !== 'anchor') return null
 
     return scrollState.messageId
   }
@@ -172,7 +167,7 @@ export const useChatRoomMessageScrollManager = (
 
     if (!scrollState) return false
 
-    if (scrollState.mode === MESSAGE_SCROLL_STATE_MODE.BOTTOM) {
+    if (scrollState.mode === 'bottom') {
       await scrollMessagesToBottom()
       return true
     }

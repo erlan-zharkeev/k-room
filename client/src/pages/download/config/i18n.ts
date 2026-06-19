@@ -1,10 +1,10 @@
-import { defineI18n } from 'global-shared'
+import { defineI18n, i18nFormatter } from 'src/shared/lib'
 
-export const DOWNLOAD_PAGE_I18N = defineI18n({
+export const DOWNLOAD_PAGE_I18N = defineI18n('downloadPage', {
   title: {
-    en: (appName: string) => `Download ${appName}`,
-    ru: (appName: string) => `Скачать ${appName}`,
-    zh: (appName: string) => `下载 ${appName}`
+    en: i18nFormatter(['appName'], (appName: string) => `Download ${appName}`),
+    ru: i18nFormatter(['appName'], (appName: string) => `Скачать ${appName}`),
+    zh: i18nFormatter(['appName'], (appName: string) => `下载 ${appName}`)
   },
   description: {
     en: 'Choose the desktop installer for your operating system.',
@@ -37,8 +37,8 @@ export const DOWNLOAD_PAGE_I18N = defineI18n({
     zh: '重试'
   },
   downloadAction: {
-    en: (platformLabel: string) => `Download for ${platformLabel}`,
-    ru: (platformLabel: string) => `Скачать для ${platformLabel}`,
-    zh: (platformLabel: string) => `下载 ${platformLabel} 版本`
+    en: i18nFormatter(['platformLabel'], (platformLabel: string) => `Download for ${platformLabel}`),
+    ru: i18nFormatter(['platformLabel'], (platformLabel: string) => `Скачать для ${platformLabel}`),
+    zh: i18nFormatter(['platformLabel'], (platformLabel: string) => `下载 ${platformLabel} 版本`)
   }
 })

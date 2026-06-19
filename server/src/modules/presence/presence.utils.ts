@@ -3,7 +3,7 @@ import type { ServerToClientSocketAction, ServerToClientSocketPayloadMap } from 
 import { getIO } from 'src/shared/lib/io'
 import type { EmitServerToClientSocketEvent, MongoId } from 'src/shared/types'
 
-import { USER_SOCKET_ROOM_PREFIX } from './constants'
+import { USER_SOCKET_ROOM_PREFIX } from './presence.constants'
 
 export const buildUserRoomName = (userId: MongoId | string) => `${USER_SOCKET_ROOM_PREFIX}:${String(userId)}`
 

@@ -1,6 +1,4 @@
-import type { LocalizedText } from 'global-shared'
-
-import type { TurnstileApi } from 'src/shared/ui/AppCaptcha/types'
+import type { TurnstileApi } from 'src/shared/ui'
 
 import type { ClientEnv } from '../client-env.types'
 
@@ -9,12 +7,6 @@ declare global {
 
   interface Window {
     turnstile?: TurnstileApi
-  }
-}
-
-declare module 'vue' {
-  interface ComponentCustomProperties {
-    $t: <T>(value: LocalizedText<T>) => T
   }
 }
 

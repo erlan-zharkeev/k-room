@@ -12,7 +12,7 @@ import { useChatRoom } from 'src/entities/chat-room'
 import { useSyncMedia } from 'src/entities/media-file'
 import { useMessage } from 'src/entities/message'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
-import { useChatRoomPinnedOrder } from 'src/features/chat-room-pinning'
+import { usePinChatRoomOrder } from 'src/features/pin-chat-room'
 
 import { filterRoomPayloadMessages } from '../lib/filter-room-payload-messages'
 
@@ -22,7 +22,7 @@ export const useChatRoomSync = () => {
   const { bulkUpdate, chatRooms, getById, merge, put, remove } = useChatRoom()
   const { syncWithOptions } = useSyncMedia()
   const { bulkDelete, bulkPut } = useMessage()
-  const { updatePinnedOrder } = useChatRoomPinnedOrder()
+  const { updatePinnedChatRoomOrder } = usePinChatRoomOrder()
 
   const saveRoomPayloadMessages = async (rooms: EventGetRooms) => {
     await bulkPut(compact(rooms.flatMap((room) => [room.previewMessage, room.pinnedMessage])))
@@ -39,7 +39,7 @@ export const useChatRoomSync = () => {
   }
 
   const updatePinnedChatRooms = async ({ pinnedChatRoomIds }: EventPinnedChatRoomsUpdated) => {
-    await updatePinnedOrder(pinnedChatRoomIds)
+    await updatePinnedChatRoomOrder(pinnedChatRoomIds)
   }
 
   const updateMutedChatRooms = async ({ mutedChatRoomIds }: EventMutedChatRoomsUpdated) => {

@@ -1,6 +1,6 @@
-import { defineI18n } from 'global-shared'
+import { defineI18n } from '../i18n/define-i18n'
 
-export const DB_QUOTA_I18N = defineI18n({
+export const DB_QUOTA_I18N = defineI18n('dbQuota', {
   cacheTrimmed: {
     en: 'Storage was full. Local cache was reduced. Some files may reload.',
     ru: 'Хранилище было заполнено. Локальный кэш уменьшен, некоторые файлы могут загрузиться заново.',

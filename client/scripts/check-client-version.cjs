@@ -1,3 +1,4 @@
+// Ensures the Tauri package version stays aligned with the client package version before desktop builds.
 const fs = require('node:fs')
 const path = require('node:path')
 

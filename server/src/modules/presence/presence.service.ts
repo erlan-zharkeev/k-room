@@ -20,7 +20,7 @@ import {
   PRESENCE_SOCKET_TTL_MS,
   PRESENCE_SWEEP_INTERVAL_MS,
   PRESENCE_USER_SET_TTL_MS
-} from './constants'
+} from './presence.constants'
 import { buildUserRoomName, emitToUsers } from './presence.utils'
 
 @Injectable()

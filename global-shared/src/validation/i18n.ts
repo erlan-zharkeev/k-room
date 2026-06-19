@@ -1,5 +1,5 @@
 import { PASSWORD_SPECIAL_CHARACTERS, VALIDATION_LIMITS } from '../auth/constants'
-import { defineI18n } from '../language/lib/define-i18n'
+import { defineI18n } from '../language/lib'
 
 import type { ValidationI18n } from './types'
 

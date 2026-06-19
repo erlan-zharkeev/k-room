@@ -3,12 +3,12 @@ import { computed, nextTick, onMounted, ref } from 'vue'
 import { useUser, useUserOnboarding } from 'src/entities/user'
 import { useI18n } from 'src/shared/lib'
 
-import { ONBOARDING_GUIDE_STEP, ONBOARDING_GUIDE_STEP_CONFIGS } from '../config/constants'
+import { ONBOARDING_GUIDE_STEP_CONFIGS } from '../config/constants'
 import { ONBOARDING_GUIDE_I18N } from '../config/i18n'
 import type { OnboardingGuideStepItem, OnboardingGuideStepName } from '../config/types'
 
 const isGuideVisible = ref(false)
-const activeGuideStep = ref<OnboardingGuideStepName>(ONBOARDING_GUIDE_STEP.navigation)
+const activeGuideStep = ref<OnboardingGuideStepName>('navigation')
 
 export const useOnboardingGuide = () => {
   const { t } = useI18n()
@@ -37,7 +37,7 @@ export const useOnboardingGuide = () => {
   }))
 
   const openGuide = () => {
-    activeGuideStep.value = ONBOARDING_GUIDE_STEP.navigation
+    activeGuideStep.value = 'navigation'
     isGuideVisible.value = true
   }
 

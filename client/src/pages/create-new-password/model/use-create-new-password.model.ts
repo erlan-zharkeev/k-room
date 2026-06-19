@@ -26,12 +26,14 @@ export const useCreateNewPassword = () => {
   })
   const isLoading = ref(false)
   const isPasswordChanged = ref(false)
+  const successMessage = ref('')
   const passwordRecoveryCode = computed(() => route.query['password-recovery'])
   const isFormValid = computed(() => formRef.value?.formData.isFormValid.value ?? false)
   const passwordMismatch = computed(() => formData.firstPassword.value !== formData.secondPassword.value)
   const passwordMismatchText = computed(() =>
     formData.secondPassword.value && passwordMismatch.value ? t(CREATE_NEW_PASSWORD_I18N.mismatch) : ''
   )
+  const isSubmitDisabled = computed(() => isLoading.value || passwordMismatch.value || !isFormValid.value)
 
   const submit = async () => {
     if (!isFormValid.value || passwordMismatch.value || !isString(passwordRecoveryCode.value)) {
@@ -45,8 +47,11 @@ export const useCreateNewPassword = () => {
         password: formData.secondPassword.value,
         codeToValidate: passwordRecoveryCode.value
       }
-      await doHttpRequest<null>('post', USER_ENDPOINTS.resetPassword, payload)
+      const response = await doHttpRequest<null>('post', USER_ENDPOINTS.resetPassword, payload, {
+        showSuccessToast: false
+      })
 
+      successMessage.value = response.data.message.silent ? '' : response.data.message.text
       isPasswordChanged.value = true
     } finally {
       isLoading.value = false
@@ -65,8 +70,10 @@ export const useCreateNewPassword = () => {
     isFormValid,
     isLoading,
     isPasswordChanged,
+    isSubmitDisabled,
     passwordMismatch,
     passwordMismatchText,
-    submit
+    submit,
+    successMessage
   }
 }

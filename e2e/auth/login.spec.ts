@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 
 import { loginByCredentials } from 'e2e/shared/auth'
 
-import { LOGIN_FIXTURE_USER, NICKNAME_LOGIN_FIXTURE_USER } from './fixtures'
+import { LOGIN_FIXTURE_USER, NICKNAME_LOGIN_FIXTURE_USER } from './constants'
 
 test.describe('login', () => {
   test('logs in with fixture user email', async ({ page }) => {

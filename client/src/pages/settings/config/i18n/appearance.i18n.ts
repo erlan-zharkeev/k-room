@@ -1,4 +1,5 @@
-export const SETTINGS_PAGE_APPEARANCE_I18N = {
+import { defineI18n } from 'src/shared/lib'
+export const SETTINGS_PAGE_APPEARANCE_I18N = defineI18n('settingsPageAppearance', {
   appearance: {
     en: 'Appearance',
     ru: 'Оформление',
@@ -279,4 +280,4 @@ export const SETTINGS_PAGE_APPEARANCE_I18N = {
     ru: 'Темная тема',
     zh: '深色主题'
   }
-} as const
+})

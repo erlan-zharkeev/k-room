@@ -1,4 +1,4 @@
-import { MESSAGE_BODY_MAX_LENGTH, MESSAGE_STATUS } from 'global-shared'
+import { MESSAGE_BODY_MAX_LENGTH, MESSAGE_STATUS_VALUES } from 'global-shared'
 import { model, Schema } from 'mongoose'
 
 import type { MessageSchema } from './messages.types'
@@ -15,7 +15,7 @@ const reactionSchema = new Schema(
 const messageMetaDataSchema = new Schema(
   {
     id: { type: String, required: true },
-    status: { type: String, enum: MESSAGE_STATUS, required: true }
+    status: { type: String, enum: MESSAGE_STATUS_VALUES, required: true }
   },
   { _id: false }
 )

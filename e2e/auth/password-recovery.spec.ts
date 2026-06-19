@@ -3,7 +3,7 @@ import { expect, test, type APIRequestContext, type Page } from '@playwright/tes
 import { E2E_ENV } from 'e2e/config'
 import { loginByCredentials } from 'e2e/shared/auth'
 
-import { buildPasswordRecoveryFixtureUser } from './fixtures'
+import { buildPasswordRecoveryFixtureUser } from './lib'
 
 const PASSWORD_RECOVERY_TEST_TIMEOUT_MS = 90_000
 

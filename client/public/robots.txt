@@ -1,0 +1,9 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+Disallow: /app
+Disallow: /authorize
+Disallow: /page
+Disallow: /notification
+Disallow: /not-found

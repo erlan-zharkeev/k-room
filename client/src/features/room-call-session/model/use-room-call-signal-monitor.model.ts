@@ -1,14 +1,19 @@
-import { socket } from 'src/shared/api'
+import { registerSocketEventListeners } from 'src/shared/api'
 
 import type { HandleRoomCallSignalReceived } from '../config/types'
 
 export const useRoomCallSignalMonitor = (handleRoomCallSignalReceived: HandleRoomCallSignalReceived) => {
+  let disposeRoomCallSignalMonitorListeners: (() => void) | null = null
+
   const initializeRoomCallSignalMonitor = () => {
-    socket.on('room-call-signal-received', handleRoomCallSignalReceived)
+    disposeRoomCallSignalMonitorListeners = registerSocketEventListeners([
+      ['room-call-signal-received', handleRoomCallSignalReceived]
+    ])
   }
 
   const disposeRoomCallSignalMonitor = () => {
-    socket.off('room-call-signal-received', handleRoomCallSignalReceived)
+    disposeRoomCallSignalMonitorListeners?.()
+    disposeRoomCallSignalMonitorListeners = null
   }
 
   return {

@@ -21,8 +21,6 @@ import {
   type VideoObject,
   MESSAGE_LOAD_LIMIT_MAX,
   MESSAGE_REACTION_LIMIT_PER_USER,
-  MESSAGE_REACTION_UPDATE_ACTION,
-  MESSAGE_STATUS_VALUE,
   REQ_STATUS,
   buildPendingMessageLinkPreview,
   getRoomOtherUserIds,
@@ -189,7 +187,7 @@ export const changeMessageStatus = async (messageId: string, status: MessageStat
       usersMetaData: {
         $elemMatch: {
           id: userId,
-          status: MESSAGE_STATUS_VALUE.DELIVERED
+          status: 'delivered'
         }
       }
     },
@@ -231,7 +229,7 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
     usersMetaData: {
       $elemMatch: {
         id: userId,
-        status: MESSAGE_STATUS_VALUE.DELIVERED
+        status: 'delivered'
       }
     }
   })
@@ -250,7 +248,7 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
     },
     {
       $set: {
-        'usersMetaData.$.status': MESSAGE_STATUS_VALUE.READ
+        'usersMetaData.$.status': 'read'
       }
     }
   )
@@ -262,7 +260,7 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
   const payload: EventMessagesStatusUpdated = {
     roomId,
     messageIds,
-    status: MESSAGE_STATUS_VALUE.READ,
+    status: 'read',
     userId,
     updatedMessagesQuantity: updateResult.modifiedCount
   }
@@ -365,7 +363,7 @@ export const toggleMessageReaction = async (userId: string, { glyphKey, messageI
     const payload: EventUpdatedMessageReactions = {
       roomId,
       messageId,
-      action: MESSAGE_REACTION_UPDATE_ACTION.REMOVE,
+      action: 'remove',
       reaction
     }
 
@@ -398,7 +396,7 @@ export const toggleMessageReaction = async (userId: string, { glyphKey, messageI
   const payload: EventUpdatedMessageReactions = {
     roomId,
     messageId,
-    action: MESSAGE_REACTION_UPDATE_ACTION.ADD,
+    action: 'add',
     reaction
   }
 
@@ -497,7 +495,7 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
     users.map(async (userId) => {
       await MessageModel.updateOne(
         { _id: newDbMessage.id },
-        { $push: { usersMetaData: { id: userId, status: MESSAGE_STATUS_VALUE.DELIVERED } } }
+        { $push: { usersMetaData: { id: userId, status: 'delivered' } } }
       )
 
       const payload: EventMessageDelivered = {
@@ -512,7 +510,7 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
           linkPreview,
           repliedMessage,
           isSelf: isMessageAuthor(trustedMessage, userId),
-          status: MESSAGE_STATUS_VALUE.DELIVERED
+          status: 'delivered'
         }
       }
 

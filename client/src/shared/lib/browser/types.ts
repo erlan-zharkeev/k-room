@@ -1,4 +1,6 @@
-import type { ImageObject, LocalizedText } from 'global-shared'
+import type { ImageObject } from 'global-shared'
+
+import type { I18nTranslate } from '../i18n/i18n.types'
 
 export type ClientPlatform = 'browser' | 'native'
 
@@ -7,7 +9,7 @@ export type FileLoaderValue = ImageObject | ImageObject[] | string | null
 export interface ImageToBase64Params {
   image: File
   allowedResolutions?: string[]
-  t: <T>(texts: LocalizedText<T>) => T
+  t: I18nTranslate
   maxImageSizeInMb?: number
 }
 

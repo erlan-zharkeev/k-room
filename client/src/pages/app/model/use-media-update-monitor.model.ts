@@ -1,21 +1,25 @@
 import type { EventMediaFilesDeleted } from 'global-shared'
 
 import { useMedia } from 'src/entities/media-file'
-import { socket } from 'src/shared/api'
+import { registerSocketEventListeners } from 'src/shared/api'
 
 export const useMediaUpdateMonitor = () => {
   const { bulkDelete } = useMedia()
+  let disposeMediaUpdateMonitorListeners: (() => void) | null = null
 
   const removeDeletedMediaFiles = ({ mediaIds }: EventMediaFilesDeleted) => {
     void bulkDelete(mediaIds)
   }
 
   const initializeMediaUpdateMonitor = () => {
-    socket.on('media-files-deleted', removeDeletedMediaFiles)
+    disposeMediaUpdateMonitorListeners = registerSocketEventListeners([
+      ['media-files-deleted', removeDeletedMediaFiles]
+    ])
   }
 
   const disposeMediaUpdateMonitor = () => {
-    socket.off('media-files-deleted', removeDeletedMediaFiles)
+    disposeMediaUpdateMonitorListeners?.()
+    disposeMediaUpdateMonitorListeners = null
   }
 
   return {

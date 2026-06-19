@@ -1,4 +1,5 @@
-export const SETTINGS_PAGE_ACCOUNT_I18N = {
+import { defineI18n } from 'src/shared/lib'
+export const SETTINGS_PAGE_ACCOUNT_I18N = defineI18n('settingsPageAccount', {
   account: {
     en: 'Account',
     ru: 'Аккаунт',
@@ -9,4 +10,4 @@ export const SETTINGS_PAGE_ACCOUNT_I18N = {
     ru: 'Профиль и пароль',
     zh: '资料和密码'
   }
-} as const
+})

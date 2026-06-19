@@ -1,7 +1,5 @@
 import { expect, test, type Browser, type Locator, type Page } from '@playwright/test'
 
-import { CHAT_KIND } from 'global-shared'
-
 import { E2E_ENV } from 'e2e/config'
 import { dismissFirstRunOverlays } from 'e2e/shared/app'
 import { signInWithProvider as signInWithProviderRequest } from 'e2e/shared/auth'
@@ -154,7 +152,7 @@ const expectStoredPrivateChatRoom = async (page: Page, dbName: string, userId: s
 
         return rooms.some(
           ({ chatKind, users }) =>
-            chatKind === CHAT_KIND.DIRECT && users.length === 2 && users.includes(userId) && users.includes(contactId)
+            chatKind === 'direct' && users.length === 2 && users.includes(userId) && users.includes(contactId)
         )
       },
       { timeout: CONTACT_E2E_SOCKET_SYNC_TIMEOUT_MS }

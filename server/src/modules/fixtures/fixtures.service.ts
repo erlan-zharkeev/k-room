@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises'
 
 import bcrypt from 'bcryptjs'
-import { CHAT_KIND, MEDIA_AVATAR_VALIDATION_OPTIONS } from 'global-shared'
+import { MEDIA_AVATAR_VALIDATION_OPTIONS } from 'global-shared'
 import countBy from 'lodash/countBy'
 import { Types, type HydratedDocument } from 'mongoose'
 
@@ -11,8 +11,8 @@ import { uploadBufferToBucket } from 'src/modules/media/media.service'
 import type { StreamMediaFileData } from 'src/modules/media/media.types'
 import { MessageModel } from 'src/modules/messages/messages.model'
 import { createUser, isUserExist } from 'src/modules/user/lib/user-existence'
-import type { UserSchema } from 'src/modules/user/types'
 import { UserModel } from 'src/modules/user/user.model'
+import type { UserSchema } from 'src/modules/user/user.types'
 import { log } from 'src/shared/lib/log'
 import { stringifyMongoIds } from 'src/shared/lib/normalize-object-id'
 
@@ -322,7 +322,7 @@ const ensureDirectRoom = async (firstUserId: string, secondUserId: string) => {
 
   const room = await new ChatRoomModel({
     adminId: firstUserId,
-    chatKind: CHAT_KIND.DIRECT,
+    chatKind: 'direct',
     users: [firstUserId, secondUserId],
     chatName: '',
     pinnedMessageId: null,
@@ -349,7 +349,7 @@ const ensureGroupRooms = async () => {
         existingRoom ??
         (await new ChatRoomModel({
           adminId,
-          chatKind: CHAT_KIND.GROUP,
+          chatKind: 'group',
           users,
           chatName,
           avatarId: null,

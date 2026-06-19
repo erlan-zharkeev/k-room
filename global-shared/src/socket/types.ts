@@ -76,6 +76,7 @@ import type {
   JoinRoomCallAckPayload,
   StartRoomCallAckPayload
 } from '../room-calls/types'
+import type { BackendMessage } from '../shared/types'
 import type { ReqStatus } from '../status/types'
 import type { UserPreview } from '../user/types'
 
@@ -86,6 +87,7 @@ export type SocketAckSuccess<TPayload = void> = [TPayload] extends [void]
 export interface SocketAckFailure<TReason extends string = string> {
   ok: false
   reason?: TReason
+  message?: BackendMessage
   handledByGlobalError?: boolean
 }
 

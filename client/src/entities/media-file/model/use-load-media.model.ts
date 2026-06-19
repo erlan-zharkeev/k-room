@@ -5,17 +5,8 @@ import { isHttpError, useHttp } from 'src/shared/api'
 import { MEDIA_NO_CACHE_REQUEST_HEADERS } from '../config/constants'
 import { transformHeadersToMediaData } from '../lib/transform-headers-to-media-data'
 
+import { getMediaRequestSignal } from './media-request-control.model'
 import { useMedia } from './use-media.model'
-
-let mediaRequestAbortController = new AbortController()
-
-export const abortMediaRequests = () => {
-  mediaRequestAbortController.abort()
-}
-
-export const resetMediaRequests = () => {
-  mediaRequestAbortController = new AbortController()
-}
 
 export const useLoadMedia = () => {
   const { doHttpRequest } = useHttp()
@@ -26,7 +17,7 @@ export const useLoadMedia = () => {
   const loadMediaHeaders = async (mediaId: string) => {
     const response = await doHttpRequest('head', getMediaEndpoint(mediaId), undefined, {
       headers: MEDIA_NO_CACHE_REQUEST_HEADERS,
-      signal: mediaRequestAbortController.signal
+      signal: getMediaRequestSignal()
     })
 
     return transformHeadersToMediaData(response)
@@ -36,7 +27,7 @@ export const useLoadMedia = () => {
     return doHttpRequest<never, 'blob'>('get', getMediaEndpoint(mediaId), undefined, {
       headers: MEDIA_NO_CACHE_REQUEST_HEADERS,
       responseType: 'blob',
-      signal: mediaRequestAbortController.signal
+      signal: getMediaRequestSignal()
     })
   }
 

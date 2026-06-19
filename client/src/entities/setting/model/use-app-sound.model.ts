@@ -2,7 +2,7 @@ import { createGlobalState } from '@vueuse/core'
 import { isFunction } from 'global-shared'
 import { watch } from 'vue'
 
-import { APP_SOUND_KIND, APP_SOUND_SRC_BY_KIND, type AppSoundKind } from 'src/shared/lib'
+import { APP_SOUND_KIND_VALUES, APP_SOUND_SRC_BY_KIND, type AppSoundKind } from 'src/shared/lib'
 
 import { useSettings } from './use-settings.model'
 
@@ -62,7 +62,7 @@ export const useAppSound = createGlobalState(() => {
   }
 
   const stopAllAppSounds = () => {
-    Object.values(APP_SOUND_KIND).forEach((kind) => stopAppSound(kind))
+    APP_SOUND_KIND_VALUES.forEach((kind) => stopAppSound(kind))
   }
 
   const playPreparedAppSound = async (kind: AppSoundKind, loop: boolean) => {

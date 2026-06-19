@@ -3,10 +3,10 @@ import { DEFAULT_APP_LANGUAGE, formatHumanDateTime, isNumber, isString } from 'g
 
 import { localizedText } from 'src/shared/lib/localized-text'
 
-import type { AdminUserActionRequest, AdminUserActionResponse, AdminUserRecord } from './types'
 import { LAST_SEEN_PATH } from './user.constants'
 import { USER_ADMIN_I18N } from './user.i18n'
 import { UserModel } from './user.model'
+import type { AdminUserActionRequest, AdminUserActionResponse, AdminUserRecord } from './user.types'
 
 const formatLastSeenParam = (params?: AdminUserRecord['params']) => {
   if (!params) {

@@ -1,5 +1,4 @@
 import {
-  CONTACT_INTERACTION,
   CONTACT_SEARCH_QUERY_MAX_LENGTH,
   CONTACT_SEARCH_RESULT_LIMIT,
   type Contact,
@@ -89,7 +88,7 @@ export const searchContacts = async (
       transformUserToContact(
         user,
         (contactMap instanceof Map ? contactMap.get(String(user._id)) : contactMap[String(user._id)])?.interaction ??
-          CONTACT_INTERACTION.DEFAULT,
+          'default',
         onlineMap.get(String(user._id)) ?? false
       )
     )
@@ -142,7 +141,7 @@ export const saveContact = async (userId: string, interlocutorId: string, presen
   return {
     contactData: transformUserToContact(
       contactCandidate,
-      CONTACT_INTERACTION.DEFAULT,
+      'default',
       await presenceService.isUserOnline(contactCandidate._id)
     )
   } satisfies EventContactAddSuccess
@@ -202,9 +201,9 @@ export const deleteContactById = async (userId: string, deletingUserId: string, 
   }
 
   if (isAcceptedContactInteraction(deletingUserInteractionType)) {
-    await setExistingUserContactInteraction(deletingUserId, userId, CONTACT_INTERACTION.DEFAULT)
+    await setExistingUserContactInteraction(deletingUserId, userId, 'default')
 
-    emitContactInteractionUpdated(String(deletingContact._id), userId, CONTACT_INTERACTION.DEFAULT)
+    emitContactInteractionUpdated(String(deletingContact._id), userId, 'default')
   }
 }
 
@@ -244,13 +243,13 @@ export const updateContactInteraction = async (
   }
 
   switch (interaction) {
-    case CONTACT_INTERACTION.DEFAULT:
-    case CONTACT_INTERACTION.BLOCKED:
+    case 'default':
+    case 'blocked':
       await updateAuthorContactInteraction()
       break
-    case CONTACT_INTERACTION.INVITED: {
+    case 'invited': {
       const [contactData, authorData] = await Promise.all([
-        createContactInteraction(contactId, userId, CONTACT_INTERACTION.INVITE_RECEIVED),
+        createContactInteraction(contactId, userId, 'invite-received'),
         updateAuthorContactInteraction()
       ])
 
@@ -260,14 +259,14 @@ export const updateContactInteraction = async (
 
       const payload: Contact = transformUserToContact(
         authorData,
-        CONTACT_INTERACTION.INVITE_RECEIVED,
+        'invite-received',
         await presenceService.isUserOnline(authorData._id)
       )
 
       emitToUsers([contactData._id], 'invite-received', payload)
       break
     }
-    case CONTACT_INTERACTION.INVITE_ACCEPTED:
+    case 'invite-accepted':
       await updateAuthorContactInteraction()
       await handleUpdateContactInteraction()
       break
@@ -309,7 +308,7 @@ export const updateContactInteractionType = async (
     return
   }
 
-  const currentInteraction = (await getContactInteraction(userId, contactId)) ?? CONTACT_INTERACTION.DEFAULT
+  const currentInteraction = (await getContactInteraction(userId, contactId)) ?? 'default'
 
   emitContactInteractionUpdated(userId, contactId, currentInteraction)
 }

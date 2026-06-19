@@ -7,27 +7,26 @@ import {
   NmorphIconGoogle,
   NmorphTextInput
 } from '@nmorph/nmorph-ui-kit'
-import { ROUTE_NAMES, SECURITY_ACTION } from 'global-shared'
-import { computed } from 'vue'
+import { ROUTE_NAMES } from 'global-shared'
 import { RouterLink } from 'vue-router'
 
-import { useSystem } from 'src/entities/system'
 import { AppCaptcha, AppText } from 'src/shared/ui'
 
 import { LOGIN_FORM_I18N } from '../config/i18n'
-import { useFirebase } from '../model/use-firebase.model'
 import { useLogin } from '../model/use-login.model'
 
-const { isFirebaseLoginLoading, onFirebaseLogin } = useFirebase()
-const { captchaRequired, captchaResetKey, captchaToken, formData, isFormValid, isLoading, submit } = useLogin()
-const isFormDisabled = computed(() => isLoading.value || isFirebaseLoginLoading.value)
-const isCaptchaBlocked = computed(() => captchaRequired.value && !captchaToken.value)
-const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked.value)
-const { hasInteracted } = useSystem()
-const isSubmitBtnDisabled = computed(() => {
-  if (!hasInteracted.value) return false
-  else return isSubmitDisabled.value || !isFormValid.value
-})
+const {
+  captchaRequired,
+  captchaResetKey,
+  captchaToken,
+  formData,
+  isFirebaseLoginLoading,
+  isFormDisabled,
+  isLoading,
+  isSubmitBtnDisabled,
+  onFirebaseLogin,
+  submit
+} = useLogin()
 </script>
 
 <template>
@@ -50,12 +49,7 @@ const isSubmitBtnDisabled = computed(() => {
       />
     </NmorphFormItem>
 
-    <AppCaptcha
-      v-if="captchaRequired"
-      :action="SECURITY_ACTION.login"
-      v-model="captchaToken"
-      :reset-key="captchaResetKey"
-    />
+    <AppCaptcha v-if="captchaRequired" :action="'login'" v-model="captchaToken" :reset-key="captchaResetKey" />
     <div class="login-page__action-btns">
       <NmorphButton
         :disabled="isSubmitBtnDisabled"

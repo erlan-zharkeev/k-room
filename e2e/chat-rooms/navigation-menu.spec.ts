@@ -1,6 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test'
 
-import { LOGIN_FIXTURE_USER } from 'e2e/auth/fixtures'
+import { LOGIN_FIXTURE_USER } from 'e2e/auth/constants'
 import { dismissFirstRunOverlays } from 'e2e/shared/app'
 import { loginByCredentials } from 'e2e/shared/auth'
 

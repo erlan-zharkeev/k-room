@@ -1,6 +1,6 @@
-import { defineI18n } from 'global-shared'
+import { defineI18n } from 'src/shared/lib'
 
-export const CALLS_PAGE_I18N = defineI18n({
+export const CALLS_PAGE_I18N = defineI18n('callsPage', {
   search: {
     en: 'Search call',
     ru: 'Поиск звонка',

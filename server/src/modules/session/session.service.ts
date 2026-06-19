@@ -9,15 +9,15 @@ import { AppError } from 'src/shared/lib/app-error'
 
 import { clearUserRefreshDevice, hasUserRefreshDevice, setUserRefreshDevice } from '../user/lib/user-persistence'
 
+import { parseTokenExpires } from './lib/parse-token-expires'
 import {
   DEVICE_COOKIE_MAX_AGE_MS,
   JWT_ACCESS_TOKEN_EXPIRES_IN,
   REFRESH_TOKEN_EXPIRES_IN,
   SESSION_COOKIE_NAMES
-} from './constants'
-import { parseTokenExpires } from './lib/parse-token-expires'
+} from './session.constants'
 import { SESSION_I18N } from './session.i18n'
-import type { TokenPayload } from './types'
+import type { TokenPayload } from './session.types'
 
 @Injectable()
 export class SessionService {

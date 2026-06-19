@@ -1,6 +1,6 @@
-import { defineI18n } from 'global-shared'
+import { defineI18n } from 'src/shared/lib'
 
-export const SOCKET_I18N = defineI18n({
+export const SOCKET_I18N = defineI18n('socket', {
   transportError: {
     en: 'Connection problem. Please try again later',
     ru: 'Проблема с соединением. Попробуйте позже',

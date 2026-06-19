@@ -1,9 +1,4 @@
-import {
-  CHAT_KIND,
-  ROOM_CALL_DEFAULT_PARTICIPANT_QUICK_COMMAND_STATE,
-  ROOM_CALL_MEDIA_KIND,
-  ROOM_CALL_STATUS
-} from 'global-shared'
+import { ROOM_CALL_DEFAULT_PARTICIPANT_QUICK_COMMAND_STATE } from 'global-shared'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { ChatRoomCallAccessProjection } from '../../chat-rooms/chat-rooms.types'
@@ -39,15 +34,15 @@ const createRoomCall = (): RoomCallActiveState => ({
   id: 'room-call-id',
   calledAt: 1,
   initiatorId: 'user-a',
-  mediaKind: ROOM_CALL_MEDIA_KIND.AUDIO,
+  mediaKind: 'audio',
   participants: [createRoomCallParticipant()],
   roomId: 'room-id',
   startedAt: 2,
-  status: ROOM_CALL_STATUS.IN_PROGRESS
+  status: 'in-progress'
 })
 
 const createRoom = (): ChatRoomCallAccessProjection => ({
-  chatKind: CHAT_KIND.DIRECT,
+  chatKind: 'direct',
   users: ['user-a', 'user-b']
 })
 
@@ -68,6 +63,6 @@ describe('assert-room-call-access', () => {
 
     expect(chatRoomPersistenceMock.findRoomCallAccessByUser).toHaveBeenCalledWith(roomCall.roomId, 'user-a')
     expect(result.room).toBe(room)
-    expect(result.room.chatKind).toBe(CHAT_KIND.DIRECT)
+    expect(result.room.chatKind).toBe('direct')
   })
 })

@@ -23,22 +23,9 @@ if (isLan) {
   process.env.API_HOST = 'https://192.168.8.7'
 }
 
-if (!isWindows && commandExists('zsh')) {
-  const child = spawn('zsh', [join(rootDir, 'scripts/dev.sh')], {
-    cwd: rootDir,
-    env: process.env,
-    stdio: 'inherit'
-  })
+await runDev()
 
-  child.on('exit', (code, signal) => {
-    if (signal) process.kill(process.pid, signal)
-    process.exit(code ?? 1)
-  })
-} else {
-  await runWindowsDev()
-}
-
-async function runWindowsDev() {
+async function runDev() {
   process.chdir(rootDir)
   loadEnvFile('.env.development')
   loadEnvFile('.env.secret', { fillEmptyOnly: true })

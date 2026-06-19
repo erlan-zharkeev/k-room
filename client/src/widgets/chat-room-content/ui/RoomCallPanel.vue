@@ -20,7 +20,6 @@ import {
 import { ROOM_CALL_SESSION_I18N } from 'src/features/room-call-session'
 
 import {
-  ROOM_CALL_QUICK_COMMAND,
   ROOM_CALL_QUICK_COMMANDS,
   ROOM_CALL_QUICK_COMMANDS_TOGGLE_I18N,
   ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE
@@ -131,7 +130,7 @@ const {
         >
           <template v-for="command in ROOM_CALL_QUICK_COMMANDS" :key="command.id">
             <NmorphButton
-              v-if="command.id === ROOM_CALL_QUICK_COMMAND.RAISE_HAND"
+              v-if="command.id === 'raise-hand'"
               class="room-call-panel__quick-command"
               design="plain"
               borderless
@@ -149,7 +148,7 @@ const {
               </template>
             </NmorphButton>
             <NmorphButton
-              v-if="command.id !== ROOM_CALL_QUICK_COMMAND.RAISE_HAND"
+              v-if="command.id !== 'raise-hand'"
               class="room-call-panel__quick-command"
               design="plain"
               borderless

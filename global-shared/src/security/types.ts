@@ -1,8 +1,13 @@
-import type { PROTECTED_ACTION_REASON, SECURITY_ACTION } from './constants'
+export type SecurityAction =
+  | 'login'
+  | 'registration'
+  | 'send-confirmation-link'
+  | 'send-change-email-code'
+  | 'validate-change-email-code'
+  | 'send-password-recovery-code'
+  | 'validate-password-recovery-code'
 
-export type SecurityAction = (typeof SECURITY_ACTION)[keyof typeof SECURITY_ACTION]
-
-export type ProtectedActionReason = (typeof PROTECTED_ACTION_REASON)[keyof typeof PROTECTED_ACTION_REASON]
+export type ProtectedActionReason = 'captcha-required' | 'rate-limited' | 'temporarily-blocked'
 
 export interface CaptchaTokenPayload {
   captchaToken?: string

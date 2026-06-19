@@ -1,4 +1,4 @@
-import { DEXIE_CACHE_TRIMMER_IDS, DEXIE_CACHE_TRIMMER_PRIORITIES, registerDexieCacheTrimmer } from 'src/shared/lib'
+import { DEXIE_CACHE_TRIMMER_PRIORITIES, registerDexieCacheTrimmer } from 'src/shared/lib'
 
 import { trimMediaCache } from '../lib/trim-media-cache'
 
@@ -10,8 +10,8 @@ export const initializeMediaCacheTrimmer = () => {
   if (isMediaCacheTrimmerInitialized) return
 
   registerDexieCacheTrimmer({
-    id: DEXIE_CACHE_TRIMMER_IDS.MEDIA,
-    priority: DEXIE_CACHE_TRIMMER_PRIORITIES.MEDIA,
+    id: 'media',
+    priority: DEXIE_CACHE_TRIMMER_PRIORITIES.media,
     trim: () =>
       trimMediaCache({
         loadMediaRecords: mediaStore.getAll,

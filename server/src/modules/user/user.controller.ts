@@ -58,7 +58,7 @@ export class UserController {
       runRequestValidation(request, RESET_PASSWORD_VALIDATION)
       await this.userService.resetPassword(payload)
 
-      return sendResponse(response, language, null, RESET_PASSWORD_I18N.success, true)
+      return sendResponse(response, language, null, RESET_PASSWORD_I18N.success, false)
     } catch (error) {
       throw toAppError(error, RESET_PASSWORD_I18N.failed)
     }

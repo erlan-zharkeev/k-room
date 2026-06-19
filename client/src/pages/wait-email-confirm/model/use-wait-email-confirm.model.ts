@@ -5,7 +5,7 @@ import {
   type SendConfirmationLinkPayload,
   type SendConfirmationLinkResponse
 } from 'global-shared'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useHttp, useProtectedActionCaptcha } from 'src/shared/api'
@@ -22,6 +22,10 @@ export const useWaitEmailConfirm = () => {
   const isLoading = ref(false)
   const captcha = useProtectedActionCaptcha()
   const { counterValue, syncCounterValue } = useRequestCooldownCounter(WAIT_EMAIL_CONFIRM_COUNTER_TICK_MS)
+  const isCaptchaBlocked = computed(() => captcha.captchaRequired.value && !captcha.captchaToken.value)
+  const isResendDisabled = computed(
+    () => isLoading.value || attempts.value <= 0 || counterValue.value > 0 || isCaptchaBlocked.value
+  )
 
   const syncQuery = async (payload: SendConfirmationLinkResponse) => {
     await router.replace(buildPathWithParams(ROUTE_NAMES.waitEmailConfirm, payload))
@@ -31,11 +35,9 @@ export const useWaitEmailConfirm = () => {
     if (!email.value) return
 
     isLoading.value = true
-    const requestPayload: SendConfirmationLinkPayload = {
-      email: email.value,
-      ...captcha.buildCaptchaPayload()
-    }
-    const shouldResetCaptcha = Boolean(requestPayload.captchaToken)
+    const { requestPayload, resetCaptchaIfUsed } = captcha.createProtectedActionPayload<SendConfirmationLinkPayload>({
+      email: email.value
+    })
 
     try {
       const response = await doHttpRequest<SendConfirmationLinkResponse>(
@@ -55,10 +57,7 @@ export const useWaitEmailConfirm = () => {
         syncCounterValue(payload.nextTryAt)
       }
     } finally {
-      if (shouldResetCaptcha) {
-        captcha.resetCaptcha()
-      }
-
+      resetCaptchaIfUsed()
       isLoading.value = false
     }
   }
@@ -87,7 +86,9 @@ export const useWaitEmailConfirm = () => {
     counterValue,
     email,
     initializeWaitEmailConfirm,
+    isCaptchaBlocked,
     isLoading,
+    isResendDisabled,
     resend
   }
 }

@@ -1,5 +1,6 @@
+import { registerSocketEventListeners } from './event-listeners'
 import { socket } from './socket'
-import { useSocketConnectionSync } from './use-socket-connection-sync.model'
+import { useSocketConnectionSync } from './use-socket-connection-sync'
 
 let isMonitorActive = false
 let disposeSocketConnectionMonitorListeners: (() => void) | null = null
@@ -19,19 +20,18 @@ export const useSocketConnectionMonitor = () => {
 
     isMonitorActive = true
 
-    socket.on('connect', syncSocketConnected)
-    socket.on('disconnect', syncSocketDisconnected)
-    socket.on('error-message', showSocketErrorMessage)
-    socket.on('auth-error', syncSocketAuthError)
+    const disposeSocketListeners = registerSocketEventListeners([
+      ['connect', syncSocketConnected],
+      ['disconnect', syncSocketDisconnected],
+      ['error-message', showSocketErrorMessage],
+      ['auth-error', syncSocketAuthError]
+    ])
     socket.io.on('reconnect', syncSocketConnected)
     socket.io.on('reconnect_attempt', syncSocketReconnectAttempt)
     socket.io.on('reconnect_failed', syncSocketReconnectFailed)
 
     disposeSocketConnectionMonitorListeners = () => {
-      socket.off('connect', syncSocketConnected)
-      socket.off('disconnect', syncSocketDisconnected)
-      socket.off('error-message', showSocketErrorMessage)
-      socket.off('auth-error', syncSocketAuthError)
+      disposeSocketListeners()
       socket.io.off('reconnect', syncSocketConnected)
       socket.io.off('reconnect_attempt', syncSocketReconnectAttempt)
       socket.io.off('reconnect_failed', syncSocketReconnectFailed)

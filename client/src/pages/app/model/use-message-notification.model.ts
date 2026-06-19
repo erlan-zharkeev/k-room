@@ -3,7 +3,7 @@ import { type EventMessageDelivered, isMessageStatusDelivered } from 'global-sha
 import { useChatRoom } from 'src/entities/chat-room'
 import { useAppSound, useSettings } from 'src/entities/setting'
 import { useSystem } from 'src/entities/system'
-import { APP_SOUND_KIND, useAppToast } from 'src/shared/lib'
+import { useAppToast } from 'src/shared/lib'
 
 export const useMessageNotification = () => {
   const { getById } = useChatRoom()
@@ -52,7 +52,7 @@ export const useMessageNotification = () => {
     if (!messages.sound) return
 
     try {
-      await playAppSound(APP_SOUND_KIND.MESSAGE)
+      await playAppSound('message')
     } catch (error) {
       void error
     }

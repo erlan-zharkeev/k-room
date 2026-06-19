@@ -1,17 +1,9 @@
 import type { AudioObject, DocumentObject, ImageObject, VideoObject } from '../media/types'
 
-import {
-  type MESSAGE_LINK_PREVIEW_STATUS,
-  type MESSAGE_LOAD_DIRECTION,
-  type MESSAGE_REACTION_UPDATE_ACTION,
-  type MESSAGE_STATUS
-} from './constants'
-
-export type MessageStatus = (typeof MESSAGE_STATUS)[number]
-export type MessageLoadDirection = (typeof MESSAGE_LOAD_DIRECTION)[keyof typeof MESSAGE_LOAD_DIRECTION]
-export type MessageReactionUpdateAction =
-  (typeof MESSAGE_REACTION_UPDATE_ACTION)[keyof typeof MESSAGE_REACTION_UPDATE_ACTION]
-export type MessageLinkPreviewStatus = (typeof MESSAGE_LINK_PREVIEW_STATUS)[keyof typeof MESSAGE_LINK_PREVIEW_STATUS]
+export type MessageStatus = 'sending' | 'undelivered' | 'delivered' | 'read' | 'none'
+export type MessageLoadDirection = 'latest' | 'before' | 'after' | 'around'
+export type MessageReactionUpdateAction = 'add' | 'remove'
+export type MessageLinkPreviewStatus = 'pending' | 'loaded' | 'failed'
 
 export interface MessageMetadata {
   id: string

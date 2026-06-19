@@ -51,6 +51,7 @@ export const usePasswordRecovery = () => {
   const isSendingEmailCode = ref(false)
   const isValidatingCode = ref(false)
   const codeSent = ref(false)
+  const codeSentMessage = ref('')
   const debugCode = ref('')
   const sendCaptcha = useProtectedActionCaptcha()
   const validateCaptcha = useProtectedActionCaptcha()
@@ -92,21 +93,23 @@ export const usePasswordRecovery = () => {
     const email = emailFormData.email.value.trim()
 
     isSendingEmailCode.value = true
-    const requestPayload: EmailCodeRequestPayload = {
-      email,
-      ...sendCaptcha.buildCaptchaPayload()
-    }
-    const shouldResetCaptcha = Boolean(requestPayload.captchaToken)
+    const { requestPayload, resetCaptchaIfUsed } = sendCaptcha.createProtectedActionPayload<EmailCodeRequestPayload>({
+      email
+    })
 
     try {
       const response = await doHttpRequest<CodeRequestResponse>(
         'post',
         CODES_ENDPOINTS.sendEmailCodePasswordRecovery,
-        requestPayload
+        requestPayload,
+        {
+          showSuccessToast: false
+        }
       )
       const { nextRequestTime: nextRequestTimestampMs, debugCode: nextDebugCode } = response.data.payload
 
       codeSent.value = true
+      codeSentMessage.value = response.data.message.silent ? '' : response.data.message.text
       emailFormData.email.value = requestPayload.email
       debugCode.value = nextDebugCode ?? ''
       await syncQuery(requestPayload.email, nextRequestTimestampMs)
@@ -119,10 +122,7 @@ export const usePasswordRecovery = () => {
         syncCounterValue(payload.nextTryAt)
       }
     } finally {
-      if (shouldResetCaptcha) {
-        sendCaptcha.resetCaptcha()
-      }
-
+      resetCaptchaIfUsed()
       isSendingEmailCode.value = false
     }
   }
@@ -133,12 +133,11 @@ export const usePasswordRecovery = () => {
     const code = codeFormData.code.value.trim()
 
     isValidatingCode.value = true
-    const requestPayload: EmailCodeValidationPayload = {
-      email: emailFormData.email.value,
-      code,
-      ...validateCaptcha.buildCaptchaPayload()
-    }
-    const shouldResetCaptcha = Boolean(requestPayload.captchaToken)
+    const { requestPayload, resetCaptchaIfUsed } =
+      validateCaptcha.createProtectedActionPayload<EmailCodeValidationPayload>({
+        email: emailFormData.email.value,
+        code
+      })
 
     try {
       const response = await doHttpRequest<ValidatePasswordRecoveryCodeResponse>(
@@ -152,10 +151,7 @@ export const usePasswordRecovery = () => {
     } catch (error) {
       validateCaptcha.handleProtectedActionError(error)
     } finally {
-      if (shouldResetCaptcha) {
-        validateCaptcha.resetCaptcha()
-      }
-
+      resetCaptchaIfUsed()
       isValidatingCode.value = false
     }
   }
@@ -179,6 +175,7 @@ export const usePasswordRecovery = () => {
   return {
     codeFormData,
     codeSent,
+    codeSentMessage,
     counterValue,
     debugCode,
     emailFormData,

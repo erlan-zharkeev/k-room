@@ -1,6 +1,5 @@
 import type { VirtualItem, Virtualizer } from '@tanstack/vue-virtual'
 import {
-  MESSAGE_STATUS_VALUE,
   isMessageReadStatus,
   isMessageSendingStatus,
   type ChatRoom,
@@ -38,7 +37,7 @@ export const useChatRoomMessageReadStatus = (room: Ref<ChatRoom>, messageList: C
     const payload: EventChangeMessageStatus = {
       roomId: room.value.id,
       messageId: message.id,
-      status: MESSAGE_STATUS_VALUE.READ
+      status: 'read'
     }
 
     pendingReadMessageIds.add(message.id)

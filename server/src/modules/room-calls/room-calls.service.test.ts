@@ -1,10 +1,4 @@
-import {
-  CHAT_KIND,
-  ROOM_CALL_DEFAULT_PARTICIPANT_QUICK_COMMAND_STATE,
-  ROOM_CALL_LEAVE_REASON,
-  ROOM_CALL_MEDIA_KIND,
-  ROOM_CALL_STATUS
-} from 'global-shared'
+import { ROOM_CALL_DEFAULT_PARTICIPANT_QUICK_COMMAND_STATE } from 'global-shared'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { ChatRoomCallAccessProjection } from '../chat-rooms/chat-rooms.types'
@@ -56,14 +50,14 @@ const createRoomCall = (): RoomCallActiveState => ({
   id: 'room-call-id',
   calledAt: 1,
   initiatorId: 'user-a',
-  mediaKind: ROOM_CALL_MEDIA_KIND.AUDIO,
+  mediaKind: 'audio',
   participants: [
     createRoomCallParticipant('user-a', 'socket-a', 1),
     createRoomCallParticipant('user-b', 'socket-b', 2)
   ],
   roomId: 'room-id',
   startedAt: 2,
-  status: ROOM_CALL_STATUS.IN_PROGRESS
+  status: 'in-progress'
 })
 
 describe('room-calls.service', () => {
@@ -73,7 +67,7 @@ describe('room-calls.service', () => {
 
   it('finishes private room call when participant leaves', async () => {
     const redisService = {}
-    const room = createRoom(CHAT_KIND.DIRECT)
+    const room = createRoom('direct')
     const roomCall = createRoomCall()
 
     roomCallAccessMock.assertRoomCallParticipantAccess.mockResolvedValue({
@@ -82,7 +76,7 @@ describe('room-calls.service', () => {
     })
 
     await leaveRoomCall(redisService as never, 'user-a', 'socket-a', {
-      reason: ROOM_CALL_LEAVE_REASON.LEFT,
+      reason: 'left',
       roomCallId: roomCall.id
     })
 
@@ -92,7 +86,7 @@ describe('room-calls.service', () => {
 
   it('keeps group room call active when participant leaves', async () => {
     const redisService = {}
-    const room = createRoom(CHAT_KIND.GROUP)
+    const room = createRoom('group')
     const roomCall = createRoomCall()
 
     roomCallAccessMock.assertRoomCallParticipantAccess.mockResolvedValue({
@@ -101,7 +95,7 @@ describe('room-calls.service', () => {
     })
 
     await leaveRoomCall(redisService as never, 'user-a', 'socket-a', {
-      reason: ROOM_CALL_LEAVE_REASON.LEFT,
+      reason: 'left',
       roomCallId: roomCall.id
     })
 
@@ -110,7 +104,7 @@ describe('room-calls.service', () => {
       roomCall,
       'user-a',
       'socket-a',
-      ROOM_CALL_LEAVE_REASON.LEFT,
+      'left',
       undefined
     )
     expect(leaveRoomCallParticipantMock.finishRoomCall).not.toHaveBeenCalled()
@@ -147,7 +141,7 @@ describe('room-calls.service', () => {
       roomCall,
       'user-a',
       'socket-a',
-      ROOM_CALL_LEAVE_REASON.DISCONNECTED
+      'disconnected'
     )
     expect(leaveRoomCallParticipantMock.finishRoomCall).not.toHaveBeenCalled()
   })

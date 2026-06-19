@@ -1,5 +1,4 @@
 import {
-  MESSAGE_LOAD_DIRECTION,
   type ChatRoom,
   type EventLoadRoomMessages,
   type EventRoomMessagesLoaded,
@@ -103,7 +102,7 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoom>) => {
   const loadLatestMessages = async () => {
     if (!room?.value) return
 
-    await loadRoomMessages(room.value, MESSAGE_LOAD_DIRECTION.LATEST)
+    await loadRoomMessages(room.value, 'latest')
   }
 
   const loadMessagesBeforeRange = (targetRoom: ChatRoom, range: MessageLoadedRange) => {
@@ -111,7 +110,7 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoom>) => {
 
     if (!anchorMessageId) return Promise.resolve()
 
-    return loadRoomMessages(targetRoom, MESSAGE_LOAD_DIRECTION.BEFORE, anchorMessageId)
+    return loadRoomMessages(targetRoom, 'before', anchorMessageId)
   }
 
   const loadMessagesAfterRange = (targetRoom: ChatRoom, range: MessageLoadedRange) => {
@@ -119,13 +118,13 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoom>) => {
 
     if (!anchorMessageId) return Promise.resolve()
 
-    return loadRoomMessages(targetRoom, MESSAGE_LOAD_DIRECTION.AFTER, anchorMessageId)
+    return loadRoomMessages(targetRoom, 'after', anchorMessageId)
   }
 
   const loadMessagesAround = async (messageId: string) => {
     if (!room?.value) return
 
-    await loadRoomMessages(room.value, MESSAGE_LOAD_DIRECTION.AROUND, messageId)
+    await loadRoomMessages(room.value, 'around', messageId)
   }
 
   const resetLoadedMessageRanges = (roomId?: string) => {

@@ -1,6 +1,8 @@
-import { defineI18n, formatPlural } from 'global-shared'
+import { formatPlural } from 'global-shared'
 
-export const ROOM_CALL_SESSION_I18N = defineI18n({
+import { defineI18n, i18nFormatter } from 'src/shared/lib'
+
+export const ROOM_CALL_SESSION_I18N = defineI18n('roomCallSession', {
   startAudioRoomCall: {
     en: 'Start audio call',
     ru: 'Начать аудиозвонок',
@@ -52,24 +54,24 @@ export const ROOM_CALL_SESSION_I18N = defineI18n({
     zh: '通话进行中'
   },
   activeRoomCallActivity: {
-    en: (title: string) => `Call in progress: ${title}`,
-    ru: (title: string) => `Идет звонок: ${title}`,
-    zh: (title: string) => `通话进行中：${title}`
+    en: i18nFormatter(['title'], (title: string) => `Call in progress: ${title}`),
+    ru: i18nFormatter(['title'], (title: string) => `Идет звонок: ${title}`),
+    zh: i18nFormatter(['title'], (title: string) => `通话进行中：${title}`)
   },
   incomingGroupRoomCall: {
-    en: (title: string) => `Incoming call in ${title}`,
-    ru: (title: string) => `В ${title} идет звонок`,
-    zh: (title: string) => `${title} 有来电`
+    en: i18nFormatter(['title'], (title: string) => `Incoming call in ${title}`),
+    ru: i18nFormatter(['title'], (title: string) => `В ${title} идет звонок`),
+    zh: i18nFormatter(['title'], (title: string) => `${title} 有来电`)
   },
   incomingPrivateRoomCall: {
-    en: (title: string) => `${title} is calling you`,
-    ru: (title: string) => `Вам звонит ${title}`,
-    zh: (title: string) => `${title} 正在呼叫你`
+    en: i18nFormatter(['title'], (title: string) => `${title} is calling you`),
+    ru: i18nFormatter(['title'], (title: string) => `Вам звонит ${title}`),
+    zh: i18nFormatter(['title'], (title: string) => `${title} 正在呼叫你`)
   },
   joinableRoomCall: {
-    en: (title: string) => `Call in ${title}`,
-    ru: (title: string) => `Звонок в ${title}`,
-    zh: (title: string) => `${title} 中的通话`
+    en: i18nFormatter(['title'], (title: string) => `Call in ${title}`),
+    ru: i18nFormatter(['title'], (title: string) => `Звонок в ${title}`),
+    zh: i18nFormatter(['title'], (title: string) => `${title} 中的通话`)
   },
   openRoomCall: {
     en: 'Open call',
@@ -77,9 +79,9 @@ export const ROOM_CALL_SESSION_I18N = defineI18n({
     zh: '打开通话'
   },
   outgoingRoomCall: {
-    en: (title: string) => `Calling ${title}`,
-    ru: (title: string) => `Вы звоните ${title}`,
-    zh: (title: string) => `正在呼叫 ${title}`
+    en: i18nFormatter(['title'], (title: string) => `Calling ${title}`),
+    ru: i18nFormatter(['title'], (title: string) => `Вы звоните ${title}`),
+    zh: i18nFormatter(['title'], (title: string) => `正在呼叫 ${title}`)
   },
   unknownRoom: {
     en: 'Unknown chat',
@@ -107,15 +109,18 @@ export const ROOM_CALL_SESSION_I18N = defineI18n({
     zh: '用视频接听'
   },
   roomCallParticipants: {
-    en: (quantity: number) => formatPlural('en', quantity, { one: 'participant', other: 'participants' }),
-    ru: (quantity: number) =>
+    en: i18nFormatter(['quantity'], (quantity: number) =>
+      formatPlural('en', quantity, { one: 'participant', other: 'participants' })
+    ),
+    ru: i18nFormatter(['quantity'], (quantity: number) =>
       formatPlural('ru', quantity, {
         few: 'участника',
         many: 'участников',
         one: 'участник',
         other: 'участника'
-      }),
-    zh: (quantity: number) => formatPlural('zh', quantity, { other: '位参与者' })
+      })
+    ),
+    zh: i18nFormatter(['quantity'], (quantity: number) => formatPlural('zh', quantity, { other: '位参与者' }))
   },
   roomCallStartFailed: {
     en: 'Could not start call. Check microphone and camera access in browser and system settings.',
@@ -126,21 +131,6 @@ export const ROOM_CALL_SESSION_I18N = defineI18n({
     en: 'Could not join call. Check microphone and camera access in browser and system settings.',
     ru: 'Не удалось присоединиться к звонку. Проверьте доступ к микрофону и камере в браузере и системе.',
     zh: '无法加入通话。请检查浏览器和系统中的麦克风和摄像头权限。'
-  },
-  roomCallAccessFailed: {
-    en: 'You do not have access to this call.',
-    ru: 'У вас нет доступа к этому звонку.',
-    zh: '你没有访问此通话的权限。'
-  },
-  roomCallAlreadyActive: {
-    en: 'A call is already active in this chat.',
-    ru: 'В этом чате уже идет звонок.',
-    zh: '此聊天中已有正在进行的通话。'
-  },
-  roomCallLimitReached: {
-    en: 'Call is full.',
-    ru: 'Звонок уже заполнен.',
-    zh: '通话人数已满。'
   },
   roomCallAudioStartFailed: {
     en: 'Could not turn on microphone. Check microphone access in browser and system settings.',

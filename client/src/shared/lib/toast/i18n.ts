@@ -1,6 +1,6 @@
-import { defineI18n } from 'global-shared'
+import { defineI18n } from '../i18n/define-i18n'
 
-export const TOAST_I18N = defineI18n({
+export const TOAST_I18N = defineI18n('toast', {
   success: {
     en: 'Success',
     ru: 'Успешно',

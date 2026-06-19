@@ -1,8 +1,6 @@
 import type { UserPreview } from '../user/types'
 
-import { type CONTACT_INTERACTION } from './constants'
-
-export type Interaction = (typeof CONTACT_INTERACTION)[keyof typeof CONTACT_INTERACTION]
+export type Interaction = 'default' | 'invited' | 'invite-accepted' | 'invite-received' | 'blocked'
 
 export type Contact = UserPreview & {
   online: boolean

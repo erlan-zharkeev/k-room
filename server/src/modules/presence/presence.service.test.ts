@@ -18,7 +18,7 @@ vi.mock('../user/lib/resolve-user-recipient-ids', () => recipientMock)
 vi.mock('../user/lib/user-persistence', () => userPersistenceMock)
 
 const { PresenceService } = await import('./presence.service')
-const { PRESENCE_ONLINE_USERS_KEY } = await import('./constants')
+const { PRESENCE_ONLINE_USERS_KEY } = await import('./presence.constants')
 
 const createRedisService = () => {
   const values = new Map<string, string>()

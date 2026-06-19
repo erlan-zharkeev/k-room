@@ -3,12 +3,7 @@ import { NmorphCard } from '@nmorph/nmorph-ui-kit'
 import { RouterView } from 'vue-router'
 
 import { AppWelcomeDialog } from 'src/features/app-welcome'
-import {
-  ONBOARDING_GUIDE_STEP,
-  OnboardingGuide,
-  OnboardingGuideTarget,
-  useOnboardingGuide
-} from 'src/features/onboarding-guide'
+import { OnboardingGuide, OnboardingGuideTarget, useOnboardingGuide } from 'src/features/onboarding-guide'
 import { useAppMonitors } from 'src/pages/app'
 import { useScreen } from 'src/shared/lib'
 import { LeftBar } from 'src/widgets/left-bar'
@@ -41,11 +36,7 @@ const {
       <section class="app-layout__workspace">
         <TopBar class="widget" />
         <div class="app-layout__content">
-          <OnboardingGuideTarget
-            v-if="showNavigation"
-            class="app-layout__guide-target"
-            :name="ONBOARDING_GUIDE_STEP.contentNavigation"
-          >
+          <OnboardingGuideTarget v-if="showNavigation" class="app-layout__guide-target" name="contentNavigation">
             <NmorphCard class="app-layout__navigation-widget widget">
               <ContentNavigationLayout :title-key="navigationTitleKey">
                 <RouterView v-slot="{ Component, route }" name="content-navigation">
@@ -56,11 +47,7 @@ const {
               </ContentNavigationLayout>
             </NmorphCard>
           </OnboardingGuideTarget>
-          <OnboardingGuideTarget
-            v-if="showContent"
-            class="app-layout__guide-target"
-            :name="ONBOARDING_GUIDE_STEP.content"
-          >
+          <OnboardingGuideTarget v-if="showContent" class="app-layout__guide-target" name="content">
             <NmorphCard class="app-layout__content-widget widget">
               <ContentLayout v-if="isContentLayoutEnabled" :title-key="contentTitleKey">
                 <RouterView v-slot="{ Component, route }" name="content">

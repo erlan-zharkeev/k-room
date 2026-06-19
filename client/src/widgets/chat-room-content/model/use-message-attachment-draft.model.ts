@@ -17,7 +17,6 @@ import {
 import { revokeObjectUrls, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
 import {
-  MESSAGE_ATTACHMENT_DRAFT_KIND,
   MESSAGE_AUDIO_MAX_MB,
   MESSAGE_DOCUMENT_MAX_MB,
   MESSAGE_IMAGE_MAX_MB,
@@ -139,7 +138,7 @@ export const useMessageAttachmentDraft = ({
       toast.add({
         type: 'error',
         title: t(TOAST_I18N.error),
-        content: t(CHAT_ROOM_CONTENT_I18N.messageImageInvalidSize)(MESSAGE_IMAGE_MAX_MB)
+        content: t(CHAT_ROOM_CONTENT_I18N.messageImageInvalidSize, { size: MESSAGE_IMAGE_MAX_MB })
       })
     }
 
@@ -147,7 +146,7 @@ export const useMessageAttachmentDraft = ({
       toast.add({
         type: 'error',
         title: t(TOAST_I18N.error),
-        content: t(CHAT_ROOM_CONTENT_I18N.messageDocumentInvalidSize)(MESSAGE_DOCUMENT_MAX_MB)
+        content: t(CHAT_ROOM_CONTENT_I18N.messageDocumentInvalidSize, { size: MESSAGE_DOCUMENT_MAX_MB })
       })
     }
 
@@ -155,7 +154,7 @@ export const useMessageAttachmentDraft = ({
       toast.add({
         type: 'error',
         title: t(TOAST_I18N.error),
-        content: t(CHAT_ROOM_CONTENT_I18N.messageAudioInvalidSize)(MESSAGE_AUDIO_MAX_MB)
+        content: t(CHAT_ROOM_CONTENT_I18N.messageAudioInvalidSize, { size: MESSAGE_AUDIO_MAX_MB })
       })
     }
 
@@ -163,7 +162,7 @@ export const useMessageAttachmentDraft = ({
       toast.add({
         type: 'error',
         title: t(TOAST_I18N.error),
-        content: t(CHAT_ROOM_CONTENT_I18N.messageVideoInvalidSize)(MESSAGE_VIDEO_MAX_MB)
+        content: t(CHAT_ROOM_CONTENT_I18N.messageVideoInvalidSize, { size: MESSAGE_VIDEO_MAX_MB })
       })
     }
 
@@ -171,7 +170,7 @@ export const useMessageAttachmentDraft = ({
       toast.add({
         type: 'warning',
         title: t(TOAST_I18N.warn),
-        content: t(CHAT_ROOM_CONTENT_I18N.messageAttachmentLimitReached)(MESSAGE_ATTACHMENT_LIMIT)
+        content: t(CHAT_ROOM_CONTENT_I18N.messageAttachmentLimitReached, { limit: MESSAGE_ATTACHMENT_LIMIT })
       })
     }
   }
@@ -193,17 +192,17 @@ export const useMessageAttachmentDraft = ({
   }
 
   const removeMessageAttachmentDraft = (attachment: MessageAttachmentDraftListItem) => {
-    if (attachment.kind === MESSAGE_ATTACHMENT_DRAFT_KIND.IMAGE) {
+    if (attachment.kind === 'image') {
       void messageImageDraft.remove(attachment.src)
       return
     }
 
-    if (attachment.kind === MESSAGE_ATTACHMENT_DRAFT_KIND.DOCUMENT) {
+    if (attachment.kind === 'document') {
       void messageDocumentDraft.remove(attachment.src)
       return
     }
 
-    if (attachment.kind === MESSAGE_ATTACHMENT_DRAFT_KIND.AUDIO) {
+    if (attachment.kind === 'audio') {
       void messageAudioDraft.remove(attachment.src)
       return
     }

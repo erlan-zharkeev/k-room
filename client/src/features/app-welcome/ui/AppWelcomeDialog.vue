@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { NmorphButton, NmorphDialog } from '@nmorph/nmorph-ui-kit'
-import { computed } from 'vue'
 
 import { AppHeader, AppText } from 'src/shared/ui'
 
@@ -13,8 +12,10 @@ const props = withDefaults(defineProps<AppWelcomeDialogProps>(), {
   padding: '4px'
 })
 const emit = defineEmits<AppWelcomeDialogEmit>()
-const { completeAppWelcome, isAppWelcomeVisible, updateAppWelcomeVisible } = useAppWelcomeDialog(emit)
-const dialogContentStyle = computed(() => ({ padding: props.padding }))
+const { completeAppWelcome, dialogContentStyle, isAppWelcomeVisible, updateAppWelcomeVisible } = useAppWelcomeDialog(
+  props,
+  emit
+)
 </script>
 
 <template>

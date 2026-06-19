@@ -1,4 +1,4 @@
-import { ROOM_CALL_STATUS, type RoomCallMediaKind } from 'global-shared'
+import { type RoomCallMediaKind } from 'global-shared'
 import { computed, ref } from 'vue'
 
 import { useActiveRoomCallSession } from 'src/features/room-call-session'
@@ -43,7 +43,7 @@ export const useChatRoomContent = () => {
   const isRoomCallStartDisabled = computed(() => !canStartActiveRoomCall(selectedChatRoomId.value))
   const selectedActiveRoomCall = computed(() => {
     const belongsToSelectedRoom = activeRoomCall.value?.roomId === selectedChatRoomId.value
-    const isActiveRoomCallInProgress = activeRoomCall.value?.status === ROOM_CALL_STATUS.IN_PROGRESS
+    const isActiveRoomCallInProgress = activeRoomCall.value?.status === 'in-progress'
 
     return belongsToSelectedRoom && isActiveRoomCallInProgress ? activeRoomCall.value : undefined
   })

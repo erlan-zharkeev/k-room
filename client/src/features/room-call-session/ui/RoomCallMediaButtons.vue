@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { NmorphButton, NmorphDivider, NmorphIcon, NmorphIconPhone, NmorphIconVideoCamera } from '@nmorph/nmorph-ui-kit'
-import { ROOM_CALL_MEDIA_KIND } from 'global-shared'
 
 import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
 import type { RoomCallMediaButtonsEmits, RoomCallMediaButtonsProps } from '../config/types'
@@ -17,8 +16,8 @@ const emit = defineEmits<RoomCallMediaButtonsEmits>()
       borderless
       :aria-label="$t(ROOM_CALL_SESSION_I18N.startAudioRoomCall)"
       :disabled="props.disabled || props.loading"
-      :loading="props.loadingMediaKind === ROOM_CALL_MEDIA_KIND.AUDIO"
-      @click="emit('start', ROOM_CALL_MEDIA_KIND.AUDIO)"
+      :loading="props.loadingMediaKind === 'audio'"
+      @click="emit('start', 'audio')"
     >
       <NmorphIcon width="16px" height="16px">
         <NmorphIconPhone />
@@ -31,8 +30,8 @@ const emit = defineEmits<RoomCallMediaButtonsEmits>()
       borderless
       :aria-label="$t(ROOM_CALL_SESSION_I18N.startVideoRoomCall)"
       :disabled="props.disabled || props.loading"
-      :loading="props.loadingMediaKind === ROOM_CALL_MEDIA_KIND.VIDEO"
-      @click="emit('start', ROOM_CALL_MEDIA_KIND.VIDEO)"
+      :loading="props.loadingMediaKind === 'video'"
+      @click="emit('start', 'video')"
     >
       <NmorphIcon width="16px" height="16px">
         <NmorphIconVideoCamera />

@@ -1,4 +1,4 @@
-import { REQ_STATUS, ROOM_CALL_ACK_FAILURE_REASON, ROOM_CALL_STATUS, ROOM_PARTICIPANT_LIMIT } from 'global-shared'
+import { REQ_STATUS, ROOM_PARTICIPANT_LIMIT } from 'global-shared'
 
 import type { RedisService } from 'src/modules/security/redis.service'
 import { AppError } from 'src/shared/lib/app-error'
@@ -13,13 +13,7 @@ export const assertRoomCallStartAccess = async (userId: string, roomId: string) 
   const room = await findRoomCallAccessByUser(roomId, userId)
 
   if (!room) {
-    throw new AppError(
-      REQ_STATUS.badRequest,
-      ROOM_CALLS_I18N.roomCallStartFailed,
-      true,
-      undefined,
-      ROOM_CALL_ACK_FAILURE_REASON.ACCESS_FAILED
-    )
+    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallStartFailed, false, undefined, 'access-failed')
   }
 
   return room
@@ -29,38 +23,20 @@ export const assertActiveRoomCallAccess = async (redisService: RedisService, use
   const roomCall = await readActiveRoomCall(redisService, roomCallId)
 
   if (!roomCall) {
-    throw new AppError(
-      REQ_STATUS.badRequest,
-      ROOM_CALLS_I18N.roomCallAccessFailed,
-      true,
-      undefined,
-      ROOM_CALL_ACK_FAILURE_REASON.ACCESS_FAILED
-    )
+    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallAccessFailed, false, undefined, 'access-failed')
   }
 
   const hasFinishedAt = Boolean(roomCall.finishedAt)
-  const isFinishedStatus = roomCall.status === ROOM_CALL_STATUS.FINISHED
+  const isFinishedStatus = roomCall.status === 'finished'
 
   if (hasFinishedAt || isFinishedStatus) {
-    throw new AppError(
-      REQ_STATUS.badRequest,
-      ROOM_CALLS_I18N.roomCallAccessFailed,
-      true,
-      undefined,
-      ROOM_CALL_ACK_FAILURE_REASON.ACCESS_FAILED
-    )
+    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallAccessFailed, false, undefined, 'access-failed')
   }
 
   const room = await findRoomCallAccessByUser(roomCall.roomId, userId)
 
   if (!room) {
-    throw new AppError(
-      REQ_STATUS.badRequest,
-      ROOM_CALLS_I18N.roomCallAccessFailed,
-      true,
-      undefined,
-      ROOM_CALL_ACK_FAILURE_REASON.ACCESS_FAILED
-    )
+    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallAccessFailed, false, undefined, 'access-failed')
   }
 
   return {
@@ -75,13 +51,7 @@ export const assertRoomCallJoinAccess = async (redisService: RedisService, userI
   const isCurrentUserActiveParticipant = activeParticipants.some((participant) => participant.userId === userId)
 
   if (!isCurrentUserActiveParticipant && activeParticipants.length >= ROOM_PARTICIPANT_LIMIT) {
-    throw new AppError(
-      REQ_STATUS.badRequest,
-      ROOM_CALLS_I18N.roomCallLimitReached,
-      true,
-      undefined,
-      ROOM_CALL_ACK_FAILURE_REASON.LIMIT_REACHED
-    )
+    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallLimitReached, false, undefined, 'limit-reached')
   }
 
   return roomCall

@@ -1,6 +1,6 @@
-import { defineI18n } from 'global-shared'
+import { defineI18n } from 'src/shared/lib'
 
-export const APP_WELCOME_I18N = defineI18n({
+export const APP_WELCOME_I18N = defineI18n('appWelcome', {
   title: {
     en: 'Welcome to K Room',
     ru: 'Добро пожаловать в K Room',

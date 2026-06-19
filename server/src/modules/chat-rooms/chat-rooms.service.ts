@@ -1,7 +1,6 @@
 import { setTimeout as delay } from 'timers/promises'
 
 import {
-  CHAT_KIND,
   type CreateRoomAckPayload,
   type EventChatRoomDeleted,
   type EventCreateRoom,
@@ -77,7 +76,7 @@ export const createChatRoom = async (
     users: roomMemberIds,
     adminId: userId,
     createdAt: Date.now(),
-    chatKind: roomMemberIds.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT,
+    chatKind: roomMemberIds.length > 2 ? 'group' : 'direct',
     avatarId: null,
     pinnedMessageId: null,
     messages: []
@@ -187,7 +186,7 @@ export const updateChatRoom = async (
   const room = await ChatRoomModel.findOne({
     _id: roomId,
     adminId: userId,
-    chatKind: CHAT_KIND.GROUP
+    chatKind: 'group'
   })
     .select('-__v')
     .lean<ChatRoomDocument>()
@@ -316,7 +315,7 @@ export const leaveChatRoom = async (
   const room = await ChatRoomModel.findOne({
     _id: roomId,
     users: userId,
-    chatKind: CHAT_KIND.GROUP
+    chatKind: 'group'
   })
     .select('-__v')
     .lean<ChatRoomDocument>()

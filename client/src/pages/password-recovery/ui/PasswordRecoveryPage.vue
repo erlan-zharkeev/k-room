@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NmorphButton, NmorphForm, NmorphFormItem, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
-import { ROUTE_NAMES, SECURITY_ACTION } from 'global-shared'
+import { ROUTE_NAMES } from 'global-shared'
 import { RouterLink } from 'vue-router'
 
 import { AppCaptcha, AppHeader, AppText } from 'src/shared/ui'
@@ -11,6 +11,7 @@ import { usePasswordRecovery } from '../model/use-password-recovery.model'
 const {
   codeFormData,
   codeSent,
+  codeSentMessage,
   counterValue,
   debugCode,
   emailFormData,
@@ -38,7 +39,7 @@ const {
 
     <AppText v-if="!codeSent" tag="p" :text="$t(PASSWORD_RECOVERY_I18N.enterEmailHint)" />
     <template v-else>
-      <AppText tag="p" :text="$t(PASSWORD_RECOVERY_I18N.sentToEmail)" />
+      <AppText v-if="codeSentMessage" tag="p" :text="codeSentMessage" />
       <AppText bold color="accent" :text="emailFormData.email.value" />
       <AppText tag="p" :text="$t(PASSWORD_RECOVERY_I18N.enterCodeHint)" />
     </template>
@@ -71,12 +72,16 @@ const {
 
     <AppCaptcha
       v-if="sendCaptchaRequired"
-      :action="SECURITY_ACTION.sendPasswordRecoveryCode"
+      :action="'send-password-recovery-code'"
       v-model="sendCaptchaToken"
       :reset-key="sendCaptchaResetKey"
     />
 
-    <AppText v-if="counterValue > 0" tag="p" :text="$t(PASSWORD_RECOVERY_I18N.resendTimer)(counterValue)" />
+    <AppText
+      v-if="counterValue > 0"
+      tag="p"
+      :text="$t(PASSWORD_RECOVERY_I18N.resendTimer, { seconds: counterValue })"
+    />
 
     <AppText v-if="debugCode" tag="p" :text="`${$t(PASSWORD_RECOVERY_I18N.debugCode)}: ${debugCode}`" />
 
@@ -107,7 +112,7 @@ const {
 
     <AppCaptcha
       v-if="validateCaptchaRequired"
-      :action="SECURITY_ACTION.validatePasswordRecoveryCode"
+      :action="'validate-password-recovery-code'"
       v-model="validateCaptchaToken"
       :reset-key="validateCaptchaResetKey"
     />

@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { NmorphGuideStep } from '@nmorph/nmorph-ui-kit'
-import { computed } from 'vue'
 
 import type { OnboardingGuideTargetProps } from '../config/types'
-import { useOnboardingGuide } from '../model/use-onboarding-guide.model'
+
+import { useOnboardingGuideTarget } from './use-onboarding-guide-target.model'
 
 const props = defineProps<OnboardingGuideTargetProps>()
-const { activeGuideStep, guideStepMap, isGuideVisible } = useOnboardingGuide()
-const guideStep = computed(() => guideStepMap.value[props.name])
-const isGuideStepActive = computed(() => isGuideVisible.value && activeGuideStep.value === props.name)
+const { guideStep, isGuideStepActive } = useOnboardingGuideTarget(props)
 </script>
 
 <template>

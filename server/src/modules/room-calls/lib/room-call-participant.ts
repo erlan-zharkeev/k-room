@@ -1,6 +1,5 @@
 import {
   ROOM_CALL_DEFAULT_PARTICIPANT_QUICK_COMMAND_STATE,
-  ROOM_CALL_MEDIA_KIND,
   type RoomCallMediaKind,
   type RoomCallParticipantQuickCommandStateByUserId
 } from 'global-shared'
@@ -13,8 +12,8 @@ import type {
 
 export const buildInitialRoomCallMediaState = (mediaKind: RoomCallMediaKind): RoomCallParticipantMediaStateSchema => ({
   audio: true,
-  video: mediaKind === ROOM_CALL_MEDIA_KIND.VIDEO,
-  screen: mediaKind === ROOM_CALL_MEDIA_KIND.SCREEN
+  video: mediaKind === 'video',
+  screen: mediaKind === 'screen'
 })
 
 export const buildRoomCallParticipant = (

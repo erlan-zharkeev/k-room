@@ -1,4 +1,5 @@
-export const SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N = {
+import { defineI18n } from 'src/shared/lib'
+export const SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N = defineI18n('settingsAccountChangePassword', {
   changePassword: {
     en: 'Change password',
     ru: 'Изменить пароль',
@@ -24,4 +25,4 @@ export const SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N = {
     ru: 'Пароли не совпадают',
     zh: '两次输入的密码不一致'
   }
-} as const
+})

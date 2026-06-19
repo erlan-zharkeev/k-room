@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import {
-  PROTECTED_ACTION_REASON,
   REQ_STATUS,
-  SECURITY_ACTION,
   type ProtectedActionResponsePayload,
   type ProtectedActionReason,
   type SecurityAction
@@ -12,6 +10,7 @@ import { SERVER_ENV } from 'src/app/env'
 import { AppError } from 'src/shared/lib/app-error'
 
 import { CaptchaService } from './captcha.service'
+import { RedisService } from './redis.service'
 import {
   EMAIL_ACTION_WINDOW_MS,
   LOGIN_BLOCK_ACCOUNT_THRESHOLD,
@@ -26,10 +25,9 @@ import {
   SECURITY_EMAIL_IP_ACTION_LIMITS,
   SECURITY_REDIS_KEY_PREFIX,
   SEND_CONFIRMATION_LINK_COOLDOWN_MS
-} from './constants'
-import { RedisService } from './redis.service'
+} from './security.constants'
 import { SECURITY_I18N } from './security.i18n'
-import type { SecurityEmailIpActionLimits, SecurityEmailIpActionParams } from './types'
+import type { SecurityEmailIpActionLimits, SecurityEmailIpActionParams } from './security.types'
 
 @Injectable()
 export class SecurityService {
@@ -44,19 +42,19 @@ export class SecurityService {
   }
 
   private buildChangeEmailCodeKey(userId: string) {
-    return [SECURITY_REDIS_KEY_PREFIX, SECURITY_ACTION.validateChangeEmailCode, 'code', userId].join(':')
+    return [SECURITY_REDIS_KEY_PREFIX, 'validate-change-email-code', 'code', userId].join(':')
   }
 
   private buildPasswordRecoveryCodeKey(userId: string) {
-    return [SECURITY_REDIS_KEY_PREFIX, SECURITY_ACTION.validatePasswordRecoveryCode, 'code', userId].join(':')
+    return [SECURITY_REDIS_KEY_PREFIX, 'validate-password-recovery-code', 'code', userId].join(':')
   }
 
   private buildPasswordRecoveryQueryKey(query: string) {
-    return [SECURITY_REDIS_KEY_PREFIX, SECURITY_ACTION.validatePasswordRecoveryCode, 'query', query].join(':')
+    return [SECURITY_REDIS_KEY_PREFIX, 'validate-password-recovery-code', 'query', query].join(':')
   }
 
   private buildPasswordRecoveryUserQueryKey(userId: string) {
-    return [SECURITY_REDIS_KEY_PREFIX, SECURITY_ACTION.validatePasswordRecoveryCode, 'user-query', userId].join(':')
+    return [SECURITY_REDIS_KEY_PREFIX, 'validate-password-recovery-code', 'user-query', userId].join(':')
   }
 
   private buildPayload(
@@ -145,7 +143,7 @@ export class SecurityService {
         SECURITY_I18N.captchaRequired,
         false,
         undefined,
-        this.buildPayload(action, PROTECTED_ACTION_REASON.captchaRequired)
+        this.buildPayload(action, 'captcha-required')
       )
     }
 
@@ -157,7 +155,7 @@ export class SecurityService {
         SECURITY_I18N.captchaFailed,
         false,
         undefined,
-        this.buildPayload(action, PROTECTED_ACTION_REASON.captchaRequired)
+        this.buildPayload(action, 'captcha-required')
       )
     }
   }
@@ -168,14 +166,14 @@ export class SecurityService {
       SECURITY_I18N.temporarilyBlocked,
       false,
       undefined,
-      this.buildPayload(action, PROTECTED_ACTION_REASON.temporarilyBlocked, await this.resolveNextTryAt(keys))
+      this.buildPayload(action, 'temporarily-blocked', await this.resolveNextTryAt(keys))
     )
   }
 
   async assertLoginAllowed(ip: string, login: string, captchaToken?: string) {
     if (SERVER_ENV.isE2E) return
 
-    const action = SECURITY_ACTION.login
+    const action = 'login'
     const accountKey = this.buildKey(action, 'account', login)
     const ipKey = this.buildKey(action, 'ip', ip)
     const [accountFailures, ipFailures] = await Promise.all([
@@ -193,7 +191,7 @@ export class SecurityService {
   }
 
   async trackLoginFailure(ip: string, login: string) {
-    const action = SECURITY_ACTION.login
+    const action = 'login'
 
     await Promise.all([
       this.redisService.increment(this.buildKey(action, 'account', login), LOGIN_FAILURE_WINDOW_MS),
@@ -202,13 +200,13 @@ export class SecurityService {
   }
 
   async clearLoginFailures(login: string) {
-    await this.redisService.remove(this.buildKey(SECURITY_ACTION.login, 'account', login))
+    await this.redisService.remove(this.buildKey('login', 'account', login))
   }
 
   async assertRegistrationAllowed(ip: string, captchaToken?: string) {
     if (SERVER_ENV.isE2E) return
 
-    const action = SECURITY_ACTION.registration
+    const action = 'registration'
     const ipKey = this.buildKey(action, 'ip', ip)
     const ipAttempts = await this.redisService.readNumber(ipKey)
 
@@ -222,15 +220,15 @@ export class SecurityService {
   }
 
   async trackRegistrationAttempt(ip: string) {
-    await this.redisService.increment(this.buildKey(SECURITY_ACTION.registration, 'ip', ip), REGISTRATION_WINDOW_MS)
+    await this.redisService.increment(this.buildKey('registration', 'ip', ip), REGISTRATION_WINDOW_MS)
   }
 
   async getSendConfirmationLinkCooldown(email: string) {
-    return this.resolveActionCooldownUntil(SECURITY_ACTION.sendConfirmationLink, 'cooldown', email)
+    return this.resolveActionCooldownUntil('send-confirmation-link', 'cooldown', email)
   }
 
   async assertSendConfirmationLinkAllowed(email: string, ip: string, captchaToken?: string) {
-    const action = SECURITY_ACTION.sendConfirmationLink
+    const action = 'send-confirmation-link'
 
     await this.assertEmailIpActionAllowed({
       action,
@@ -242,7 +240,7 @@ export class SecurityService {
   }
 
   async trackSendConfirmationLinkAttempt(ip: string, email: string) {
-    const action = SECURITY_ACTION.sendConfirmationLink
+    const action = 'send-confirmation-link'
 
     await Promise.all([
       this.trackEmailIpAction(action, email, ip, EMAIL_ACTION_WINDOW_MS),
@@ -251,7 +249,7 @@ export class SecurityService {
   }
 
   async assertSendPasswordRecoveryAllowed(email: string, ip: string, captchaToken?: string) {
-    const action = SECURITY_ACTION.sendPasswordRecoveryCode
+    const action = 'send-password-recovery-code'
 
     await this.assertEmailIpActionAllowed({
       action,
@@ -263,11 +261,11 @@ export class SecurityService {
   }
 
   async trackSendPasswordRecoveryAttempt(ip: string, email: string) {
-    await this.trackEmailIpAction(SECURITY_ACTION.sendPasswordRecoveryCode, email, ip, EMAIL_ACTION_WINDOW_MS)
+    await this.trackEmailIpAction('send-password-recovery-code', email, ip, EMAIL_ACTION_WINDOW_MS)
   }
 
   async getSendPasswordRecoveryCodeCooldown(userId: string) {
-    return this.resolveActionCooldownUntil(SECURITY_ACTION.sendPasswordRecoveryCode, 'cooldown', userId)
+    return this.resolveActionCooldownUntil('send-password-recovery-code', 'cooldown', userId)
   }
 
   private async clearPasswordRecoveryQuery(userId: string) {
@@ -290,11 +288,7 @@ export class SecurityService {
     await this.clearPasswordRecoveryQuery(userId)
     await Promise.all([
       this.redisService.write(this.buildPasswordRecoveryCodeKey(userId), code, codeTtlMs),
-      this.redisService.write(
-        this.buildKey(SECURITY_ACTION.sendPasswordRecoveryCode, 'cooldown', userId),
-        '1',
-        cooldownTtlMs
-      )
+      this.redisService.write(this.buildKey('send-password-recovery-code', 'cooldown', userId), '1', cooldownTtlMs)
     ])
   }
 
@@ -323,11 +317,11 @@ export class SecurityService {
   }
 
   async getSendChangeEmailCodeCooldown(userId: string) {
-    return this.resolveActionCooldownUntil(SECURITY_ACTION.sendChangeEmailCode, 'cooldown', userId)
+    return this.resolveActionCooldownUntil('send-change-email-code', 'cooldown', userId)
   }
 
   async assertSendChangeEmailCodeAllowed(email: string, ip: string, captchaToken?: string) {
-    const action = SECURITY_ACTION.sendChangeEmailCode
+    const action = 'send-change-email-code'
 
     await this.assertEmailIpActionAllowed({
       action,
@@ -339,7 +333,7 @@ export class SecurityService {
   }
 
   async trackSendChangeEmailCodeAttempt(ip: string, email: string, userId: string) {
-    const action = SECURITY_ACTION.sendChangeEmailCode
+    const action = 'send-change-email-code'
 
     await Promise.all([
       this.trackEmailIpAction(action, email, ip, EMAIL_ACTION_WINDOW_MS),
@@ -348,7 +342,7 @@ export class SecurityService {
   }
 
   async assertValidateChangeEmailCodeAllowed(email: string, ip: string, captchaToken?: string) {
-    const action = SECURITY_ACTION.validateChangeEmailCode
+    const action = 'validate-change-email-code'
 
     await this.assertEmailIpActionAllowed({
       action,
@@ -360,7 +354,7 @@ export class SecurityService {
   }
 
   async trackInvalidChangeEmailCode(ip: string, email: string) {
-    const action = SECURITY_ACTION.validateChangeEmailCode
+    const action = 'validate-change-email-code'
 
     return this.trackEmailIpFailure(
       action,
@@ -372,7 +366,7 @@ export class SecurityService {
   }
 
   async clearChangeEmailCodeFailures(email: string) {
-    await this.clearEmailIpFailures(SECURITY_ACTION.validateChangeEmailCode, email)
+    await this.clearEmailIpFailures('validate-change-email-code', email)
   }
 
   async getChangeEmailCode(userId: string) {
@@ -388,7 +382,7 @@ export class SecurityService {
   }
 
   async assertValidatePasswordRecoveryCodeAllowed(email: string, ip: string, captchaToken?: string) {
-    const action = SECURITY_ACTION.validatePasswordRecoveryCode
+    const action = 'validate-password-recovery-code'
 
     await this.assertEmailIpActionAllowed({
       action,
@@ -400,7 +394,7 @@ export class SecurityService {
   }
 
   async trackInvalidPasswordRecoveryCode(ip: string, email: string) {
-    const action = SECURITY_ACTION.validatePasswordRecoveryCode
+    const action = 'validate-password-recovery-code'
 
     return this.trackEmailIpFailure(
       action,
@@ -412,6 +406,6 @@ export class SecurityService {
   }
 
   async clearPasswordRecoveryCodeFailures(email: string) {
-    await this.clearEmailIpFailures(SECURITY_ACTION.validatePasswordRecoveryCode, email)
+    await this.clearEmailIpFailures('validate-password-recovery-code', email)
   }
 }

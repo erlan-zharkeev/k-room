@@ -167,7 +167,6 @@ jobs:
             .env.production
             scripts/deploy/deploy.sh
             scripts/deploy/sync-certs.sh
-            scripts/deploy/install-certbot-renew-hook.sh
             nginx/webserver.conf
           )
 

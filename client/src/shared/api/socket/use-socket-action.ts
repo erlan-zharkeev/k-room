@@ -9,7 +9,7 @@ import type {
 import { SOCKET_ACTION_ACK_TIMEOUT_MS } from './constants'
 import { socket } from './socket'
 import type { EmitSocketActionOptions, SocketWithAck } from './types'
-import { useSocketAvailability } from './use-socket-availability'
+import { useSocketAvailability } from './use-socket-availability.model'
 import { useSocketTransportErrorToast } from './use-socket-transport-error-toast'
 
 export const useSocketAction = () => {

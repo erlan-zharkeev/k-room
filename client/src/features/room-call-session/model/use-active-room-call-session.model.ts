@@ -1,10 +1,9 @@
 import { createGlobalState } from '@vueuse/core'
 import {
-  ROOM_CALL_LEAVE_REASON,
-  ROOM_CALL_STATUS,
   type EventRoomCallSignalReceived,
   type RoomCall,
   type RoomCallAckFailureReason,
+  type RoomCallLeaveReason,
   type RoomCallMediaKind,
   type RoomCallTemporaryQuickCommand,
   type SocketAckFailure
@@ -13,14 +12,11 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 import { useRoomCall } from 'src/entities/room-call'
 import { useUser } from 'src/entities/user'
+import { API_I18N } from 'src/shared/api'
 import { log, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
 import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
 import { resolveRoomCallJoinMediaKind } from '../lib/resolve-room-call-join-media-kind'
-import {
-  resolveRoomCallJoinFailureMessage,
-  resolveRoomCallStartFailureMessage
-} from '../lib/resolve-room-call-session-failure-message'
 import { isRoomCallBlockingStartForUser, isRoomCallUnfinished } from '../lib/room-call-start-availability'
 
 import { useRoomCallLocalMedia } from './use-room-call-local-media.model'
@@ -100,7 +96,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
         .join('|') ?? ''
   )
   const activeRoomCallFinished = computed(() => {
-    const isFinishedStatus = activeRoomCall.value?.status === ROOM_CALL_STATUS.FINISHED
+    const isFinishedStatus = activeRoomCall.value?.status === 'finished'
     const hasFinishedAt = Boolean(activeRoomCall.value?.finishedAt)
 
     return isFinishedStatus || hasFinishedAt
@@ -154,12 +150,24 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     })
   }
 
-  const showRoomCallAckFailure = (response: SocketAckFailure<RoomCallAckFailureReason>, content: string) => {
+  const resolveRoomCallAckFailureMessage = (response: SocketAckFailure<RoomCallAckFailureReason>) => {
+    if (response.message?.silent) return ''
+    if (response.message?.text) return response.message.text
+    if (response.handledByGlobalError) return ''
+
+    return t(API_I18N.operationFailed)
+  }
+
+  const showRoomCallAckFailure = (response: SocketAckFailure<RoomCallAckFailureReason>) => {
     if (response.handledByGlobalError && !response.reason) {
       return
     }
 
-    showRoomCallSessionError(content)
+    const message = resolveRoomCallAckFailureMessage(response)
+
+    if (message) {
+      showRoomCallSessionError(message)
+    }
   }
 
   const syncActiveRoomCallMediaState = async () => {
@@ -226,7 +234,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
 
       if (!response.ok) {
         stopRoomCallLocalMedia()
-        showRoomCallAckFailure(response, t(resolveRoomCallStartFailureMessage(response.reason)))
+        showRoomCallAckFailure(response)
         return null
       }
 
@@ -253,7 +261,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       const response = await joinRoomCall(roomCallId)
 
       if (!response.ok) {
-        showRoomCallAckFailure(response, t(resolveRoomCallJoinFailureMessage(response.reason)))
+        showRoomCallAckFailure(response)
         return null
       }
 
@@ -271,7 +279,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       return roomCall
     } catch (error) {
       log('error', 'Join room call failed', error)
-      await leaveRoomCall(roomCallId, ROOM_CALL_LEAVE_REASON.LEFT)
+      await leaveRoomCall(roomCallId, 'left')
       clearActiveRoomCallSessionState()
       showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallJoinFailed))
       return null
@@ -280,7 +288,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     }
   }
 
-  const leaveActiveRoomCall = async (reason = ROOM_CALL_LEAVE_REASON.LEFT) => {
+  const leaveActiveRoomCall = async (reason: RoomCallLeaveReason = 'left') => {
     const roomCallId = activeRoomCallId.value
 
     if (!roomCallId) {

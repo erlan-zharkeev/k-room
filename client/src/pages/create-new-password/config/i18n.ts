@@ -1,6 +1,6 @@
-import { defineI18n } from 'global-shared'
+import { defineI18n } from 'src/shared/lib'
 
-export const CREATE_NEW_PASSWORD_I18N = defineI18n({
+export const CREATE_NEW_PASSWORD_I18N = defineI18n('createNewPassword', {
   title: {
     en: 'Create new password',
     ru: 'Создание нового пароля',
@@ -30,11 +30,6 @@ export const CREATE_NEW_PASSWORD_I18N = defineI18n({
     en: "Passwords don't match",
     ru: 'Пароли не совпадают',
     zh: '两次输入的密码不一致'
-  },
-  success: {
-    en: 'Password changed successfully',
-    ru: 'Пароль успешно изменён',
-    zh: '密码修改成功'
   },
   changePassword: {
     en: 'Change password',

@@ -1,4 +1,4 @@
-import { ROOM_CALL_SIGNAL_KIND, type EventRoomCallSignalReceived } from 'global-shared'
+import { type EventRoomCallSignalReceived, type RoomCallSignalKind } from 'global-shared'
 import { shallowRef } from 'vue'
 
 import { ROOM_CALL_RTC_CONFIGURATION } from '../config/constants'
@@ -38,12 +38,7 @@ export const useRoomCallPeerManager = () => {
     remoteStreamsByUserId.value = remoteStreams
   }
 
-  const sendPeerSignal = (
-    roomCallId: string,
-    toUserId: string,
-    signalKind: (typeof ROOM_CALL_SIGNAL_KIND)[keyof typeof ROOM_CALL_SIGNAL_KIND],
-    signal: unknown
-  ) => {
+  const sendPeerSignal = (roomCallId: string, toUserId: string, signalKind: RoomCallSignalKind, signal: unknown) => {
     sendRoomCallSignal({
       roomCallId,
       signal,
@@ -111,7 +106,7 @@ export const useRoomCallPeerManager = () => {
     syncRoomCallPeerLocalTracks(peerConnection, localStreams)
     peerConnection.addEventListener('icecandidate', ({ candidate }) => {
       if (candidate) {
-        sendPeerSignal(roomCallId, userId, ROOM_CALL_SIGNAL_KIND.ICE_CANDIDATE, candidate.toJSON())
+        sendPeerSignal(roomCallId, userId, 'ice-candidate', candidate.toJSON())
       }
     })
     peerConnection.addEventListener('track', ({ track }) => {
@@ -147,14 +142,14 @@ export const useRoomCallPeerManager = () => {
     const offer = await peerConnection.createOffer()
 
     await peerConnection.setLocalDescription(offer)
-    sendPeerSignal(roomCallId, toUserId, ROOM_CALL_SIGNAL_KIND.OFFER, offer)
+    sendPeerSignal(roomCallId, toUserId, 'offer', offer)
   }
 
   const answerRoomCallPeerOffer = async (
     payload: EventRoomCallSignalReceived,
     localStreams: RoomCallLocalMediaStreamList
   ) => {
-    if (!isRoomCallSessionDescriptionSignal(payload.signal, ROOM_CALL_SIGNAL_KIND.OFFER)) {
+    if (!isRoomCallSessionDescriptionSignal(payload.signal, 'offer')) {
       return
     }
 
@@ -166,13 +161,13 @@ export const useRoomCallPeerManager = () => {
 
     await peerConnection.setLocalDescription(answer)
     await flushRoomCallPeerIceCandidates(payload.fromUserId, peerConnection)
-    sendPeerSignal(payload.roomCallId, payload.fromUserId, ROOM_CALL_SIGNAL_KIND.ANSWER, answer)
+    sendPeerSignal(payload.roomCallId, payload.fromUserId, 'answer', answer)
   }
 
   const acceptRoomCallPeerAnswer = async (payload: EventRoomCallSignalReceived) => {
     const peerConnection = peerConnectionByUserId.get(payload.fromUserId)
 
-    if (!peerConnection || !isRoomCallSessionDescriptionSignal(payload.signal, ROOM_CALL_SIGNAL_KIND.ANSWER)) {
+    if (!peerConnection || !isRoomCallSessionDescriptionSignal(payload.signal, 'answer')) {
       return
     }
 
@@ -205,13 +200,13 @@ export const useRoomCallPeerManager = () => {
     }
 
     switch (payload.signalKind) {
-      case ROOM_CALL_SIGNAL_KIND.OFFER:
+      case 'offer':
         await answerRoomCallPeerOffer(payload, localStreams)
         break
-      case ROOM_CALL_SIGNAL_KIND.ANSWER:
+      case 'answer':
         await acceptRoomCallPeerAnswer(payload)
         break
-      case ROOM_CALL_SIGNAL_KIND.ICE_CANDIDATE:
+      case 'ice-candidate':
         await addRoomCallPeerIceCandidate(payload)
         break
     }

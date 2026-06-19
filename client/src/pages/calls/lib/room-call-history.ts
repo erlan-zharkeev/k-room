@@ -1,28 +1,27 @@
-import { ROOM_CALL_MEDIA_KIND, type RoomCall, type RoomCallMediaKind } from 'global-shared'
+import { type RoomCall, type RoomCallMediaKind } from 'global-shared'
 
-import { ROOM_CALL_HISTORY_STATUS_KIND } from '../config/constants'
 import { CALLS_PAGE_I18N } from '../config/i18n'
 import type { RoomCallHistoryItem, RoomCallHistoryStatusKind } from '../config/types'
 
 import { isRoomCallActive, isRoomCallMissed } from './resolve-room-call-state'
 
 export const resolveRoomCallHistoryStatusKind = (roomCall: RoomCall): RoomCallHistoryStatusKind => {
-  if (isRoomCallActive(roomCall)) return ROOM_CALL_HISTORY_STATUS_KIND.ACTIVE
-  if (isRoomCallMissed(roomCall)) return ROOM_CALL_HISTORY_STATUS_KIND.MISSED
+  if (isRoomCallActive(roomCall)) return 'active'
+  if (isRoomCallMissed(roomCall)) return 'missed'
 
-  return ROOM_CALL_HISTORY_STATUS_KIND.FINISHED
+  return 'finished'
 }
 
 export const resolveRoomCallHistoryStatusI18n = (statusKind: RoomCallHistoryStatusKind) => {
-  if (statusKind === ROOM_CALL_HISTORY_STATUS_KIND.ACTIVE) return CALLS_PAGE_I18N.activeCall
-  if (statusKind === ROOM_CALL_HISTORY_STATUS_KIND.MISSED) return CALLS_PAGE_I18N.missedCall
+  if (statusKind === 'active') return CALLS_PAGE_I18N.activeCall
+  if (statusKind === 'missed') return CALLS_PAGE_I18N.missedCall
 
   return CALLS_PAGE_I18N.finishedCall
 }
 
 export const resolveRoomCallHistoryMediaI18n = (mediaKind: RoomCallMediaKind) => {
-  if (mediaKind === ROOM_CALL_MEDIA_KIND.AUDIO) return CALLS_PAGE_I18N.audioCall
-  if (mediaKind === ROOM_CALL_MEDIA_KIND.VIDEO) return CALLS_PAGE_I18N.videoCall
+  if (mediaKind === 'audio') return CALLS_PAGE_I18N.audioCall
+  if (mediaKind === 'video') return CALLS_PAGE_I18N.videoCall
 
   return CALLS_PAGE_I18N.screenCall
 }

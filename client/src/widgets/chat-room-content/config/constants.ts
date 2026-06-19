@@ -2,77 +2,60 @@ import {
   MB_IN_BYTES,
   MEDIA_KIND_ALLOWED_UPLOAD_TYPES_MAP,
   MEDIA_VALIDATION_OPTIONS_MAP,
-  MESSAGE_STATUS_VALUE
+  type MessageStatus,
+  type RoomCallTemporaryQuickCommand
 } from 'global-shared'
 
 import { CHAT_ROOM_CONTENT_I18N } from './i18n'
+import type { MessageStatusDotTone, RoomCallPanelDisplayMode, RoomCallQuickCommand } from './types'
 
 export const ROOM_MESSAGES_PAGE_LIMIT = 30
 export const ROOM_MESSAGES_PRELOAD_EDGE_ITEMS = 20
 export const CHAT_ROOM_CONTENT_VIEW_QUERY_KEY = 'chat-view'
-export const CHAT_ROOM_CONTENT_VIEW = {
-  TEXT: 'text',
-  CALL: 'call'
-} as const
-export const ROOM_CALL_PANEL_DISPLAY_MODE = {
-  FOCUS: 'focus',
-  GRID: 'grid'
-} as const
-export const ROOM_CALL_TILE_KIND = {
-  PARTICIPANT: 'participant',
-  SCREEN: 'screen'
-} as const
-export const ROOM_CALL_TILE_MEDIA_FIT = {
-  CONTAIN: 'contain',
-  COVER: 'cover'
-} as const
 export const ROOM_CALL_SCREEN_TILE_ID_SUFFIX = 'screen'
 export const ROOM_CALL_PANEL_GRID_ROWS_PER_COLUMN = 2
 export const ROOM_CALL_PANEL_DISPLAY_MODE_TOGGLE_I18N = {
-  [ROOM_CALL_PANEL_DISPLAY_MODE.FOCUS]: CHAT_ROOM_CONTENT_I18N.roomCallGridDisplayMode,
-  [ROOM_CALL_PANEL_DISPLAY_MODE.GRID]: CHAT_ROOM_CONTENT_I18N.roomCallFocusDisplayMode
-} as const
-export const ROOM_CALL_TILE_REMOTE_ACTION_TEXT = {
-  HIDE: 'hide',
-  MUTE: 'mute',
-  SHOW: 'show',
-  UNMUTE: 'unmute'
-} as const
-export const ROOM_CALL_QUICK_COMMAND = {
-  NO: 'no',
-  OK: 'ok',
-  RAISE_HAND: 'raise-hand',
-  YES: 'yes'
-} as const
+  focus: CHAT_ROOM_CONTENT_I18N.roomCallGridDisplayMode,
+  grid: CHAT_ROOM_CONTENT_I18N.roomCallFocusDisplayMode
+} as const satisfies Record<
+  RoomCallPanelDisplayMode,
+  (typeof CHAT_ROOM_CONTENT_I18N)[keyof typeof CHAT_ROOM_CONTENT_I18N]
+>
 export const ROOM_CALL_QUICK_COMMANDS = [
   {
     i18n: CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandRaiseHand,
-    id: ROOM_CALL_QUICK_COMMAND.RAISE_HAND
+    id: 'raise-hand'
   },
   {
     i18n: CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandOk,
-    id: ROOM_CALL_QUICK_COMMAND.OK
+    id: 'ok'
   },
   {
     i18n: CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandYes,
-    id: ROOM_CALL_QUICK_COMMAND.YES
+    id: 'yes'
   },
   {
     i18n: CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandNo,
-    id: ROOM_CALL_QUICK_COMMAND.NO
+    id: 'no'
   }
-] as const
+] as const satisfies readonly {
+  i18n: (typeof CHAT_ROOM_CONTENT_I18N)[keyof typeof CHAT_ROOM_CONTENT_I18N]
+  id: RoomCallQuickCommand
+}[]
 export const ROOM_CALL_QUICK_COMMANDS_TOGGLE_I18N = CHAT_ROOM_CONTENT_I18N.roomCallQuickCommands
 export const ROOM_CALL_TEMPORARY_QUICK_COMMAND_I18N_BY_COMMAND = {
-  [ROOM_CALL_QUICK_COMMAND.NO]: CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandNo,
-  [ROOM_CALL_QUICK_COMMAND.OK]: CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandOk,
-  [ROOM_CALL_QUICK_COMMAND.YES]: CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandYes
-} as const
+  no: CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandNo,
+  ok: CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandOk,
+  yes: CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandYes
+} as const satisfies Record<
+  RoomCallTemporaryQuickCommand,
+  (typeof CHAT_ROOM_CONTENT_I18N)[keyof typeof CHAT_ROOM_CONTENT_I18N]
+>
 export const ROOM_CALL_TEMPORARY_QUICK_COMMAND_TEXT_COLOR_BY_COMMAND = {
-  [ROOM_CALL_QUICK_COMMAND.NO]: 'error-text',
-  [ROOM_CALL_QUICK_COMMAND.OK]: 'accent',
-  [ROOM_CALL_QUICK_COMMAND.YES]: 'success'
-} as const
+  no: 'error-text',
+  ok: 'accent',
+  yes: 'success'
+} as const satisfies Record<RoomCallTemporaryQuickCommand, string>
 export const ROOM_CALL_QUICK_COMMAND_ICON_SIZE = '20px'
 export const ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE = '20px'
 export const ROOM_CALL_TILE_STATE_ICON_SIZE = '16px'
@@ -91,20 +74,6 @@ export const MESSAGE_MEDIA_GALLERY_ITEM_MAX_ASPECT_RATIO = 2.2
 export const MESSAGE_REACTION_VISIBLE_GROUP_LIMIT = 3
 export const MESSAGE_REACTION_VISIBLE_USER_LIMIT = 3
 export const MESSAGE_CONTEXT_MENU_WIDTH = 274
-export const MESSAGE_CONTEXT_MENU_TRIGGER = {
-  CONTEXT_MENU: 'contextmenu',
-  LONG_PRESS: 'longpress'
-} as const
-export const MESSAGE_ATTACHMENT_DRAFT_KIND = {
-  IMAGE: 'image',
-  DOCUMENT: 'document',
-  AUDIO: 'audio',
-  VIDEO: 'video'
-} as const
-export const MESSAGE_MEDIA_GALLERY_ITEM_KIND = {
-  IMAGE: 'image',
-  VIDEO: 'video'
-} as const
 export const MESSAGE_ATTACHMENT_DRAFT_IMAGE_SIZE_PX = 56
 export const MESSAGE_ATTACHMENT_FILE_CARD_HEIGHT_PX = 60
 export const MESSAGE_ATTACHMENT_SCROLL_X_BAR_WIDTH_PX = 6
@@ -137,40 +106,17 @@ export const MESSAGE_DOCUMENT_MAX_MB = MEDIA_VALIDATION_OPTIONS_MAP.doc.maxMb
 export const MESSAGE_DOCUMENT_MAX_FILE_SIZE = MESSAGE_DOCUMENT_MAX_MB * MB_IN_BYTES
 export const MESSAGE_IMAGE_MAX_MB = MEDIA_VALIDATION_OPTIONS_MAP.image.maxMb
 export const MESSAGE_IMAGE_MAX_FILE_SIZE = MESSAGE_IMAGE_MAX_MB * MB_IN_BYTES
-export const MESSAGE_CONTEXT_MENU_ACTION = {
-  COPY_TEXT: 'copy-text',
-  EDIT_MESSAGE: 'edit-message',
-  REPLY_MESSAGE: 'reply-message',
-  FORWARD_MESSAGE: 'forward-message',
-  REACTION_PICKER: 'reaction-picker',
-  PIN_MESSAGE: 'pin-message',
-  UNPIN_MESSAGE: 'unpin-message',
-  DELETE_MESSAGE: 'delete-message'
-} as const
-export const MESSAGE_DRAFT_REFERENCE_KIND = {
-  REPLY: 'reply',
-  FORWARD: 'forward'
-} as const
-export const MESSAGE_STATUS_DOT_TONE = {
-  TEXT: 'text',
-  ACCENT: 'accent',
-  ERROR: 'error'
-} as const
-export const MESSAGE_TEXT_SEGMENT_KIND = {
-  TEXT: 'text',
-  LINK: 'link'
-} as const
 export const MESSAGE_STATUS_DOT_COUNT_BY_STATUS = {
-  [MESSAGE_STATUS_VALUE.SENDING]: 1,
-  [MESSAGE_STATUS_VALUE.UNDELIVERED]: 1,
-  [MESSAGE_STATUS_VALUE.DELIVERED]: 1,
-  [MESSAGE_STATUS_VALUE.READ]: 2,
-  [MESSAGE_STATUS_VALUE.NONE]: 0
-} as const
+  sending: 1,
+  undelivered: 1,
+  delivered: 1,
+  read: 2,
+  none: 0
+} as const satisfies Record<MessageStatus, number>
 export const MESSAGE_STATUS_DOT_TONE_BY_STATUS = {
-  [MESSAGE_STATUS_VALUE.SENDING]: MESSAGE_STATUS_DOT_TONE.TEXT,
-  [MESSAGE_STATUS_VALUE.UNDELIVERED]: MESSAGE_STATUS_DOT_TONE.ERROR,
-  [MESSAGE_STATUS_VALUE.DELIVERED]: MESSAGE_STATUS_DOT_TONE.TEXT,
-  [MESSAGE_STATUS_VALUE.READ]: MESSAGE_STATUS_DOT_TONE.ACCENT,
-  [MESSAGE_STATUS_VALUE.NONE]: MESSAGE_STATUS_DOT_TONE.TEXT
-} as const
+  sending: 'text',
+  undelivered: 'error',
+  delivered: 'text',
+  read: 'accent',
+  none: 'text'
+} as const satisfies Record<MessageStatus, MessageStatusDotTone>

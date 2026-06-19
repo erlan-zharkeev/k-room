@@ -1,4 +1,4 @@
-import { CHAT_KIND, type EventGetRoom, getRoomInterlocutorId, isRoomPrivate } from 'global-shared'
+import { type EventGetRoom, getRoomInterlocutorId, isRoomPrivate } from 'global-shared'
 
 import { countUnreadMessagesByIds, loadMessageById } from 'src/modules/messages/lib/message-persistence'
 import { resolveVisibleMessageIds } from 'src/modules/messages/lib/resolve-visible-message-ids'
@@ -28,7 +28,7 @@ export const transformRoomForUser = async ({
   } = normalizedRoom
   const roomId = stringifyMongoId(_id)
   const users = stringifyMongoIds(roomUsers)
-  const chatKind = roomChatKind ?? (roomUsers.length > 2 ? CHAT_KIND.GROUP : CHAT_KIND.DIRECT)
+  const chatKind = roomChatKind ?? (roomUsers.length > 2 ? 'group' : 'direct')
   const isDirectRoom = isRoomPrivate({ chatKind })
   const interlocutorId = isDirectRoom ? getRoomInterlocutorId({ users }, userId) : ''
   const interlocutor = isDirectRoom ? await loadUserPublicById(interlocutorId) : null

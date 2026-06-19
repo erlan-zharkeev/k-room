@@ -4,7 +4,6 @@ import { E2E_ENV } from 'e2e/config'
 import { dismissFirstRunOverlays } from 'e2e/shared/app'
 import { signInWithProvider } from 'e2e/shared/auth'
 
-const CHAT_ROOMS_PAGE_PATH = '/app/chat-rooms'
 const CONTACTS_PAGE_PATH = '/app/contacts'
 const CONTACTS_SEARCH_PLACEHOLDER = 'Search contact'
 const CONTACT_ACTIONS_BUTTON_NAME = 'Contact actions'

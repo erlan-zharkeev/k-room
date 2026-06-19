@@ -1,6 +1,6 @@
 import { isString, isUnknownObject } from 'global-shared'
 
-import { loadStorageEstimate } from '../storage/storage'
+import { loadStorageEstimate } from '../storage/storage.model'
 
 import { DEXIE_CACHE_TRIM_EVENT_COOLDOWN_MS, DEXIE_QUOTA_ERROR_NAME_SET } from './constants'
 import type { DexieCacheTrimEvent, DexieCacheTrimEventKind, DexieCacheTrimmer, DexieErrorLike } from './types'

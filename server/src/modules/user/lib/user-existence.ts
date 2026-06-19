@@ -1,7 +1,7 @@
 import { normalizeNicknameKey } from 'global-shared'
 
-import type { CreateUserParams, UserExistParams, UserExistState } from '../types'
 import { UserModel } from '../user.model'
+import type { CreateUserParams, UserExistParams, UserExistState } from '../user.types'
 
 export const isUserExist = async ({ nickname, email, id }: UserExistParams): Promise<UserExistState> => {
   const normalizedNickname = normalizeNicknameKey(nickname)

@@ -1,3 +1,12 @@
 import type { LocalizedText } from 'global-shared'
 
-export type I18nTranslate = <T>(value: LocalizedText<T>) => T
+import type { I18nKey, I18nNamedValues } from './define-i18n'
+
+export interface I18nTranslate {
+  (key: I18nKey, named?: I18nNamedValues): string
+  <T>(value: LocalizedText<T>): T
+}
+
+export interface UseI18nResult {
+  t: I18nTranslate
+}

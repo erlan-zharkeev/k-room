@@ -2,7 +2,6 @@ import { randomUUID } from 'crypto'
 
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common'
 import {
-  ROOM_CALL_ACK_FAILURE_REASON,
   type EventDeclineRoomCall,
   type EventJoinRoomCall,
   type EventLeaveRoomCall,
@@ -22,12 +21,12 @@ import type { SocketInstance } from 'src/shared/types'
 
 import { RedisService } from '../security/redis.service'
 
+import { cleanupStaleRoomCallParticipants } from './lib/cleanup-stale-room-call-participants'
+import { saveRoomCallServerInstanceHeartbeat } from './lib/room-call-active-state'
 import {
   ROOM_CALL_SERVER_INSTANCE_HEARTBEAT_INTERVAL_MS,
   ROOM_CALL_STALE_PARTICIPANT_CLEANUP_INTERVAL_MS
-} from './constants'
-import { cleanupStaleRoomCallParticipants } from './lib/cleanup-stale-room-call-participants'
-import { saveRoomCallServerInstanceHeartbeat } from './lib/room-call-active-state'
+} from './room-calls.constants'
 import { ROOM_CALLS_I18N } from './room-calls.i18n'
 import {
   declineRoomCall,
@@ -100,7 +99,7 @@ export class RoomCallsSocketService implements OnModuleInit, OnModuleDestroy {
           )
 
           if (!result) {
-            return { ok: false, reason: ROOM_CALL_ACK_FAILURE_REASON.JOIN_FAILED }
+            return { ok: false, reason: 'join-failed' }
           }
 
           return {

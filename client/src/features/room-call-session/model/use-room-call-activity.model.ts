@@ -1,4 +1,4 @@
-import { ROOM_CALL_MEDIA_KIND, type RoomCall, type RoomCallMediaKind } from 'global-shared'
+import { type RoomCall, type RoomCallMediaKind } from 'global-shared'
 import { computed, ref, watch } from 'vue'
 
 import { getRoomOtherUserIds, isRoomPrivate, useChatRoom } from 'src/entities/chat-room'
@@ -9,7 +9,7 @@ import { useUser } from 'src/entities/user'
 import { socketStatus } from 'src/shared/api'
 import { useI18n } from 'src/shared/lib'
 
-import { ROOM_CALL_ACTIVITY_DOT_COLOR_BY_KIND, ROOM_CALL_ACTIVITY_KIND } from '../config/constants'
+import { ROOM_CALL_ACTIVITY_DOT_COLOR_BY_KIND } from '../config/constants'
 import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
 import type { RoomCallActivityItem, RoomCallActivityRoomTitleUser, UseRoomCallActivityParams } from '../config/types'
 import {
@@ -98,7 +98,7 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
         roomCall
       })
 
-      return kind === ROOM_CALL_ACTIVITY_KIND.INCOMING
+      return kind === 'incoming'
     })
   )
   const outgoingRoomCall = computed(() =>
@@ -109,7 +109,7 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
         roomCall
       })
 
-      return kind === ROOM_CALL_ACTIVITY_KIND.OUTGOING
+      return kind === 'outgoing'
     })
   )
   const joinableRoomCall = computed(() =>
@@ -120,7 +120,7 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
         roomCall
       })
 
-      return kind === ROOM_CALL_ACTIVITY_KIND.JOINABLE
+      return kind === 'joinable'
     })
   )
 
@@ -143,17 +143,17 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
     const avatarId = isPrivateRoom ? titleUser?.avatarId ?? null : room.avatarId
     const textSource = resolveRoomCallActivityI18n({ isPrivateRoom, kind })
     const activeParticipantQuantity = resolveActiveRoomCallParticipantQuantity(roomCall)
-    const participantText = t(ROOM_CALL_SESSION_I18N.roomCallParticipants)(activeParticipantQuantity)
+    const participantText = t(ROOM_CALL_SESSION_I18N.roomCallParticipants, { quantity: activeParticipantQuantity })
     const text = buildRoomCallActivityText({
       activeParticipantQuantity,
       isPrivateRoom,
       participantText,
-      text: t(textSource)(title)
+      text: t(textSource, { title: title })
     })
-    const canJoin = kind === ROOM_CALL_ACTIVITY_KIND.INCOMING || kind === ROOM_CALL_ACTIVITY_KIND.JOINABLE
-    const canLeaveActiveRoomCall = kind === ROOM_CALL_ACTIVITY_KIND.ACTIVE
-    const canLeaveIncomingRoomCall = kind === ROOM_CALL_ACTIVITY_KIND.INCOMING
-    const canLeaveOutgoingRoomCall = kind === ROOM_CALL_ACTIVITY_KIND.OUTGOING
+    const canJoin = kind === 'incoming' || kind === 'joinable'
+    const canLeaveActiveRoomCall = kind === 'active'
+    const canLeaveIncomingRoomCall = kind === 'incoming'
+    const canLeaveOutgoingRoomCall = kind === 'outgoing'
     const canLeave = canLeaveActiveRoomCall || canLeaveIncomingRoomCall || canLeaveOutgoingRoomCall
 
     return {
@@ -254,8 +254,8 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
     }
   }
 
-  const joinCurrentRoomCallWithAudio = () => joinCurrentRoomCall(ROOM_CALL_MEDIA_KIND.AUDIO)
-  const joinCurrentRoomCallWithVideo = () => joinCurrentRoomCall(ROOM_CALL_MEDIA_KIND.VIDEO)
+  const joinCurrentRoomCallWithAudio = () => joinCurrentRoomCall('audio')
+  const joinCurrentRoomCallWithVideo = () => joinCurrentRoomCall('video')
   const leaveCurrentRoomCall = async () => {
     const item = activityItem.value
 
@@ -263,7 +263,7 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
       return false
     }
 
-    const isIncomingRoomCall = item.kind === ROOM_CALL_ACTIVITY_KIND.INCOMING
+    const isIncomingRoomCall = item.kind === 'incoming'
     const isSessionBusyForLeave = isRoomCallSessionBusy.value && !isIncomingRoomCall
     const cannotLeaveRoomCall = !item.canLeave
     const isDeclineInProgress = isDecliningRoomCall.value
@@ -296,7 +296,7 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
   })
   const isActivityLeaveLoading = computed(() => {
     const item = activityItem.value
-    const isIncomingRoomCall = item?.kind === ROOM_CALL_ACTIVITY_KIND.INCOMING
+    const isIncomingRoomCall = item?.kind === 'incoming'
 
     return isIncomingRoomCall ? isDecliningRoomCall.value : isLeavingRoomCall.value
   })

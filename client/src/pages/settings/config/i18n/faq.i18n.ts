@@ -1,4 +1,5 @@
-export const SETTINGS_PAGE_FAQ_I18N = {
+import { defineI18n, i18nFormatter } from 'src/shared/lib'
+export const SETTINGS_PAGE_FAQ_I18N = defineI18n('settingsPageFaq', {
   faq: {
     en: 'FAQ',
     ru: 'FAQ',
@@ -135,12 +136,21 @@ export const SETTINGS_PAGE_FAQ_I18N = {
     zh: '为什么清除存储后媒体会重新加载？'
   },
   faqA11: {
-    en: (appName: string) =>
-      `${appName} keeps downloaded media in local cache so chats open faster. If you clear storage, messages stay in your chats, but images, documents, audio and video will be downloaded again when needed.`,
-    ru: (appName: string) =>
-      `${appName} хранит загруженные медиа в локальном кеше, чтобы чаты открывались быстрее. После очистки хранилища сообщения остаются в чатах, но изображения, документы, аудио и видео будут загружены заново при необходимости.`,
-    zh: (appName: string) =>
-      `${appName} 会把已下载的媒体保存在本地缓存中，让聊天打开得更快。清除存储后，消息仍会保留，但图片、文档、音频和视频会在需要时重新下载。`
+    en: i18nFormatter(
+      ['appName'],
+      (appName: string) =>
+        `${appName} keeps downloaded media in local cache so chats open faster. If you clear storage, messages stay in your chats, but images, documents, audio and video will be downloaded again when needed.`
+    ),
+    ru: i18nFormatter(
+      ['appName'],
+      (appName: string) =>
+        `${appName} хранит загруженные медиа в локальном кеше, чтобы чаты открывались быстрее. После очистки хранилища сообщения остаются в чатах, но изображения, документы, аудио и видео будут загружены заново при необходимости.`
+    ),
+    zh: i18nFormatter(
+      ['appName'],
+      (appName: string) =>
+        `${appName} 会把已下载的媒体保存在本地缓存中，让聊天打开得更快。清除存储后，消息仍会保留，但图片、文档、音频和视频会在需要时重新下载。`
+    )
   },
   faqQ12: {
     en: 'What does persistent storage do?',
@@ -178,12 +188,21 @@ export const SETTINGS_PAGE_FAQ_I18N = {
     zh: '在哪里检查麦克风、摄像头和屏幕共享权限？'
   },
   faqA15: {
-    en: (appName: string) =>
-      `First check Settings → Devices in ${appName} and the site permissions in the browser address bar. On Windows, open Start → Settings → Privacy & security → Microphone or Camera, then enable device access and desktop app access for the browser. On macOS, open Apple menu → System Settings → Privacy & Security → Microphone, Camera, and Screen & System Audio Recording, then allow your browser.`,
-    ru: (appName: string) =>
-      `Сначала проверьте Настройки → Устройства в ${appName} и разрешения сайта в адресной строке браузера. На Windows: Пуск → Параметры → Конфиденциальность и безопасность → Микрофон или Камера; включите доступ к устройству и доступ для классических приложений/браузера. На macOS: меню Apple → Системные настройки → Конфиденциальность и безопасность → Микрофон, Камера, Запись экрана и системного аудио; разрешите доступ браузеру.`,
-    zh: (appName: string) =>
-      `先检查 ${appName} 的设置 → 设备，以及浏览器地址栏中的网站权限。在 Windows 上，打开开始 → 设置 → 隐私和安全性 → 麦克风或摄像头，然后为浏览器启用设备访问和桌面应用访问。在 macOS 上，打开 Apple 菜单 → 系统设置 → 隐私与安全性 → 麦克风、摄像头、屏幕与系统音频录制，然后允许浏览器访问。`
+    en: i18nFormatter(
+      ['appName'],
+      (appName: string) =>
+        `First check Settings → Devices in ${appName} and the site permissions in the browser address bar. On Windows, open Start → Settings → Privacy & security → Microphone or Camera, then enable device access and desktop app access for the browser. On macOS, open Apple menu → System Settings → Privacy & Security → Microphone, Camera, and Screen & System Audio Recording, then allow your browser.`
+    ),
+    ru: i18nFormatter(
+      ['appName'],
+      (appName: string) =>
+        `Сначала проверьте Настройки → Устройства в ${appName} и разрешения сайта в адресной строке браузера. На Windows: Пуск → Параметры → Конфиденциальность и безопасность → Микрофон или Камера; включите доступ к устройству и доступ для классических приложений/браузера. На macOS: меню Apple → Системные настройки → Конфиденциальность и безопасность → Микрофон, Камера, Запись экрана и системного аудио; разрешите доступ браузеру.`
+    ),
+    zh: i18nFormatter(
+      ['appName'],
+      (appName: string) =>
+        `先检查 ${appName} 的设置 → 设备，以及浏览器地址栏中的网站权限。在 Windows 上，打开开始 → 设置 → 隐私和安全性 → 麦克风或摄像头，然后为浏览器启用设备访问和桌面应用访问。在 macOS 上，打开 Apple 菜单 → 系统设置 → 隐私与安全性 → 麦克风、摄像头、屏幕与系统音频录制，然后允许浏览器访问。`
+    )
   },
   faqQ16: {
     en: 'How do I change my email?',
@@ -305,4 +324,4 @@ export const SETTINGS_PAGE_FAQ_I18N = {
     ru: 'В Настройках → Уведомления можно включить или отключить все уведомления сразу либо настроить отдельные каналы: тосты, звук, вибрацию, браузерные push и нативные push для сообщений и звонков.',
     zh: '在设置 → 通知中，可以开启或关闭所有通知，也可以分别配置消息和通话的应用内提示、声音、振动、浏览器推送和原生推送。'
   }
-} as const
+})

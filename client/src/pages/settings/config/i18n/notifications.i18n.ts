@@ -1,4 +1,5 @@
-export const SETTINGS_PAGE_NOTIFICATIONS_I18N = {
+import { defineI18n } from 'src/shared/lib'
+export const SETTINGS_PAGE_NOTIFICATIONS_I18N = defineI18n('settingsPageNotifications', {
   general: {
     en: 'General',
     ru: 'Общие',
@@ -164,4 +165,4 @@ export const SETTINGS_PAGE_NOTIFICATIONS_I18N = {
     ru: 'Push-уведомления приложения для звонков',
     zh: '通话原生应用推送通知'
   }
-} as const
+})

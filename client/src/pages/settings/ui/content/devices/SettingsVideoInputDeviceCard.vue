@@ -8,7 +8,6 @@ import {
   NmorphSelect,
   NmorphMediaTile
 } from '@nmorph/nmorph-ui-kit'
-import { computed } from 'vue'
 
 import { AppText } from 'src/shared/ui'
 
@@ -26,15 +25,10 @@ const {
   hasVideoInputPermissionWarning,
   videoInputStream,
   isVideoInputChecking,
+  videoInputCheckLabel,
   setVideoInputChecking,
   setSelectedVideoInputDevice
 } = useVideoInputDevice()
-
-const videoInputCheckLabel = computed(() =>
-  isVideoInputChecking.value
-    ? SETTINGS_PAGE_DEVICES_I18N.stopVideoInputCheck
-    : SETTINGS_PAGE_DEVICES_I18N.testVideoInput
-)
 </script>
 
 <template>

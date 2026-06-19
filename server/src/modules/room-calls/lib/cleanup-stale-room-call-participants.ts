@@ -1,5 +1,3 @@
-import { ROOM_CALL_LEAVE_REASON, ROOM_CALL_STATUS } from 'global-shared'
-
 import type { RedisService } from 'src/modules/security/redis.service'
 
 import type { RoomCallActiveState } from '../room-calls.types'
@@ -10,7 +8,7 @@ import { resolveActiveRoomCallParticipants } from './room-call-participant'
 
 const isFinishedRoomCall = ({ finishedAt, status }: RoomCallActiveState) => {
   const hasFinishedAt = Boolean(finishedAt)
-  const isFinishedStatus = status === ROOM_CALL_STATUS.FINISHED
+  const isFinishedStatus = status === 'finished'
 
   return hasFinishedAt || isFinishedStatus
 }
@@ -27,13 +25,7 @@ export const cleanupStaleRoomCall = async (redisService: RedisService, roomCall:
   const staleParticipants = activeParticipants.filter((_participant, index) => !participantInstanceStates[index])
 
   for (const participant of staleParticipants) {
-    await leaveRoomCallParticipant(
-      redisService,
-      roomCall,
-      participant.userId,
-      participant.socketId,
-      ROOM_CALL_LEAVE_REASON.DISCONNECTED
-    )
+    await leaveRoomCallParticipant(redisService, roomCall, participant.userId, participant.socketId, 'disconnected')
   }
 
   return staleParticipants.length > 0

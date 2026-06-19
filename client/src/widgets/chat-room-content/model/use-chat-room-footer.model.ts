@@ -1,10 +1,4 @@
-import {
-  MESSAGE_BODY_MAX_LENGTH,
-  MESSAGE_STATUS_VALUE,
-  type ChatRoom,
-  type EventSendMessage,
-  type Message
-} from 'global-shared'
+import { MESSAGE_BODY_MAX_LENGTH, type ChatRoom, type EventSendMessage, type Message } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 import { computed, type Ref, ref } from 'vue'
 
@@ -149,7 +143,7 @@ export const useChatRoomFooter = (room: Ref<ChatRoom>, onSelectEditingMessage: C
       body,
       createdAt: Date.now(),
       isSelf: true,
-      status: MESSAGE_STATUS_VALUE.SENDING,
+      status: 'sending',
       reactions: [],
       images,
       documents,

@@ -1,4 +1,4 @@
-import { socket } from 'src/shared/api'
+import { registerSocketEventListeners } from 'src/shared/api'
 
 import { useMessageSync } from './use-message-sync.model'
 
@@ -13,27 +13,24 @@ export const useMessageMonitor = () => {
     updateMessageStatus,
     updateMessagesStatus
   } = useMessageSync()
+  let disposeMessageMonitorListeners: (() => void) | null = null
 
   const initializeMessageMonitor = () => {
-    socket.on('message-deleted', handleMessageDeleted)
-    socket.on('message-delivered', handleDeliveredMessage)
-    socket.on('message-edited', handleMessageEdited)
-    socket.on('message-link-preview-updated', handleMessageLinkPreviewUpdated)
-    socket.on('message-reaction-updated', handleMessageReactionUpdate)
-    socket.on('pinned-message-updated', handlePinnedMessageUpdated)
-    socket.on('message-status-updated', updateMessageStatus)
-    socket.on('messages-status-updated', updateMessagesStatus)
+    disposeMessageMonitorListeners = registerSocketEventListeners([
+      ['message-deleted', handleMessageDeleted],
+      ['message-delivered', handleDeliveredMessage],
+      ['message-edited', handleMessageEdited],
+      ['message-link-preview-updated', handleMessageLinkPreviewUpdated],
+      ['message-reaction-updated', handleMessageReactionUpdate],
+      ['pinned-message-updated', handlePinnedMessageUpdated],
+      ['message-status-updated', updateMessageStatus],
+      ['messages-status-updated', updateMessagesStatus]
+    ])
   }
 
   const disposeMessageMonitor = () => {
-    socket.off('message-deleted', handleMessageDeleted)
-    socket.off('message-delivered', handleDeliveredMessage)
-    socket.off('message-edited', handleMessageEdited)
-    socket.off('message-link-preview-updated', handleMessageLinkPreviewUpdated)
-    socket.off('message-reaction-updated', handleMessageReactionUpdate)
-    socket.off('pinned-message-updated', handlePinnedMessageUpdated)
-    socket.off('message-status-updated', updateMessageStatus)
-    socket.off('messages-status-updated', updateMessagesStatus)
+    disposeMessageMonitorListeners?.()
+    disposeMessageMonitorListeners = null
   }
 
   return {

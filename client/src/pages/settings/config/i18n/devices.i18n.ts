@@ -1,4 +1,5 @@
-export const SETTINGS_PAGE_DEVICES_I18N = {
+import { defineI18n, i18nFormatter } from 'src/shared/lib'
+export const SETTINGS_PAGE_DEVICES_I18N = defineI18n('settingsPageDevices', {
   audioInputDevice: {
     en: 'Audio input device',
     ru: 'Устройство ввода звука',
@@ -10,9 +11,9 @@ export const SETTINGS_PAGE_DEVICES_I18N = {
     zh: '通话使用的麦克风'
   },
   permissionStatus: {
-    en: (status: string) => `Permission: ${status}`,
-    ru: (status: string) => `Разрешение: ${status}`,
-    zh: (status: string) => `权限：${status}`
+    en: i18nFormatter(['status'], (status: string) => `Permission: ${status}`),
+    ru: i18nFormatter(['status'], (status: string) => `Разрешение: ${status}`),
+    zh: i18nFormatter(['status'], (status: string) => `权限：${status}`)
   },
   permissionGranted: {
     en: 'granted',
@@ -110,13 +111,13 @@ export const SETTINGS_PAGE_DEVICES_I18N = {
     zh: '当前环境不支持媒体设备'
   },
   deviceLabel: {
-    en: (index: number) => `Device ${index}`,
-    ru: (index: number) => `Устройство ${index}`,
-    zh: (index: number) => `设备 ${index}`
+    en: i18nFormatter(['index'], (index: number) => `Device ${index}`),
+    ru: i18nFormatter(['index'], (index: number) => `Устройство ${index}`),
+    zh: i18nFormatter(['index'], (index: number) => `设备 ${index}`)
   },
   videoPreview: {
     en: 'Camera preview',
     ru: 'Предпросмотр камеры',
     zh: '摄像头预览'
   }
-} as const
+})

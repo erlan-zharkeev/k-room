@@ -1,5 +1,4 @@
 import {
-  ROOM_CALL_STATUS,
   type EventRoomCallEnded,
   type EventRoomCallJoined,
   type EventRoomCallLeft,
@@ -10,7 +9,7 @@ import {
 export const applyRoomCallJoined = (roomCall: RoomCall, { participant, startedAt }: EventRoomCallJoined) => {
   const participantIndex = roomCall.participants.findIndex(({ userId }) => userId === participant.userId)
 
-  roomCall.status = ROOM_CALL_STATUS.IN_PROGRESS
+  roomCall.status = 'in-progress'
   roomCall.startedAt = startedAt
 
   if (participantIndex === -1) {
@@ -33,7 +32,7 @@ export const applyRoomCallLeft = (roomCall: RoomCall, { leftAt, userId }: EventR
 
 export const applyRoomCallEnded = (roomCall: RoomCall, { finishedAt }: EventRoomCallEnded) => {
   roomCall.finishedAt = finishedAt
-  roomCall.status = ROOM_CALL_STATUS.FINISHED
+  roomCall.status = 'finished'
 }
 
 export const applyRoomCallMediaStateUpdated = (

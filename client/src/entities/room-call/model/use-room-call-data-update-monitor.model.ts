@@ -1,4 +1,4 @@
-import { socket } from 'src/shared/api'
+import { registerSocketEventListeners } from 'src/shared/api'
 
 import { useRoomCallSync } from './use-room-call-sync.model'
 
@@ -12,25 +12,23 @@ export const useRoomCallDataUpdateMonitor = () => {
     syncRoomCalls,
     syncStartedRoomCall
   } = useRoomCallSync()
+  let disposeRoomCallDataUpdateMonitorListeners: (() => void) | null = null
 
   const initializeRoomCallDataUpdateMonitor = () => {
-    socket.on('room-calls-updated', syncRoomCalls)
-    socket.on('room-call-started', syncStartedRoomCall)
-    socket.on('room-call-joined', syncJoinedRoomCall)
-    socket.on('room-call-declined', syncDeclinedRoomCall)
-    socket.on('room-call-left', syncLeftRoomCall)
-    socket.on('room-call-ended', syncEndedRoomCall)
-    socket.on('room-call-media-state-updated', syncRoomCallMediaStateUpdated)
+    disposeRoomCallDataUpdateMonitorListeners = registerSocketEventListeners([
+      ['room-calls-updated', syncRoomCalls],
+      ['room-call-started', syncStartedRoomCall],
+      ['room-call-joined', syncJoinedRoomCall],
+      ['room-call-declined', syncDeclinedRoomCall],
+      ['room-call-left', syncLeftRoomCall],
+      ['room-call-ended', syncEndedRoomCall],
+      ['room-call-media-state-updated', syncRoomCallMediaStateUpdated]
+    ])
   }
 
   const disposeRoomCallDataUpdateMonitor = () => {
-    socket.off('room-calls-updated', syncRoomCalls)
-    socket.off('room-call-started', syncStartedRoomCall)
-    socket.off('room-call-joined', syncJoinedRoomCall)
-    socket.off('room-call-declined', syncDeclinedRoomCall)
-    socket.off('room-call-left', syncLeftRoomCall)
-    socket.off('room-call-ended', syncEndedRoomCall)
-    socket.off('room-call-media-state-updated', syncRoomCallMediaStateUpdated)
+    disposeRoomCallDataUpdateMonitorListeners?.()
+    disposeRoomCallDataUpdateMonitorListeners = null
   }
 
   return {

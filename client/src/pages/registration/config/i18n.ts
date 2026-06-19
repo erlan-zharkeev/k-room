@@ -1,6 +1,6 @@
-import { defineI18n } from 'global-shared'
+import { defineI18n } from 'src/shared/lib'
 
-export const REGISTRATION_FORM_I18N = defineI18n({
+export const REGISTRATION_FORM_I18N = defineI18n('registrationForm', {
   nicknamePlaceholder: {
     en: 'Enter nickname',
     ru: 'Введите никнейм',

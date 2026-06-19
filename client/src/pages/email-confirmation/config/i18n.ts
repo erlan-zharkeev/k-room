@@ -1,15 +1,10 @@
-import { defineI18n } from 'global-shared'
+import { defineI18n } from 'src/shared/lib'
 
-export const EMAIL_CONFIRMATION_I18N = defineI18n({
+export const EMAIL_CONFIRMATION_I18N = defineI18n('emailConfirmation', {
   title: {
     en: 'Congratulations',
     ru: 'Готово',
     zh: '完成'
-  },
-  confirmed: {
-    en: 'confirmed',
-    ru: 'подтверждён',
-    zh: '已确认'
   },
   loading: {
     en: 'Confirming email',

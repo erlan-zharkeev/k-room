@@ -1,7 +1,6 @@
 import { isNumber, isString, isUnknownObject } from 'global-shared'
 
 import {
-  MESSAGE_SCROLL_STATE_MODE,
   type MessageScrollAnchorState,
   type MessageScrollBottomState,
   type MessageScrollState
@@ -10,11 +9,11 @@ import {
 import type { MessageListItem, ResolveVisibleMessageScrollAnchorStateParams } from '../config/types'
 
 export const buildMessageBottomScrollState = (): MessageScrollBottomState => ({
-  mode: MESSAGE_SCROLL_STATE_MODE.BOTTOM
+  mode: 'bottom'
 })
 
 export const buildMessageAnchorScrollState = (messageId: string, offset: number): MessageScrollAnchorState => ({
-  mode: MESSAGE_SCROLL_STATE_MODE.ANCHOR,
+  mode: 'anchor',
   messageId,
   offset: Math.trunc(offset)
 })
@@ -57,12 +56,12 @@ export const resolveVisibleMessageScrollAnchorState = ({
 export const resolveMessageScrollState = (state?: unknown): MessageScrollState | null => {
   if (!isUnknownObject(state)) return null
 
-  if (state.mode === MESSAGE_SCROLL_STATE_MODE.BOTTOM) {
+  if (state.mode === 'bottom') {
     return buildMessageBottomScrollState()
   }
 
   const { messageId, mode, offset } = state
-  const isAnchorMode = mode === MESSAGE_SCROLL_STATE_MODE.ANCHOR
+  const isAnchorMode = mode === 'anchor'
   const hasAnchorMessageId = isString(messageId)
   const hasAnchorOffset = isNumber(offset)
   const hasAnchorState = isAnchorMode && hasAnchorMessageId && hasAnchorOffset
@@ -79,8 +78,8 @@ export const isSameMessageScrollState = (currentState: unknown, nextState: Messa
 
   if (!resolvedCurrentState) return false
   if (resolvedCurrentState.mode !== nextState.mode) return false
-  if (resolvedCurrentState.mode === MESSAGE_SCROLL_STATE_MODE.BOTTOM) return true
-  if (nextState.mode !== MESSAGE_SCROLL_STATE_MODE.ANCHOR) return false
+  if (resolvedCurrentState.mode === 'bottom') return true
+  if (nextState.mode !== 'anchor') return false
 
   const hasSameMessageId = resolvedCurrentState.messageId === nextState.messageId
   const hasSameOffset = resolvedCurrentState.offset === nextState.offset

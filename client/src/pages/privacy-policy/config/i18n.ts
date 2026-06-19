@@ -1,10 +1,10 @@
-import { defineI18n } from 'global-shared'
+import { defineI18n, i18nFormatter } from 'src/shared/lib'
 
-export const LEGAL_INFO_PAGE_I18N = defineI18n({
+export const LEGAL_INFO_PAGE_I18N = defineI18n('legalInfoPage', {
   title: {
-    en: (appName: string) => `Legal Information for ${appName}`,
-    ru: (appName: string) => `Правовая информация ${appName}`,
-    zh: (appName: string) => `${appName} 法律信息`
+    en: i18nFormatter(['appName'], (appName: string) => `Legal Information for ${appName}`),
+    ru: i18nFormatter(['appName'], (appName: string) => `Правовая информация ${appName}`),
+    zh: i18nFormatter(['appName'], (appName: string) => `${appName} 法律信息`)
   },
   lastUpdatedLabel: {
     en: 'Last updated:',
@@ -12,12 +12,21 @@ export const LEGAL_INFO_PAGE_I18N = defineI18n({
     zh: '最后更新：'
   },
   intro: {
-    en: (appName: string) =>
-      `This Privacy Policy explains what information may be collected when you use ${appName}, how that information may be used, and the limits of our responsibility.`,
-    ru: (appName: string) =>
-      `Эта политика конфиденциальности объясняет, какие данные могут собираться при использовании ${appName}, как они могут использоваться и где проходят пределы нашей ответственности.`,
-    zh: (appName: string) =>
-      `本隐私政策说明你使用 ${appName} 时可能收集哪些信息、这些信息可能如何使用，以及我们的责任范围。`
+    en: i18nFormatter(
+      ['appName'],
+      (appName: string) =>
+        `This Privacy Policy explains what information may be collected when you use ${appName}, how that information may be used, and the limits of our responsibility.`
+    ),
+    ru: i18nFormatter(
+      ['appName'],
+      (appName: string) =>
+        `Эта политика конфиденциальности объясняет, какие данные могут собираться при использовании ${appName}, как они могут использоваться и где проходят пределы нашей ответственности.`
+    ),
+    zh: i18nFormatter(
+      ['appName'],
+      (appName: string) =>
+        `本隐私政策说明你使用 ${appName} 时可能收集哪些信息、这些信息可能如何使用，以及我们的责任范围。`
+    )
   },
   warning: {
     en: 'Important warning:',
@@ -25,12 +34,21 @@ export const LEGAL_INFO_PAGE_I18N = defineI18n({
     zh: '重要提示：'
   },
   warningText: {
-    en: (appName: string) =>
-      `${appName} is a general-purpose chat and calling service. It is not designed for storing, transmitting, or protecting highly sensitive, confidential, regulated, financial, medical, government-issued, or otherwise mission-critical information. Do not use ${appName} as a secure vault, legal archive, or protected communications channel.`,
-    ru: (appName: string) =>
-      `${appName} — это общий сервис для чатов и звонков. Он не предназначен для хранения, передачи или защиты особо чувствительной, конфиденциальной, регулируемой, финансовой, медицинской, государственной или иной критически важной информации. Не используйте ${appName} как защищённое хранилище, юридический архив или безопасный канал связи.`,
-    zh: (appName: string) =>
-      `${appName} 是通用聊天和通话服务。它并非用于存储、传输或保护高度敏感、机密、受监管、金融、医疗、政府签发或其他关键任务信息。不要将 ${appName} 用作安全保险库、法律档案或受保护的通信渠道。`
+    en: i18nFormatter(
+      ['appName'],
+      (appName: string) =>
+        `${appName} is a general-purpose chat and calling service. It is not designed for storing, transmitting, or protecting highly sensitive, confidential, regulated, financial, medical, government-issued, or otherwise mission-critical information. Do not use ${appName} as a secure vault, legal archive, or protected communications channel.`
+    ),
+    ru: i18nFormatter(
+      ['appName'],
+      (appName: string) =>
+        `${appName} — это общий сервис для чатов и звонков. Он не предназначен для хранения, передачи или защиты особо чувствительной, конфиденциальной, регулируемой, финансовой, медицинской, государственной или иной критически важной информации. Не используйте ${appName} как защищённое хранилище, юридический архив или безопасный канал связи.`
+    ),
+    zh: i18nFormatter(
+      ['appName'],
+      (appName: string) =>
+        `${appName} 是通用聊天和通话服务。它并非用于存储、传输或保护高度敏感、机密、受监管、金融、医疗、政府签发或其他关键任务信息。不要将 ${appName} 用作安全保险库、法律档案或受保护的通信渠道。`
+    )
   },
   storageRisk: {
     en: 'Messages, files, account data, and technical data may be processed and stored on systems controlled by us or by our service providers. Although we may use reasonable operational measures, we do not promise or guarantee absolute security, confidentiality, availability, or loss prevention. Any use of the service is at your own risk.',
@@ -218,12 +236,21 @@ export const LEGAL_INFO_PAGE_I18N = defineI18n({
     zh: '9. 儿童'
   },
   section9Text: {
-    en: (appName: string) =>
-      `${appName} is not intended for children under 13, and we do not knowingly design the service for children. If you believe a child has provided personal information, contact us through the app support flow so we can review the report.`,
-    ru: (appName: string) =>
-      `${appName} не предназначен для детей младше 13 лет, и мы сознательно не создаём сервис для детей. Если вы считаете, что ребёнок предоставил персональные данные, свяжитесь с нами через поддержку внутри приложения, чтобы мы могли проверить сообщение.`,
-    zh: (appName: string) =>
-      `${appName} 不面向 13 岁以下儿童，我们也不会有意为儿童设计本服务。如果你认为儿童提供了个人信息，请通过应用内支持流程联系我们，以便我们审查报告。`
+    en: i18nFormatter(
+      ['appName'],
+      (appName: string) =>
+        `${appName} is not intended for children under 13, and we do not knowingly design the service for children. If you believe a child has provided personal information, contact us through the app support flow so we can review the report.`
+    ),
+    ru: i18nFormatter(
+      ['appName'],
+      (appName: string) =>
+        `${appName} не предназначен для детей младше 13 лет, и мы сознательно не создаём сервис для детей. Если вы считаете, что ребёнок предоставил персональные данные, свяжитесь с нами через поддержку внутри приложения, чтобы мы могли проверить сообщение.`
+    ),
+    zh: i18nFormatter(
+      ['appName'],
+      (appName: string) =>
+        `${appName} 不面向 13 岁以下儿童，我们也不会有意为儿童设计本服务。如果你认为儿童提供了个人信息，请通过应用内支持流程联系我们，以便我们审查报告。`
+    )
   },
   section10Title: {
     en: '10. Third-Party Services',

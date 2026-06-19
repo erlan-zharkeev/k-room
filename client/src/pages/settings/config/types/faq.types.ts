@@ -1,8 +1,6 @@
-import type { LocalizedText } from 'global-shared'
+import type { I18nKey } from 'src/shared/lib'
 
-export type FaqDynamicText = (appName: string) => string
-export type FaqTextValue = string | FaqDynamicText
-export type FaqText = LocalizedText<FaqTextValue>
+export type FaqText = I18nKey
 
 export interface FaqItem {
   id: number

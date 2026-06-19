@@ -1,4 +1,5 @@
-export const SETTINGS_ACCOUNT_CHANGE_EMAIL_I18N = {
+import { defineI18n } from 'src/shared/lib'
+export const SETTINGS_ACCOUNT_CHANGE_EMAIL_I18N = defineI18n('settingsAccountChangeEmail', {
   changeEmail: {
     en: 'Change email',
     ru: 'Изменить email',
@@ -34,4 +35,4 @@ export const SETTINGS_ACCOUNT_CHANGE_EMAIL_I18N = {
     ru: 'Введите другой email',
     zh: '请输入不同的 email'
   }
-} as const
+})

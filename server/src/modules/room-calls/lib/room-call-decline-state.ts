@@ -1,8 +1,8 @@
-import { ROOM_CALL_STATUS, type RoomCall } from 'global-shared'
+import { type RoomCall } from 'global-shared'
 
 import type { RedisService } from 'src/modules/security/redis.service'
 
-import { ROOM_CALL_DECLINE_STATE_TTL_MS } from '../constants'
+import { ROOM_CALL_DECLINE_STATE_TTL_MS } from '../room-calls.constants'
 
 const buildRoomCallDeclinedUsersKey = (roomCallId: string) => `room-call:${roomCallId}:declined-user-ids`
 
@@ -28,7 +28,7 @@ export const filterAvailableRoomCallsForUser = async (
   const declinedStates = await Promise.all(
     roomCalls.map((roomCall) => {
       const hasFinishedAt = Boolean(roomCall.finishedAt)
-      const isFinishedStatus = roomCall.status === ROOM_CALL_STATUS.FINISHED
+      const isFinishedStatus = roomCall.status === 'finished'
       const isActiveRoomCall = !hasFinishedAt && !isFinishedStatus
 
       if (!isActiveRoomCall) {

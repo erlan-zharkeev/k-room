@@ -3,7 +3,7 @@ import { isString, type LocalizedText, REQ_STATUS, type SocketAckFailure, type S
 import { SHARED_I18N } from '../i18n'
 import type { SocketErrorMiddlewareOptions, SocketInstance, ThrowSocketErrorOptions } from '../types'
 
-import { isAppError } from './app-error'
+import { getAppErrorMessage, isAppError } from './app-error'
 import { getIO } from './io'
 import { localizedText } from './localized-text'
 import { log } from './log'
@@ -65,13 +65,20 @@ export const socketErrorMiddleware =
     }
   }
 
-const buildSocketAckFailure = <TReason extends string>(error: unknown): SocketAckFailure<TReason> => {
+const buildSocketAckFailure = <TReason extends string>(
+  socket: SocketInstance,
+  error: unknown
+): SocketAckFailure<TReason> => {
   const response: SocketAckFailure<TReason> = {
     ok: false
   }
 
   if (isAppError(error) && isString(error.payload)) {
     response.reason = error.payload as TReason
+    response.message = {
+      text: getAppErrorMessage(error, socket.data.language),
+      silent: error.silent
+    }
   } else {
     response.handledByGlobalError = true
   }
@@ -99,7 +106,7 @@ export const socketAckMiddleware =
       const shouldHandleByAckReason = isAppError(error) && isString(error.payload)
 
       if (shouldHandleByAckReason) {
-        ack?.(buildSocketAckFailure<TReason>(error))
+        ack?.(buildSocketAckFailure<TReason>(socket, error))
         return
       }
 
@@ -117,6 +124,6 @@ export const socketAckMiddleware =
         })
       }
 
-      ack?.(buildSocketAckFailure<TReason>(error))
+      ack?.(buildSocketAckFailure<TReason>(socket, error))
     }
   }

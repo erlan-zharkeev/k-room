@@ -1,22 +1,15 @@
 import { MINUTE_IN_MS } from 'global-shared'
 
-export const DEXIE_CACHE_TRIMMER_IDS = {
-  MEDIA: 'media',
-  MESSAGES: 'messages',
-  ROOM_CALLS: 'room-calls',
-  KNOWN_USERS: 'known-users',
-  CONTACTS: 'contacts',
-  CHAT_ROOMS: 'chat-rooms'
-} as const
+import type { DexieCacheTrimmerId } from './types'
 
 export const DEXIE_CACHE_TRIMMER_PRIORITIES = {
-  MEDIA: 10,
-  MESSAGES: 20,
-  ROOM_CALLS: 30,
-  KNOWN_USERS: 40,
-  CONTACTS: 50,
-  CHAT_ROOMS: 60
-} as const
+  media: 10,
+  messages: 20,
+  'room-calls': 30,
+  'known-users': 40,
+  contacts: 50,
+  'chat-rooms': 60
+} as const satisfies Record<DexieCacheTrimmerId, number>
 
 export const DEXIE_QUOTA_ERROR_NAMES = ['QuotaExceededError'] as const
 export const DEXIE_QUOTA_ERROR_NAME_SET = new Set<string>(DEXIE_QUOTA_ERROR_NAMES)

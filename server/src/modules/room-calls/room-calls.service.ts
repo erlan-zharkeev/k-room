@@ -1,9 +1,6 @@
 import {
   REQ_STATUS,
-  ROOM_CALL_ACK_FAILURE_REASON,
-  ROOM_CALL_LEAVE_REASON,
   ROOM_CALL_LOAD_LIMIT_MAX,
-  ROOM_CALL_STATUS,
   ROOM_PARTICIPANT_LIMIT,
   isRoomPrivate,
   type EventDeclineRoomCall,
@@ -73,7 +70,7 @@ export const startRoomCall = async (
     calledAt: Date.now(),
     roomId,
     initiatorId: userId,
-    status: ROOM_CALL_STATUS.CALLING,
+    status: 'calling',
     mediaKind,
     participants: [participant]
   }
@@ -90,13 +87,7 @@ export const startRoomCall = async (
   const isCreatedAfterCleanup = isCreated || (await createActiveRoomCall(redisService, roomCall))
 
   if (!isCreatedAfterCleanup) {
-    throw new AppError(
-      REQ_STATUS.badRequest,
-      ROOM_CALLS_I18N.roomCallAlreadyActive,
-      true,
-      undefined,
-      ROOM_CALL_ACK_FAILURE_REASON.ALREADY_ACTIVE
-    )
+    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallAlreadyActive, false, undefined, 'already-active')
   }
 
   emitToUsers(room.users, 'room-call-started', {
@@ -139,7 +130,7 @@ export const joinRoomCall = async (
     if (participantIndex === -1) {
       return {
         ...currentRoomCall,
-        status: ROOM_CALL_STATUS.IN_PROGRESS,
+        status: 'in-progress',
         startedAt,
         participants: [...currentRoomCall.participants, participant]
       }
@@ -150,20 +141,14 @@ export const joinRoomCall = async (
 
     return {
       ...currentRoomCall,
-      status: ROOM_CALL_STATUS.IN_PROGRESS,
+      status: 'in-progress',
       startedAt,
       participants
     }
   })
 
   if (hasParticipantLimitReached) {
-    throw new AppError(
-      REQ_STATUS.badRequest,
-      ROOM_CALLS_I18N.roomCallLimitReached,
-      true,
-      undefined,
-      ROOM_CALL_ACK_FAILURE_REASON.LIMIT_REACHED
-    )
+    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallLimitReached, false, undefined, 'limit-reached')
   }
 
   if (!updatedRoomCall) {
@@ -194,7 +179,7 @@ export const leaveRoomCall = async (
 ) => {
   const { room, roomCall } = await assertRoomCallParticipantAccess(redisService, userId, socketId, payload.roomCallId)
   const isPrivateRoom = isRoomPrivate(room)
-  const isCallingRoomCall = roomCall.status === ROOM_CALL_STATUS.CALLING
+  const isCallingRoomCall = roomCall.status === 'calling'
 
   if (isPrivateRoom) {
     await finishRoomCall(redisService, roomCall, room.users.map(String))
@@ -219,7 +204,7 @@ export const declineRoomCall = async (
     throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallAccessFailed)
   }
 
-  const isCallingRoomCall = roomCall.status === ROOM_CALL_STATUS.CALLING
+  const isCallingRoomCall = roomCall.status === 'calling'
 
   if (privateRoom || isCallingRoomCall) {
     await finishRoomCall(redisService, roomCall, room.users.map(String))
@@ -251,7 +236,7 @@ export const leaveActiveRoomCallsBySocket = async (redisService: RedisService, u
         return
       }
 
-      await leaveRoomCallParticipant(redisService, roomCall, userId, socketId, ROOM_CALL_LEAVE_REASON.DISCONNECTED)
+      await leaveRoomCallParticipant(redisService, roomCall, userId, socketId, 'disconnected')
     })
   )
 }

@@ -1,8 +1,8 @@
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 import { useUser, useUserOnboarding } from 'src/entities/user'
 
-import type { AppWelcomeDialogEmit } from '../config/types'
+import type { AppWelcomeDialogEmit, AppWelcomeDialogProps } from '../config/types'
 
 const isAppWelcomeVisible = ref(false)
 
@@ -43,10 +43,11 @@ export const useAppWelcome = () => {
   }
 }
 
-export const useAppWelcomeDialog = (emit: AppWelcomeDialogEmit) => {
+export const useAppWelcomeDialog = (props: AppWelcomeDialogProps, emit: AppWelcomeDialogEmit) => {
   const { closeAppWelcome, initializeAppWelcome, isAppWelcomeVisible } = useAppWelcome()
   const { user } = useUser()
   const { updateUserOnboarding } = useUserOnboarding()
+  const dialogContentStyle = computed(() => ({ padding: props.padding }))
 
   const completeAppWelcome = async () => {
     if (!user.value.onboarding.welcomeCompleted) {
@@ -70,6 +71,7 @@ export const useAppWelcomeDialog = (emit: AppWelcomeDialogEmit) => {
 
   return {
     completeAppWelcome,
+    dialogContentStyle,
     isAppWelcomeVisible,
     updateAppWelcomeVisible
   }

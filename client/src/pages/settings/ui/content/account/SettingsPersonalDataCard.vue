@@ -121,8 +121,9 @@ const {
           <NmorphCallout
             type="warning"
             :content="`${$t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.uploadPhotoRequirements)} ${$t(
-              SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.uploadPhotoHint
-            )(SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES_LABEL, SETTINGS_ACCOUNT_AVATAR_MAX_MB)}`"
+              SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.uploadPhotoHint,
+              { formats: SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES_LABEL, maxMb: SETTINGS_ACCOUNT_AVATAR_MAX_MB }
+            )}`"
           />
         </div>
       </NmorphFormItem>

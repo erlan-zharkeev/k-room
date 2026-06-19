@@ -5,7 +5,6 @@ import type {
   EventRoomCallSignalReceived,
   EventSendRoomCallSignal,
   MediaId,
-  ROOM_CALL_SIGNAL_KIND,
   RoomCall,
   RoomCallMediaKind,
   RoomCallParticipant,
@@ -14,11 +13,9 @@ import type {
 } from 'global-shared'
 import type { Ref } from 'vue'
 
-import type { ROOM_CALL_ACTIVITY_KIND } from './constants'
+export type RoomCallDescriptionSignalKind = 'offer' | 'answer'
 
-export type RoomCallDescriptionSignalKind = typeof ROOM_CALL_SIGNAL_KIND.OFFER | typeof ROOM_CALL_SIGNAL_KIND.ANSWER
-
-export type RoomCallActivityKind = (typeof ROOM_CALL_ACTIVITY_KIND)[keyof typeof ROOM_CALL_ACTIVITY_KIND]
+export type RoomCallActivityKind = 'active' | 'incoming' | 'joinable' | 'outgoing'
 
 export type RoomCallLocalMediaStreamList = Array<MediaStream | null | undefined>
 
@@ -124,6 +121,8 @@ export interface CallActivityPanelProps {
 export interface CallActivityPanelEmits {
   'open-room-call': [roomId: string]
 }
+
+export type CallActivityPanelEmit = (event: 'open-room-call', roomId: string) => void
 
 export interface CallActivityPanelItemProps {
   compact: boolean

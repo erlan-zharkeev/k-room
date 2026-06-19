@@ -1,8 +1,4 @@
-import {
-  MESSAGE_LINK_PREVIEW_STATUS,
-  MESSAGE_REACTION_LIMIT_PER_USER,
-  MESSAGE_REACTION_UPDATE_ACTION
-} from 'global-shared'
+import { MESSAGE_REACTION_LIMIT_PER_USER } from 'global-shared'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const chatRoomModelMock = vi.hoisted(() => ({
@@ -112,7 +108,7 @@ describe('messages.service', () => {
     const linkPreview = {
       url: 'https://example.com/',
       host: 'example.com',
-      status: MESSAGE_LINK_PREVIEW_STATUS.PENDING
+      status: 'pending'
     }
 
     chatRoomModelMock.findOne.mockReturnValue(createLeanQuery({ users: ['user-1', 'user-2'] }))
@@ -240,7 +236,7 @@ describe('messages.service', () => {
     expect(presenceMock.emitToUsers).toHaveBeenCalledWith(['user-1', 'user-2'], 'message-reaction-updated', {
       roomId: payload.roomId,
       messageId: payload.messageId,
-      action: MESSAGE_REACTION_UPDATE_ACTION.ADD,
+      action: 'add',
       reaction
     })
   })
@@ -271,7 +267,7 @@ describe('messages.service', () => {
     expect(presenceMock.emitToUsers).toHaveBeenCalledWith(['user-1', 'user-2'], 'message-reaction-updated', {
       roomId: payload.roomId,
       messageId: payload.messageId,
-      action: MESSAGE_REACTION_UPDATE_ACTION.REMOVE,
+      action: 'remove',
       reaction
     })
   })

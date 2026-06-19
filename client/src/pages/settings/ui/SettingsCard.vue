@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import { NmorphBadge, NmorphButton, NmorphCard } from '@nmorph/nmorph-ui-kit'
-import { computed, useSlots } from 'vue'
 
 import { AppHeader } from 'src/shared/ui'
 
 import { CARD_DEFAULT_PROPS } from '../config/constants/card.constants'
 import type { CardProps } from '../config/types/card.types'
 
-const props = withDefaults(defineProps<CardProps>(), CARD_DEFAULT_PROPS)
+import { useSettingsCard } from './use-settings-card.model'
 
-const slots = useSlots()
-const hasFooter = computed(() => Boolean(slots.footer || props.buttonLabel))
+const props = withDefaults(defineProps<CardProps>(), CARD_DEFAULT_PROPS)
+const { hasFooter } = useSettingsCard(props)
 </script>
 
 <template>

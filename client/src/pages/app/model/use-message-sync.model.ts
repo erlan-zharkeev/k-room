@@ -9,7 +9,6 @@ import {
   type EventUpdatedMessageReactions,
   type MediaObject,
   type Message,
-  MESSAGE_REACTION_UPDATE_ACTION,
   isMessageReadStatus,
   isMessageStatusDelivered
 } from 'global-shared'
@@ -215,7 +214,7 @@ export const useMessageSync = () => {
       const reactions = message.reactions ?? []
 
       switch (action) {
-        case MESSAGE_REACTION_UPDATE_ACTION.ADD: {
+        case 'add': {
           const hasReaction = reactions.some(
             ({ authorId, glyphKey }) => authorId === reaction.authorId && glyphKey === reaction.glyphKey
           )
@@ -225,7 +224,7 @@ export const useMessageSync = () => {
           message.reactions = [...reactions, reaction]
           break
         }
-        case MESSAGE_REACTION_UPDATE_ACTION.REMOVE:
+        case 'remove':
           message.reactions = reactions.filter(
             ({ authorId, glyphKey }) => authorId !== reaction.authorId || glyphKey !== reaction.glyphKey
           )

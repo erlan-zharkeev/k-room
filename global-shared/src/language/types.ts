@@ -1,6 +1,4 @@
-import { type APP_LANGUAGE_VALUES } from './constants'
-
-export type AppLanguage = (typeof APP_LANGUAGE_VALUES)[number]
+export type AppLanguage = 'en' | 'ru' | 'zh'
 
 export type PluralRule = ReturnType<Intl.PluralRules['select']>
 

@@ -8,6 +8,8 @@ export interface HttpRequestOptions<R extends ResponseType = ResponseType> {
   headers?: AxiosRequestConfig['headers']
   responseType?: R
   skipAuthRefresh?: boolean
+  showErrorToast?: boolean
+  showSuccessToast?: boolean
   signal?: AxiosRequestConfig['signal']
 }
 
