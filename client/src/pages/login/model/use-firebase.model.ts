@@ -1,4 +1,3 @@
-import { getAuth, signInWithPopup } from 'firebase/auth'
 import { AUTH_ENDPOINTS, type FirebaseProvider, type SignInWithProviderPayload, type UserData } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 import { ref } from 'vue'
@@ -10,8 +9,10 @@ import { TOAST_I18N } from 'src/shared/lib'
 import { useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
 
-import { E2E_FIREBASE_AUTH_RESULT, FIREBASE_PROVIDER_MAP } from '../config/constants'
+import { E2E_FIREBASE_AUTH_RESULT } from '../config/constants'
 import { LOGIN_FORM_I18N } from '../config/i18n'
+
+import { initFirebase } from './init-firebase.model'
 
 export const useFirebase = () => {
   const { doHttpRequest } = useHttp()
@@ -26,7 +27,9 @@ export const useFirebase = () => {
       return E2E_FIREBASE_AUTH_RESULT
     }
 
-    const Provider = FIREBASE_PROVIDER_MAP[provider]
+    await initFirebase()
+    const { FacebookAuthProvider, GoogleAuthProvider, getAuth, signInWithPopup } = await import('firebase/auth')
+    const Provider = provider === 'google' ? GoogleAuthProvider : FacebookAuthProvider
     const currentProvider = new Provider()
     const auth = getAuth()
 

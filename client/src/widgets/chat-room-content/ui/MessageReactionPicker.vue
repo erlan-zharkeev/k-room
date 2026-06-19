@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphEmojiPicker } from '@nmorph/nmorph-ui-kit'
+import { defineAsyncComponent } from 'vue'
 
 import { MESSAGE_CONTEXT_MENU_WIDTH } from '../config/constants'
 import type { MessageReactionPickerEmits, MessageReactionPickerProps } from '../config/types'
@@ -7,6 +7,9 @@ import { useMessageReactionPicker } from '../model/use-message-reaction-picker.m
 
 const props = defineProps<MessageReactionPickerProps>()
 const emit = defineEmits<MessageReactionPickerEmits>()
+const NmorphEmojiPicker = defineAsyncComponent(() =>
+  import('@nmorph/nmorph-ui-kit').then(({ NmorphEmojiPicker }) => NmorphEmojiPicker)
+)
 const { emojiPickerLocale, emojiPickerQuickList, selectMessageReaction } = useMessageReactionPicker(props, emit)
 </script>
 

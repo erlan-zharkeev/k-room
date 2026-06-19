@@ -94,10 +94,10 @@ export const DEFAULT_WALLPAPER_SETTINGS = {
 } as const satisfies WallpaperSettings
 
 export const DEFAULT_DARK_WALLPAPER_URL = DEFAULT_DARK_WALLPAPER
-export const DEFAULT_DARK_WALLPAPER_FILENAME = 'default-wallpaper-dark.jpeg'
+export const DEFAULT_DARK_WALLPAPER_FILENAME = 'default-wallpaper-dark.webp'
 
 export const DEFAULT_LIGHT_WALLPAPER_URL = DEFAULT_LIGHT_WALLPAPER
-export const DEFAULT_LIGHT_WALLPAPER_FILENAME = 'default-wallpaper-light.png'
+export const DEFAULT_LIGHT_WALLPAPER_FILENAME = 'default-wallpaper-light.webp'
 
 export const DARK_WALLPAPER_SETTINGS = {
   ...DEFAULT_WALLPAPER_SETTINGS,

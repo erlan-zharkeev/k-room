@@ -3,7 +3,7 @@ import { NmorphButton, NmorphDialog } from '@nmorph/nmorph-ui-kit'
 
 import { AppHeader, AppText } from 'src/shared/ui'
 
-import welcomeImageSrc from '../assets/welcome.png'
+import welcomeImageSrc from '../assets/welcome.webp'
 import { APP_WELCOME_I18N } from '../config/i18n'
 import type { AppWelcomeDialogEmit, AppWelcomeDialogProps } from '../config/types'
 import { useAppWelcomeDialog } from '../model/use-app-welcome.model'

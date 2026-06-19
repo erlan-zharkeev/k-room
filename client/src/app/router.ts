@@ -5,26 +5,39 @@ import { useSettings, type DeviceSetting } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { initClientData, useLogoutNavigation } from 'src/features/client-session'
-import { CallsPage } from 'src/pages/calls'
-import { ContactsPage } from 'src/pages/contacts'
-import { CreateNewPasswordPage } from 'src/pages/create-new-password'
-import { DownloadPage } from 'src/pages/download'
-import { EmailConfirmationPage } from 'src/pages/email-confirmation'
-import { ErrorPage } from 'src/pages/error'
-import { LoginPage } from 'src/pages/login'
-import { PasswordRecoveryPage } from 'src/pages/password-recovery'
-import { PrivacyPolicyPage } from 'src/pages/privacy-policy'
-import { RegistrationPage } from 'src/pages/registration'
-import { DEFAULT_SETTINGS_CONTENT_ID, SettingsContentPage, SettingsNavigationPage } from 'src/pages/settings'
-import { WaitEmailConfirmPage } from 'src/pages/wait-email-confirm'
-import { ChatRoomContent } from 'src/widgets/chat-room-content'
-import { ChatRoomsNavigation } from 'src/widgets/chat-rooms-navigation'
+import { DEFAULT_SETTINGS_CONTENT_ID } from 'src/pages/settings'
 
-import AppLayout from './layouts/app-layout/AppLayout.vue'
-import AuthLayout from './layouts/auth-layout/AuthLayout.vue'
-import DocsLayout from './layouts/docs-layout/DocsLayout.vue'
-import PageLayout from './layouts/page-layout/PageLayout.vue'
 import { getAppPathFromSettings, getContentTabFromPath } from './lib/router'
+
+const loadAppLayout = () => import('./layouts/app-layout/AppLayout.vue')
+const loadAuthLayout = () => import('./layouts/auth-layout/AuthLayout.vue')
+const loadDocsLayout = () => import('./layouts/docs-layout/DocsLayout.vue')
+const loadPageLayout = () => import('./layouts/page-layout/PageLayout.vue')
+
+const loadCallsPage = () => import('src/pages/calls').then(({ CallsPage }) => CallsPage)
+const loadContactsPage = () => import('src/pages/contacts').then(({ ContactsPage }) => ContactsPage)
+const loadCreateNewPasswordPage = () =>
+  import('src/pages/create-new-password').then(({ CreateNewPasswordPage }) => CreateNewPasswordPage)
+const loadDownloadPage = () => import('src/pages/download').then(({ DownloadPage }) => DownloadPage)
+const loadEmailConfirmationPage = () =>
+  import('src/pages/email-confirmation').then(({ EmailConfirmationPage }) => EmailConfirmationPage)
+const loadErrorPage = () => import('src/pages/error').then(({ ErrorPage }) => ErrorPage)
+const loadLoginPage = () => import('src/pages/login').then(({ LoginPage }) => LoginPage)
+const loadPasswordRecoveryPage = () =>
+  import('src/pages/password-recovery').then(({ PasswordRecoveryPage }) => PasswordRecoveryPage)
+const loadPrivacyPolicyPage = () =>
+  import('src/pages/privacy-policy').then(({ PrivacyPolicyPage }) => PrivacyPolicyPage)
+const loadRegistrationPage = () => import('src/pages/registration').then(({ RegistrationPage }) => RegistrationPage)
+const loadSettingsContentPage = () =>
+  import('src/pages/settings').then(({ SettingsContentPage }) => SettingsContentPage)
+const loadSettingsNavigationPage = () =>
+  import('src/pages/settings').then(({ SettingsNavigationPage }) => SettingsNavigationPage)
+const loadWaitEmailConfirmPage = () =>
+  import('src/pages/wait-email-confirm').then(({ WaitEmailConfirmPage }) => WaitEmailConfirmPage)
+
+const loadChatRoomContent = () => import('src/widgets/chat-room-content').then(({ ChatRoomContent }) => ChatRoomContent)
+const loadChatRoomsNavigation = () =>
+  import('src/widgets/chat-rooms-navigation').then(({ ChatRoomsNavigation }) => ChatRoomsNavigation)
 
 const routes: RouteRecordRaw[] = [
   {
@@ -33,7 +46,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: LAYOUT_ROUTE_NAMES.auth,
-    component: AuthLayout,
+    component: loadAuthLayout,
     redirect: ROUTE_NAMES.authLogin,
     meta: {
       guestOnly: true
@@ -41,40 +54,40 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: AUTH_ROUTE_NAMES.login,
-        component: LoginPage
+        component: loadLoginPage
       },
       {
         path: AUTH_ROUTE_NAMES.registration,
-        component: RegistrationPage
+        component: loadRegistrationPage
       }
     ]
   },
   {
     path: LAYOUT_ROUTE_NAMES.page,
-    component: PageLayout,
+    component: loadPageLayout,
     redirect: ROUTE_NAMES.notFound,
     children: [
       {
         path: PAGE_ROUTE_NAMES.emailConfirmation,
-        component: EmailConfirmationPage
+        component: loadEmailConfirmationPage
       },
       {
         path: PAGE_ROUTE_NAMES.waitEmailConfirm,
-        component: WaitEmailConfirmPage,
+        component: loadWaitEmailConfirmPage,
         meta: {
           guestOnly: true
         }
       },
       {
         path: PAGE_ROUTE_NAMES.passwordRecovery,
-        component: PasswordRecoveryPage,
+        component: loadPasswordRecoveryPage,
         meta: {
           guestOnly: true
         }
       },
       {
         path: PAGE_ROUTE_NAMES.createNewPassword,
-        component: CreateNewPasswordPage,
+        component: loadCreateNewPasswordPage,
         meta: {
           guestOnly: true
         }
@@ -83,22 +96,22 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: LAYOUT_ROUTE_NAMES.docs,
-    component: DocsLayout,
+    component: loadDocsLayout,
     redirect: ROUTE_NAMES.privacyPolicy,
     children: [
       {
         path: PAGE_ROUTE_NAMES.privacyPolicy,
-        component: PrivacyPolicyPage
+        component: loadPrivacyPolicyPage
       }
     ]
   },
   {
     path: ROUTE_NAMES.download,
-    component: DownloadPage
+    component: loadDownloadPage
   },
   {
     path: LAYOUT_ROUTE_NAMES.app,
-    component: AppLayout,
+    component: loadAppLayout,
     meta: {
       requiresAuth: true
     },
@@ -106,22 +119,22 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'chat-rooms/:chatRoomId?',
         components: {
-          'content-navigation': ChatRoomsNavigation,
-          content: ChatRoomContent
+          'content-navigation': loadChatRoomsNavigation,
+          content: loadChatRoomContent
         }
       },
       {
         path: 'calls',
         components: {
-          'content-navigation': CallsPage,
-          content: ChatRoomContent
+          'content-navigation': loadCallsPage,
+          content: loadChatRoomContent
         }
       },
       {
         path: 'contacts',
         components: {
-          'content-navigation': ContactsPage,
-          content: ChatRoomContent
+          'content-navigation': loadContactsPage,
+          content: loadChatRoomContent
         }
       },
       {
@@ -131,19 +144,19 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'settings/:settingsId',
         components: {
-          'content-navigation': SettingsNavigationPage,
-          content: SettingsContentPage
+          'content-navigation': loadSettingsNavigationPage,
+          content: loadSettingsContentPage
         }
       }
     ]
   },
   {
     path: '/:pathMatch(.*)*',
-    component: PageLayout,
+    component: loadPageLayout,
     children: [
       {
         path: '',
-        component: ErrorPage
+        component: loadErrorPage
       }
     ]
   }

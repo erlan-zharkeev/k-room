@@ -10,10 +10,16 @@ export const useChatRoomMessageEmojiPicker = (messageText: Ref<string>): ChatRoo
   const { emojiPickerQuickList, saveEmojiPickerQuickReaction } = useEmojiPickerQuickList()
   const messageEmojiDropdownAnchor = useTemplateRef<HTMLElement>('messageEmojiDropdownAnchor')
   const isMessageEmojiDropdownOpen = ref(false)
-  const { emojiPickerLocale } = useNmorphEmojiPicker()
+  const { emojiPickerLocale, loadEmojiPickerLocale } = useNmorphEmojiPicker()
 
   const toggleMessageEmojiDropdown = () => {
-    isMessageEmojiDropdownOpen.value = !isMessageEmojiDropdownOpen.value
+    const nextIsOpen = !isMessageEmojiDropdownOpen.value
+
+    isMessageEmojiDropdownOpen.value = nextIsOpen
+
+    if (nextIsOpen) {
+      void loadEmojiPickerLocale()
+    }
   }
 
   const closeMessageEmojiDropdown = () => {

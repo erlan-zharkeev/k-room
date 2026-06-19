@@ -1,6 +1,6 @@
-import { getApps, initializeApp } from 'firebase/app'
+export const initFirebase = async () => {
+  const { getApps, initializeApp } = await import('firebase/app')
 
-export const initFirebase = () => {
   if (getApps().length) return
 
   initializeApp({

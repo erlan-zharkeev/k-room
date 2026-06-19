@@ -5,7 +5,6 @@ import { setHttpClientLanguage, setSocketLanguage } from 'src/shared/api'
 import { pinia } from '../providers/pinia'
 import { router } from '../router'
 
-import { initFirebase } from './init-firebase'
 import { initI18n } from './init-i18n'
 import { initNmorphUi } from './init-nmorph-ui'
 import type { VueApp } from './types'
@@ -14,7 +13,6 @@ export const initApp = async (app: VueApp) => {
   const { appName } = __CLIENT_ENV_DATA__
 
   document.title = appName
-  initFirebase()
   app.use(pinia)
   await app.runWithContext(initClientIndexedDbData)
   const { settings } = useSettings()

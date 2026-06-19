@@ -3,7 +3,6 @@ import {
   NmorphButton,
   NmorphCard,
   NmorphDropdown,
-  NmorphEmojiPicker,
   NmorphIconCheck,
   NmorphIconClose,
   NmorphFileUpload,
@@ -13,7 +12,7 @@ import {
   NmorphIconSmile
 } from '@nmorph/nmorph-ui-kit'
 import { MESSAGE_BODY_MAX_LENGTH } from 'global-shared'
-import { toRef } from 'vue'
+import { defineAsyncComponent, toRef } from 'vue'
 
 import { MESSAGE_ATTACHMENT_ALLOWED_TYPES } from '../config/constants'
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
@@ -25,6 +24,9 @@ import MessagePreview from './MessagePreview.vue'
 
 const props = defineProps<ChatRoomFooterProps>()
 const emit = defineEmits<ChatRoomFooterEmits>()
+const NmorphEmojiPicker = defineAsyncComponent(() =>
+  import('@nmorph/nmorph-ui-kit').then(({ NmorphEmojiPicker }) => NmorphEmojiPicker)
+)
 const room = toRef(props, 'room')
 const {
   messageText,

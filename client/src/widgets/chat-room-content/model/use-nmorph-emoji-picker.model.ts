@@ -1,4 +1,3 @@
-import { loadNmorphEmojiLocale } from '@nmorph/nmorph-ui-kit/emoji'
 import type { NmorphEmojiLocale } from '@nmorph/nmorph-ui-kit/emoji'
 import { computed, shallowRef, watch } from 'vue'
 
@@ -9,15 +8,28 @@ export const useNmorphEmojiPicker = () => {
   const emojiPickerLocale = shallowRef<NmorphEmojiLocale>()
   const emojiPickerLanguage = computed(() => settings.value.localization.language)
 
+  const loadEmojiPickerLocale = async () => {
+    const language = emojiPickerLanguage.value
+    const { loadNmorphEmojiLocale } = await import('@nmorph/nmorph-ui-kit/emoji')
+    const locale = await loadNmorphEmojiLocale(language)
+
+    if (language === emojiPickerLanguage.value) {
+      emojiPickerLocale.value = locale
+    }
+  }
+
   watch(
     emojiPickerLanguage,
-    async (currentLanguage) => {
-      emojiPickerLocale.value = await loadNmorphEmojiLocale(currentLanguage)
+    () => {
+      if (emojiPickerLocale.value) {
+        void loadEmojiPickerLocale()
+      }
     },
-    { immediate: true }
+    { immediate: false }
   )
 
   return {
-    emojiPickerLocale
+    emojiPickerLocale,
+    loadEmojiPickerLocale
   }
 }

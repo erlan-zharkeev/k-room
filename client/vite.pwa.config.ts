@@ -20,15 +20,15 @@ export const generatePWAConfig = ({ appName, themeBg }: { appName: string; theme
       orientation: 'any',
       screenshots: [
         {
-          src: '/img/wide.png',
+          src: '/img/wide.webp',
           sizes: '1920x1080',
-          type: 'image/png',
+          type: 'image/webp',
           form_factor: 'wide'
         },
         {
-          src: '/img/narrow.png',
+          src: '/img/narrow.webp',
           sizes: '414x896',
-          type: 'image/png',
+          type: 'image/webp',
           form_factor: 'narrow'
         }
       ],
@@ -46,6 +46,14 @@ export const generatePWAConfig = ({ appName, themeBg }: { appName: string; theme
       ]
     },
     workbox: {
+      globPatterns: [
+        'index.html',
+        'registerSW.js',
+        'manifest.webmanifest',
+        'assets/index-*.js',
+        'assets/index-*.css',
+        'meta/*'
+      ],
       runtimeCaching: [
         {
           urlPattern: ({ request }) => request.destination === 'document',

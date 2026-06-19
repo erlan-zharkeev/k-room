@@ -1,4 +1,4 @@
-import { toRef } from 'vue'
+import { onMounted, toRef } from 'vue'
 
 import type { MessageReactionPickerEmit, MessageReactionPickerProps } from '../config/types'
 
@@ -11,7 +11,11 @@ export const useMessageReactionPicker = (props: MessageReactionPickerProps, emit
   const room = toRef(props, 'room')
   const { emojiPickerQuickList, saveEmojiPickerQuickReaction } = useEmojiPickerQuickList()
   const { canUpdateMessageReaction, toggleMessageReaction } = useMessageReaction(message, room)
-  const { emojiPickerLocale } = useNmorphEmojiPicker()
+  const { emojiPickerLocale, loadEmojiPickerLocale } = useNmorphEmojiPicker()
+
+  onMounted(() => {
+    void loadEmojiPickerLocale()
+  })
 
   const selectMessageReaction = (glyphKey: string) => {
     if (!canUpdateMessageReaction.value) return
