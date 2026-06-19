@@ -1,20 +1,26 @@
 import { type AppLanguage, type LocalizedText } from 'global-shared'
-import { useI18n as useVueI18n } from 'vue-i18n'
 
+import { CLIENT_LANGUAGE } from './constants'
 import type { I18nNamedValues } from './define-i18n'
-import type { I18nTranslate, UseI18nResult } from './i18n.types'
+import type { I18nRuntime, I18nTranslate, UseI18nResult } from './i18n.types'
+
+let i18nRuntime: I18nRuntime = {
+  getLocale: () => CLIENT_LANGUAGE,
+  translate: (key) => key
+}
 
 const isLocalizedText = (value: unknown): value is LocalizedText<unknown> =>
   typeof value === 'object' && value !== null && 'en' in value && 'ru' in value && 'zh' in value
 
+export const setI18nRuntime = (runtime: I18nRuntime) => {
+  i18nRuntime = runtime
+}
+
 export const useI18n = (): UseI18nResult => {
-  const i18n = useVueI18n({ useScope: 'global' })
-  const vueTranslate = i18n.t as (key: string, named?: I18nNamedValues) => string
-
   const t = ((value: string | LocalizedText<unknown>, named?: I18nNamedValues) => {
-    if (isLocalizedText(value)) return value[i18n.locale.value as AppLanguage]
+    if (isLocalizedText(value)) return value[i18nRuntime.getLocale() as AppLanguage]
 
-    return vueTranslate(value, named)
+    return i18nRuntime.translate(value, named)
   }) as I18nTranslate
 
   return {

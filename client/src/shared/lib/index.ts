@@ -38,7 +38,7 @@ export {
 } from './misc/misc'
 export { acquireUrl, releaseUrl, useLiveMediaUrl, useLiveMediaUrlMap, useLiveMediaUrls } from './media/media'
 export { loadStorageEstimate, useStorageEstimate } from './storage/storage.model'
-export { useI18n } from './i18n/i18n'
+export { setI18nRuntime, useI18n } from './i18n/i18n'
 export { buildI18nMessages, defineI18n, i18nFormatter } from './i18n/define-i18n'
 export { createPasswordValidationRules } from './validation/validation'
 export { CLIENT_LANGUAGE } from './i18n/constants'
