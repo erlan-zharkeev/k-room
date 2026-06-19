@@ -10,18 +10,79 @@ K-Room is a chat and communication app with a Vue/Tauri client, Node server, loc
 
 - pnpm 10 as package manager
 - Docker for correct development environment startup
+- OpenSSL, or Git for Windows with OpenSSL, when dev certificates must be generated
 
 ## Development
 
 - Enable pnpm once if needed: `corepack enable`
-- Add variables to bash `RESEND_API_KEY`, `EMAIL_CONFIRM_SECRET`, `FIREBASE_API_KEY`
-- Generate local HTTPS certificates once and place them in `dev-certs/`:
+- Add required values to `.env.development` or `.env.secret`: `RESEND_API_KEY`, `EMAIL_CONFIRM_SECRET`, `FIREBASE_API_KEY`
+- The dev script generates local HTTPS certificates in `dev-certs/` when they are missing:
   - `dev-certs/k-room-dev.pem`
   - `dev-certs/k-room-dev-key.pem`
-- Add `127.0.0.1 k-room-dev` to `/etc/hosts`
-- Run `pnpm dev`
-- Client opens automatically at `https://k-room-dev:43101`
-- Update `@nmorph/nmorph-ui-kit`: `pnpm update:nmorph`
+- Add `127.0.0.1 k-room-dev` to your hosts file
+- Run `pnpm run dev`
+- Open the client at `https://k-room-dev:43101`
+- Update `@nmorph/nmorph-ui-kit`: `pnpm run update:nmorph`
+
+### LAN Development
+
+Use `pnpm run dev:lan` when the app must be opened from another device on the same local network, for example from a phone while testing camera, microphone, WebRTC, or mobile layout.
+
+`dev:lan` runs the same startup flow as `dev`, but passes `--lan` to `scripts/dev.mjs`. In LAN mode the script overrides `APP_HOST` and `API_HOST` to `https://192.168.8.7`, so the printed client and server URLs use the machine LAN IP instead of `https://k-room-dev`.
+
+To configure LAN mode for a different network:
+
+1. Find this machine's LAN IPv4 address, for example with `ipconfig` on Windows.
+2. Replace `192.168.8.7` in `scripts/dev.mjs`:
+   - the `APP_HOST` and `API_HOST` values in the `isLan` block
+   - the `IP.3` value in the generated certificate config
+3. Delete the old generated certificate files from `dev-certs/` so the script can generate a certificate containing the new IP.
+4. Allow inbound connections to the dev ports if the firewall asks:
+   - client: `43101`
+   - server: `43107`
+5. Run `pnpm run dev:lan`.
+6. Open `https://<LAN_IP>:43101` on the other device.
+
+Both devices must be on the same network. Because the certificate is local and self-signed, the browser on the other device may ask you to trust or continue to the dev site.
+
+## Root Package Scripts
+
+These commands are defined in the root `package.json`.
+
+| Command                       | What it does                                                                                                                                                                                |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm run dev`                | Installs workspace dependencies, prepares Husky, ensures dev certificates, starts Docker services, builds `global-shared`, then runs `global-shared`, `client`, and `server` in watch mode. |
+| `pnpm run dev:lan`            | Runs the same flow as `dev`, but exposes the app through the configured LAN IP for testing from another device.                                                                             |
+| `pnpm run update:nmorph`      | Updates `@nmorph/nmorph-ui-kit` in `client` to the latest version and builds the client.                                                                                                    |
+| `pnpm run husky-prepare`      | Installs Git hooks through Husky. It is called by `dev`.                                                                                                                                    |
+| `pnpm run sync:public-config` | Generates `nginx/webserver.conf` from `nginx/webserver.template.conf` using `.env.shared` and `.env.production`.                                                                            |
+| `pnpm run format:fix`         | Formats the repository with Prettier.                                                                                                                                                       |
+| `pnpm run build`              | Runs all package build tasks through Turbo.                                                                                                                                                 |
+| `pnpm run typecheck`          | Runs application and test type checks through Turbo.                                                                                                                                        |
+| `pnpm run lint:es`            | Runs ESLint for workspace packages, e2e tests, and Playwright config.                                                                                                                       |
+| `pnpm run lint:style`         | Runs style linting through Turbo.                                                                                                                                                           |
+| `pnpm run lint:fsd`           | Runs client FSD boundary linting.                                                                                                                                                           |
+| `pnpm run lint:all`           | Runs FSD, ESLint, and style lint checks.                                                                                                                                                    |
+| `pnpm run lint:fsd:watch`     | Runs the client FSD linter in watch mode.                                                                                                                                                   |
+| `pnpm run lint:fix`           | Applies ESLint and Stylelint fixes through Turbo.                                                                                                                                           |
+| `pnpm run e2e`                | Runs the full Playwright e2e suite.                                                                                                                                                         |
+| `pnpm run e2e:ui`             | Opens the Playwright UI runner.                                                                                                                                                             |
+| `pnpm run smoke`              | Runs Playwright tests marked with `@smoke`.                                                                                                                                                 |
+| `pnpm run check`              | Runs the full local quality gate: FSD lint, ESLint, style lint, type checks, builds, tests, and Prettier check.                                                                             |
+| `pnpm run deploy`             | Creates and pushes the production deploy trigger commit. It only works from a clean `production` branch.                                                                                    |
+| `pnpm run test`               | Runs workspace test tasks through Turbo.                                                                                                                                                    |
+
+## Scripts Directory
+
+The root `scripts/` directory contains implementation files used by the package scripts and deployment workflow.
+
+| File                                                 | What it does                                                                                                                                                                                                                                                                                   |
+| ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `scripts/dev.mjs`                                    | Implements `dev` and `dev:lan`: loads env files, validates required env, prepares certificates, starts required Docker containers (`db`, `mongo-express`, `k-room-redis`), builds shared contracts, starts dev services, waits for server health, and restarts the server process if it exits. |
+| `scripts/sync-public-config.mjs`                     | Reads shared and stage env files, extracts public domains and paths, and writes `nginx/webserver.conf` from the nginx template.                                                                                                                                                                |
+| `scripts/deploy/create-production-deploy-commit.mjs` | Checks that the current branch is clean `production`, creates an empty `deploy(production): trigger` commit, and pushes it.                                                                                                                                                                    |
+| `scripts/deploy/deploy.sh`                           | Server-side production deploy script used by GitHub Actions or the host: merges env files, syncs certificates when available, logs in to Docker Hub, pulls images, and runs Docker Compose.                                                                                                    |
+| `scripts/deploy/sync-certs.sh`                       | Copies Let's Encrypt certificate files for the production domain into `scripts/deploy/certs/` for Docker Compose.                                                                                                                                                                              |
 
 ## Checks
 

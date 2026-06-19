@@ -62,9 +62,9 @@ async function runDev() {
   })
 
   ensureDockerContainer({
-    name: 'redis',
+    name: 'k-room-redis',
     image: 'redis:7-alpine',
-    args: ['-d', '-p', '6379:6379', '--name', 'redis']
+    args: ['-d', '-p', '6380:6379', '--name', 'k-room-redis']
   })
 
   const sharedEnv = readEnvFile('.env.shared')

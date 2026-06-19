@@ -17,6 +17,8 @@ env:
   PNPM_VERSION: '10.33.0'
   CLIENT_IMAGE_NAME: erlan1/k-room_client
   SERVER_IMAGE_NAME: erlan1/k-room_server
+  VPS_USER: root
+  VPS_APP_PATH: /opt/k-room
 
 jobs:
   verify:
@@ -87,41 +89,40 @@ jobs:
 
       - name: Prepare SSH
         env:
-          LIGHTSAIL_HOST: ${{ secrets.LIGHTSAIL_HOST }}
-          LIGHTSAIL_USER: ${{ secrets.LIGHTSAIL_USER }}
-          LIGHTSAIL_SSH_PRIVATE_KEY_B64: ${{ secrets.LIGHTSAIL_SSH_PRIVATE_KEY_B64 }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY_B64 }}
         run: |
           set -euo pipefail
 
-          if [ -z "$LIGHTSAIL_SSH_PRIVATE_KEY_B64" ]; then
-            echo "LIGHTSAIL_SSH_PRIVATE_KEY_B64 is empty" >&2
+          if [ -z "$VPS_SSH_PRIVATE_KEY_B64" ]; then
+            echo "VPS_SSH_PRIVATE_KEY_B64 is empty" >&2
             exit 1
           fi
 
-          if [ -z "$LIGHTSAIL_HOST" ]; then
-            echo "LIGHTSAIL_HOST is empty" >&2
+          if [ -z "$VPS_HOST" ]; then
+            echo "VPS_HOST is empty" >&2
             exit 1
           fi
 
-          if [[ "$LIGHTSAIL_HOST" =~ [[:space:]\"\'] ]]; then
-            echo "LIGHTSAIL_HOST must contain only host value without spaces or quotes" >&2
+          if [[ "$VPS_HOST" =~ [[:space:]\"\'] ]]; then
+            echo "VPS_HOST must contain only host value without spaces or quotes" >&2
             exit 1
           fi
 
-          echo "SSH target host: $LIGHTSAIL_HOST"
-          echo "SSH target user: $LIGHTSAIL_USER"
+          echo "SSH target host: $VPS_HOST"
+          echo "SSH target user: $VPS_USER"
           echo "SSH target port: 22"
           echo "Runner public IPv4:"
           curl -fsS https://api.ipify.org || true
           echo
           echo "Host resolution:"
-          getent ahosts "$LIGHTSAIL_HOST" || true
+          getent ahosts "$VPS_HOST" || true
 
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
 
-          if ! printf '%s' "$LIGHTSAIL_SSH_PRIVATE_KEY_B64" | base64 --decode | tr -d '\r' > ~/.ssh/id_ed25519; then
-            echo "LIGHTSAIL_SSH_PRIVATE_KEY_B64 must contain base64 of the private SSH key file" >&2
+          if ! printf '%s' "$VPS_SSH_PRIVATE_KEY_B64" | base64 --decode | tr -d '\r' > ~/.ssh/id_ed25519; then
+            echo "VPS_SSH_PRIVATE_KEY_B64 must contain base64 of the private SSH key file" >&2
             exit 1
           fi
 
@@ -130,16 +131,16 @@ jobs:
           echo "SSH key fingerprint:"
           ssh-keygen -lf ~/.ssh/id_ed25519.pub
 
-          echo "Testing TCP connection to $LIGHTSAIL_HOST:22"
-          if ! timeout 20 bash -c 'cat < /dev/null > /dev/tcp/"$1"/22' _ "$LIGHTSAIL_HOST"; then
-            echo "Could not connect to LIGHTSAIL_HOST port 22 from GitHub Actions." >&2
+          echo "Testing TCP connection to $VPS_HOST:22"
+          if ! timeout 20 bash -c 'cat < /dev/null > /dev/tcp/"$1"/22' _ "$VPS_HOST"; then
+            echo "Could not connect to VPS_HOST port 22 from GitHub Actions." >&2
             exit 1
           fi
 
-          echo "Reading SSH host key from $LIGHTSAIL_HOST"
-          if ! ssh-keyscan -T 20 -v -H "$LIGHTSAIL_HOST" > ~/.ssh/known_hosts 2> ~/.ssh/ssh-keyscan.log; then
+          echo "Reading SSH host key from $VPS_HOST"
+          if ! ssh-keyscan -T 20 -v -H "$VPS_HOST" > ~/.ssh/known_hosts 2> ~/.ssh/ssh-keyscan.log; then
             cat ~/.ssh/ssh-keyscan.log >&2
-            echo "Could not read SSH host key. Check LIGHTSAIL_HOST value and that port 22 is open for GitHub Actions." >&2
+            echo "Could not read SSH host key. Check VPS_HOST value and that port 22 is open for GitHub Actions." >&2
             exit 1
           fi
           cat ~/.ssh/ssh-keyscan.log
@@ -154,9 +155,7 @@ jobs:
 
       - name: Copy deployment files
         env:
-          LIGHTSAIL_HOST: ${{ secrets.LIGHTSAIL_HOST }}
-          LIGHTSAIL_USER: ${{ secrets.LIGHTSAIL_USER }}
-          LIGHTSAIL_APP_PATH: ${{ secrets.LIGHTSAIL_APP_PATH }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
           set -euo pipefail
 
@@ -174,18 +173,16 @@ jobs:
             DEPLOY_FILES+=(.env.secret)
           fi
 
-          tar -czf - "${DEPLOY_FILES[@]}" | ssh "${SSH_OPTIONS[@]}" "$LIGHTSAIL_USER@$LIGHTSAIL_HOST" "mkdir -p $LIGHTSAIL_APP_PATH/scripts/deploy/certs $LIGHTSAIL_APP_PATH/nginx && tar -xzf - -C $LIGHTSAIL_APP_PATH"
+          tar -czf - "${DEPLOY_FILES[@]}" | ssh "${SSH_OPTIONS[@]}" "$VPS_USER@$VPS_HOST" "mkdir -p $VPS_APP_PATH/scripts/deploy/certs $VPS_APP_PATH/nginx && tar -xzf - -C $VPS_APP_PATH"
 
       - name: Run deployment
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-          LIGHTSAIL_HOST: ${{ secrets.LIGHTSAIL_HOST }}
-          LIGHTSAIL_USER: ${{ secrets.LIGHTSAIL_USER }}
-          LIGHTSAIL_APP_PATH: ${{ secrets.LIGHTSAIL_APP_PATH }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
           set -euo pipefail
 
           SSH_OPTIONS=(-o ServerAliveInterval=60 -o ServerAliveCountMax=20 -o TCPKeepAlive=yes -o ConnectTimeout=30)
 
-          ssh "${SSH_OPTIONS[@]}" "$LIGHTSAIL_USER@$LIGHTSAIL_HOST" "cd $LIGHTSAIL_APP_PATH && DOCKERHUB_USERNAME=\"$DOCKERHUB_USERNAME\" DOCKERHUB_TOKEN=\"$DOCKERHUB_TOKEN\" sh ./scripts/deploy/deploy.sh"
+          ssh "${SSH_OPTIONS[@]}" "$VPS_USER@$VPS_HOST" "cd $VPS_APP_PATH && DOCKERHUB_USERNAME=\"$DOCKERHUB_USERNAME\" DOCKERHUB_TOKEN=\"$DOCKERHUB_TOKEN\" sh ./scripts/deploy/deploy.sh"

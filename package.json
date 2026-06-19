@@ -36,6 +36,7 @@
     "husky-prepare": "husky install",
     "sync:public-config": "node scripts/sync-public-config.mjs",
     "format:fix": "prettier --write .",
+    "format:staged": "node scripts/format-staged.mjs",
     "build": "turbo run build",
     "typecheck": "turbo run typecheck typecheck:test",
     "lint:es": "turbo run lint:es && eslint --config .eslintrc.cjs \"e2e/**/*.ts\" playwright.config.ts",
