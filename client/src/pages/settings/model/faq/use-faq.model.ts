@@ -42,7 +42,6 @@ export const useFaq = () => {
     contactSupport,
     filteredItems,
     openGuide,
-    searchQuery,
-    supportEmail
+    searchQuery
   }
 }

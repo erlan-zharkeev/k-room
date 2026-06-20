@@ -29,7 +29,7 @@ const { hasFooter } = useSettingsCard(props)
         <slot />
       </div>
 
-      <template v-if="hasFooter">
+      <div v-if="hasFooter" class="settings-card__footer">
         <slot name="footer">
           <NmorphButton
             fill
@@ -39,7 +39,7 @@ const { hasFooter } = useSettingsCard(props)
             @click="props.onButtonClick"
           />
         </slot>
-      </template>
+      </div>
     </NmorphCard>
   </NmorphBadge>
 </template>
@@ -47,6 +47,8 @@ const { hasFooter } = useSettingsCard(props)
 <style lang="scss">
 .settings-card-badge.nmorph-badge {
   --nmorph-badge-ribbon-corner-size: 30px;
+
+  min-width: 0;
 }
 
 .settings-card {
@@ -54,6 +56,7 @@ const { hasFooter } = useSettingsCard(props)
   gap: 8px;
   align-content: start;
 
+  min-width: 0;
   padding: 14px;
   border-radius: 8px;
 }
@@ -62,9 +65,15 @@ const { hasFooter } = useSettingsCard(props)
   display: grid;
   gap: 8px;
   align-content: start;
+  min-width: 0;
 }
 
 .settings-card__title {
   margin-bottom: 4px;
+}
+
+.settings-card__footer {
+  min-width: 0;
+  margin-top: 4px;
 }
 </style>

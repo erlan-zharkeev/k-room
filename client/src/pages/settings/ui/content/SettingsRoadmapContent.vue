@@ -11,13 +11,24 @@ const { roadmapItems } = useRoadmap()
 <template>
   <div class="settings-roadmap-content settings-content-grid">
     <SettingsCard :title="$t(SETTINGS_PAGE_ROADMAP_I18N.roadmap)">
-      <AppText color="semi-contrast-text" :text="$t(SETTINGS_PAGE_ROADMAP_I18N.intro)" />
+      <AppText
+        class="settings-roadmap-content__intro"
+        tag="p"
+        color="semi-contrast-text"
+        :text="$t(SETTINGS_PAGE_ROADMAP_I18N.intro)"
+      />
 
       <div class="settings-roadmap-content__list">
         <article v-for="(item, index) in roadmapItems" :key="item.id" class="settings-roadmap-content__item">
           <div class="settings-roadmap-content__item-header">
             <span class="settings-roadmap-content__item-number">{{ index + 1 }}</span>
-            <AppText tag="span" color="contrast-text" bold :text="item.title" />
+            <AppText
+              class="settings-roadmap-content__item-title"
+              tag="span"
+              color="contrast-text"
+              bold
+              :text="item.title"
+            />
             <AppText
               tag="span"
               class="settings-roadmap-content__item-status"
@@ -27,7 +38,12 @@ const { roadmapItems } = useRoadmap()
             />
           </div>
 
-          <AppText tag="p" color="semi-contrast-text" :text="item.description" />
+          <AppText
+            class="settings-roadmap-content__item-description"
+            tag="p"
+            color="semi-contrast-text"
+            :text="item.description"
+          />
         </article>
       </div>
     </SettingsCard>
@@ -38,12 +54,14 @@ const { roadmapItems } = useRoadmap()
 .settings-roadmap-content__list {
   display: grid;
   gap: 10px;
+  min-width: 0;
 }
 
 .settings-roadmap-content__item {
   display: grid;
   gap: 6px;
 
+  min-width: 0;
   padding: 12px;
   border: 1px solid color-mix(in srgb, var(--nmorph-border-color) 70%, transparent);
   border-radius: 8px;
@@ -54,6 +72,8 @@ const { roadmapItems } = useRoadmap()
   grid-template-columns: 24px minmax(0, 1fr) auto;
   gap: 8px;
   align-items: center;
+
+  min-width: 0;
 }
 
 .settings-roadmap-content__item-number {
@@ -75,6 +95,14 @@ const { roadmapItems } = useRoadmap()
   padding: 2px 8px;
   border-radius: 999px;
   background: color-mix(in srgb, var(--nmorph-accent-color) 14%, transparent);
+}
+
+.settings-roadmap-content__intro,
+.settings-roadmap-content__item-title,
+.settings-roadmap-content__item-description {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 @include screen-tablet {

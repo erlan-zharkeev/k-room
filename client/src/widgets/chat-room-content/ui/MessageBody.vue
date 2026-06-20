@@ -83,6 +83,7 @@ const {
   display: grid;
   gap: 4px;
 
+  min-width: 0;
   max-width: min(72%, 620px);
   padding: 8px 12px;
   border-radius: 8px;
@@ -129,6 +130,7 @@ const {
 .message-body__content {
   display: grid;
   gap: 4px;
+  min-width: 0;
 }
 
 .message-body__reference-preview {

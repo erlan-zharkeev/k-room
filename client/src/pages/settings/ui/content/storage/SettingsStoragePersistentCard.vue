@@ -16,7 +16,19 @@ const { isPersistenceSupported, isPersistent, isPersistenceLoading, requestPersi
     :button-loading="isPersistenceLoading"
     :on-button-click="isPersistent ? undefined : requestPersistence"
   >
-    <AppText :text="$t(SETTINGS_PAGE_STORAGE_I18N.storagePersistentDescription)" />
+    <AppText
+      class="settings-storage-persistent-card__description"
+      tag="p"
+      :text="$t(SETTINGS_PAGE_STORAGE_I18N.storagePersistentDescription)"
+    />
     <AppText v-if="isPersistent" color="accent" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storagePersistentGranted)" />
   </SettingsCard>
 </template>
+
+<style lang="scss">
+.settings-storage-persistent-card__description {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+</style>

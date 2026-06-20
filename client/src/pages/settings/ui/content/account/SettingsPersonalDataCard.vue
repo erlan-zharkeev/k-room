@@ -28,7 +28,6 @@ const {
   accountAvatarPreviewUrl,
   displayedAvatarId,
   displayedUserId,
-  accountNicknameError,
   isAccountSaveDisabled,
   isAccountSaving,
   copyUserId,
@@ -119,7 +118,7 @@ const {
             />
           </div>
           <NmorphCallout
-            type="warning"
+            type="info"
             :content="`${$t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.uploadPhotoRequirements)} ${$t(
               SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.uploadPhotoHint,
               { formats: SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES_LABEL, maxMb: SETTINGS_ACCOUNT_AVATAR_MAX_MB }
@@ -134,7 +133,6 @@ const {
         :show-validation-icon="false"
       >
         <NmorphTextInput v-model.trim="formData.nickname.value" :disabled="isAccountSaving" />
-        <AppText v-if="accountNicknameError" tag="small" color="warn" :text="accountNicknameError" />
       </NmorphFormItem>
     </NmorphForm>
   </SettingsCard>

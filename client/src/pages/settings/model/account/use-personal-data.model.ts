@@ -1,13 +1,15 @@
 import type { INmorphCustomFileData as NmorphCustomFileData } from '@nmorph/nmorph-ui-kit'
 import { useClipboard } from '@vueuse/core'
 import {
+  NICKNAME_MAX_LENGTH_PATTERN,
+  NICKNAME_MIN_LENGTH_PATTERN,
+  NICKNAME_PATTERN,
+  NON_EMPTY_PATTERN,
   USER_ENDPOINTS,
-  createUpdateUserDataSchema,
   createValidationMessages,
   isNicknameValid,
   type UserData
 } from 'global-shared'
-import { safeParse } from 'valibot'
 import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
 import { useMedia } from 'src/entities/media-file'
@@ -25,16 +27,24 @@ export const usePersonalData = () => {
   const { copy, isSupported: isClipboardSupported } = useClipboard()
   const { t } = useI18n()
   const toast = useAppToast()
+  const validationMessages = createValidationMessages(t)
   const formData = reactive({
     avatar: { value: '', rules: [] },
-    nickname: { value: '', rules: [] }
+    nickname: {
+      value: '',
+      rules: [
+        { pattern: NICKNAME_PATTERN, error: validationMessages.nicknameInvalidFormat },
+        { pattern: NICKNAME_MIN_LENGTH_PATTERN, error: validationMessages.nicknameTooShort },
+        { pattern: NICKNAME_MAX_LENGTH_PATTERN, error: validationMessages.nicknameTooLong },
+        { pattern: NON_EMPTY_PATTERN, error: validationMessages.fieldIsRequired }
+      ]
+    }
   })
   const accountAvatarFile = ref<File>()
   const accountAvatarUploadValue = ref<NmorphCustomFileData[]>([])
   const accountAvatarPreviewUrl = ref('')
   const accountAvatarWasReset = ref(false)
   const isAccountSaving = ref(false)
-  const accountNicknameSchema = createUpdateUserDataSchema(createValidationMessages(t))
 
   let accountAvatarPreviewObjectUrl: string | undefined
 
@@ -46,16 +56,12 @@ export const usePersonalData = () => {
   const accountNicknameChanged = computed(() => formData.nickname.value !== user.value.nickname)
   const accountAvatarChanged = computed(() => Boolean(accountAvatarFile.value || accountAvatarWasReset.value))
   const hasAccountChanges = computed(() => accountNicknameChanged.value || accountAvatarChanged.value)
-  const accountNicknameError = computed(() => {
-    if (!formData.nickname.value) return ''
-
-    const result = safeParse(accountNicknameSchema, { nickname: formData.nickname.value }, { abortPipeEarly: true })
-
-    return result.success ? '' : result.issues[0]?.message || ''
-  })
   const isAccountSaveDisabled = computed(
     () =>
-      !user.value.id || !hasAccountChanges.value || isAccountNicknameEmpty.value || Boolean(accountNicknameError.value)
+      !user.value.id ||
+      !hasAccountChanges.value ||
+      isAccountNicknameEmpty.value ||
+      !isNicknameValid(formData.nickname.value)
   )
 
   const clearAccountAvatarPreview = () => {
@@ -193,7 +199,6 @@ export const usePersonalData = () => {
     accountAvatarPreviewUrl,
     displayedAvatarId,
     displayedUserId,
-    accountNicknameError,
     isAccountSaveDisabled,
     isAccountSaving,
     copyUserId,

@@ -22,7 +22,21 @@ const { segments } = useMessageText(props)
       >
         {{ segment.text }}
       </NmorphLink>
-      <span v-else>{{ segment.text }}</span>
+      <span v-else class="message-text__segment">{{ segment.text }}</span>
     </template>
   </div>
 </template>
+
+<style lang="scss">
+.message-text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.message-text .message-text__segment,
+.message-text .message-text__link {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+</style>

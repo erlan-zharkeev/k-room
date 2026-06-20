@@ -7,7 +7,7 @@ import { SETTINGS_PAGE_FAQ_I18N } from '../../config/i18n/faq.i18n'
 import { useFaq } from '../../model/faq/use-faq.model'
 import SettingsCard from '../SettingsCard.vue'
 
-const { appVersion, contactSupport, filteredItems, openGuide, searchQuery, supportEmail } = useFaq()
+const { appVersion, contactSupport, filteredItems, openGuide, searchQuery } = useFaq()
 </script>
 
 <template>
@@ -17,8 +17,8 @@ const { appVersion, contactSupport, filteredItems, openGuide, searchQuery, suppo
 
       <div v-if="filteredItems.length">
         <div v-for="item in filteredItems" :key="item.id" class="settings-faq-content__item">
-          <AppText color="contrast-text" :text="item.question" />
-          <AppText :text="item.answer" />
+          <AppText class="settings-faq-content__question" tag="p" color="contrast-text" :text="item.question" />
+          <AppText class="settings-faq-content__answer" tag="p" :text="item.answer" />
           <NmorphDivider class="settings-faq-content__list-divider" />
         </div>
       </div>
@@ -28,8 +28,7 @@ const { appVersion, contactSupport, filteredItems, openGuide, searchQuery, suppo
       <div class="settings-faq-content__actions">
         <NmorphButton :text="$t(SETTINGS_PAGE_FAQ_I18N.faqOpenGuide)" @click="openGuide" />
         <NmorphButton :text="$t(SETTINGS_PAGE_FAQ_I18N.faqContactSupport)" @click="contactSupport" />
-        <AppText :text="supportEmail" />
-        <AppText color="semi-contrast-text" :text="`v${appVersion}`" />
+        <AppText class="settings-faq-content__version" color="semi-contrast-text" :text="`v${appVersion}`" />
       </div>
     </SettingsCard>
   </div>
@@ -39,8 +38,17 @@ const { appVersion, contactSupport, filteredItems, openGuide, searchQuery, suppo
 .settings-faq-content__item {
   display: grid;
   gap: 4px;
+
+  min-width: 0;
   padding: 12px;
   border-radius: 6px;
+}
+
+.settings-faq-content__question,
+.settings-faq-content__answer {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 .settings-faq-content__list-divider {
@@ -52,5 +60,9 @@ const { appVersion, contactSupport, filteredItems, openGuide, searchQuery, suppo
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
+}
+
+.settings-faq-content__version {
+  margin-left: auto;
 }
 </style>
