@@ -7,6 +7,7 @@ import { router } from '../router'
 
 import { initI18n } from './init-i18n'
 import { initNmorphUi } from './init-nmorph-ui'
+import { initSentry } from './init-sentry'
 import type { VueApp } from './types'
 
 export const initApp = async (app: VueApp) => {
@@ -23,5 +24,6 @@ export const initApp = async (app: VueApp) => {
   initI18n(app, language)
   initNmorphUi(app, language)
   app.use(router)
+  initSentry(app)
   void app.runWithContext(initClientData)
 }

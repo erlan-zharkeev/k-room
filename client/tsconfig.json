@@ -20,6 +20,7 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "client-env.types.ts",
+    "create-client-env-data.constants.ts",
     "create-client-env-data.ts"
   ]
 }

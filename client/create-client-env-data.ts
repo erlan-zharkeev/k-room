@@ -5,6 +5,7 @@ import { formatAppName, readEnv, readSecretEnv, type EnvKey, type PackageData } 
 import { loadEnv } from 'vite'
 
 import type { ClientEnv } from './client-env.types'
+import { SENTRY_DSN_CLIENT } from './create-client-env-data.constants'
 
 export const createClientEnvData = (mode: string, envDir: string): ClientEnv => {
   const sharedEnv = loadEnv('shared', envDir, '')
@@ -50,7 +51,7 @@ export const createClientEnvData = (mode: string, envDir: string): ClientEnv => 
     apiHost,
     firebaseApiKey: getEnv('FIREBASE_API_KEY', modeEnv),
     turnstileSiteKey,
-    sentryDsnClient: getEnv('SENTRY_DSN_CLIENT', modeEnv),
+    sentryDsnClient: SENTRY_DSN_CLIENT,
     sentryEnvironment: getEnv('SENTRY_ENVIRONMENT', modeEnv),
     sentryEnabled: getEnv('SENTRY_ENABLED', modeEnv) === 'true',
     themeBg,

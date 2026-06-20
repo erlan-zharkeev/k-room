@@ -9,7 +9,6 @@ export interface EnvVariables {
   COOKIE_DOMAIN: string
   SENTRY_ENVIRONMENT: string
   SENTRY_ENABLED: string
-  SENTRY_DSN_CLIENT: string
   FIREBASE_API_KEY: string
   RESEND_API_KEY: string
   ADMIN_USERNAME: string
