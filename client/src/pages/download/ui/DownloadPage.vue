@@ -32,12 +32,7 @@ const {
       <PageBackButton />
 
       <header class="download-page__header">
-        <AppHeader
-          tag="h1"
-          alignment="center"
-          color="contrast-text"
-          :text="$t(DOWNLOAD_PAGE_I18N.title, { appName: appName })"
-        />
+        <AppHeader tag="h1" alignment="center" :text="$t(DOWNLOAD_PAGE_I18N.title, { appName: appName })" />
         <AppText tag="p" alignment="center" color="semi-contrast-text" :text="$t(DOWNLOAD_PAGE_I18N.description)" />
       </header>
 
@@ -69,6 +64,7 @@ const {
           v-for="item in platformItems"
           fill
           :key="item.platformId"
+          thickness="thick"
           class="download-page__download-button"
           :aria-label="$t(DOWNLOAD_PAGE_I18N.downloadAction, { platformLabel: item.label })"
           @click="downloadPlatformItem(item)"
@@ -88,7 +84,7 @@ const {
               </svg>
               <svg
                 v-else-if="item.platformId === 'macos'"
-                class="download-page__platform-svg"
+                class="download-page__platform-svg download-page__platform-svg--macos"
                 fill="currentColor"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
@@ -149,5 +145,9 @@ const {
   display: block;
   width: 18px;
   height: 18px;
+}
+
+.download-page__platform-svg--macos {
+  margin-bottom: 2px;
 }
 </style>

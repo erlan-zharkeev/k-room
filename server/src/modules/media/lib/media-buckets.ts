@@ -48,12 +48,18 @@ export const initMediaBuckets = () => {
 
 export const deleteBucketFileById = async (bucketName: MediaBucketName, id: string) => {
   const bucket = resolveRequiredMediaBucket(bucketName)
+  const db = mongoose.connection.db
+
+  if (!db) {
+    throw new AppError(REQ_STATUS.server, 'Mongo is not connected yet')
+  }
+
   const fileId = new mongoose.Types.ObjectId(id)
   const file = await bucket.find({ _id: fileId }).next()
 
-  if (!file) {
-    return
+  if (file) {
+    await bucket.delete(fileId)
   }
 
-  await bucket.delete(fileId)
+  await db.collection(`${bucketName}.chunks`).deleteMany({ files_id: fileId })
 }

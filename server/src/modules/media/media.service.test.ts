@@ -6,6 +6,12 @@ const mongooseMock = vi.hoisted(() => ({
     delete: vi.fn(),
     openUploadStreamWithId: vi.fn()
   },
+  chunksCollection: {
+    deleteMany: vi.fn()
+  },
+  connectionDb: {
+    collection: vi.fn()
+  },
   GridFSBucket: vi.fn(),
   ObjectId: class {
     value: string
@@ -35,7 +41,7 @@ const sharpMock = vi.hoisted(() => vi.fn())
 vi.mock('mongoose', () => ({
   default: {
     connection: {
-      db: {}
+      db: mongooseMock.connectionDb
     },
     mongo: {
       GridFSBucket: mongooseMock.GridFSBucket
@@ -80,6 +86,7 @@ describe('media.service', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mongooseMock.GridFSBucket.mockReturnValue(mongooseMock.bucket)
+    mongooseMock.connectionDb.collection.mockReturnValue(mongooseMock.chunksCollection)
     mongooseMock.bucket.find.mockReturnValue({
       next: vi.fn().mockResolvedValue({ _id: 'old-file' })
     })
@@ -110,6 +117,10 @@ describe('media.service', () => {
 
     expect(result).toBe(fileId)
     expect(mongooseMock.bucket.delete).toHaveBeenCalledWith(expect.any(mongooseMock.ObjectId))
+    expect(mongooseMock.connectionDb.collection).toHaveBeenCalledWith('image.chunks')
+    expect(mongooseMock.chunksCollection.deleteMany).toHaveBeenCalledWith({
+      files_id: expect.any(mongooseMock.ObjectId)
+    })
     expect(mongooseMock.bucket.openUploadStreamWithId).toHaveBeenCalledWith(
       expect.any(mongooseMock.ObjectId),
       fileId,
@@ -122,6 +133,29 @@ describe('media.service', () => {
           orientation: 'portrait'
         })
       })
+    )
+  })
+
+  it('removes orphan chunks before overwriting a missing image file record', async () => {
+    mongooseMock.bucket.find.mockReturnValue({
+      next: vi.fn().mockResolvedValue(null)
+    })
+
+    const fileId = '68f000000000000000000012'
+    await mediaService.uploadBufferToBucket(Buffer.from('raw'), 'image', {
+      id: fileId,
+      overwrite: true
+    })
+
+    expect(mongooseMock.bucket.delete).not.toHaveBeenCalled()
+    expect(mongooseMock.connectionDb.collection).toHaveBeenCalledWith('image.chunks')
+    expect(mongooseMock.chunksCollection.deleteMany).toHaveBeenCalledWith({
+      files_id: expect.any(mongooseMock.ObjectId)
+    })
+    expect(mongooseMock.bucket.openUploadStreamWithId).toHaveBeenCalledWith(
+      expect.any(mongooseMock.ObjectId),
+      fileId,
+      expect.any(Object)
     )
   })
 
