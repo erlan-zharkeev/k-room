@@ -1,6 +1,13 @@
 # Backlog
 
-## Для новой версии
+## Internal Backlog
 
-что там с сентри
-Как отображать звонок если зашел на другом устройстве а говоришь по другому надо придумать flow 9. Добавить аудио сообщения 10. Добавить индикатор качества сети 11. Добавить звуки которые остались 12. Донастроить default цветовые схемы и возможно купить wallpapers
+### AdminJS
+
+- [ ] Extend the admin panel with user management
+- [ ] Add chat room and conversation inspection
+- [ ] Add quick diagnostic actions
+
+### Infrastructure
+
+- [ ] Add a full testing/staging environment

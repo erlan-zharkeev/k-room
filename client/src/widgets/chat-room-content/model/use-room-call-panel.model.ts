@@ -41,6 +41,7 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
   const roomCallTileItems = computed(() =>
     buildRoomCallTileItems({
       audioStream: props.audioStream,
+      connectionQualityByUserId: props.connectionQualityByUserId,
       currentUserId: user.value.id,
       handRaisedByUserId: props.handRaisedByUserId,
       localMediaState: props.localMediaState,

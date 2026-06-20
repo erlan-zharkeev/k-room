@@ -1,12 +1,16 @@
+import { useIntervalFn } from '@vueuse/core'
 import { type EventRoomCallSignalReceived, type RoomCallSignalKind } from 'global-shared'
 import { shallowRef } from 'vue'
 
-import { ROOM_CALL_RTC_CONFIGURATION } from '../config/constants'
+import { ROOM_CALL_CONNECTION_QUALITY_CHECK_INTERVAL_MS, ROOM_CALL_RTC_CONFIGURATION } from '../config/constants'
 import type {
   ConnectRoomCallPeersParams,
+  RoomCallConnectionQuality,
+  RoomCallConnectionQualityByUserId,
   RoomCallLocalMediaStreamList,
   RoomCallRemoteStreamsByUserId
 } from '../config/types'
+import { resolveRoomCallConnectionQuality } from '../lib/resolve-room-call-connection-quality'
 import {
   appendRoomCallRemoteTrack,
   isClosedRoomCallPeerConnection,
@@ -23,7 +27,15 @@ export const useRoomCallPeerManager = () => {
   const peerConnectionByUserId = new Map<string, RTCPeerConnection>()
   const iceCandidatesByUserId = new Map<string, RTCIceCandidateInit[]>()
   const remoteStreamsByUserId = shallowRef<RoomCallRemoteStreamsByUserId>({})
+  const connectionQualityByUserId = shallowRef<RoomCallConnectionQualityByUserId>({})
   const { sendRoomCallSignal } = useRoomCallSession()
+  const { pause: pauseConnectionQualityMonitor, resume: resumeConnectionQualityMonitor } = useIntervalFn(
+    () => {
+      void syncRoomCallConnectionQualities()
+    },
+    ROOM_CALL_CONNECTION_QUALITY_CHECK_INTERVAL_MS,
+    { immediate: false, immediateCallback: false }
+  )
 
   const updateRemoteStream = (userId: string, stream: MediaStream) => {
     remoteStreamsByUserId.value = {
@@ -36,6 +48,51 @@ export const useRoomCallPeerManager = () => {
     const { [userId]: _remoteStream, ...remoteStreams } = remoteStreamsByUserId.value
 
     remoteStreamsByUserId.value = remoteStreams
+  }
+
+  const updateRoomCallConnectionQuality = (userId: string, quality: RoomCallConnectionQuality) => {
+    if (connectionQualityByUserId.value[userId] === quality) {
+      return
+    }
+
+    connectionQualityByUserId.value = {
+      ...connectionQualityByUserId.value,
+      [userId]: quality
+    }
+  }
+
+  const removeRoomCallConnectionQuality = (userId: string) => {
+    const { [userId]: _connectionQuality, ...connectionQuality } = connectionQualityByUserId.value
+
+    connectionQualityByUserId.value = connectionQuality
+  }
+
+  const syncRoomCallConnectionQualityMonitor = () => {
+    if (peerConnectionByUserId.size > 0) {
+      resumeConnectionQualityMonitor()
+      return
+    }
+
+    pauseConnectionQualityMonitor()
+  }
+
+  const syncRoomCallConnectionQuality = async (userId: string, peerConnection: RTCPeerConnection) => {
+    try {
+      const statsReport = await peerConnection.getStats()
+      const quality = resolveRoomCallConnectionQuality(peerConnection.connectionState, statsReport)
+
+      updateRoomCallConnectionQuality(userId, quality)
+    } catch (error) {
+      void error
+    }
+  }
+
+  const syncRoomCallConnectionQualities = async () => {
+    await Promise.all(
+      Array.from(peerConnectionByUserId.entries()).map(([userId, peerConnection]) =>
+        syncRoomCallConnectionQuality(userId, peerConnection)
+      )
+    )
   }
 
   const sendPeerSignal = (roomCallId: string, toUserId: string, signalKind: RoomCallSignalKind, signal: unknown) => {
@@ -58,6 +115,8 @@ export const useRoomCallPeerManager = () => {
     peerConnectionByUserId.delete(userId)
     iceCandidatesByUserId.delete(userId)
     removeRemoteStream(userId)
+    removeRoomCallConnectionQuality(userId)
+    syncRoomCallConnectionQualityMonitor()
   }
 
   const pushRoomCallPeerIceCandidate = (userId: string, candidate: RTCIceCandidateInit) => {
@@ -124,11 +183,15 @@ export const useRoomCallPeerManager = () => {
       )
     })
     peerConnection.addEventListener('connectionstatechange', () => {
+      void syncRoomCallConnectionQuality(userId, peerConnection)
+
       if (isClosedRoomCallPeerConnection(peerConnection)) {
         closeRoomCallPeer(userId)
       }
     })
     peerConnectionByUserId.set(userId, peerConnection)
+    syncRoomCallConnectionQualityMonitor()
+    void syncRoomCallConnectionQuality(userId, peerConnection)
 
     return peerConnection
   }
@@ -245,9 +308,11 @@ export const useRoomCallPeerManager = () => {
 
   const resetRoomCallPeers = () => {
     Array.from(peerConnectionByUserId.keys()).forEach(closeRoomCallPeer)
+    pauseConnectionQualityMonitor()
   }
 
   return {
+    connectionQualityByUserId,
     remoteStreamsByUserId,
     connectRoomCallPeers,
     handleRoomCallSignalReceived,

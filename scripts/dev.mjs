@@ -1,5 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { chmod } from 'node:fs/promises'
+import { isIP } from 'node:net'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { spawn, spawnSync } from 'node:child_process'
@@ -9,7 +10,11 @@ import { request as httpsRequest } from 'node:https'
 const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const isWindows = process.platform === 'win32'
 const pnpmCommand = isWindows ? 'pnpm.cmd' : 'pnpm'
-const isLan = process.argv.includes('--lan')
+const LAN_FLAG = '--lan'
+const LAN_IP_FLAG = '--lan-ip'
+const DEFAULT_LAN_IP = '192.168.8.7'
+const isLan = hasArgumentFlag(LAN_FLAG)
+const lanIp = isLan ? resolveLanIp() : ''
 const DOCKER_START_TIMEOUT_MS = 120_000
 const DOCKER_POLL_INTERVAL_MS = 2_000
 const DOCKER_STATUS_TIMEOUT_MS = 15_000
@@ -19,8 +24,8 @@ const SERVER_READY_REQUEST_TIMEOUT_MS = 3_000
 const DEV_SERVICE_RESTART_DELAY_MS = 1_000
 
 if (isLan) {
-  process.env.APP_HOST = 'https://192.168.8.7'
-  process.env.API_HOST = 'https://192.168.8.7'
+  process.env.APP_HOST = `https://${lanIp}`
+  process.env.API_HOST = `https://${lanIp}`
 }
 
 await runDev()
@@ -34,7 +39,10 @@ async function runDev() {
   run(pnpmCommand, ['install'])
   run(pnpmCommand, ['run', 'husky-prepare'])
   await makeHookExecutableIfPossible()
-  ensureDevCertificates()
+  ensureDevCertificates({
+    lanIp: lanIp || DEFAULT_LAN_IP,
+    shouldMatchLanIp: isLan
+  })
   await ensureDockerAvailable()
 
   ensureDockerContainer({
@@ -133,6 +141,38 @@ function stripQuotes(value) {
   return value
 }
 
+function hasArgumentFlag(flag) {
+  return process.argv.some((argument) => argument === flag || argument.startsWith(`${flag}=`))
+}
+
+function resolveLanIp() {
+  const candidate = getArgumentValue(LAN_IP_FLAG) || getArgumentValue(LAN_FLAG) || process.env.LAN_IP || DEFAULT_LAN_IP
+
+  if (isIP(candidate) === 4) return candidate
+
+  console.error(`Cannot start LAN development environment. Expected IPv4 address, received "${candidate}".`)
+  console.error(`Use "pnpm run dev:lan -- ${DEFAULT_LAN_IP}" or set LAN_IP before running the command.`)
+  process.exit(1)
+}
+
+function getArgumentValue(flag) {
+  const argumentWithValue = process.argv.find((argument) => argument.startsWith(`${flag}=`))
+
+  if (argumentWithValue) {
+    return argumentWithValue.slice(flag.length + 1).trim()
+  }
+
+  const flagIndex = process.argv.indexOf(flag)
+
+  if (flagIndex === -1) return ''
+
+  const nextArgument = process.argv[flagIndex + 1]
+
+  if (!nextArgument || nextArgument.startsWith('--')) return ''
+
+  return nextArgument.trim()
+}
+
 function validateRequiredEnv() {
   const descriptions = {
     RESEND_API_KEY: 'required for password recovery and email delivery flows.',
@@ -157,12 +197,19 @@ async function makeHookExecutableIfPossible() {
   } catch {}
 }
 
-function ensureDevCertificates() {
+function ensureDevCertificates({ lanIp, shouldMatchLanIp }) {
   const certDir = join(rootDir, 'dev-certs')
   const keyPath = join(certDir, 'k-room-dev-key.pem')
   const certPath = join(certDir, 'k-room-dev.pem')
+  const configPath = join(certDir, 'k-room-dev.openssl.cnf')
+  const config = buildDevCertificateConfig(lanIp)
+  const hasCertificate = existsSync(keyPath) && existsSync(certPath)
 
-  if (existsSync(keyPath) && existsSync(certPath)) return
+  if (hasCertificate && !shouldMatchLanIp) return
+
+  if (hasCertificate && existsSync(configPath) && readFileSync(configPath, 'utf8') === config) {
+    return
+  }
 
   const opensslCommand = findOpenSslCommand()
 
@@ -174,31 +221,7 @@ function ensureDevCertificates() {
 
   mkdirSync(certDir, { recursive: true })
 
-  const configPath = join(certDir, 'k-room-dev.openssl.cnf')
-  writeFileSync(
-    configPath,
-    [
-      '[req]',
-      'default_bits = 2048',
-      'prompt = no',
-      'default_md = sha256',
-      'distinguished_name = dn',
-      'x509_extensions = v3_req',
-      '',
-      '[dn]',
-      'CN = localhost',
-      '',
-      '[v3_req]',
-      'subjectAltName = @alt_names',
-      '',
-      '[alt_names]',
-      'DNS.1 = localhost',
-      'IP.1 = 127.0.0.1',
-      'IP.2 = ::1',
-      'IP.3 = 192.168.8.7',
-      ''
-    ].join('\n')
-  )
+  writeFileSync(configPath, config)
 
   run(opensslCommand, [
     'req',
@@ -215,6 +238,30 @@ function ensureDevCertificates() {
     '-config',
     configPath
   ])
+}
+
+function buildDevCertificateConfig(lanIp) {
+  return [
+    '[req]',
+    'default_bits = 2048',
+    'prompt = no',
+    'default_md = sha256',
+    'distinguished_name = dn',
+    'x509_extensions = v3_req',
+    '',
+    '[dn]',
+    'CN = localhost',
+    '',
+    '[v3_req]',
+    'subjectAltName = @alt_names',
+    '',
+    '[alt_names]',
+    'DNS.1 = localhost',
+    'IP.1 = 127.0.0.1',
+    'IP.2 = ::1',
+    `IP.3 = ${lanIp}`,
+    ''
+  ].join('\n')
 }
 
 function findOpenSslCommand() {

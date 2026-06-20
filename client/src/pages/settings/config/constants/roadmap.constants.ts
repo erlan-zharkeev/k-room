@@ -15,6 +15,12 @@ export const ROADMAP_ITEMS: RoadmapItem[] = [
     description: SETTINGS_PAGE_ROADMAP_I18N.scheduledMessagesDescription
   },
   {
+    id: 'audio-messages',
+    status: 'planned',
+    title: SETTINGS_PAGE_ROADMAP_I18N.audioMessagesTitle,
+    description: SETTINGS_PAGE_ROADMAP_I18N.audioMessagesDescription
+  },
+  {
     id: 'camera-capture',
     status: 'planned',
     title: SETTINGS_PAGE_ROADMAP_I18N.cameraCaptureTitle,
@@ -25,6 +31,12 @@ export const ROADMAP_ITEMS: RoadmapItem[] = [
     status: 'research',
     title: SETTINGS_PAGE_ROADMAP_I18N.secureChatsTitle,
     description: SETTINGS_PAGE_ROADMAP_I18N.secureChatsDescription
+  },
+  {
+    id: 'logout-all-devices',
+    status: 'planned',
+    title: SETTINGS_PAGE_ROADMAP_I18N.logoutAllDevicesTitle,
+    description: SETTINGS_PAGE_ROADMAP_I18N.logoutAllDevicesDescription
   },
   {
     id: 'message-drafts',

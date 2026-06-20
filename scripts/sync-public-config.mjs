@@ -54,6 +54,10 @@ if (env.SOCKET_PATH == null || env.SOCKET_PATH === '') {
   throw new Error('SOCKET_PATH is missing in .env.shared')
 }
 
+if (env.ADMIN_ROOT_PATH == null || env.ADMIN_ROOT_PATH === '') {
+  throw new Error('ADMIN_ROOT_PATH is missing in .env.shared')
+}
+
 const appDomain = new URL(env.APP_HOST).hostname
 const apiDomain = new URL(env.API_HOST).hostname
 const mongoAdminDomain = new URL(env.MONGO_ADMIN_HOST).hostname
@@ -73,5 +77,6 @@ applyTemplate(nginxTemplatePath, nginxPath, {
   API_DOMAIN: apiDomain,
   MONGO_ADMIN_DOMAIN: mongoAdminDomain,
   API_PATH: addTrailingSlash(env.API_PATH),
+  ADMIN_ROOT_PATH: env.ADMIN_ROOT_PATH,
   SOCKET_PATH: addTrailingSlash(env.SOCKET_PATH)
 })

@@ -107,6 +107,19 @@ export const joinRoomCall = async (
   { roomCallId }: EventJoinRoomCall
 ): Promise<JoinRoomCallAckPayload | null> => {
   const roomCall = await assertRoomCallJoinAccess(redisService, userId, roomCallId)
+  const activeCurrentUserParticipant = resolveActiveRoomCallParticipantByUserId(roomCall.participants, userId)
+  const isActiveOnAnotherSocket = activeCurrentUserParticipant && activeCurrentUserParticipant.socketId !== socketId
+
+  if (isActiveOnAnotherSocket) {
+    throw new AppError(
+      REQ_STATUS.badRequest,
+      ROOM_CALLS_I18N.roomCallAlreadyOpenOnAnotherDevice,
+      false,
+      undefined,
+      'already-active'
+    )
+  }
+
   const mediaState = buildInitialRoomCallMediaState(roomCall.mediaKind)
   const participant = buildRoomCallActiveParticipant(userId, socketId, serverInstanceId, mediaState)
   let hasParticipantLimitReached = false

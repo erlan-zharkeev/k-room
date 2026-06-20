@@ -11,6 +11,11 @@ export const ROOM_CALLS_I18N = defineI18n({
     ru: 'В этом чате уже идет звонок',
     zh: '此聊天中已有正在进行的通话'
   },
+  roomCallAlreadyOpenOnAnotherDevice: {
+    en: 'The call is already open on another device',
+    ru: 'Звонок уже открыт на другом устройстве',
+    zh: '通话已在另一台设备上打开'
+  },
   roomCallJoinFailed: {
     en: 'Failed to join call',
     ru: 'Не удалось присоединиться к звонку',

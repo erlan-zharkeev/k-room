@@ -52,7 +52,7 @@ export const useMessageNotification = () => {
     if (!messages.sound) return
 
     try {
-      await playAppSound('message')
+      await playAppSound('incoming-message')
     } catch (error) {
       void error
     }

@@ -10,7 +10,7 @@ import { AppLogo } from 'src/shared/ui'
   <section class="page-layout">
     <PageBackButton />
     <div class="page-layout__card">
-      <NmorphCard shadow-type="inset">
+      <NmorphCard shadow-type="inset" padding="16px">
         <template #header>
           <AppLogo />
         </template>

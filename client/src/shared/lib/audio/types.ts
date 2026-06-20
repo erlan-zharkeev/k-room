@@ -1,4 +1,9 @@
-export type AppSoundKind = 'busy' | 'calling' | 'call-ring' | 'connection' | 'message'
+export type AppSoundKind =
+  | 'call-connection'
+  | 'incoming-call'
+  | 'incoming-message'
+  | 'interlocutor-busy'
+  | 'outgoing-call'
 
 export interface AudioMeterAnalyser {
   analyser: AnalyserNode

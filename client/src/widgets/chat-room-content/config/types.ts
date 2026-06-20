@@ -28,6 +28,8 @@ import type { Component, ComputedRef, Ref, ShallowRef } from 'vue'
 
 import type {
   RoomCallHandRaisedByUserId,
+  RoomCallConnectionQuality,
+  RoomCallConnectionQualityByUserId,
   RoomCallRemoteStreamsByUserId,
   RoomCallTemporaryQuickCommandByUserId,
   RoomCallTemporaryQuickCommandState
@@ -72,6 +74,7 @@ export interface RoomCallPanelProps {
   audioStream?: MediaStream | null
   videoStream?: MediaStream | null
   screenStream?: MediaStream | null
+  connectionQualityByUserId: RoomCallConnectionQualityByUserId
   remoteStreamsByUserId: RoomCallRemoteStreamsByUserId
   handRaisedByUserId: RoomCallHandRaisedByUserId
   temporaryQuickCommandByUserId: RoomCallTemporaryQuickCommandByUserId
@@ -106,9 +109,18 @@ export type RoomCallQuickCommand = 'no' | 'ok' | 'raise-hand' | 'yes'
 
 export type RoomCallTileKind = 'participant' | 'screen'
 
+export type RoomCallConnectionQualityBarLevel = 1 | 2 | 3
+
+export interface RoomCallConnectionQualityBarItem {
+  active: boolean
+  level: RoomCallConnectionQualityBarLevel
+  reconnecting: boolean
+}
+
 export interface RoomCallTileItem {
   audioActivityStream?: MediaStream | null
   avatarId?: MediaId | null
+  connectionQuality?: RoomCallConnectionQuality
   id: string
   isHandRaised: boolean
   isLocal: boolean
@@ -138,6 +150,7 @@ export interface BuildRoomCallTileItemsParams {
   currentUserId: string
   roomCall: RoomCall
   localMediaState: RoomCallParticipantMediaState
+  connectionQualityByUserId: RoomCallConnectionQualityByUserId
   audioStream?: MediaStream | null
   videoStream?: MediaStream | null
   screenStream?: MediaStream | null

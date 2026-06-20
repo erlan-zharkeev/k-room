@@ -13,6 +13,7 @@ export const useChatRoomContent = () => {
   const {
     activeRoomCall,
     audioStream,
+    connectionQualityByUserId,
     handRaisedByUserId,
     isLeavingRoomCall,
     isRoomCallSessionBusy,
@@ -84,6 +85,7 @@ export const useChatRoomContent = () => {
     audioStream,
     videoStream,
     screenStream,
+    connectionQualityByUserId,
     remoteStreamsByUserId: activeRoomCallRemoteStreamsByUserId,
     handRaisedByUserId,
     temporaryQuickCommandByUserId,

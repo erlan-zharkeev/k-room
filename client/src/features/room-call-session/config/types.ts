@@ -17,9 +17,13 @@ export type RoomCallDescriptionSignalKind = 'offer' | 'answer'
 
 export type RoomCallActivityKind = 'active' | 'incoming' | 'joinable' | 'outgoing'
 
+export type RoomCallConnectionQuality = 'good' | 'poor' | 'reconnecting' | 'unstable'
+
 export type RoomCallLocalMediaStreamList = Array<MediaStream | null | undefined>
 
 export type RoomCallRemoteStreamsByUserId = Record<string, MediaStream | undefined>
+
+export type RoomCallConnectionQualityByUserId = Record<string, RoomCallConnectionQuality | undefined>
 
 export type SendRoomCallSignal = (payload: EventSendRoomCallSignal) => void
 

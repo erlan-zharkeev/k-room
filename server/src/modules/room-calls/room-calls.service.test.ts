@@ -3,10 +3,11 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { ChatRoomCallAccessProjection } from '../chat-rooms/chat-rooms.types'
 
-import { leaveActiveRoomCallsBySocket, leaveRoomCall } from './room-calls.service'
+import { joinRoomCall, leaveActiveRoomCallsBySocket, leaveRoomCall } from './room-calls.service'
 import type { RoomCallActiveParticipant, RoomCallActiveState } from './room-calls.types'
 
 const roomCallAccessMock = vi.hoisted(() => ({
+  assertRoomCallJoinAccess: vi.fn(),
   assertRoomCallParticipantAccess: vi.fn()
 }))
 
@@ -144,5 +145,22 @@ describe('room-calls.service', () => {
       'disconnected'
     )
     expect(leaveRoomCallParticipantMock.finishRoomCall).not.toHaveBeenCalled()
+  })
+
+  it('rejects joining from another socket when current user is already active in the call', async () => {
+    const redisService = {}
+    const roomCall = createRoomCall()
+
+    roomCallAccessMock.assertRoomCallJoinAccess.mockResolvedValue(roomCall)
+
+    await expect(
+      joinRoomCall(redisService as never, 'user-a', 'socket-a-second-device', 'server-id', {
+        roomCallId: roomCall.id
+      })
+    ).rejects.toMatchObject({
+      payload: 'already-active'
+    })
+
+    expect(roomCallActiveStateMock.updateActiveRoomCall).not.toHaveBeenCalled()
   })
 })

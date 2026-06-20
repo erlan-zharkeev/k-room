@@ -6,8 +6,15 @@ import {
   type RoomCallTemporaryQuickCommand
 } from 'global-shared'
 
+import type { RoomCallConnectionQuality } from 'src/features/room-call-session'
+
 import { CHAT_ROOM_CONTENT_I18N } from './i18n'
-import type { MessageStatusDotTone, RoomCallPanelDisplayMode, RoomCallQuickCommand } from './types'
+import type {
+  MessageStatusDotTone,
+  RoomCallConnectionQualityBarLevel,
+  RoomCallPanelDisplayMode,
+  RoomCallQuickCommand
+} from './types'
 
 export const ROOM_MESSAGES_PAGE_LIMIT = 30
 export const ROOM_MESSAGES_PRELOAD_EDGE_ITEMS = 20
@@ -59,6 +66,15 @@ export const ROOM_CALL_TEMPORARY_QUICK_COMMAND_TEXT_COLOR_BY_COMMAND = {
 export const ROOM_CALL_QUICK_COMMAND_ICON_SIZE = '20px'
 export const ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE = '20px'
 export const ROOM_CALL_TILE_STATE_ICON_SIZE = '16px'
+export const ROOM_CALL_CONNECTION_QUALITY_BAR_LEVELS = [
+  1, 2, 3
+] as const satisfies readonly RoomCallConnectionQualityBarLevel[]
+export const ROOM_CALL_CONNECTION_QUALITY_ACTIVE_BAR_COUNT_BY_KIND = {
+  good: 3,
+  poor: 1,
+  reconnecting: 1,
+  unstable: 2
+} as const satisfies Record<RoomCallConnectionQuality, number>
 export const MESSAGE_READ_VISIBILITY_RATIO = 0.5
 export const MESSAGE_RANGE_GAP_HEIGHT = 24
 export const MESSAGE_VIRTUAL_ESTIMATED_HEIGHT = 96

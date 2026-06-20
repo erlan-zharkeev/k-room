@@ -24,6 +24,7 @@ const {
   audioStream,
   videoStream,
   screenStream,
+  connectionQualityByUserId,
   remoteStreamsByUserId,
   handRaisedByUserId,
   temporaryQuickCommandByUserId,
@@ -85,6 +86,7 @@ const {
           :audio-stream="audioStream"
           :video-stream="videoStream"
           :screen-stream="screenStream"
+          :connection-quality-by-user-id="connectionQualityByUserId"
           :remote-streams-by-user-id="remoteStreamsByUserId"
           :hand-raised-by-user-id="handRaisedByUserId"
           :temporary-quick-command-by-user-id="temporaryQuickCommandByUserId"

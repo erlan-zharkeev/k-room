@@ -41,6 +41,16 @@ export const SETTINGS_PAGE_ROADMAP_I18N = defineI18n('settingsPageRoadmap', {
     ru: 'Можно будет выбрать точное время отправки, заранее подготовить напоминание или важное сообщение и видеть его в чате до момента отправки.',
     zh: '可以为消息选择精确发送时间，提前准备提醒或重要内容，并在发送前持续看到这条草稿。'
   },
+  audioMessagesTitle: {
+    en: 'Audio messages',
+    ru: 'Аудиосообщения',
+    zh: '语音消息'
+  },
+  audioMessagesDescription: {
+    en: 'Record a short voice message directly from the composer and send it without opening the file picker.',
+    ru: 'Короткое голосовое сообщение можно будет записать прямо из поля ввода и отправить без выбора файла.',
+    zh: '可以直接在输入框中录制简短语音消息并发送，无需打开文件选择器。'
+  },
   cameraCaptureTitle: {
     en: 'Fast camera capture',
     ru: 'Быстрая съемка с камеры',
@@ -60,6 +70,16 @@ export const SETTINGS_PAGE_ROADMAP_I18N = defineI18n('settingsPageRoadmap', {
     en: 'Special limited chats with stronger privacy guarantees, separate creation rules, and end-to-end encryption for sensitive conversations.',
     ru: 'Появятся специальные чаты с ограниченным количеством, отдельными правилами создания и сквозным шифрованием для действительно приватных разговоров.',
     zh: '将推出数量受限的特殊聊天，带有独立创建规则，并为敏感对话提供端到端加密。'
+  },
+  logoutAllDevicesTitle: {
+    en: 'Sign out on all devices',
+    ru: 'Выход на всех устройствах',
+    zh: '退出所有设备'
+  },
+  logoutAllDevicesDescription: {
+    en: 'End every active session for the account from settings, so lost or old devices stop keeping access.',
+    ru: 'Можно будет завершить все активные сессии аккаунта из настроек, чтобы потерянные или старые устройства больше не сохраняли доступ.',
+    zh: '可以在设置中结束账号的所有活动会话，让丢失或旧设备不再保留访问权限。'
   },
   messageDraftsTitle: {
     en: 'Full message drafts',

@@ -17,7 +17,7 @@ export const useRoomCallNotification = () => {
   const { hasInteracted } = useSystem()
   const { startLoopAppSound, stopAppSound } = useAppSound()
   const { user } = useUser()
-  let startedRoomCallSoundRoomCallId = ''
+  let incomingRoomCallSoundRoomCallId = ''
 
   const resolveStartedRoomCallNotificationRoom = ({ roomCall }: EventRoomCallStarted) => {
     const isOwnRoomCall = roomCall.initiatorId === user.value.id
@@ -43,21 +43,21 @@ export const useRoomCallNotification = () => {
     if (!resolveStartedRoomCallNotificationRoom(payload)) return
 
     stopStartedRoomCallSound()
-    startedRoomCallSoundRoomCallId = roomCall.id
+    incomingRoomCallSoundRoomCallId = roomCall.id
 
     try {
-      await startLoopAppSound('call-ring')
-      const isCurrentStartedRoomCallSound = startedRoomCallSoundRoomCallId === roomCall.id
+      await startLoopAppSound('incoming-call')
+      const isCurrentStartedRoomCallSound = incomingRoomCallSoundRoomCallId === roomCall.id
 
       if (!isCurrentStartedRoomCallSound) {
-        if (!startedRoomCallSoundRoomCallId) {
-          stopAppSound('call-ring')
+        if (!incomingRoomCallSoundRoomCallId) {
+          stopAppSound('incoming-call')
         }
 
         return
       }
     } catch (error) {
-      if (startedRoomCallSoundRoomCallId === roomCall.id) {
+      if (incomingRoomCallSoundRoomCallId === roomCall.id) {
         stopStartedRoomCallSound()
       }
 
@@ -66,8 +66,8 @@ export const useRoomCallNotification = () => {
   }
 
   const stopStartedRoomCallSound = () => {
-    stopAppSound('call-ring')
-    startedRoomCallSoundRoomCallId = ''
+    stopAppSound('incoming-call')
+    incomingRoomCallSoundRoomCallId = ''
   }
 
   const notifyStartedRoomCall = (payload: EventRoomCallStarted) => {
@@ -77,7 +77,7 @@ export const useRoomCallNotification = () => {
   const stopRoomCallSound = ({
     roomCallId
   }: EventRoomCallJoined | EventRoomCallDeclined | EventRoomCallLeft | EventRoomCallEnded) => {
-    if (roomCallId !== startedRoomCallSoundRoomCallId) return
+    if (roomCallId !== incomingRoomCallSoundRoomCallId) return
 
     stopStartedRoomCallSound()
   }

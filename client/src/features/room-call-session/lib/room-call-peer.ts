@@ -72,8 +72,7 @@ export const resolveRoomCallPeerParticipantIds = (currentUserId: string, partici
 
 export const isClosedRoomCallPeerConnection = (peerConnection: RTCPeerConnection) => {
   const isClosed = peerConnection.connectionState === 'closed'
-  const isDisconnected = peerConnection.connectionState === 'disconnected'
   const isFailed = peerConnection.connectionState === 'failed'
 
-  return isClosed || isDisconnected || isFailed
+  return isClosed || isFailed
 }

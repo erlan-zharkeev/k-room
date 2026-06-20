@@ -5,6 +5,8 @@ export { default as RoomCallAudioContextMenuItem } from './ui/RoomCallAudioConte
 export { default as CallActivityPanel } from './ui/CallActivityPanel.vue'
 export { default as RoomCallMediaButtons } from './ui/RoomCallMediaButtons.vue'
 export type {
+  RoomCallConnectionQuality,
+  RoomCallConnectionQualityByUserId,
   RoomCallHandRaisedByUserId,
   RoomCallRemoteStreamsByUserId,
   RoomCallTemporaryQuickCommandByUserId,

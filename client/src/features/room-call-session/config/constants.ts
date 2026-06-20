@@ -1,5 +1,5 @@
 import { ROOM_CALL_SESSION_I18N } from './i18n'
-import type { RoomCallActivityKind } from './types'
+import type { RoomCallActivityKind, RoomCallConnectionQuality } from './types'
 
 export const ROOM_CALL_ACTIVITY_DOT_COLOR_BY_KIND = {
   active: 'var(--nmorph-success-color)',
@@ -23,4 +23,20 @@ export const ROOM_CALL_RTC_CONFIGURATION: RTCConfiguration = {
   ]
 }
 
+export const ROOM_CALL_CONNECTION_QUALITY_CHECK_INTERVAL_MS = 2_000
+export const ROOM_CALL_CONNECTION_QUALITY_THRESHOLDS = {
+  poor: {
+    jitter: 0.08,
+    packetLossRatio: 0.1,
+    roundTripTime: 0.8
+  },
+  unstable: {
+    jitter: 0.035,
+    packetLossRatio: 0.03,
+    roundTripTime: 0.35
+  }
+} as const satisfies Record<
+  Exclude<RoomCallConnectionQuality, 'good' | 'reconnecting'>,
+  Record<'jitter' | 'packetLossRatio' | 'roundTripTime', number>
+>
 export const ROOM_CALL_TEMPORARY_QUICK_COMMAND_TTL_MS = 3_500

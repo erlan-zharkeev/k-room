@@ -4,7 +4,6 @@ TEMP_CI_CD_AGREEMENTS.md
 .claude
 .vscode
 .DS_Store
-BACKLOG.md
 .codex
 
 .env.deploy

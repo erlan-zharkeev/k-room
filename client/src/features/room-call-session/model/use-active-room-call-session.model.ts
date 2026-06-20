@@ -11,9 +11,11 @@ import {
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 import { useRoomCall } from 'src/entities/room-call'
+import { useAppSound, useSettings } from 'src/entities/setting'
+import { useSystem } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
 import { API_I18N } from 'src/shared/api'
-import { log, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
+import { type AppSoundKind, log, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
 import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
 import { resolveRoomCallJoinMediaKind } from '../lib/resolve-room-call-join-media-kind'
@@ -34,7 +36,11 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   const { t } = useI18n()
   const toast = useAppToast()
   const { roomCalls } = useRoomCall()
+  const { settings } = useSettings()
+  const { hasInteracted } = useSystem()
+  const { playAppSound, startLoopAppSound, stopAppSound } = useAppSound()
   const { user } = useUser()
+  let outgoingRoomCallSoundRoomCallId = ''
   const {
     audioStream,
     isAudioLoading,
@@ -61,6 +67,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     updateRoomCallMediaState
   } = useRoomCallSession()
   const {
+    connectionQualityByUserId,
     connectRoomCallPeers,
     handleRoomCallSignalReceived,
     remoteStreamsByUserId,
@@ -77,6 +84,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   } = useRoomCallQuickCommandSync(activeRoomCallId)
   const localStreams = computed(() => [audioStream.value, videoStream.value, screenStream.value])
   const activeRoomCall = computed(() => roomCalls.value.find(({ id }) => id === activeRoomCallId.value))
+  const activeRoomCallStatus = computed(() => activeRoomCall.value?.status)
   const isActiveRoomCallScreenSharingByAnotherParticipant = computed(() =>
     Boolean(
       activeRoomCall.value?.participants.some(({ leftAt, mediaState, userId }) => {
@@ -135,10 +143,65 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     return !isRoomCallActionLocked
   }
 
+  const canPlayRoomCallSound = () => {
+    const { calls, enabled, general } = settings.value.notifications
+
+    return hasInteracted.value && enabled && general.sound && calls.sound
+  }
+
+  const stopOutgoingRoomCallSound = () => {
+    stopAppSound('outgoing-call')
+    outgoingRoomCallSoundRoomCallId = ''
+  }
+
+  const playRoomCallSound = async (kind: AppSoundKind) => {
+    if (!canPlayRoomCallSound()) return
+
+    try {
+      await playAppSound(kind)
+    } catch (error) {
+      void error
+    }
+  }
+
+  const startOutgoingRoomCallSound = async (roomCallId: string) => {
+    if (!canPlayRoomCallSound()) return
+
+    stopOutgoingRoomCallSound()
+    outgoingRoomCallSoundRoomCallId = roomCallId
+
+    try {
+      await startLoopAppSound('outgoing-call')
+      const isCurrentOutgoingRoomCallSound = outgoingRoomCallSoundRoomCallId === roomCallId
+
+      if (!isCurrentOutgoingRoomCallSound) {
+        if (!outgoingRoomCallSoundRoomCallId) {
+          stopAppSound('outgoing-call')
+        }
+
+        return
+      }
+    } catch (error) {
+      if (outgoingRoomCallSoundRoomCallId === roomCallId) {
+        stopOutgoingRoomCallSound()
+      }
+
+      void error
+    }
+  }
+
+  const finishOutgoingRoomCallSound = (kind: AppSoundKind) => {
+    if (!outgoingRoomCallSoundRoomCallId) return
+
+    stopOutgoingRoomCallSound()
+    void playRoomCallSound(kind)
+  }
+
   const clearActiveRoomCallSessionState = () => {
     activeRoomCallId.value = ''
     resetRoomCallPeers()
     resetRoomCallQuickCommands()
+    stopOutgoingRoomCallSound()
     stopRoomCallLocalMedia()
   }
 
@@ -242,6 +305,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
 
       activeRoomCallId.value = roomCallId
       await syncActiveRoomCallLocalState()
+      void startOutgoingRoomCallSound(roomCallId)
 
       return roomCallId
     } catch (error) {
@@ -275,6 +339,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       syncInitialRoomCallParticipantQuickCommandStates(participantQuickCommandStateByUserId)
       await syncActiveRoomCallLocalState()
       await connectActiveRoomCallPeers(roomCall)
+      void playRoomCallSound('call-connection')
 
       return roomCall
     } catch (error) {
@@ -375,8 +440,31 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     void connectActiveRoomCallPeers()
   })
 
+  watch(activeRoomCallStatus, (status) => {
+    const roomCall = activeRoomCall.value
+
+    if (!roomCall) return
+
+    const isConnected = status === 'in-progress'
+    const isInitiatedByCurrentUser = roomCall.initiatorId === user.value.id
+    const isOutgoingSoundRoomCall = roomCall.id === outgoingRoomCallSoundRoomCallId
+    const shouldFinishOutgoingRoomCallSound = isConnected && isInitiatedByCurrentUser && isOutgoingSoundRoomCall
+
+    if (shouldFinishOutgoingRoomCallSound) {
+      finishOutgoingRoomCallSound('call-connection')
+    }
+  })
+
   watch(activeRoomCallFinished, (isFinished) => {
     if (isFinished) {
+      const shouldPlayInterlocutorBusySound = Boolean(outgoingRoomCallSoundRoomCallId)
+
+      stopOutgoingRoomCallSound()
+
+      if (shouldPlayInterlocutorBusySound) {
+        void playRoomCallSound('interlocutor-busy')
+      }
+
       clearActiveRoomCallSessionState()
     }
   })
@@ -411,6 +499,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     videoStream,
     screenStream,
     remoteStreamsByUserId,
+    connectionQualityByUserId,
     handRaisedByUserId,
     temporaryQuickCommandByUserId,
     localMediaState,

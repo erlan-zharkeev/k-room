@@ -3,6 +3,8 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { calculateAudioVolumeDb, createAudioMeterAnalyser, log, useLiveMediaUrl } from 'src/shared/lib'
 
 import {
+  ROOM_CALL_CONNECTION_QUALITY_ACTIVE_BAR_COUNT_BY_KIND,
+  ROOM_CALL_CONNECTION_QUALITY_BAR_LEVELS,
   ROOM_CALL_TEMPORARY_QUICK_COMMAND_I18N_BY_COMMAND,
   ROOM_CALL_TEMPORARY_QUICK_COMMAND_TEXT_COLOR_BY_COMMAND
 } from '../config/constants'
@@ -36,6 +38,24 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
   )
   const isRoomCallTileRemoteActionsVisible = computed(() => !props.self && isRoomCallParticipantTile.value)
   const roomCallTileMediaFit = computed(() => (isRoomCallScreenTile.value ? 'contain' : 'cover'))
+  const roomCallConnectionQualityClass = computed(() =>
+    props.item.connectionQuality ? `room-call-tile__connection-quality--${props.item.connectionQuality}` : undefined
+  )
+  const roomCallConnectionQualityBarItems = computed(() => {
+    const connectionQuality = props.item.connectionQuality
+
+    if (!connectionQuality) {
+      return []
+    }
+
+    const activeBarCount = ROOM_CALL_CONNECTION_QUALITY_ACTIVE_BAR_COUNT_BY_KIND[connectionQuality]
+
+    return ROOM_CALL_CONNECTION_QUALITY_BAR_LEVELS.map((level) => ({
+      active: level <= activeBarCount,
+      level,
+      reconnecting: connectionQuality === 'reconnecting'
+    }))
+  })
   const temporaryQuickCommandI18n = computed(() => {
     const quickCommand = props.item.temporaryQuickCommand?.command
 
@@ -156,6 +176,8 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
     isRoomCallTileQuickCommandsVisible,
     isRoomCallTileRemoteActionsVisible,
     roomCallTileAudioVolumeDb,
+    roomCallConnectionQualityBarItems,
+    roomCallConnectionQualityClass,
     roomCallTileMediaFit,
     remoteHideButtonText,
     remoteMuteButtonText,

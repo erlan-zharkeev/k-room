@@ -38,6 +38,8 @@ const {
   isRoomCallTileRemoteActionsVisible,
   remoteHideButtonText,
   remoteMuteButtonText,
+  roomCallConnectionQualityBarItems,
+  roomCallConnectionQualityClass,
   roomCallTileAudioVolumeDb,
   roomCallTileMediaFit,
   temporaryQuickCommandI18n,
@@ -175,6 +177,23 @@ const {
         </template>
       </NmorphButton>
     </div>
+    <div
+      v-if="props.item.connectionQuality"
+      class="room-call-tile__connection-quality room-call-tile__overlay"
+      :class="roomCallConnectionQualityClass"
+      aria-hidden="true"
+    >
+      <span
+        v-for="bar in roomCallConnectionQualityBarItems"
+        :key="bar.level"
+        class="room-call-tile__connection-quality-bar"
+        :class="[
+          `room-call-tile__connection-quality-bar--${bar.level}`,
+          bar.active && 'room-call-tile__connection-quality-bar--active',
+          bar.active && bar.reconnecting && 'room-call-tile__connection-quality-bar--reconnecting'
+        ]"
+      />
+    </div>
   </div>
 </template>
 
@@ -266,6 +285,57 @@ const {
   padding: 4px;
 }
 
+.room-call-tile__connection-quality {
+  --room-call-tile-connection-quality-color: var(--nmorph-success-color);
+
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+
+  padding: 5px 6px;
+}
+
+.room-call-tile__connection-quality--unstable {
+  --room-call-tile-connection-quality-color: var(--nmorph-warn-color);
+}
+
+.room-call-tile__connection-quality--poor,
+.room-call-tile__connection-quality--reconnecting {
+  --room-call-tile-connection-quality-color: var(--nmorph-error-text-color);
+}
+
+.room-call-tile__connection-quality-bar {
+  width: 3px;
+  border-radius: 2px;
+  opacity: 0.32;
+  background: var(--nmorph-contrast-text-color);
+}
+
+.room-call-tile__connection-quality-bar--1 {
+  height: 5px;
+}
+
+.room-call-tile__connection-quality-bar--2 {
+  height: 9px;
+}
+
+.room-call-tile__connection-quality-bar--3 {
+  height: 13px;
+}
+
+.room-call-tile__connection-quality-bar--active {
+  opacity: 1;
+  background: var(--room-call-tile-connection-quality-color);
+}
+
+.room-call-tile__connection-quality-bar--reconnecting {
+  animation: room-call-tile-connection-quality-reconnecting 0.9s ease-in-out infinite;
+}
+
 .room-call-tile__quick-commands {
   pointer-events: none;
 
@@ -304,6 +374,17 @@ const {
   }
 
   to {
+    opacity: 1;
+  }
+}
+
+@keyframes room-call-tile-connection-quality-reconnecting {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+
+  50% {
     opacity: 1;
   }
 }

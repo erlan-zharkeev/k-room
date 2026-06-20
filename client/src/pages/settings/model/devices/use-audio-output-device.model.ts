@@ -53,7 +53,7 @@ export const useAudioOutputDevice = () => {
 
   const stopAudioOutput = () => {
     stopOutputIndicatorTimer()
-    stopAppSound('message')
+    stopAppSound('incoming-message')
   }
 
   const setSelectedAudioOutputDevice = async (value: NmorphSelectModelValueType = '') => {
@@ -88,7 +88,7 @@ export const useAudioOutputDevice = () => {
       audioOutputTestLoading.value = true
       stopAudioOutput()
 
-      await playAppSound('message')
+      await playAppSound('incoming-message')
       startOutputIndicatorTimer()
     } catch (error) {
       stopAudioOutput()

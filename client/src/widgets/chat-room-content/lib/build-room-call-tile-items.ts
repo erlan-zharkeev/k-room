@@ -57,6 +57,7 @@ const resolveRemoteRoomCallScreenStream = (stream: MediaStream | undefined) => {
 
 export const buildRoomCallTileItems = ({
   audioStream,
+  connectionQualityByUserId,
   currentUserId,
   handRaisedByUserId,
   localMediaState,
@@ -74,6 +75,7 @@ export const buildRoomCallTileItems = ({
       const isLocal = participant.userId === currentUserId
       const mediaState = isLocal ? localMediaState : participant.mediaState
       const remoteStream = remoteStreamsByUserId[participant.userId]
+      const connectionQuality = isLocal ? undefined : connectionQualityByUserId[participant.userId]
       const stream = isLocal
         ? videoStream || undefined
         : resolveRemoteRoomCallParticipantStream(remoteStream, mediaState)
@@ -84,6 +86,7 @@ export const buildRoomCallTileItems = ({
       return {
         audioActivityStream,
         avatarId: resolveParticipantAvatarId(participant.userId),
+        connectionQuality,
         id: participant.userId,
         isHandRaised: Boolean(handRaisedByUserId[participant.userId]),
         isLocal,
@@ -102,6 +105,7 @@ export const buildRoomCallTileItems = ({
       const isLocal = participant.userId === currentUserId
       const mediaState = isLocal ? localMediaState : participant.mediaState
       const remoteStream = remoteStreamsByUserId[participant.userId]
+      const connectionQuality = isLocal ? undefined : connectionQualityByUserId[participant.userId]
 
       if (!mediaState.screen) {
         return []
@@ -110,6 +114,7 @@ export const buildRoomCallTileItems = ({
       return [
         {
           avatarId: resolveParticipantAvatarId(participant.userId),
+          connectionQuality,
           id: buildRoomCallScreenTileId(participant.userId),
           isHandRaised: false,
           isLocal,
