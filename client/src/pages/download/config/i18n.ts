@@ -31,6 +31,11 @@ export const DOWNLOAD_PAGE_I18N = defineI18n('downloadPage', {
     ru: 'Не удалось загрузить варианты скачивания.',
     zh: '无法加载下载选项。'
   },
+  downloadUnavailable: {
+    en: 'The installer is not available yet.',
+    ru: 'Установщик пока недоступен.',
+    zh: '安装程序暂不可用。'
+  },
   retry: {
     en: 'Retry',
     ru: 'Повторить',

@@ -1,17 +1,21 @@
 import { computed, onMounted, ref } from 'vue'
 
-import type { DownloadPlatformItem, DownloadReleasesManifest } from '../config/types'
+import type { DownloadPlatformId, DownloadPlatformItem, DownloadReleasesManifest } from '../config/types'
+import { isDownloadFileAvailable } from '../lib/is-download-file-available'
 import { loadDownloadReleasesManifest } from '../lib/load-download-releases-manifest'
 
 export const useDownloadPage = () => {
   const releasesManifest = ref<DownloadReleasesManifest | null>(null)
   const isLoading = ref(false)
   const hasLoadError = ref(false)
+  const hasDownloadError = ref(false)
+  const downloadingPlatformId = ref<DownloadPlatformId | null>(null)
   const { appVersion } = __CLIENT_ENV_DATA__
 
   const loadReleasesManifest = async () => {
     isLoading.value = true
     hasLoadError.value = false
+    hasDownloadError.value = false
 
     try {
       const parsedManifest = await loadDownloadReleasesManifest()
@@ -49,7 +53,26 @@ export const useDownloadPage = () => {
     return canShowPlatformItems && hasPlatformItems
   })
   const showReleasedAt = computed(() => Boolean(releasedAt.value))
-  const downloadPlatformItem = ({ downloadUrl, fileName }: DownloadPlatformItem) => {
+  const isDownloading = computed(() => Boolean(downloadingPlatformId.value))
+  const isPlatformDownloading = (platformId: DownloadPlatformId) => downloadingPlatformId.value === platformId
+  const downloadPlatformItem = async ({ platformId, downloadUrl, fileName }: DownloadPlatformItem) => {
+    hasDownloadError.value = false
+    downloadingPlatformId.value = platformId
+
+    try {
+      if (!(await isDownloadFileAvailable(downloadUrl))) {
+        hasDownloadError.value = true
+
+        return
+      }
+    } catch {
+      hasDownloadError.value = true
+
+      return
+    } finally {
+      downloadingPlatformId.value = null
+    }
+
     const link = document.createElement('a')
 
     link.href = downloadUrl
@@ -64,8 +87,11 @@ export const useDownloadPage = () => {
   return {
     appVersion,
     downloadPlatformItem,
+    hasDownloadError,
     hasLoadError,
+    isDownloading,
     isLoading,
+    isPlatformDownloading,
     loadReleasesManifest,
     platformItems,
     releasedAt,

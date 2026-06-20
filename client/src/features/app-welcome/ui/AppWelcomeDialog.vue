@@ -33,7 +33,7 @@ const { completeAppWelcome, dialogContentStyle, isAppWelcomeVisible, updateAppWe
         <AppHeader tag="h3" alignment="center" :text="$t(APP_WELCOME_I18N.title)" />
         <AppText tag="p" alignment="center" color="semi-contrast-text" :text="$t(APP_WELCOME_I18N.description)" />
         <div class="app-welcome-dialog__actions">
-          <NmorphButton design="plain" :text="$t(APP_WELCOME_I18N.action)" @click="completeAppWelcome" />
+          <NmorphButton design="plain" borderless :text="$t(APP_WELCOME_I18N.action)" @click="completeAppWelcome" />
         </div>
       </div>
     </div>

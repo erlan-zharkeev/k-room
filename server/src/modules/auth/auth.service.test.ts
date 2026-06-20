@@ -49,10 +49,12 @@ const createUser = async (confirmed = true) => ({
   system: {
     password: await bcrypt.hash('Asdf1234', 6),
     confirmed,
+    provider: 'app',
     confirmAttempts: 3,
     device: {}
   },
   markModified: vi.fn(),
+  deleteOne: vi.fn(),
   save: vi.fn()
 })
 
@@ -168,6 +170,92 @@ describe('AuthService', () => {
     expect(user.public.avatarId).toBe('uploaded-avatar-id')
     expect(user.save).toHaveBeenCalled()
     expect(sessionService.updateTokens).toHaveBeenCalledWith('user-1', expect.any(Object), response)
+  })
+
+  it('deletes newly created registration user when confirmation email sending fails', async () => {
+    const user = await createUser(false)
+    const emailError = new Error('resend failed')
+    const emailService = {
+      sendEmailConfirmationEmail: vi.fn().mockRejectedValue(emailError)
+    }
+    const userService = {
+      findByEmail: vi.fn().mockResolvedValue(null),
+      isUserExist: vi.fn().mockResolvedValue({ exists: false, reason: null }),
+      createUser: vi.fn().mockResolvedValue(user)
+    }
+    const sessionService = {
+      signToken: vi.fn().mockReturnValue('confirm-token')
+    }
+    const service = new AuthService(
+      emailService as never,
+      userService as never,
+      {
+        assertRegistrationAllowed: vi.fn(),
+        trackRegistrationAttempt: vi.fn()
+      } as never,
+      sessionService as never
+    )
+
+    await expect(
+      service.registration(
+        {
+          email: 'user@test.com',
+          nickname: 'tester',
+          password: 'Asdf1234'
+        },
+        { headers: {}, ip: '127.0.0.1' } as never
+      )
+    ).rejects.toBe(emailError)
+
+    expect(user.deleteOne).toHaveBeenCalled()
+    expect(userService.createUser).toHaveBeenCalled()
+  })
+
+  it('resends confirmation for existing unconfirmed app registration', async () => {
+    const user = await createUser(false)
+    const emailService = {
+      sendEmailConfirmationEmail: vi.fn().mockResolvedValue({ id: 'resend-id' })
+    }
+    const userService = {
+      findByEmail: vi.fn().mockResolvedValue(user),
+      isUserExist: vi.fn(),
+      createUser: vi.fn()
+    }
+    const sessionService = {
+      signToken: vi.fn().mockReturnValue('confirm-token')
+    }
+    const service = new AuthService(
+      emailService as never,
+      userService as never,
+      {
+        assertRegistrationAllowed: vi.fn(),
+        trackRegistrationAttempt: vi.fn()
+      } as never,
+      sessionService as never
+    )
+
+    const result = await service.registration(
+      {
+        email: 'user@test.com',
+        nickname: 'tester',
+        password: 'Asdf1234'
+      },
+      { headers: {}, ip: '127.0.0.1' } as never
+    )
+
+    expect(emailService.sendEmailConfirmationEmail).toHaveBeenCalledWith({
+      email: 'user@test.com',
+      token: 'confirm-token',
+      nickname: 'tester'
+    })
+    expect(user.system.confirmAttempts).toBe(2)
+    expect(user.save).toHaveBeenCalled()
+    expect(userService.isUserExist).not.toHaveBeenCalled()
+    expect(userService.createUser).not.toHaveBeenCalled()
+    expect(result).toMatchObject({
+      email: 'user@test.com',
+      attempts: 2
+    })
   })
 
   it('returns alreadyConfirmed when email token was already consumed', async () => {

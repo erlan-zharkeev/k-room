@@ -77,6 +77,37 @@ export class AuthService {
     await this.securityService.assertRegistrationAllowed(ip, payload.captchaToken)
     await this.securityService.trackRegistrationAttempt(ip)
 
+    const existingUserByEmail = await this.userService.findByEmail(payload.email)
+    const canResendExistingRegistration =
+      existingUserByEmail && !existingUserByEmail.system.confirmed && existingUserByEmail.system.provider === 'app'
+
+    if (canResendExistingRegistration) {
+      if (existingUserByEmail.system.confirmAttempts <= 0) {
+        throw new AppError(REQ_STATUS.badRequest, AUTH_I18N.noConfirmationAttemptsLeft)
+      }
+
+      const confirmToken = this.sessionService.signToken(
+        String(existingUserByEmail._id),
+        SERVER_ENV.secret.emailConfirmSecret,
+        EMAIL_CONFIRMATION_LINK_LIFE_SEC
+      )
+
+      await this.emailService.sendEmailConfirmationEmail({
+        email: existingUserByEmail.personal.email,
+        token: confirmToken,
+        nickname: existingUserByEmail.public.nickname
+      })
+
+      existingUserByEmail.system.confirmAttempts = Math.max(existingUserByEmail.system.confirmAttempts - 1, 0)
+      await existingUserByEmail.save()
+
+      return {
+        email: existingUserByEmail.personal.email,
+        attempts: existingUserByEmail.system.confirmAttempts,
+        nextRequestTime: Date.now() + REGISTRATION_RESEND_INTERVAL_MS
+      }
+    }
+
     const userExistState = await this.userService.isUserExist({
       nickname: payload.nickname,
       email: payload.email
@@ -103,11 +134,16 @@ export class AuthService {
       EMAIL_CONFIRMATION_LINK_LIFE_SEC
     )
 
-    await this.emailService.sendEmailConfirmationEmail({
-      email: payload.email,
-      token: confirmToken,
-      nickname: payload.nickname
-    })
+    try {
+      await this.emailService.sendEmailConfirmationEmail({
+        email: payload.email,
+        token: confirmToken,
+        nickname: payload.nickname
+      })
+    } catch (error) {
+      await user.deleteOne()
+      throw error
+    }
 
     return {
       email: payload.email,

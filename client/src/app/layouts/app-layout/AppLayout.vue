@@ -29,44 +29,51 @@ const {
 </script>
 
 <template>
-  <AppWelcomeDialog @complete="openPendingGuide" />
-  <OnboardingGuide>
-    <main class="app-layout" :class="{ 'app-layout--wallpaper': showWallpaper }" :style="wallpaperStyle">
-      <LeftBar v-if="!isPortraitTabletOrLess" class="widget" />
-      <section class="app-layout__workspace">
-        <TopBar class="widget" />
-        <div class="app-layout__content">
-          <OnboardingGuideTarget v-if="showNavigation" class="app-layout__guide-target" name="contentNavigation">
-            <NmorphCard class="app-layout__navigation-widget widget">
-              <ContentNavigationLayout :title-key="navigationTitleKey">
-                <RouterView v-slot="{ Component, route }" name="content-navigation">
-                  <Transition name="app-route-motion" mode="out-in">
+  <div class="app-layout-root">
+    <AppWelcomeDialog @complete="openPendingGuide" />
+    <OnboardingGuide>
+      <main class="app-layout" :class="{ 'app-layout--wallpaper': showWallpaper }" :style="wallpaperStyle">
+        <LeftBar v-if="!isPortraitTabletOrLess" class="widget" />
+        <section class="app-layout__workspace">
+          <TopBar class="widget" />
+          <div class="app-layout__content">
+            <OnboardingGuideTarget v-if="showNavigation" class="app-layout__guide-target" name="contentNavigation">
+              <NmorphCard class="app-layout__navigation-widget widget">
+                <ContentNavigationLayout :title-key="navigationTitleKey">
+                  <RouterView v-slot="{ Component, route }" name="content-navigation">
+                    <Transition name="app-route-motion" mode="out-in">
+                      <component :is="Component" :key="route.matched[1]?.path ?? route.fullPath" />
+                    </Transition>
+                  </RouterView>
+                </ContentNavigationLayout>
+              </NmorphCard>
+            </OnboardingGuideTarget>
+            <OnboardingGuideTarget v-if="showContent" class="app-layout__guide-target" name="content">
+              <NmorphCard class="app-layout__content-widget widget">
+                <ContentLayout v-if="isContentLayoutEnabled" :title-key="contentTitleKey">
+                  <RouterView v-slot="{ Component, route }" name="content">
                     <component :is="Component" :key="route.matched[1]?.path ?? route.fullPath" />
-                  </Transition>
-                </RouterView>
-              </ContentNavigationLayout>
-            </NmorphCard>
-          </OnboardingGuideTarget>
-          <OnboardingGuideTarget v-if="showContent" class="app-layout__guide-target" name="content">
-            <NmorphCard class="app-layout__content-widget widget">
-              <ContentLayout v-if="isContentLayoutEnabled" :title-key="contentTitleKey">
-                <RouterView v-slot="{ Component, route }" name="content">
+                  </RouterView>
+                </ContentLayout>
+                <RouterView v-else v-slot="{ Component, route }" name="content">
                   <component :is="Component" :key="route.matched[1]?.path ?? route.fullPath" />
                 </RouterView>
-              </ContentLayout>
-              <RouterView v-else v-slot="{ Component, route }" name="content">
-                <component :is="Component" :key="route.matched[1]?.path ?? route.fullPath" />
-              </RouterView>
-            </NmorphCard>
-          </OnboardingGuideTarget>
-        </div>
-        <MobileNavFooter v-if="isPortraitTabletOrLess" class="widget" />
-      </section>
-    </main>
-  </OnboardingGuide>
+              </NmorphCard>
+            </OnboardingGuideTarget>
+          </div>
+          <MobileNavFooter v-if="isPortraitTabletOrLess" class="widget" />
+        </section>
+      </main>
+    </OnboardingGuide>
+  </div>
 </template>
 
 <style lang="scss">
+.app-layout-root {
+  height: 100%;
+  min-height: 0;
+}
+
 .app-layout {
   --bar-thickness: 64px;
 
