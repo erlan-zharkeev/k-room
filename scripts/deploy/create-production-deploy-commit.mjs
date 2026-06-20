@@ -1,7 +1,13 @@
 import { spawnSync } from 'node:child_process'
+import { readFileSync } from 'node:fs'
 
 const PRODUCTION_BRANCH = 'production'
-const DEPLOY_COMMIT_MESSAGE = 'deploy(production): trigger'
+const CLIENT_PACKAGE_JSON_PATH = 'client/package.json'
+const CLIENT_CARGO_TOML_PATH = 'client/src-tauri/Cargo.toml'
+const VERSION_BUMP_SCRIPT_PATH = 'scripts/version/bump-client-version.mjs'
+const VERSION_BUMP_FLAGS = ['--patch', '--minor', '--major']
+
+const versionBumpFlag = readVersionBumpFlag()
 
 const read = (command, args, { trim = false } = {}) => {
   const result = spawnSync(command, args, {
@@ -53,5 +59,32 @@ if (status) {
   process.exit(1)
 }
 
-run('git', ['commit', '--allow-empty', '-m', DEPLOY_COMMIT_MESSAGE])
+run('node', [VERSION_BUMP_SCRIPT_PATH, versionBumpFlag])
+run('git', ['add', CLIENT_PACKAGE_JSON_PATH, CLIENT_CARGO_TOML_PATH])
+run('git', ['commit', '-m', `deploy(production): v${readClientVersion()}`])
 run('git', ['push', 'origin', PRODUCTION_BRANCH])
+
+function readVersionBumpFlag() {
+  const args = process.argv.slice(2)
+  const bumpFlags = args.filter((arg) => VERSION_BUMP_FLAGS.includes(arg))
+  const unknownArgs = args.filter((arg) => !VERSION_BUMP_FLAGS.includes(arg))
+
+  if (unknownArgs.length > 0) {
+    console.error(`Unknown deploy argument: ${unknownArgs.join(', ')}`)
+    console.error(`Use one of ${VERSION_BUMP_FLAGS.join(', ')}.`)
+    process.exit(1)
+  }
+
+  if (bumpFlags.length > 1) {
+    console.error(`Use only one deploy version argument: ${VERSION_BUMP_FLAGS.join(', ')}.`)
+    process.exit(1)
+  }
+
+  return bumpFlags[0] ?? '--patch'
+}
+
+function readClientVersion() {
+  const packageData = JSON.parse(readFileSync(CLIENT_PACKAGE_JSON_PATH, 'utf-8'))
+
+  return packageData.version
+}

@@ -79,7 +79,7 @@ These commands are defined in the root `package.json`.
 | `pnpm run e2e:ui`             | Opens the Playwright UI runner.                                                                                                                                                             |
 | `pnpm run smoke`              | Runs Playwright tests marked with `@smoke`.                                                                                                                                                 |
 | `pnpm run check`              | Runs the full local quality gate: FSD lint, ESLint, style lint, type checks, builds, tests, and Prettier check.                                                                             |
-| `pnpm run deploy`             | Creates and pushes the production deploy trigger commit. It only works from a clean `production` branch.                                                                                    |
+| `pnpm run deploy`             | Bumps the client app patch version, creates the production deploy trigger commit, and pushes it. It only works from a clean `production` branch.                                            |
 | `pnpm run test`               | Runs workspace test tasks through Turbo.                                                                                                                                                    |
 
 ## Scripts Directory
@@ -90,7 +90,8 @@ The root `scripts/` directory contains implementation files used by the package 
 | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `scripts/dev.mjs`                                    | Implements `dev` and `dev:lan`: loads env files, validates required env, prepares certificates, applies the optional LAN IP, starts required Docker containers (`db`, `mongo-express`, `k-room-redis`), builds shared contracts, starts dev services, waits for server health, and restarts the server process if it exits. |
 | `scripts/sync-public-config.mjs`                     | Reads shared and stage env files, extracts public domains and paths, and writes `nginx/webserver.conf` from the nginx template.                                                                                                                                                                                             |
-| `scripts/deploy/create-production-deploy-commit.mjs` | Checks that the current branch is clean `production`, creates an empty `deploy(production): trigger` commit, and pushes it.                                                                                                                                                                                                 |
+| `scripts/deploy/create-production-deploy-commit.mjs` | Checks that the current branch is clean `production`, bumps the client app version, creates a `deploy(production): v...` commit, and pushes it.                                                                                                                                                                             |
+| `scripts/version/bump-client-version.mjs`            | Bumps `client/package.json` and `client/src-tauri/Cargo.toml`; patch is the default bump, while minor and major require explicit flags.                                                                                                                                                                                     |
 | `scripts/deploy/deploy.sh`                           | Server-side production deploy script used by GitHub Actions or the host: merges env files, syncs certificates when available, logs in to Docker Hub, pulls images, and runs Docker Compose.                                                                                                                                 |
 | `scripts/deploy/sync-certs.sh`                       | Copies Let's Encrypt certificate files for the production domain into `scripts/deploy/certs/` for Docker Compose.                                                                                                                                                                                                           |
 
@@ -112,11 +113,20 @@ To deploy, use a clean local `production` branch and run:
 pnpm run deploy
 ```
 
-The command creates and pushes an empty commit with this message:
+The command bumps the client app patch version by default, for example `0.1.0` to `0.1.1`, then creates and pushes a commit with a message like:
 
 ```text
-deploy(production): trigger
+deploy(production): v0.1.1
 ```
+
+Use explicit flags for larger release bumps:
+
+```sh
+pnpm run deploy -- --minor
+pnpm run deploy -- --major
+```
+
+Only `client/package.json` and `client/src-tauri/Cargo.toml` are bumped automatically. The root and server package versions stay manual.
 
 GitHub Actions deploys only when the latest pushed commit on `production` starts with `deploy(production):`.
 
