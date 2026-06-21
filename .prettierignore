@@ -10,6 +10,8 @@ node_modules
 **/dev-dist
 **/.adminjs
 **/*.tsbuildinfo
+client/src-tauri/gen/schemas
+client/src-tauri/target
 
 pnpm-lock.yaml
 package-lock.log
