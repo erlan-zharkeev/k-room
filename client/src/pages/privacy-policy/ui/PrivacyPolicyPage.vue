@@ -12,7 +12,7 @@ const { appName } = __CLIENT_ENV_DATA__
 
     <AppText tag="p" color="semi-contrast-text">
       <AppText bold color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.lastUpdatedLabel)" />
-      June 1, 2026
+      June 20, 2026
     </AppText>
 
     <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.intro, { appName: appName })" />
@@ -22,7 +22,15 @@ const { appName } = __CLIENT_ENV_DATA__
       {{ $t(LEGAL_INFO_PAGE_I18N.warningText, { appName: appName }) }}
     </AppText>
 
+    <AppText
+      tag="p"
+      color="semi-contrast-text"
+      :text="$t(LEGAL_INFO_PAGE_I18N.demoProjectNotice, { appName: appName })"
+    />
+
     <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.storageRisk)" />
+
+    <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.noConfidentialCommunications)" />
 
     <section>
       <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section1Title)" />
@@ -77,6 +85,7 @@ const { appName } = __CLIENT_ENV_DATA__
       <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section6Title)" />
       <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section6Text1)" />
       <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section6Text2)" />
+      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section6Text3)" />
     </section>
 
     <section>

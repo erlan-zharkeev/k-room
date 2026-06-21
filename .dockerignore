@@ -6,6 +6,7 @@ node_modules
 .pnpm-store
 .turbo
 **/.turbo
+.desktop-downloads
 .env.development
 .env.test
 .env.secret

@@ -5,11 +5,14 @@ import { allowMediaSync } from 'src/entities/media-file'
 import { useUser } from 'src/entities/user'
 import { allowAuthRefresh, useSocketConnect } from 'src/shared/api'
 
+import { useClientLogoutStatus } from './use-client-logout-status.model'
+
 export const useClientSession = () => {
   const route = useRoute()
   const router = useRouter()
   const { update } = useUser()
   const { socketConnect } = useSocketConnect()
+  const { clearLogoutStatus } = useClientLogoutStatus()
 
   const getRedirectPath = () => {
     const { redirect } = route.query
@@ -24,6 +27,7 @@ export const useClientSession = () => {
   const activateClientSession = async (data: UserData, shouldRedirect = true) => {
     const { avatarId, email, id, role, nickname, onboarding } = data
 
+    clearLogoutStatus()
     allowAuthRefresh()
     allowMediaSync()
     await update({ avatarId, email, id, role, nickname, onboarding })

@@ -61,6 +61,7 @@ WORKDIR /app/server
 
 COPY --from=build /app/global-shared/dist /app/global-shared/dist
 COPY --from=build /app/server/build ./build
+COPY server/public ./public
 
 EXPOSE ${SERVER_PORT}
 

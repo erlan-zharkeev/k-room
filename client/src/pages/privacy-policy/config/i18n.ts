@@ -37,23 +37,45 @@ export const LEGAL_INFO_PAGE_I18N = defineI18n('legalInfoPage', {
     en: i18nFormatter(
       ['appName'],
       (appName: string) =>
-        `${appName} is a general-purpose chat and calling service. It is not designed for storing, transmitting, or protecting highly sensitive, confidential, regulated, financial, medical, government-issued, or otherwise mission-critical information. Do not use ${appName} as a secure vault, legal archive, or protected communications channel.`
+        `${appName} is a developer demo and portfolio project that demonstrates full-stack product functionality. It is not a production-grade secure messenger, regulated communications platform, professional service, or service designed for storing, transmitting, or protecting highly sensitive, confidential, regulated, financial, medical, government-issued, legally privileged, or mission-critical information. Do not use ${appName} as a secure vault, legal archive, protected communications channel, or place to share secrets.`
     ),
     ru: i18nFormatter(
       ['appName'],
       (appName: string) =>
-        `${appName} — это общий сервис для чатов и звонков. Он не предназначен для хранения, передачи или защиты особо чувствительной, конфиденциальной, регулируемой, финансовой, медицинской, государственной или иной критически важной информации. Не используйте ${appName} как защищённое хранилище, юридический архив или безопасный канал связи.`
+        `${appName} — это демо-проект разработчика и портфолио, демонстрирующее fullstack-функциональность продукта. Это не production-grade защищённый мессенджер, не регулируемая коммуникационная платформа, не профессиональный сервис и не сервис для хранения, передачи или защиты особо чувствительной, конфиденциальной, регулируемой, финансовой, медицинской, государственной, юридически привилегированной или критически важной информации. Не используйте ${appName} как защищённое хранилище, юридический архив, безопасный канал связи или место для передачи секретов.`
     ),
     zh: i18nFormatter(
       ['appName'],
       (appName: string) =>
-        `${appName} 是通用聊天和通话服务。它并非用于存储、传输或保护高度敏感、机密、受监管、金融、医疗、政府签发或其他关键任务信息。不要将 ${appName} 用作安全保险库、法律档案或受保护的通信渠道。`
+        `${appName} 是开发者演示和作品集项目，用于展示全栈产品功能。它不是生产级安全通讯工具、受监管通信平台、专业服务，也不是用于存储、传输或保护高度敏感、机密、受监管、金融、医疗、政府签发、法律特权或关键任务信息的服务。不要将 ${appName} 用作安全保险库、法律档案、受保护通信渠道或分享秘密的地方。`
+    )
+  },
+  demoProjectNotice: {
+    en: i18nFormatter(
+      ['appName'],
+      (appName: string) =>
+        `${appName} may be changed, interrupted, reset, removed, reconfigured, or discontinued at any time as part of development, testing, maintenance, deployment, infrastructure changes, or portfolio demonstration. We do not guarantee that any feature, account, message, file, call history, contact list, setting, or stored data will remain available, accurate, private, complete, or recoverable.`
+    ),
+    ru: i18nFormatter(
+      ['appName'],
+      (appName: string) =>
+        `${appName} может быть изменён, прерван, сброшен, удалён, перенастроен или отключён в любой момент в рамках разработки, тестирования, обслуживания, деплоя, инфраструктурных изменений или демонстрации портфолио. Мы не гарантируем, что какая-либо функция, аккаунт, сообщение, файл, история звонков, список контактов, настройка или сохранённые данные останутся доступными, точными, приватными, полными или восстановимыми.`
+    ),
+    zh: i18nFormatter(
+      ['appName'],
+      (appName: string) =>
+        `${appName} 可能因开发、测试、维护、部署、基础设施变更或作品集展示而在任何时候被更改、中断、重置、删除、重新配置或停止。我们不保证任何功能、账户、消息、文件、通话记录、联系人列表、设置或已存储数据会保持可用、准确、私密、完整或可恢复。`
     )
   },
   storageRisk: {
-    en: 'Messages, files, account data, and technical data may be processed and stored on systems controlled by us or by our service providers. Although we may use reasonable operational measures, we do not promise or guarantee absolute security, confidentiality, availability, or loss prevention. Any use of the service is at your own risk.',
-    ru: 'Сообщения, файлы, данные аккаунта и технические данные могут обрабатываться и храниться на системах, которые контролируем мы или наши подрядчики. Даже если мы используем разумные организационные меры, мы не обещаем и не гарантируем абсолютную безопасность, конфиденциальность, доступность или защиту от потери данных. Вы используете сервис на свой риск.',
-    zh: '消息、文件、账户数据和技术数据可能会在我们或服务提供商控制的系统中处理和存储。即使我们可能采取合理的运营措施，也不承诺或保证绝对安全、保密、可用或防止数据丢失。你使用本服务需自行承担风险。'
+    en: 'Messages, files, account data, and technical data may be processed and stored on systems controlled by us or by our service providers. We may access, inspect, copy, migrate, delete, disclose, or otherwise process such data when needed for development, debugging, support, abuse investigation, legal compliance, infrastructure operation, backups, security, or product maintenance. Although we may use reasonable operational measures, we do not promise or guarantee security, confidentiality, privacy, availability, integrity, delivery, backup, recovery, or loss prevention. Any use of the service is at your own risk.',
+    ru: 'Сообщения, файлы, данные аккаунта и технические данные могут обрабатываться и храниться на системах, которые контролируем мы или наши подрядчики. Мы можем получать доступ, просматривать, копировать, переносить, удалять, раскрывать или иным образом обрабатывать такие данные, когда это нужно для разработки, отладки, поддержки, расследования злоупотреблений, исполнения закона, работы инфраструктуры, резервных копий, безопасности или обслуживания продукта. Даже если мы используем разумные организационные меры, мы не обещаем и не гарантируем безопасность, конфиденциальность, приватность, доступность, целостность, доставку, резервное копирование, восстановление или защиту от потери данных. Вы используете сервис на свой риск.',
+    zh: '消息、文件、账户数据和技术数据可能会在我们或服务提供商控制的系统中处理和存储。我们可能在开发、调试、支持、滥用调查、法律合规、基础设施运行、备份、安全或产品维护需要时访问、检查、复制、迁移、删除、披露或以其他方式处理这些数据。即使我们可能采取合理的运营措施，也不承诺或保证安全性、保密性、隐私性、可用性、完整性、送达、备份、恢复或防止数据丢失。你使用本服务需自行承担风险。'
+  },
+  noConfidentialCommunications: {
+    en: 'No communication through the service should be treated as confidential, privileged, private, sealed, encrypted end-to-end, or protected from review, loss, disclosure, interception, technical failure, provider access, administrative access, or accidental exposure. If you need confidentiality or legal, medical, financial, corporate, or regulated communications protection, use a dedicated service designed for that purpose instead.',
+    ru: 'Никакая коммуникация через сервис не должна считаться конфиденциальной, привилегированной, приватной, закрытой, защищённой end-to-end шифрованием или защищённой от просмотра, потери, раскрытия, перехвата, технического сбоя, доступа провайдера, административного доступа или случайной утечки. Если вам нужна конфиденциальность или защита юридической, медицинской, финансовой, корпоративной или регулируемой коммуникации, используйте специализированный сервис, созданный для этой цели.',
+    zh: '通过本服务进行的任何通信都不应被视为机密、特权、私密、密封、端到端加密，或不会被审查、丢失、披露、拦截、技术故障、服务提供商访问、管理员访问或意外暴露影响。如果你需要机密性，或需要法律、医疗、金融、公司或受监管通信保护，请使用专门为该目的设计的服务。'
   },
   section1Title: {
     en: '1. Information We Collect',
@@ -209,6 +231,11 @@ export const LEGAL_INFO_PAGE_I18N = defineI18n('legalInfoPage', {
     en: 'In particular, you should assume that chat content, attachments, account data, and technical data may be exposed, lost, corrupted, or accessed without authorization at some point. If that level of risk is not acceptable to you, do not use the service.',
     ru: 'В частности, вы должны исходить из того, что содержимое чатов, вложения, данные аккаунта и технические данные могут быть когда-либо раскрыты, потеряны, повреждены или доступны без разрешения. Если такой уровень риска для вас неприемлем, не используйте сервис.',
     zh: '尤其是，你应假设聊天内容、附件、账户数据和技术数据在某个时候可能被暴露、丢失、损坏或未经授权访问。如果你无法接受这种风险，请不要使用本服务。'
+  },
+  section6Text3: {
+    en: 'We make no warranties, representations, service-level commitments, confidentiality commitments, data-retention commitments, backup commitments, incident-response commitments, or security commitments beyond what is explicitly required by applicable law. The service is provided as is and as available for demonstration and development purposes.',
+    ru: 'Мы не даём никаких гарантий, заверений, обязательств по уровню сервиса, обязательств конфиденциальности, обязательств хранения данных, обязательств резервного копирования, обязательств реагирования на инциденты или обязательств безопасности сверх того, что прямо требуется применимым законом. Сервис предоставляется как есть и по мере доступности для целей демонстрации и разработки.',
+    zh: '除适用法律明确要求外，我们不作任何保证、陈述、服务等级承诺、保密承诺、数据保留承诺、备份承诺、事件响应承诺或安全承诺。本服务按现状和可用状态提供，用于演示和开发目的。'
   },
   section7Title: {
     en: '7. Your Choices and Rights',

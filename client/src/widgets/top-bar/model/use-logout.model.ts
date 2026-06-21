@@ -1,4 +1,3 @@
-import { useLocalStorage } from '@vueuse/core'
 import { AUTH_ENDPOINTS, ROUTE_NAMES } from 'global-shared'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -10,11 +9,9 @@ import { blockMediaSync, useMedia } from 'src/entities/media-file'
 import { useMessage } from 'src/entities/message'
 import { useRoomCall } from 'src/entities/room-call'
 import { useUser } from 'src/entities/user'
-import { useLogoutNavigation } from 'src/features/client-session'
+import { useClientLogoutStatus, useLogoutNavigation } from 'src/features/client-session'
 import { blockAuthRefresh, useHttp, socket } from 'src/shared/api'
-import { clearCookie } from 'src/shared/lib'
-
-import { LOCAL_STORAGE_KEY } from '../config/constants'
+import { clearCookie, log } from 'src/shared/lib'
 
 export const useLogout = () => {
   const router = useRouter()
@@ -27,8 +24,8 @@ export const useLogout = () => {
   const { reset: resetRoomCall } = useRoomCall()
   const { reset: resetUser } = useUser()
   const { startLogoutNavigation, stopLogoutNavigation } = useLogoutNavigation()
+  const { clearLogoutStatus, markLogoutFailed } = useClientLogoutStatus()
   const isLogoutLoading = ref(false)
-  const logoutStatus = useLocalStorage<string | null>(LOCAL_STORAGE_KEY.LogoutStatus, null)
 
   const resetClientData = () =>
     Promise.all([
@@ -41,29 +38,45 @@ export const useLogout = () => {
       resetUser()
     ])
 
+  const navigateToLogin = async () => {
+    startLogoutNavigation()
+
+    try {
+      await router.push(ROUTE_NAMES.authLogin)
+    } catch (error) {
+      log('error', 'Logout navigation failed', error)
+    } finally {
+      stopLogoutNavigation()
+    }
+  }
+
+  const clearClientSession = async () => {
+    try {
+      await resetClientData()
+    } catch (error) {
+      log('error', 'Logout client data reset failed', error)
+    }
+  }
+
   const logout = async () => {
     isLogoutLoading.value = true
     blockAuthRefresh()
     blockMediaSync()
 
     try {
-      await doHttpRequest('post', AUTH_ENDPOINTS.logout)
-      logoutStatus.value = null
+      await doHttpRequest('post', AUTH_ENDPOINTS.logout, {}, { showErrorToast: false })
+      clearLogoutStatus()
     } catch {
-      logoutStatus.value = 'failed'
+      markLogoutFailed()
     } finally {
-      clearCookie()
-      socket.disconnect()
-      startLogoutNavigation()
-
       try {
-        await router.push(ROUTE_NAMES.authLogin)
+        clearCookie()
+        socket.disconnect()
+        await navigateToLogin()
+        await clearClientSession()
       } finally {
-        stopLogoutNavigation()
+        isLogoutLoading.value = false
       }
-
-      await resetClientData()
-      isLogoutLoading.value = false
     }
   }
 
