@@ -46,6 +46,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run checks
+        env:
+          FIREBASE_API_KEY: ci-firebase-api-key
         run: pnpm run check
 
   build-desktop-installers:
