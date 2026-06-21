@@ -2,6 +2,9 @@ FROM node:24.14.0 AS build
 
 WORKDIR /app
 
+ARG FIREBASE_API_KEY
+ENV FIREBASE_API_KEY=${FIREBASE_API_KEY}
+
 RUN corepack enable
 
 COPY package.json ./package.json
@@ -16,7 +19,6 @@ COPY global-shared ./global-shared
 
 COPY client/package.json ./client/package.json
 COPY client/client-env.types.ts ./client/client-env.types.ts
-COPY client/create-client-env-data.constants.ts ./client/create-client-env-data.constants.ts
 COPY client/create-client-env-data.ts ./client/create-client-env-data.ts
 COPY client/tsconfig.json ./client/tsconfig.json
 COPY client/vite.config.ts ./client/vite.config.ts

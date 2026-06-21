@@ -1,11 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 
-import { formatAppName, readEnv, readSecretEnv, type EnvKey, type PackageData } from 'global-shared'
+import { formatAppName, readEnv, readSecretEnv, SENTRY_DSN_CLIENT, type EnvKey, type PackageData } from 'global-shared'
 import { loadEnv } from 'vite'
 
 import type { ClientEnv } from './client-env.types'
-import { SENTRY_DSN_CLIENT } from './create-client-env-data.constants'
 
 export const createClientEnvData = (mode: string, envDir: string): ClientEnv => {
   const sharedEnv = loadEnv('shared', envDir, '')
@@ -23,6 +22,7 @@ export const createClientEnvData = (mode: string, envDir: string): ClientEnv => 
   const socketPath = getEnv('SOCKET_PATH', sharedEnv)
   const appHost = getEnv('APP_HOST', modeEnv)
   const apiHost = getEnv('API_HOST', modeEnv)
+  const firebaseApiKey = getEnv('FIREBASE_API_KEY', modeEnv)
   const turnstileSiteKey = getEnv('TURNSTILE_SITE_KEY', modeEnv) || (isDev ? '1x00000000000000000000AA' : '')
   const themeBg = '#1c1f21'
   const themeAccent = '#006cb6'
@@ -32,6 +32,10 @@ export const createClientEnvData = (mode: string, envDir: string): ClientEnv => 
     fs.readFileSync(path.resolve(envDir, 'client/package.json'), 'utf-8')
   ) as PackageData
   const appName = getEnv('APP_NAME', sharedEnv) || formatAppName(rootPackageData.name)
+
+  if (!isDev && !firebaseApiKey) {
+    throw new Error('FIREBASE_API_KEY is required for production client builds')
+  }
 
   return {
     apiPath,
@@ -49,7 +53,7 @@ export const createClientEnvData = (mode: string, envDir: string): ClientEnv => 
     clientPort,
     appHost,
     apiHost,
-    firebaseApiKey: getEnv('FIREBASE_API_KEY', modeEnv),
+    firebaseApiKey,
     turnstileSiteKey,
     sentryDsnClient: SENTRY_DSN_CLIENT,
     sentryEnvironment: getEnv('SENTRY_ENVIRONMENT', modeEnv),

@@ -53,4 +53,22 @@ describe('parseDownloadReleasesManifest', () => {
       })
     ).toBeNull()
   })
+
+  it('parses unreleased manifest as unavailable downloads', () => {
+    expect(
+      parseDownloadReleasesManifest({
+        releasedAt: '',
+        platforms: {
+          windows: {
+            label: 'PC',
+            fileName: 'K-Room-Setup.exe',
+            downloadUrl: '/downloads/K-Room-Setup.exe'
+          }
+        }
+      })
+    ).toEqual({
+      releasedAt: '',
+      platformItems: []
+    })
+  })
 })

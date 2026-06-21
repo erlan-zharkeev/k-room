@@ -134,7 +134,7 @@ GitHub Actions deploys only when the latest pushed commit on `production` starts
 
 The production workflow builds Windows and macOS Tauri installers before publishing Docker images. The client Docker image is built only after the installer artifacts are available, so `/downloads/K-Room-Setup.exe`, `/downloads/K-Room.dmg`, and `/downloads/desktop/latest.json` are shipped together with the web client.
 
-The desktop installer jobs require the GitHub secret `TAURI_SIGNING_PRIVATE_KEY`. If the updater key has a password, also set `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`.
+The desktop installer jobs require `TAURI_SIGNING_PRIVATE_KEY`. It can be provided either as a dedicated GitHub secret or inside the decoded `ENV_SECRET_B64` `.env.secret` payload. If the updater key has a password, also set `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` the same way.
 
 ## Docs
 

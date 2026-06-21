@@ -5,9 +5,7 @@ import { ref } from 'vue'
 import { useSettings } from 'src/entities/setting'
 import { useClientSession } from 'src/features/client-session'
 import { useHttp } from 'src/shared/api'
-import { TOAST_I18N } from 'src/shared/lib'
-import { useI18n } from 'src/shared/lib'
-import { useAppToast } from 'src/shared/lib'
+import { log, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
 import { E2E_FIREBASE_AUTH_RESULT } from '../config/constants'
 import { LOGIN_FORM_I18N } from '../config/i18n'
@@ -61,7 +59,7 @@ export const useFirebase = () => {
         provider: normalizedProvider
       }
     } catch (error) {
-      void error
+      log('error', 'Firebase login failed', error)
 
       toast.add({
         type: 'error',

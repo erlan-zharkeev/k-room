@@ -1,6 +1,7 @@
 import { useSettings } from 'src/entities/setting'
 import { initClientData, initClientIndexedDbData } from 'src/features/client-session'
 import { setHttpClientLanguage, setSocketLanguage } from 'src/shared/api'
+import { log } from 'src/shared/lib'
 
 import { pinia } from '../providers/pinia'
 import { router } from '../router'
@@ -11,9 +12,10 @@ import { initSentry } from './init-sentry'
 import type { VueApp } from './types'
 
 export const initApp = async (app: VueApp) => {
-  const { appName } = __CLIENT_ENV_DATA__
+  const { appName, appVersion } = __CLIENT_ENV_DATA__
 
   document.title = appName
+  log('success', `${appName} v${appVersion}`)
   app.use(pinia)
   await app.runWithContext(initClientIndexedDbData)
   const { settings } = useSettings()

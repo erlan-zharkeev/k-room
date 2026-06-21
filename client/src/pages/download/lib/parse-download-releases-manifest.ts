@@ -29,6 +29,12 @@ export const parseDownloadReleasesManifest = (source: unknown): DownloadReleases
   const { releasedAt, platforms } = source
 
   if (!isString(releasedAt) || !isUnknownObject(platforms)) return null
+  if (!releasedAt) {
+    return {
+      releasedAt,
+      platformItems: []
+    }
+  }
 
   const platformItems = DOWNLOAD_PLATFORM_IDS.flatMap((platformId) => {
     const platformItem = parseDownloadPlatformItem(platformId, platforms[platformId])

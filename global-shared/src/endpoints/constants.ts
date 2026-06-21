@@ -75,3 +75,7 @@ export const ADMIN_ENDPOINTS = {
   deleteUser: '/admin/delete-user',
   updateUserData: '/admin/update-user-data'
 } as const
+
+export const MONITORING_ENDPOINTS = {
+  sentryEnvelope: '/monitoring/envelope'
+} as const

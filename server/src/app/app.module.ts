@@ -6,10 +6,11 @@ import { MediaModule } from '../modules/media/media.module'
 import { UserModule } from '../modules/user/user.module'
 
 import { HealthController } from './health.controller'
+import { SentryTunnelController } from './sentry-tunnel.controller'
 import { SocketModule } from './socket.module'
 
 @Module({
   imports: [AuthModule, CodesModule, MediaModule, SocketModule, UserModule],
-  controllers: [HealthController]
+  controllers: [HealthController, SentryTunnelController]
 })
 export class AppModule {}

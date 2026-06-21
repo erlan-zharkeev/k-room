@@ -6,12 +6,13 @@ import { WEEK_IN_MS } from 'global-shared'
 import { SERVER_ENV } from 'src/app/env'
 import { ADMIN_USER_OPTIONS } from 'src/modules/user/user.admin'
 
-const adminFaviconPath = path.resolve(process.cwd(), 'public/admin-favicon.svg')
+const adminFaviconPath = path.resolve(__dirname, '..', '..', 'public', 'admin-favicon.svg')
 const {
   adminjs: { adminRootPath, adminLoginPath, adminLogoutPath, adminUsername, adminPassword, adminCookie },
   secret: { refreshTokenSecret },
   mongo: { mongoHost },
   info: { appName },
+  clientUrl,
   isDev
 } = SERVER_ENV
 
@@ -21,7 +22,7 @@ const ADMIN_JS_CONFIG = {
   logoutPath: adminLogoutPath,
   branding: {
     companyName: appName,
-    favicon: '/admin-favicon.svg'
+    favicon: `${clientUrl}/meta/favicon-32x32.png`
   },
   resources: [ADMIN_USER_OPTIONS]
 }

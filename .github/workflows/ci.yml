@@ -106,12 +106,66 @@ jobs:
       - name: Build shared contracts
         run: pnpm --dir global-shared run build
 
-      - name: Validate updater signing key
+      - name: Restore production secret env
+        shell: bash
+        env:
+          ENV_SECRET_B64: ${{ secrets.ENV_SECRET_B64 }}
+        run: |
+          if [ -n "$ENV_SECRET_B64" ]; then
+            printf '%s' "$ENV_SECRET_B64" | base64 --decode > .env.secret
+          fi
+
+      - name: Load desktop signing env
         shell: bash
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         run: |
-          if [ -z "$TAURI_SIGNING_PRIVATE_KEY" ]; then
+          set -euo pipefail
+
+          read_env_value() {
+            file_path="$1"
+            key="$2"
+
+            if [ ! -f "$file_path" ]; then
+              return
+            fi
+
+            grep -m 1 "^$key=" "$file_path" | cut -d '=' -f 2- | sed "s/^'//; s/'$//; s/^\"//; s/\"$//" || true
+          }
+
+          write_github_env() {
+            key="$1"
+            value="$2"
+            delimiter="${key}_EOF"
+
+            if [ -z "$value" ]; then
+              return
+            fi
+
+            echo "::add-mask::$value"
+            {
+              echo "$key<<$delimiter"
+              printf '%s\n' "$value"
+              echo "$delimiter"
+            } >> "$GITHUB_ENV"
+          }
+
+          if [ -z "${TAURI_SIGNING_PRIVATE_KEY:-}" ]; then
+            TAURI_SIGNING_PRIVATE_KEY="$(read_env_value .env.secret TAURI_SIGNING_PRIVATE_KEY)"
+          fi
+
+          if [ -z "${TAURI_SIGNING_PRIVATE_KEY_PASSWORD:-}" ]; then
+            TAURI_SIGNING_PRIVATE_KEY_PASSWORD="$(read_env_value .env.secret TAURI_SIGNING_PRIVATE_KEY_PASSWORD)"
+          fi
+
+          write_github_env TAURI_SIGNING_PRIVATE_KEY "$TAURI_SIGNING_PRIVATE_KEY"
+          write_github_env TAURI_SIGNING_PRIVATE_KEY_PASSWORD "$TAURI_SIGNING_PRIVATE_KEY_PASSWORD"
+
+      - name: Validate updater signing key
+        shell: bash
+        run: |
+          if [ -z "${TAURI_SIGNING_PRIVATE_KEY:-}" ]; then
             echo "TAURI_SIGNING_PRIVATE_KEY is required to build signed updater artifacts." >&2
             exit 1
           fi
@@ -121,8 +175,6 @@ jobs:
         env:
           APPLE_SIGNING_IDENTITY: ${{ matrix.platform == 'macos' && '-' || '' }}
           TAURI_BUILD_ARGS: ${{ matrix.tauri_args }}
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         run: |
           if [ -n "$TAURI_BUILD_ARGS" ]; then
             pnpm --dir client run tauri:build -- $TAURI_BUILD_ARGS
@@ -176,11 +228,51 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push images
+      - name: Restore production secret env
+        env:
+          ENV_SECRET_B64: ${{ secrets.ENV_SECRET_B64 }}
         run: |
+          if [ -n "$ENV_SECRET_B64" ]; then
+            printf '%s' "$ENV_SECRET_B64" | base64 --decode > .env.secret
+          fi
+
+      - name: Build and push images
+        env:
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+        run: |
+          set -euo pipefail
+
+          read_env_value() {
+            file_path="$1"
+            key="$2"
+
+            if [ ! -f "$file_path" ]; then
+              return
+            fi
+
+            grep -m 1 "^$key=" "$file_path" | cut -d '=' -f 2- | sed "s/^'//; s/'$//; s/^\"//; s/\"$//" || true
+          }
+
+          if [ -z "${FIREBASE_API_KEY:-}" ]; then
+            FIREBASE_API_KEY="$(read_env_value .env.secret FIREBASE_API_KEY)"
+          fi
+
+          if [ -z "${FIREBASE_API_KEY:-}" ]; then
+            FIREBASE_API_KEY="$(read_env_value .env.production FIREBASE_API_KEY)"
+          fi
+
+          if [ -z "$FIREBASE_API_KEY" ]; then
+            echo "FIREBASE_API_KEY is required for the production client image." >&2
+            exit 1
+          fi
+
           SHORT_SHA="${GITHUB_SHA::7}"
 
-          docker build -t "${CLIENT_IMAGE_NAME}:latest" -t "${CLIENT_IMAGE_NAME}:${SHORT_SHA}" -f ./client/Dockerfile ./
+          docker build \
+            --build-arg FIREBASE_API_KEY="$FIREBASE_API_KEY" \
+            -t "${CLIENT_IMAGE_NAME}:latest" \
+            -t "${CLIENT_IMAGE_NAME}:${SHORT_SHA}" \
+            -f ./client/Dockerfile ./
           docker build -t "${SERVER_IMAGE_NAME}:latest" -t "${SERVER_IMAGE_NAME}:${SHORT_SHA}" -f ./server/Dockerfile ./
 
           docker push "${CLIENT_IMAGE_NAME}:latest"

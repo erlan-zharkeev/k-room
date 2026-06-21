@@ -114,6 +114,10 @@ const {
           </NmorphButton>
         </div>
       </div>
+
+      <div v-else class="download-page__state">
+        <AppText alignment="center" color="warn" :text="$t(DOWNLOAD_PAGE_I18N.downloadUnavailable)" />
+      </div>
     </NmorphCard>
   </div>
 </template>

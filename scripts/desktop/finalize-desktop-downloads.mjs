@@ -45,6 +45,7 @@ writeFileSync(
   `${JSON.stringify(createDownloadReleasesManifest(), null, 2)}\n`
 )
 writeFileSync(join(outputDownloadsDir, 'desktop/latest.json'), `${JSON.stringify(createUpdaterManifest(), null, 2)}\n`)
+validateOutputDownloads()
 
 function createDownloadReleasesManifest() {
   const platforms = Object.fromEntries(
@@ -95,6 +96,45 @@ function getMetadataItem(platformId) {
   if (metadata) return metadata
 
   console.error(`Missing desktop downloads metadata for ${platformId}.`)
+  process.exit(1)
+}
+
+function validateOutputDownloads() {
+  const requiredDownloadPaths = new Set([
+    '/downloads/releases.json',
+    '/downloads/desktop/latest.json',
+    ...metadataItems.flatMap((metadata) => [
+      metadata.installerDownloadPath,
+      ...metadata.updaterTargets.map((target) => target.downloadPath)
+    ])
+  ])
+
+  for (const downloadPath of requiredDownloadPaths) {
+    validateOutputDownloadPath(downloadPath)
+  }
+}
+
+function validateOutputDownloadPath(downloadPath) {
+  const outputPath = resolveOutputDownloadPath(downloadPath)
+
+  if (!existsSync(outputPath)) {
+    console.error(`Desktop download file is missing: ${outputPath}.`)
+    process.exit(1)
+  }
+
+  if (statSync(outputPath).size > 0) return
+
+  console.error(`Desktop download file is empty: ${outputPath}.`)
+  process.exit(1)
+}
+
+function resolveOutputDownloadPath(downloadPath) {
+  const downloadsPrefix = '/downloads/'
+
+  if (downloadPath.startsWith(downloadsPrefix))
+    return join(outputDownloadsDir, downloadPath.slice(downloadsPrefix.length))
+
+  console.error(`Desktop download path must start with ${downloadsPrefix}: ${downloadPath}.`)
   process.exit(1)
 }
 

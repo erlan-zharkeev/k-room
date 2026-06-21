@@ -121,6 +121,7 @@ export {
   USER_ENDPOINTS,
   MEDIA_ENDPOINTS,
   CODES_ENDPOINTS,
+  MONITORING_ENDPOINTS,
   ADMIN_ENDPOINTS
 } from './endpoints/constants'
 export type { RouteName, Endpoints } from './endpoints/types'
@@ -233,7 +234,7 @@ export type {
   ValidatePasswordRecoveryCodeResponse
 } from './response/types'
 
-export { SENTRY_IGNORED_SUBSTRINGS } from './sentry/constants'
+export { SENTRY_DSN_CLIENT, SENTRY_IGNORED_SUBSTRINGS } from './sentry/constants'
 export { isIgnoredSentryStatus, shouldIgnoreSentryError } from './sentry/lib'
 export type { SentryErrorContext } from './sentry/types'
 
