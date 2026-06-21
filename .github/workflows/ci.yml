@@ -179,6 +179,7 @@ jobs:
           APPLE_SIGNING_IDENTITY: ${{ matrix.platform == 'macos' && '-' || '' }}
           TAURI_BUILD_ARGS: ${{ matrix.tauri_args }}
         run: |
+          set +e
           set -o pipefail
 
           build_log_path="${RUNNER_TEMP:-.}/tauri-build.log"
