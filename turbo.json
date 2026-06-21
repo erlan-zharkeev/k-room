@@ -10,6 +10,7 @@
     "stylelint.config.cjs",
     "tsconfig*.json"
   ],
+  "globalEnv": ["FIREBASE_API_KEY"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
