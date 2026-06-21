@@ -86,20 +86,22 @@ These commands are defined in the root `package.json`.
 
 The root `scripts/` directory contains implementation files used by the package scripts and deployment workflow.
 
-| File                                                 | What it does                                                                                                                                                                                                                                                                                                                |
-| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `scripts/dev.mjs`                                    | Implements `dev` and `dev:lan`: loads env files, validates required env, prepares certificates, applies the optional LAN IP, starts required Docker containers (`db`, `mongo-express`, `k-room-redis`), builds shared contracts, starts dev services, waits for server health, and restarts the server process if it exits. |
-| `scripts/sync-public-config.mjs`                     | Reads shared and stage env files, extracts public domains and paths, and writes `nginx/webserver.conf` from the nginx template.                                                                                                                                                                                             |
-| `scripts/deploy/create-production-deploy-commit.mjs` | Checks that the current branch is clean `production`, bumps the client app version, creates a `deploy(production): v...` commit, and pushes it.                                                                                                                                                                             |
-| `scripts/version/bump-client-version.mjs`            | Bumps `client/package.json` and `client/src-tauri/Cargo.toml`; patch is the default bump, while minor and major require explicit flags.                                                                                                                                                                                     |
-| `scripts/deploy/deploy.sh`                           | Server-side production deploy script used by GitHub Actions or the host: merges env files, syncs certificates when available, logs in to Docker Hub, pulls images, and runs Docker Compose.                                                                                                                                 |
-| `scripts/deploy/sync-certs.sh`                       | Copies Let's Encrypt certificate files for the production domain into `scripts/deploy/certs/` for Docker Compose.                                                                                                                                                                                                           |
+| File                                                    | What it does                                                                                                                                                                                                                                                                                                                |
+| ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `scripts/dev.mjs`                                       | Implements `dev` and `dev:lan`: loads env files, validates required env, prepares certificates, applies the optional LAN IP, starts required Docker containers (`db`, `mongo-express`, `k-room-redis`), builds shared contracts, starts dev services, waits for server health, and restarts the server process if it exits. |
+| `scripts/desktop/prepare-desktop-download-artifact.mjs` | Collects platform-specific Tauri build output, normalizes public installer names, and stores installer metadata for the production Docker image build.                                                                                                                                                                      |
+| `scripts/desktop/finalize-desktop-downloads.mjs`        | Rebuilds `client/public/downloads` from desktop installer artifacts and generates the public download manifest plus the Tauri updater `latest.json` file before the client Docker image is built.                                                                                                                           |
+| `scripts/sync-public-config.mjs`                        | Reads shared and stage env files, extracts public domains and paths, and writes `nginx/webserver.conf` from the nginx template.                                                                                                                                                                                             |
+| `scripts/deploy/create-production-deploy-commit.mjs`    | Checks that the current branch is clean `production`, bumps the client app version, creates a `deploy(production): v...` commit, and pushes it.                                                                                                                                                                             |
+| `scripts/version/bump-client-version.mjs`               | Bumps `client/package.json` and `client/src-tauri/Cargo.toml`; patch is the default bump, while minor and major require explicit flags.                                                                                                                                                                                     |
+| `scripts/deploy/deploy.sh`                              | Server-side production deploy script used by GitHub Actions or the host: merges env files, syncs certificates when available, logs in to Docker Hub, pulls images, and runs Docker Compose.                                                                                                                                 |
+| `scripts/deploy/sync-certs.sh`                          | Copies Let's Encrypt certificate files for the production domain into `scripts/deploy/certs/` for Docker Compose.                                                                                                                                                                                                           |
 
 ## Checks
 
 - CI runs `pnpm run check`.
 - The local pre-commit hook runs `pnpm run check`.
-- Smoke and e2e tests are manual local checks.
+- Smoke and e2e tests are manual local checks and are not part of `pnpm run deploy` or the GitHub Actions production deploy flow.
 - Run `pnpm run smoke` for smoke tests or `pnpm run e2e` for the full e2e suite.
 - Smoke and e2e tests require MongoDB on `127.0.0.1:27017`.
 
@@ -129,6 +131,10 @@ pnpm run deploy -- --major
 Only `client/package.json` and `client/src-tauri/Cargo.toml` are bumped automatically. The root and server package versions stay manual.
 
 GitHub Actions deploys only when the latest pushed commit on `production` starts with `deploy(production):`.
+
+The production workflow builds Windows and macOS Tauri installers before publishing Docker images. The client Docker image is built only after the installer artifacts are available, so `/downloads/K-Room-Setup.exe`, `/downloads/K-Room.dmg`, and `/downloads/desktop/latest.json` are shipped together with the web client.
+
+The desktop installer jobs require the GitHub secret `TAURI_SIGNING_PRIVATE_KEY`. If the updater key has a password, also set `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`.
 
 ## Docs
 
