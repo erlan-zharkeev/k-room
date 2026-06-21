@@ -179,16 +179,18 @@ jobs:
           APPLE_SIGNING_IDENTITY: ${{ matrix.platform == 'macos' && '-' || '' }}
           TAURI_BUILD_ARGS: ${{ matrix.tauri_args }}
         run: |
+          pnpm --dir client run check:version
+
           set +e
           set -o pipefail
 
           build_log_path="${RUNNER_TEMP:-.}/tauri-build.log"
 
           if [ -n "$TAURI_BUILD_ARGS" ]; then
-            pnpm --dir client run tauri:build -- $TAURI_BUILD_ARGS 2>&1 | tee "$build_log_path"
+            pnpm --dir client exec tauri build $TAURI_BUILD_ARGS 2>&1 | tee "$build_log_path"
             build_status="${PIPESTATUS[0]}"
           else
-            pnpm --dir client run tauri:build 2>&1 | tee "$build_log_path"
+            pnpm --dir client exec tauri build 2>&1 | tee "$build_log_path"
             build_status="${PIPESTATUS[0]}"
           fi
 
