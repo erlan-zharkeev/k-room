@@ -179,11 +179,28 @@ jobs:
           APPLE_SIGNING_IDENTITY: ${{ matrix.platform == 'macos' && '-' || '' }}
           TAURI_BUILD_ARGS: ${{ matrix.tauri_args }}
         run: |
+          set -o pipefail
+
+          build_log_path="${RUNNER_TEMP:-.}/tauri-build.log"
+
           if [ -n "$TAURI_BUILD_ARGS" ]; then
-            pnpm --dir client run tauri:build -- $TAURI_BUILD_ARGS
+            pnpm --dir client run tauri:build -- $TAURI_BUILD_ARGS 2>&1 | tee "$build_log_path"
+            build_status="${PIPESTATUS[0]}"
           else
-            pnpm --dir client run tauri:build
+            pnpm --dir client run tauri:build 2>&1 | tee "$build_log_path"
+            build_status="${PIPESTATUS[0]}"
           fi
+
+          if [ "$build_status" -eq 0 ]; then
+            exit 0
+          fi
+
+          log_tail="$(tail -40 "$build_log_path" || true)"
+          log_tail="${log_tail//%/%25}"
+          log_tail="${log_tail//$'\r'/%0D}"
+          log_tail="${log_tail//$'\n'/%0A}"
+          echo "::error title=Tauri build failed::$log_tail"
+          exit "$build_status"
 
       - name: Prepare desktop download artifact
         run: node scripts/desktop/prepare-desktop-download-artifact.mjs ${{ matrix.platform }}
