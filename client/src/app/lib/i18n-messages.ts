@@ -1,3 +1,5 @@
+import { en as nmorphEn, ru as nmorphRu, zh as nmorphZh } from '@nmorph/nmorph-ui-kit'
+
 import { APP_I18N } from 'src/app/config/i18n'
 import { AUTH_LAYOUT_I18N } from 'src/app/layouts/auth-layout/i18n'
 import { APP_NAVIGATION_I18N } from 'src/features/app-navigation'
@@ -43,7 +45,7 @@ import { CHAT_ROOM_CONTENT_I18N } from 'src/widgets/chat-room-content'
 import { CHAT_ROOMS_NAVIGATION_I18N } from 'src/widgets/chat-rooms-navigation'
 import { TOP_BAR_I18N } from 'src/widgets/top-bar'
 
-export const I18N_MESSAGES = buildI18nMessages([
+const appI18nMessages = buildI18nMessages([
   APP_I18N,
   AUTH_LAYOUT_I18N,
   APP_NAVIGATION_I18N,
@@ -90,3 +92,18 @@ export const I18N_MESSAGES = buildI18nMessages([
   CHAT_ROOMS_NAVIGATION_I18N,
   TOP_BAR_I18N
 ])
+
+export const I18N_MESSAGES: ReturnType<typeof buildI18nMessages> = {
+  en: {
+    ...nmorphEn,
+    ...appI18nMessages.en
+  },
+  ru: {
+    ...nmorphRu,
+    ...appI18nMessages.ru
+  },
+  zh: {
+    ...nmorphZh,
+    ...appI18nMessages.zh
+  }
+}

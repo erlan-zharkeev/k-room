@@ -41,7 +41,8 @@ export const createNmorphOptions = (
         ru,
         zh
       },
-      locale: language
+      locale: language,
+      outsideMessagesMerge: true
     }
   }
 }
