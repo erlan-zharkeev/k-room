@@ -40,7 +40,11 @@ export { acquireUrl, releaseUrl, useLiveMediaUrl, useLiveMediaUrlMap, useLiveMed
 export { loadStorageEstimate, useStorageEstimate } from './storage/storage.model'
 export { setI18nRuntime, useI18n } from './i18n/i18n'
 export { buildI18nMessages, defineI18n, i18nFormatter } from './i18n/define-i18n'
-export { createPasswordValidationRules } from './validation/validation'
+export {
+  createDifferentOrEmptyValidationPattern,
+  createExactOrEmptyValidationPattern,
+  createPasswordValidationRules
+} from './validation/validation'
 export { CLIENT_LANGUAGE } from './i18n/constants'
 export {
   dexieCollectionStore,

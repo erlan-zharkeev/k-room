@@ -8,17 +8,19 @@ import { AppProfileBasicData } from 'src/shared/ui'
 
 import { useLogout } from '../model/use-logout.model'
 import { useRoomCallActivityNavigation } from '../model/use-room-call-activity-navigation.model'
+import { useTopBarGuide } from '../model/use-top-bar-guide.model'
 import { useTopBarSocketStatus } from '../model/use-top-bar-socket-status.model'
 
 const { user, avatarId } = useUser()
 const { isLogoutLoading, logout } = useLogout()
 const { openRoomCall } = useRoomCallActivityNavigation()
+const { topBarGuidePosition } = useTopBarGuide()
 const { socketTag } = useTopBarSocketStatus()
 </script>
 
 <template>
   <NmorphCard tag="header" class="top-bar" content-class="top-bar__content">
-    <OnboardingGuideTarget class="top-bar__profile-guide-target" name="topBar">
+    <OnboardingGuideTarget class="top-bar__profile-guide-target" name="topBar" :position="topBarGuidePosition">
       <AppProfileBasicData :image-alt="user.nickname" :image-id="avatarId" :title="user.nickname" :name="user.nickname">
         <template #description>
           <NmorphBadge

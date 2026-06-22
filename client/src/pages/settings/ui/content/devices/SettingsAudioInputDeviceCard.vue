@@ -47,6 +47,7 @@ const {
       <div class="settings-audio-input-device-card__control">
         <NmorphSelect
           :key="settings.ioDevices.audioInputDeviceId"
+          class="settings-audio-input-device-card__select"
           :aria-label="$t(SETTINGS_PAGE_DEVICES_I18N.audioInputDevice)"
           :model-value="settings.ioDevices.audioInputDeviceId"
           :options="audioInputOptions"
@@ -85,12 +86,18 @@ const {
 .settings-audio-input-device-card {
   display: grid;
   gap: 8px;
+  min-width: 0;
 }
 
 .settings-audio-input-device-card__control {
   display: flex;
   gap: 8px;
   align-items: center;
+  min-width: 0;
+}
+
+.settings-audio-input-device-card__select {
+  min-width: 0;
 }
 
 .settings-audio-input-device-card__level-meter.nmorph-audio-meter.nmorph-audio-meter--bars {

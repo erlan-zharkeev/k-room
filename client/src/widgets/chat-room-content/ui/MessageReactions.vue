@@ -140,16 +140,20 @@ const {
   padding: 0 4px;
 }
 
-.message-reactions__avatars {
+.message-reactions__list .message-reactions__avatars {
+  transform: none;
   display: inline-flex;
   align-items: center;
   margin-left: 3px;
 }
 
-.message-reactions__avatar {
+.message-reactions__list .message-reactions__avatar {
   position: relative;
+  transform: none;
+
   display: inline-flex;
   flex: 0 0 16px;
+
   min-width: 0;
 
   .nmorph-image {
@@ -159,6 +163,10 @@ const {
 
 .message-reactions__avatar:last-child {
   flex-basis: 22px;
+}
+
+.message-reactions__avatar .nmorph-avatar__initials {
+  transform: none;
 }
 
 .message-reactions__avatar:not(:first-child) {

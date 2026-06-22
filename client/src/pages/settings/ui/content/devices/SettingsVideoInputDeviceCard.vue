@@ -48,6 +48,7 @@ const {
       <div class="settings-video-input-device-card__control">
         <NmorphSelect
           :key="settings.ioDevices.videoInputDeviceId"
+          class="settings-video-input-device-card__select"
           :aria-label="$t(SETTINGS_PAGE_DEVICES_I18N.videoInputDevice)"
           :model-value="settings.ioDevices.videoInputDeviceId"
           :options="videoInputOptions"
@@ -89,12 +90,18 @@ const {
 .settings-video-input-device-card {
   display: grid;
   gap: 8px;
+  min-width: 0;
 }
 
 .settings-video-input-device-card__control {
   display: flex;
   gap: 8px;
   align-items: center;
+  min-width: 0;
+}
+
+.settings-video-input-device-card__select {
+  min-width: 0;
 }
 
 .settings-video-input-device-card__permission {

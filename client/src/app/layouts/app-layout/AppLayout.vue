@@ -123,20 +123,6 @@ const {
   flex: 1 1 auto;
 }
 
-.app-layout__guide-target.onboarding-guide-target--active .widget::after {
-  pointer-events: none;
-  content: '';
-
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-
-  border: 2px solid var(--app-guide-target-border-color);
-  border-radius: 8px;
-
-  box-shadow: var(--app-guide-target-shadow);
-}
-
 .widget {
   isolation: isolate;
   position: relative;

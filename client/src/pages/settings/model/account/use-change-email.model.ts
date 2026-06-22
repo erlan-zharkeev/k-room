@@ -11,9 +11,10 @@ import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
 
 import { useUser } from 'src/entities/user'
 import { useHttp } from 'src/shared/api'
-import { useI18n } from 'src/shared/lib'
+import { createDifferentOrEmptyValidationPattern, useI18n } from 'src/shared/lib'
 
 import { SETTINGS_EMAIL_PATTERN } from '../../config/constants/account.constants'
+import { SETTINGS_ACCOUNT_CHANGE_EMAIL_I18N } from '../../config/i18n/account-change-email.i18n'
 
 export const useChangeEmail = () => {
   const { doHttpRequest } = useHttp()
@@ -21,6 +22,7 @@ export const useChangeEmail = () => {
   const { t } = useI18n()
   const validationMessages = createValidationMessages(t)
   const formRef = useTemplateRef<INmorphFormDataExpose>('formRef')
+  const formResetKey = ref(0)
   const formData = reactive({
     currentEmail: { value: '', rules: [] },
     nextEmail: {
@@ -38,11 +40,7 @@ export const useChangeEmail = () => {
   const currentEmail = computed(() => user.value.email)
   const isFormValid = computed(() => formRef.value?.formData.isFormValid.value ?? false)
   const normalizedNextEmail = computed(() => formData.nextEmail.value.trim())
-  const emailNotChanged = computed(
-    () =>
-      Boolean(normalizedNextEmail.value) && normalizedNextEmail.value.toLowerCase() === currentEmail.value.toLowerCase()
-  )
-  const isSendCodeDisabled = computed(() => !user.value.id || !isFormValid.value || emailNotChanged.value)
+  const isSendCodeDisabled = computed(() => !user.value.id || !isFormValid.value)
   const isEmailCodeVisible = computed(
     () => Boolean(codeSentEmail.value) && codeSentEmail.value === normalizedNextEmail.value && !isSendCodeDisabled.value
   )
@@ -76,6 +74,7 @@ export const useChangeEmail = () => {
       formData.nextEmail.value = ''
       otpCode.value = ''
       codeSentEmail.value = ''
+      formResetKey.value += 1
     } finally {
       isEmailCodeValidating.value = false
     }
@@ -85,14 +84,22 @@ export const useChangeEmail = () => {
     currentEmail,
     (email) => {
       formData.currentEmail.value = email
+      formData.nextEmail.rules = [
+        { pattern: NON_EMPTY_PATTERN, error: validationMessages.emailIsRequired },
+        { pattern: SETTINGS_EMAIL_PATTERN, error: validationMessages.invalidEmailFormat },
+        {
+          pattern: createDifferentOrEmptyValidationPattern(email, 'i'),
+          error: t(SETTINGS_ACCOUNT_CHANGE_EMAIL_I18N.emailNotChanged)
+        }
+      ]
     },
     { immediate: true }
   )
 
   return {
     currentEmail,
-    emailNotChanged,
     formData,
+    formResetKey,
     isEmailCodeVisible,
     isEmailCodeSending,
     isEmailCodeValidating,

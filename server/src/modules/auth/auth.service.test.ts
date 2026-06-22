@@ -84,7 +84,13 @@ describe('AuthService', () => {
     }
     const userService = {
       findByLogin: vi.fn().mockResolvedValue(user),
-      mapUserToDto: vi.fn().mockReturnValue({ id: 'user-1', email: 'user@test.com', nickname: 'tester', role: 'user' })
+      mapUserToDto: vi.fn().mockReturnValue({
+        id: 'user-1',
+        email: 'user@test.com',
+        nickname: 'tester',
+        role: 'user',
+        provider: 'app'
+      })
     }
     const service = new AuthService(
       {} as never,
@@ -103,7 +109,13 @@ describe('AuthService', () => {
       response as never
     )
 
-    expect(result).toEqual({ id: 'user-1', email: 'user@test.com', nickname: 'tester', role: 'user' })
+    expect(result).toEqual({
+      id: 'user-1',
+      email: 'user@test.com',
+      nickname: 'tester',
+      role: 'user',
+      provider: 'app'
+    })
     expect(sessionService.updateTokens).toHaveBeenCalledWith('user-1', expect.any(Object), response)
   })
 

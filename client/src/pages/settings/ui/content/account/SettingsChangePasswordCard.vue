@@ -1,14 +1,11 @@
 <script setup lang="ts">
 import { NmorphForm, NmorphFormItem, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 
-import { AppText } from 'src/shared/ui'
-
 import { SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N } from '../../../config/i18n/account-change-password.i18n'
 import { useChangePassword } from '../../../model/account/use-change-password.model'
 import SettingsCard from '../../SettingsCard.vue'
 
-const { changePassword, formData, isPasswordChanging, isPasswordSubmitDisabled, nextPasswordError, passwordMismatch } =
-  useChangePassword()
+const { changePassword, formData, formResetKey, isPasswordChanging, isPasswordSubmitDisabled } = useChangePassword()
 </script>
 
 <template>
@@ -20,7 +17,7 @@ const { changePassword, formData, isPasswordChanging, isPasswordSubmitDisabled, 
     :on-button-click="changePassword"
     :title="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N.changePassword)"
   >
-    <NmorphForm :value="formData" @submit.prevent="changePassword">
+    <NmorphForm :key="formResetKey" ref="formRef" :value="formData" @submit.prevent="changePassword">
       <NmorphFormItem
         id="currentPassword"
         :label="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N.currentPassword)"
@@ -35,7 +32,6 @@ const { changePassword, formData, isPasswordChanging, isPasswordSubmitDisabled, 
         :show-validation-icon="false"
       >
         <NmorphTextInput :disabled="isPasswordChanging" type-password />
-        <AppText v-if="nextPasswordError" tag="small" color="warn" :text="nextPasswordError" />
       </NmorphFormItem>
 
       <NmorphFormItem
@@ -45,13 +41,6 @@ const { changePassword, formData, isPasswordChanging, isPasswordSubmitDisabled, 
       >
         <NmorphTextInput :disabled="isPasswordChanging" type-password />
       </NmorphFormItem>
-
-      <AppText
-        v-if="passwordMismatch"
-        tag="small"
-        color="warn"
-        :text="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N.passwordMismatch)"
-      />
     </NmorphForm>
   </SettingsCard>
 </template>

@@ -92,12 +92,22 @@ export class UserService {
     return user
   }
 
+  assertCredentialsManagedLocally(user: UserSchema) {
+    if ((user.system.provider ?? 'app') !== 'app') {
+      throw new AppError(REQ_STATUS.badRequest, USER_I18N.credentialsManagedByProvider)
+    }
+  }
+
   async resetPassword({ codeToValidate, password }: CreateNewPasswordPayload) {
     const userId = await this.securityService.getPasswordRecoveryQueryUserId(codeToValidate)
 
     if (!userId) {
       throw new AppError(REQ_STATUS.badRequest, RESET_PASSWORD_I18N.failed)
     }
+
+    const user = await this.requireUser(userId)
+
+    this.assertCredentialsManagedLocally(user)
 
     const hashedPassword = await bcrypt.hash(password, 6)
 
@@ -107,10 +117,19 @@ export class UserService {
 
   async changePassword({ userId, currentPassword, password }: ChangePasswordParams) {
     const user = await this.requireUser(userId)
+
+    this.assertCredentialsManagedLocally(user)
+
     const isPasswordValid = await bcrypt.compare(currentPassword, user.system.password)
 
     if (!isPasswordValid) {
       throw new AppError(REQ_STATUS.badRequest, CHANGE_PASSWORD_I18N.currentPasswordInvalid)
+    }
+
+    const isNewPasswordSameAsCurrent = await bcrypt.compare(password, user.system.password)
+
+    if (isNewPasswordSameAsCurrent) {
+      throw new AppError(REQ_STATUS.badRequest, CHANGE_PASSWORD_I18N.newPasswordSameAsCurrent)
     }
 
     const hashedPassword = await bcrypt.hash(password, 6)
@@ -120,6 +139,9 @@ export class UserService {
 
   async changeEmail({ userId, email }: ChangeEmailParams) {
     const user = await this.requireUser(userId)
+
+    this.assertCredentialsManagedLocally(user)
+
     const normalizedEmail = email.trim()
 
     if (normalizedEmail === user.personal.email) {

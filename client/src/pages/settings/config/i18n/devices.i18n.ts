@@ -110,10 +110,10 @@ export const SETTINGS_PAGE_DEVICES_I18N = defineI18n('settingsPageDevices', {
     ru: 'Медиаустройства не поддерживаются в этом окружении',
     zh: '当前环境不支持媒体设备'
   },
-  deviceLabel: {
-    en: i18nFormatter(['index'], (index: number) => `Device ${index}`),
-    ru: i18nFormatter(['index'], (index: number) => `Устройство ${index}`),
-    zh: i18nFormatter(['index'], (index: number) => `设备 ${index}`)
+  unknownDevice: {
+    en: 'Unknown device',
+    ru: 'Неизвестное устройство',
+    zh: '未知设备'
   },
   videoPreview: {
     en: 'Camera preview',

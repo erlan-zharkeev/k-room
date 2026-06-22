@@ -62,9 +62,9 @@ export const useMediaInputDevice = ({
   const selectedDeviceId = computed(() => settings.value.ioDevices[settingKey])
   const { permissionCalloutType, permissionStatus } = useDevicePermissionStatus(isSupported, permission)
   const inputOptions = computed(() =>
-    inputDevices.value.map(({ deviceId, label }, index) => ({
+    inputDevices.value.map(({ deviceId, label }) => ({
       value: deviceId,
-      label: label || t(SETTINGS_PAGE_DEVICES_I18N.deviceLabel, { index: index + 1 })
+      label: label || t(SETTINGS_PAGE_DEVICES_I18N.unknownDevice)
     }))
   )
   const isInputChecking = computed(() => Boolean(inputStream.value))

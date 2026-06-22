@@ -32,7 +32,7 @@ onMounted(confirmEmail)
       <AppText v-if="isConfirmed && email" bold color="accent" :text="email" />
       <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ navigate }">
         <NmorphButton
-          :text="$t(EMAIL_CONFIRMATION_I18N.back)"
+          :text="$t(EMAIL_CONFIRMATION_I18N.login)"
           class="email-confirmation-page__act-btn"
           @click="navigate"
         />
@@ -42,7 +42,20 @@ onMounted(confirmEmail)
 </template>
 
 <style>
+.email-confirmation-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100%;
+}
+
+.email-confirmation-page > * {
+  margin-bottom: 8px;
+}
+
 .email-confirmation-page__act-btn {
   gap: 8px;
+  margin-top: auto;
+  margin-bottom: 16px;
 }
 </style>

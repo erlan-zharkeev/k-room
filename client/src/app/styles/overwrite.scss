@@ -3,6 +3,10 @@
   border-radius: 8px;
 }
 
+.nmorph-alert.nmorph-alert--success .nmorph-alert__icon .nmorph-icon {
+  --nmorph-private-icon-color: var(--nmorph-success-color);
+}
+
 .nmorph-dropdown.nmorph-dropdown--hide-shadow,
 .nmorph-dropdown {
   box-shadow: calc(var(--base-shadow-width) * 2) calc(var(--base-shadow-width) * 2) calc(var(--base-shadow-blur) * 2)
@@ -13,32 +17,6 @@
 
 .nmorph-context-menu__item {
   gap: 12px;
-}
-
-.onboarding-guide-target--active > .nmorph-tooltip__content > .nmorph-tooltip__trigger {
-  isolation: isolate;
-  position: relative;
-  z-index: 1;
-  border-radius: 8px;
-}
-
-.onboarding-guide-target--active > .nmorph-tooltip__content > .nmorph-tooltip__trigger::after {
-  pointer-events: none;
-  content: '';
-
-  position: absolute;
-  z-index: 0;
-  inset: -4px;
-
-  border: 2px solid var(--app-guide-target-border-color);
-  border-radius: calc(8px + 4px);
-
-  box-shadow: var(--app-guide-target-shadow);
-}
-
-.onboarding-guide-target--active > .nmorph-tooltip__content > .nmorph-tooltip__trigger > * {
-  position: relative;
-  z-index: 1;
 }
 
 .app-layout__guide-target.nmorph-tooltip {
@@ -57,8 +35,8 @@
   min-height: 0;
 }
 
-.app-layout__guide-target.onboarding-guide-target--active > .nmorph-tooltip__content > .nmorph-tooltip__trigger::after {
-  display: none;
+.app-layout__guide-target.nmorph-guide-step .nmorph-tooltip__trigger::after {
+  inset: 0;
 }
 
 .left-bar__navigation-guide-target.nmorph-tooltip {

@@ -6,8 +6,8 @@ import { useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
 
 import { refreshAuthTokens, shouldSkipAuthRefresh } from './auth-refresh'
-import { getHeaderValue } from './get-header-value'
 import { httpClient } from './http-client'
+import { isBackendResponse } from './is-backend-response'
 import type { HttpRequestOptions, HttpRequestPayload } from './types'
 import { useHttpInterceptor } from './use-http-interceptor'
 
@@ -16,13 +16,9 @@ export const useHttp = () => {
   const toast = useAppToast()
   const { interceptError } = useHttpInterceptor()
 
-  const successMessageHandler = (response: AxiosResponse<BackendResponse<unknown>>, showSuccessToast: boolean) => {
+  const successMessageHandler = (response: AxiosResponse<unknown>, showSuccessToast: boolean) => {
     if (!showSuccessToast) return
-
-    const contentType = getHeaderValue(response.headers?.['content-type'])
-    const isJson = contentType.includes('application/json')
-
-    if (!isJson) return
+    if (!isBackendResponse(response.data)) return
 
     const { text, silent } = response.data.message
     const isSuccess = isHttpSuccessStatus(response.status)
@@ -73,7 +69,7 @@ export const useHttp = () => {
         throw new Error('No response')
       }
 
-      successMessageHandler(response as AxiosResponse<BackendResponse<unknown>>, showSuccessToast)
+      successMessageHandler(response, showSuccessToast)
 
       return response as R extends 'json' ? AxiosResponse<BackendResponse<T>> : AxiosResponse<Blob>
     } catch (error) {
@@ -88,7 +84,7 @@ export const useHttp = () => {
 
           const response = await request()
 
-          successMessageHandler(response as AxiosResponse<BackendResponse<unknown>>, showSuccessToast)
+          successMessageHandler(response, showSuccessToast)
 
           return response as R extends 'json' ? AxiosResponse<BackendResponse<T>> : AxiosResponse<Blob>
         } catch (retryError) {

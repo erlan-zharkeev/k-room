@@ -1,39 +1,70 @@
-import { createPasswordSchema, createValidationMessages, USER_ENDPOINTS } from 'global-shared'
-import * as v from 'valibot'
-import { computed, reactive, ref } from 'vue'
+import type { INmorphFormDataExpose } from '@nmorph/nmorph-ui-kit'
+import { createValidationMessages, NON_EMPTY_PATTERN, USER_ENDPOINTS } from 'global-shared'
+import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
 
 import { useHttp } from 'src/shared/api'
-import { useI18n } from 'src/shared/lib'
+import {
+  createDifferentOrEmptyValidationPattern,
+  createExactOrEmptyValidationPattern,
+  createPasswordValidationRules,
+  useI18n
+} from 'src/shared/lib'
+
+import { SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N } from '../../config/i18n/account-change-password.i18n'
 
 export const useChangePassword = () => {
   const { doHttpRequest } = useHttp()
   const { t } = useI18n()
+  const validationMessages = createValidationMessages(t)
+  const formRef = useTemplateRef<INmorphFormDataExpose>('formRef')
+  const formResetKey = ref(0)
   const isPasswordChanging = ref(false)
-  const passwordSchema = createPasswordSchema(createValidationMessages(t))
+  const passwordRules = createPasswordValidationRules(validationMessages)
+  const repeatPasswordRules = [{ pattern: NON_EMPTY_PATTERN, error: validationMessages.passwordIsRequired }]
 
   const formData = reactive({
-    currentPassword: { value: '', rules: [] },
-    nextPassword: { value: '', rules: [] },
-    repeatPassword: { value: '', rules: [] }
+    currentPassword: {
+      value: '',
+      rules: [{ pattern: NON_EMPTY_PATTERN, error: validationMessages.passwordIsRequired }]
+    },
+    nextPassword: { value: '', rules: passwordRules },
+    repeatPassword: { value: '', rules: repeatPasswordRules }
   })
 
-  const nextPasswordValidationResult = computed(() => v.safeParse(passwordSchema, formData.nextPassword.value))
-  const nextPasswordError = computed(() =>
-    formData.nextPassword.value && !nextPasswordValidationResult.value.success
-      ? nextPasswordValidationResult.value.issues[0]?.message || ''
-      : ''
-  )
-  const passwordMismatch = computed(() =>
-    Boolean(formData.repeatPassword.value && formData.nextPassword.value !== formData.repeatPassword.value)
-  )
-  const isPasswordSubmitDisabled = computed(
-    () =>
-      !formData.currentPassword.value ||
-      !formData.nextPassword.value ||
-      !formData.repeatPassword.value ||
-      Boolean(nextPasswordError.value) ||
-      passwordMismatch.value
-  )
+  const isFormValid = computed(() => formRef.value?.formData.isFormValid.value ?? false)
+  const isPasswordSubmitDisabled = computed(() => isPasswordChanging.value || !isFormValid.value)
+
+  const updateNextPasswordRules = () => {
+    const shouldCompareWithCurrentPassword = Boolean(formData.currentPassword.value && formData.nextPassword.value)
+
+    if (!shouldCompareWithCurrentPassword && formData.nextPassword.rules === passwordRules) return
+
+    formData.nextPassword.rules = shouldCompareWithCurrentPassword
+      ? [
+          ...passwordRules,
+          {
+            pattern: createDifferentOrEmptyValidationPattern(formData.currentPassword.value),
+            error: t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N.newPasswordSameAsCurrent)
+          }
+        ]
+      : passwordRules
+  }
+
+  const updateRepeatPasswordRules = () => {
+    const shouldCompareWithNextPassword = Boolean(formData.nextPassword.value && formData.repeatPassword.value)
+
+    if (!shouldCompareWithNextPassword && formData.repeatPassword.rules === repeatPasswordRules) return
+
+    formData.repeatPassword.rules = shouldCompareWithNextPassword
+      ? [
+          {
+            pattern: createExactOrEmptyValidationPattern(formData.nextPassword.value),
+            error: t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N.passwordMismatch)
+          },
+          ...repeatPasswordRules
+        ]
+      : repeatPasswordRules
+  }
 
   const changePassword = async () => {
     if (isPasswordSubmitDisabled.value) return
@@ -47,17 +78,29 @@ export const useChangePassword = () => {
       formData.currentPassword.value = ''
       formData.nextPassword.value = ''
       formData.repeatPassword.value = ''
+      formResetKey.value += 1
     } finally {
       isPasswordChanging.value = false
     }
   }
 
+  watch([() => formData.currentPassword.value, () => formData.nextPassword.value], () => {
+    updateNextPasswordRules()
+    updateRepeatPasswordRules()
+  })
+
+  watch(
+    () => formData.repeatPassword.value,
+    () => {
+      updateRepeatPasswordRules()
+    }
+  )
+
   return {
     changePassword,
     formData,
+    formResetKey,
     isPasswordChanging,
-    isPasswordSubmitDisabled,
-    nextPasswordError,
-    passwordMismatch
+    isPasswordSubmitDisabled
   }
 }

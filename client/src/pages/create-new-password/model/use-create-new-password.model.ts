@@ -2,11 +2,11 @@ import type { INmorphFormDataExpose } from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES, USER_ENDPOINTS, createValidationMessages, isString } from 'global-shared'
 import type { CreateNewPasswordPayload } from 'global-shared'
 import clone from 'lodash/clone'
-import { computed, reactive, ref, useTemplateRef } from 'vue'
+import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useHttp } from 'src/shared/api'
-import { createPasswordValidationRules, useI18n } from 'src/shared/lib'
+import { createExactOrEmptyValidationPattern, createPasswordValidationRules, useI18n } from 'src/shared/lib'
 
 import { DEFAULT_CREATE_NEW_PASSWORD_FORM_DATA } from '../config/constants'
 import { CREATE_NEW_PASSWORD_I18N } from '../config/i18n'
@@ -29,14 +29,10 @@ export const useCreateNewPassword = () => {
   const successMessage = ref('')
   const passwordRecoveryCode = computed(() => route.query['password-recovery'])
   const isFormValid = computed(() => formRef.value?.formData.isFormValid.value ?? false)
-  const passwordMismatch = computed(() => formData.firstPassword.value !== formData.secondPassword.value)
-  const passwordMismatchText = computed(() =>
-    formData.secondPassword.value && passwordMismatch.value ? t(CREATE_NEW_PASSWORD_I18N.mismatch) : ''
-  )
-  const isSubmitDisabled = computed(() => isLoading.value || passwordMismatch.value || !isFormValid.value)
+  const isSubmitDisabled = computed(() => isLoading.value || !isFormValid.value)
 
   const submit = async () => {
-    if (!isFormValid.value || passwordMismatch.value || !isString(passwordRecoveryCode.value)) {
+    if (!isFormValid.value || !isString(passwordRecoveryCode.value)) {
       return
     }
 
@@ -58,6 +54,20 @@ export const useCreateNewPassword = () => {
     }
   }
 
+  watch(
+    () => formData.firstPassword.value,
+    (firstPassword) => {
+      formData.secondPassword.rules = [
+        {
+          pattern: createExactOrEmptyValidationPattern(firstPassword),
+          error: t(CREATE_NEW_PASSWORD_I18N.mismatch)
+        },
+        ...passwordRules
+      ]
+    },
+    { immediate: true }
+  )
+
   const initializeCreateNewPassword = async () => {
     if (!isString(passwordRecoveryCode.value)) {
       await router.push(ROUTE_NAMES.app)
@@ -71,8 +81,6 @@ export const useCreateNewPassword = () => {
     isLoading,
     isPasswordChanged,
     isSubmitDisabled,
-    passwordMismatch,
-    passwordMismatchText,
     submit,
     successMessage
   }

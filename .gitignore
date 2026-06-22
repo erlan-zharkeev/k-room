@@ -5,6 +5,7 @@ TEMP_CI_CD_AGREEMENTS.md
 .vscode
 .DS_Store
 .codex
+.agents
 
 .env.deploy
 .env.secret

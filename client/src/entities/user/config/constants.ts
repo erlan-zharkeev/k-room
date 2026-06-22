@@ -5,6 +5,7 @@ export const INITIAL_USER_STORE: UserData = {
   id: '',
   role: 'user',
   email: '',
+  provider: 'app',
   nickname: '',
   onboarding: USER_DEFAULT_ONBOARDING
 }

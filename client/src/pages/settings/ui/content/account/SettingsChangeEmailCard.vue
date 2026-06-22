@@ -10,8 +10,8 @@ import SettingsCard from '../../SettingsCard.vue'
 
 const {
   currentEmail,
-  emailNotChanged,
   formData,
+  formResetKey,
   isEmailCodeVisible,
   isEmailCodeSending,
   isEmailCodeValidating,
@@ -25,7 +25,7 @@ const {
 
 <template>
   <SettingsCard :title="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_I18N.changeEmail)">
-    <NmorphForm ref="formRef" :value="formData" @submit.prevent="sendEmailCode">
+    <NmorphForm :key="formResetKey" ref="formRef" :value="formData" @submit.prevent="sendEmailCode">
       <NmorphFormItem
         id="currentEmail"
         :label="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_I18N.currentEmail)"
@@ -43,12 +43,6 @@ const {
           autocomplete="email"
           :disabled="isEmailCodeSending || isEmailCodeValidating"
           :input-attrs="{ type: 'email' }"
-        />
-        <AppText
-          v-if="emailNotChanged"
-          tag="small"
-          color="warn"
-          :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_I18N.emailNotChanged)"
         />
       </NmorphFormItem>
 

@@ -35,6 +35,7 @@ const {
       <div class="settings-audio-output-device-card__control">
         <NmorphSelect
           :key="audioOutputSelectValue"
+          class="settings-audio-output-device-card__select"
           :aria-label="$t(SETTINGS_PAGE_DEVICES_I18N.audioOutputDevice)"
           :model-value="audioOutputSelectValue"
           :options="audioOutputOptions"
@@ -64,10 +65,17 @@ const {
 .settings-audio-output-device-card {
   display: grid;
   gap: 8px;
+  min-width: 0;
 }
 
 .settings-audio-output-device-card__control {
   display: flex;
   gap: 8px;
+  align-items: center;
+  min-width: 0;
+}
+
+.settings-audio-output-device-card__select {
+  min-width: 0;
 }
 </style>

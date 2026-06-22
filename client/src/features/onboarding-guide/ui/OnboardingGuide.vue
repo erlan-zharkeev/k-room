@@ -20,6 +20,8 @@ initializeGuide()
     :next-text="guideLabels.next"
     :show-close="true"
     :show-progress="true"
+    target-outline-color="success"
+    target-outline-offset="4px"
     :width="320"
     :z-index="30"
     @close="completeGuide"

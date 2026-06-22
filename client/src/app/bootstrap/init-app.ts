@@ -15,7 +15,7 @@ export const initApp = async (app: VueApp) => {
   const { appName, appVersion } = __CLIENT_ENV_DATA__
 
   document.title = appName
-  log('success', `${appName} v${appVersion}`)
+  log('success', `${appName} (v${appVersion})`)
   app.use(pinia)
   await app.runWithContext(initClientIndexedDbData)
   const { settings } = useSettings()

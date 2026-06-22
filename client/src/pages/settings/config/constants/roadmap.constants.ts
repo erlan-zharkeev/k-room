@@ -51,6 +51,12 @@ export const ROADMAP_ITEMS: RoadmapItem[] = [
     description: SETTINGS_PAGE_ROADMAP_I18N.audioActivityDescription
   },
   {
+    id: 'granular-storage-cleanup',
+    status: 'planned',
+    title: SETTINGS_PAGE_ROADMAP_I18N.granularStorageCleanupTitle,
+    description: SETTINGS_PAGE_ROADMAP_I18N.granularStorageCleanupDescription
+  },
+  {
     id: 'conference-recording',
     status: 'research',
     title: SETTINGS_PAGE_ROADMAP_I18N.conferenceRecordingTitle,

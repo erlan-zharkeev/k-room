@@ -36,7 +36,8 @@ describe('CodesService', () => {
       sendPasswordRecoveryEmail: vi.fn()
     }
     const userService = {
-      findByEmail: vi.fn().mockResolvedValue({ _id: 'user-1', public: { nickname: 'tester' } })
+      findByEmail: vi.fn().mockResolvedValue({ _id: 'user-1', public: { nickname: 'tester' } }),
+      assertCredentialsManagedLocally: vi.fn()
     }
     const securityService = {
       assertSendPasswordRecoveryAllowed: vi.fn(),
@@ -64,7 +65,8 @@ describe('CodesService', () => {
       findByEmail: vi.fn().mockResolvedValue({
         _id: 'user-1',
         public: { nickname: 'tester' }
-      })
+      }),
+      assertCredentialsManagedLocally: vi.fn()
     }
     const securityService = {
       assertSendPasswordRecoveryAllowed: vi.fn(),
@@ -88,6 +90,36 @@ describe('CodesService', () => {
     })
   })
 
+  it('rejects password recovery code for provider account', async () => {
+    const emailService = {
+      sendPasswordRecoveryEmail: vi.fn()
+    }
+    const userService = {
+      findByEmail: vi.fn().mockResolvedValue({ _id: 'user-1', system: { provider: 'google' } }),
+      assertCredentialsManagedLocally: vi.fn(() => {
+        throw Object.assign(new Error('provider account'), { status: 400 })
+      })
+    }
+    const securityService = {
+      assertSendPasswordRecoveryAllowed: vi.fn(),
+      trackSendPasswordRecoveryAttempt: vi.fn(),
+      getSendPasswordRecoveryCodeCooldown: vi.fn(),
+      setPasswordRecoveryCode: vi.fn()
+    }
+
+    const service = new CodesService(emailService as never, userService as never, securityService as never)
+
+    await expect(
+      service.sendPasswordRecoveryCode({ email: 'user@test.com' }, {
+        language: 'en',
+        headers: {}
+      } as never)
+    ).rejects.toMatchObject({ status: 400 })
+    expect(securityService.getSendPasswordRecoveryCodeCooldown).not.toHaveBeenCalled()
+    expect(securityService.setPasswordRecoveryCode).not.toHaveBeenCalled()
+    expect(emailService.sendPasswordRecoveryEmail).not.toHaveBeenCalled()
+  })
+
   it('stores and sends a change email code in redis with dev debugCode', async () => {
     const emailService = {
       sendChangeEmailCodeEmail: vi.fn()
@@ -98,6 +130,7 @@ describe('CodesService', () => {
         personal: { email: 'old@test.com' },
         public: { nickname: 'tester' }
       }),
+      assertCredentialsManagedLocally: vi.fn(),
       findByEmail: vi.fn().mockResolvedValue(null)
     }
     const securityService = {
@@ -124,6 +157,40 @@ describe('CodesService', () => {
       code: '123456',
       nickname: 'tester'
     })
+  })
+
+  it('rejects change email code for provider account', async () => {
+    const emailService = {
+      sendChangeEmailCodeEmail: vi.fn()
+    }
+    const userService = {
+      requireUser: vi.fn().mockResolvedValue({
+        _id: 'user-1',
+        system: { provider: 'google' }
+      }),
+      assertCredentialsManagedLocally: vi.fn(() => {
+        throw Object.assign(new Error('provider account'), { status: 400 })
+      }),
+      findByEmail: vi.fn()
+    }
+    const securityService = {
+      assertSendChangeEmailCodeAllowed: vi.fn(),
+      getSendChangeEmailCodeCooldown: vi.fn(),
+      trackSendChangeEmailCodeAttempt: vi.fn(),
+      setChangeEmailCode: vi.fn()
+    }
+
+    const service = new CodesService(emailService as never, userService as never, securityService as never)
+
+    await expect(
+      service.sendChangeEmailCode('user-1', { email: 'new@test.com' }, {
+        language: 'en',
+        headers: {}
+      } as never)
+    ).rejects.toMatchObject({ status: 400 })
+    expect(securityService.getSendChangeEmailCodeCooldown).not.toHaveBeenCalled()
+    expect(securityService.setChangeEmailCode).not.toHaveBeenCalled()
+    expect(emailService.sendChangeEmailCodeEmail).not.toHaveBeenCalled()
   })
 
   it('validates a change email code from redis and updates user email', async () => {
@@ -165,7 +232,8 @@ describe('CodesService', () => {
     const service = new CodesService(
       {} as never,
       {
-        findByEmail: vi.fn().mockResolvedValue({ _id: 'user-1' })
+        findByEmail: vi.fn().mockResolvedValue({ _id: 'user-1' }),
+        assertCredentialsManagedLocally: vi.fn()
       } as never,
       securityService as never
     )
@@ -190,7 +258,8 @@ describe('CodesService', () => {
     const service = new CodesService(
       {} as never,
       {
-        findByEmail: vi.fn().mockResolvedValue({ _id: 'user-1' })
+        findByEmail: vi.fn().mockResolvedValue({ _id: 'user-1' }),
+        assertCredentialsManagedLocally: vi.fn()
       } as never,
       securityService as never
     )
@@ -202,5 +271,33 @@ describe('CodesService', () => {
 
     expect(result).toEqual({ query: 'query-token' })
     expect(securityService.setPasswordRecoveryQuery).toHaveBeenCalledWith('user-1', 'query-token', 1_200_000)
+  })
+
+  it('rejects password recovery code validation for provider account', async () => {
+    const securityService = {
+      assertValidatePasswordRecoveryCodeAllowed: vi.fn(),
+      getPasswordRecoveryCode: vi.fn(),
+      setPasswordRecoveryQuery: vi.fn(),
+      clearPasswordRecoveryCodeFailures: vi.fn()
+    }
+    const service = new CodesService(
+      {} as never,
+      {
+        findByEmail: vi.fn().mockResolvedValue({ _id: 'user-1', system: { provider: 'google' } }),
+        assertCredentialsManagedLocally: vi.fn(() => {
+          throw Object.assign(new Error('provider account'), { status: 400 })
+        })
+      } as never,
+      securityService as never
+    )
+
+    await expect(
+      service.validatePasswordRecoveryCode({ email: 'user@test.com', code: '123456' }, {
+        language: 'en',
+        headers: {}
+      } as never)
+    ).rejects.toMatchObject({ status: 400 })
+    expect(securityService.getPasswordRecoveryCode).not.toHaveBeenCalled()
+    expect(securityService.setPasswordRecoveryQuery).not.toHaveBeenCalled()
   })
 })

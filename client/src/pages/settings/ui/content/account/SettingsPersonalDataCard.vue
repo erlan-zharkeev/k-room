@@ -110,6 +110,7 @@ const {
               @update:model-value="uploadAccountAvatar"
             />
             <NmorphButton
+              class="settings-personal-data-card__reset-button"
               design="plain"
               borderless
               :disabled="isAccountSaving"
@@ -161,14 +162,25 @@ const {
 
 .settings-personal-data-card__actions {
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .settings-personal-data-card__avatar-field {
   display: grid;
   gap: 8px;
+  width: 100%;
+  min-width: 0;
 }
 
 .settings-personal-data-card__copy-button {
   flex: 0 0 auto;
+}
+
+.settings-personal-data-card__reset-button {
+  margin-left: auto;
+}
+
+.settings-personal-data-card__reset-button .nmorph-button__content {
+  padding: 0;
 }
 </style>

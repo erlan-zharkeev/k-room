@@ -15,7 +15,6 @@ const {
   isLoading,
   isPasswordChanged,
   isSubmitDisabled,
-  passwordMismatchText,
   submit,
   successMessage
 } = useCreateNewPassword()
@@ -57,7 +56,6 @@ onMounted(initializeCreateNewPassword)
             :placeholder="$t(CREATE_NEW_PASSWORD_I18N.secondPasswordPlaceholder)"
             type-password
           />
-          <AppText v-if="passwordMismatchText" tag="small" color="error-text" :text="passwordMismatchText" />
         </NmorphFormItem>
 
         <div class="create-new-password-page__action-btns">

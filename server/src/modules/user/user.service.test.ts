@@ -1,4 +1,5 @@
-import type { UnknownObject } from 'global-shared'
+import bcrypt from 'bcryptjs'
+import { REQ_STATUS, type UnknownObject } from 'global-shared'
 import { Types } from 'mongoose'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -146,6 +147,10 @@ describe('user.service', () => {
     }
     const service = new UserService(securityService as never)
 
+    userModelMock.UserModel.findById.mockResolvedValue({
+      system: { provider: 'app' }
+    })
+
     await service.resetPassword({ codeToValidate: 'query-token', password: 'Asdf1234' })
 
     expect(userModelMock.UserModel.findOneAndUpdate).toHaveBeenCalledWith(
@@ -155,11 +160,85 @@ describe('user.service', () => {
     expect(securityService.clearPasswordRecoveryState).toHaveBeenCalledWith('user-1')
   })
 
+  it('rejects password reset for provider account', async () => {
+    const securityService = {
+      getPasswordRecoveryQueryUserId: vi.fn().mockResolvedValue('user-1'),
+      clearPasswordRecoveryState: vi.fn()
+    }
+    const service = new UserService(securityService as never)
+
+    userModelMock.UserModel.findById.mockResolvedValue({
+      system: { provider: 'google' }
+    })
+
+    await expect(service.resetPassword({ codeToValidate: 'query-token', password: 'Asdf1234' })).rejects.toMatchObject({
+      status: REQ_STATUS.badRequest
+    })
+    expect(userModelMock.UserModel.findOneAndUpdate).not.toHaveBeenCalled()
+    expect(securityService.clearPasswordRecoveryState).not.toHaveBeenCalled()
+  })
+
+  it('rejects changing password for provider account', async () => {
+    const updateOne = vi.fn()
+    const service = new UserService({} as never)
+
+    userModelMock.UserModel.findById.mockResolvedValue({
+      system: { provider: 'google', password: 'provider-password' },
+      updateOne
+    })
+
+    await expect(
+      service.changePassword({
+        userId: 'user-1',
+        currentPassword: 'Asdf1234',
+        password: 'Qwer1234'
+      })
+    ).rejects.toMatchObject({ status: REQ_STATUS.badRequest })
+    expect(updateOne).not.toHaveBeenCalled()
+  })
+
+  it('rejects changing password to the current password', async () => {
+    const updateOne = vi.fn()
+    const service = new UserService({} as never)
+
+    userModelMock.UserModel.findById.mockResolvedValue({
+      system: { password: await bcrypt.hash('Asdf1234', 6) },
+      updateOne
+    })
+
+    await expect(
+      service.changePassword({
+        userId: 'user-1',
+        currentPassword: 'Asdf1234',
+        password: 'Asdf1234'
+      })
+    ).rejects.toMatchObject({ status: REQ_STATUS.badRequest })
+    expect(updateOne).not.toHaveBeenCalled()
+  })
+
+  it('rejects changing email for provider account', async () => {
+    const updateOne = vi.fn()
+    const service = new UserService({} as never)
+
+    userModelMock.UserModel.findById.mockResolvedValue({
+      system: { provider: 'google' },
+      personal: { email: 'old@test.com' },
+      updateOne
+    })
+
+    await expect(service.changeEmail({ userId: 'user-1', email: 'new@test.com' })).rejects.toMatchObject({
+      status: REQ_STATUS.badRequest
+    })
+    expect(userModelMock.UserModel.findOne).not.toHaveBeenCalled()
+    expect(updateOne).not.toHaveBeenCalled()
+  })
+
   it('changes user email when target email is free', async () => {
     const updateOne = vi.fn()
     const service = new UserService({} as never)
 
     userModelMock.UserModel.findById.mockResolvedValue({
+      system: { provider: 'app' },
       personal: { email: 'old@test.com' },
       updateOne
     })
@@ -224,6 +303,7 @@ describe('user.service', () => {
       nickname: 'tester',
       role: 'user',
       email: 'tester@test.com',
+      provider: 'app',
       onboarding: {
         welcomeCompleted: true,
         guideCompleted: false

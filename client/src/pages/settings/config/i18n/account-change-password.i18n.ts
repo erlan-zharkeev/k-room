@@ -24,5 +24,10 @@ export const SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N = defineI18n('settingsAccount
     en: 'Passwords do not match',
     ru: 'Пароли не совпадают',
     zh: '两次输入的密码不一致'
+  },
+  newPasswordSameAsCurrent: {
+    en: 'New password must be different from current password',
+    ru: 'Новый пароль должен отличаться от текущего',
+    zh: '新密码必须与当前密码不同'
   }
 })

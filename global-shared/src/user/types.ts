@@ -1,4 +1,5 @@
 import type { MediaId } from '../media/types'
+import type { Provider } from '../shared/types'
 
 import { type USER_ROLES } from './constants'
 
@@ -18,5 +19,6 @@ export type UserPreview = {
 export type UserData = UserPreview & {
   role: UserRole
   email: string
+  provider: Provider
   onboarding: UserOnboardingData
 }

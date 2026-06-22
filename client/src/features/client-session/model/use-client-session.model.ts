@@ -25,12 +25,12 @@ export const useClientSession = () => {
   }
 
   const activateClientSession = async (data: UserData, shouldRedirect = true) => {
-    const { avatarId, email, id, role, nickname, onboarding } = data
+    const { avatarId, email, id, role, nickname, onboarding, provider } = data
 
     clearLogoutStatus()
     allowAuthRefresh()
     allowMediaSync()
-    await update({ avatarId, email, id, role, nickname, onboarding })
+    await update({ avatarId, email, id, role, nickname, onboarding, provider })
     socketConnect()
 
     if (shouldRedirect) {

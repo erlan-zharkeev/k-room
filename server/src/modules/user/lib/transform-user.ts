@@ -34,6 +34,7 @@ export const mapUserToDto = (user: UserSchema): UserData => {
     ...transformUserToPreview(user),
     role: user.system.role,
     email: user.personal.email,
+    provider: user.system.provider ?? 'app',
     onboarding: mapUserOnboardingToDto(user.personal.onboarding)
   }
 }

@@ -11,9 +11,9 @@ export const EMAIL_CONFIRMATION_I18N = defineI18n('emailConfirmation', {
     ru: 'Подтверждаем email',
     zh: '正在确认 email'
   },
-  back: {
-    en: 'Back',
-    ru: 'Назад',
-    zh: '返回'
+  login: {
+    en: 'Login',
+    ru: 'Вход',
+    zh: '登录'
   }
 })

@@ -101,6 +101,16 @@ export const SETTINGS_PAGE_ROADMAP_I18N = defineI18n('settingsPageRoadmap', {
     ru: 'Во время звонков будет видно, есть ли аудиоактивность даже при выключенном микрофоне, чтобы проще замечать проблемы с устройством или соединением.',
     zh: '通话中即使麦克风关闭，也会显示是否存在音频活动，帮助更快发现设备或连接问题。'
   },
+  granularStorageCleanupTitle: {
+    en: 'Flexible storage cleanup',
+    ru: 'Гибкая очистка кэша хранилища',
+    zh: '灵活的存储清理'
+  },
+  granularStorageCleanupDescription: {
+    en: 'Clear cached media by category, such as audio, video, images, documents and other downloaded files, instead of removing the whole cache at once.',
+    ru: 'Кэш можно будет очищать по категориям: аудио, видео, изображения, документы и другие загруженные файлы, не удаляя весь кэш сразу.',
+    zh: '可以按类别清理缓存媒体，例如音频、视频、图片、文档和其他已下载文件，而不是一次性删除全部缓存。'
+  },
   conferenceRecordingTitle: {
     en: 'Conference recording',
     ru: 'Запись видеоконференций',

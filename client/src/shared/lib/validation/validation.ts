@@ -14,3 +14,17 @@ export const createPasswordValidationRules = (validationMessages: ValidationMess
   { pattern: PASSWORD_NO_SPACES_PATTERN, error: validationMessages.passwordNotContainSpaces },
   { pattern: PASSWORD_ONLY_LATIN_PATTERN, error: validationMessages.passwordMustContainOnlyLatin }
 ]
+
+const escapeRegExpValue = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+export const createExactOrEmptyValidationPattern = (value: string) => {
+  if (!value) return /^.*$/
+
+  return new RegExp(`^(?:${escapeRegExpValue(value)})?$`)
+}
+
+export const createDifferentOrEmptyValidationPattern = (value: string, flags = '') => {
+  if (!value) return /^.*$/
+
+  return new RegExp(`^(?!${escapeRegExpValue(value)}$).*`, flags)
+}

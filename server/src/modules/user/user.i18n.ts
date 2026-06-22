@@ -20,6 +20,11 @@ export const USER_I18N = defineI18n({
     en: 'A user with this id is already exist',
     ru: 'Пользователь с таким id уже существует',
     zh: '该 id 的用户已存在'
+  },
+  credentialsManagedByProvider: {
+    en: 'Email and password are managed by your sign-in provider. Contact support to unlink this account.',
+    ru: 'Email и пароль управляются провайдером входа. Чтобы отвязать аккаунт, напишите в поддержку.',
+    zh: 'Email 和密码由登录提供商管理。如需解除账号绑定，请联系支持。'
   }
 })
 
@@ -69,6 +74,11 @@ export const CHANGE_PASSWORD_I18N = defineI18n({
     en: 'Current password is invalid',
     ru: 'Текущий пароль неверный',
     zh: '当前密码无效'
+  },
+  newPasswordSameAsCurrent: {
+    en: 'New password must be different from current password',
+    ru: 'Новый пароль должен отличаться от текущего',
+    zh: '新密码必须与当前密码不同'
   },
   success: {
     en: 'Password changed successfully',

@@ -12,7 +12,6 @@ const {
   secret: { refreshTokenSecret },
   mongo: { mongoHost },
   info: { appName },
-  clientUrl,
   isDev
 } = SERVER_ENV
 
@@ -22,7 +21,7 @@ const ADMIN_JS_CONFIG = {
   logoutPath: adminLogoutPath,
   branding: {
     companyName: appName,
-    favicon: `${clientUrl}/meta/favicon-32x32.png`
+    favicon: '/admin-favicon.svg'
   },
   resources: [ADMIN_USER_OPTIONS]
 }

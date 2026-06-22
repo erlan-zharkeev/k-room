@@ -323,5 +323,15 @@ export const SETTINGS_PAGE_FAQ_I18N = defineI18n('settingsPageFaq', {
     en: 'In Settings → Notifications, you can turn all notifications on or off, or configure separate channels: toasts, sound, vibration, browser push and native push for messages and calls.',
     ru: 'В Настройках → Уведомления можно включить или отключить все уведомления сразу либо настроить отдельные каналы: тосты, звук, вибрацию, браузерные push и нативные push для сообщений и звонков.',
     zh: '在设置 → 通知中，可以开启或关闭所有通知，也可以分别配置消息和通话的应用内提示、声音、振动、浏览器推送和原生推送。'
+  },
+  faqQ28: {
+    en: 'Can I change email or set a password for a Google account?',
+    ru: 'Можно ли изменить email или установить пароль для аккаунта Google?',
+    zh: 'Google 账号可以修改 email 或设置密码吗？'
+  },
+  faqA28: {
+    en: 'No. If the account was registered through Google, email and password are managed by Google. To unlink the account from Google, contact support.',
+    ru: 'Нет. Если аккаунт зарегистрирован через Google, email и пароль управляются Google. Чтобы отвязать аккаунт от Google, напишите в поддержку.',
+    zh: '不可以。如果账号是通过 Google 注册的，email 和密码由 Google 管理。如需解除账号与 Google 的绑定，请联系支持。'
   }
 })

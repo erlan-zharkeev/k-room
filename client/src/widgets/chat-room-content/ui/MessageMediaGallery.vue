@@ -13,6 +13,7 @@ const { activeGalleryIndex, galleryItems, hasGalleryItems, messageMediaGallerySt
     <NmorphMediaGallery
       v-model:active-index="activeGalleryIndex"
       :items="galleryItems"
+      design="plain"
       image-fit="contain"
       video-fit="contain"
       trigger-image-fit="contain"

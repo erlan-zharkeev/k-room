@@ -113,6 +113,11 @@ const {
             </span>
           </NmorphButton>
         </div>
+
+        <div class="download-page__install-help">
+          <AppText tag="p" color="semi-contrast-text" :text="$t(DOWNLOAD_PAGE_I18N.windowsInstallHelp)" />
+          <AppText tag="p" color="semi-contrast-text" :text="$t(DOWNLOAD_PAGE_I18N.macosInstallHelp)" />
+        </div>
       </div>
 
       <div v-else class="download-page__state">
@@ -151,6 +156,11 @@ const {
   display: flex;
   gap: 12px;
   justify-content: center;
+}
+
+.download-page__install-help {
+  display: grid;
+  gap: 8px;
 }
 
 .download-page__download-button-content {

@@ -53,6 +53,8 @@ export class CodesService {
       }
     }
 
+    this.userService.assertCredentialsManagedLocally(user)
+
     const userId = String(user._id)
     const cooldownUntil = await this.securityService.getSendPasswordRecoveryCodeCooldown(userId)
 
@@ -90,6 +92,10 @@ export class CodesService {
 
     await this.securityService.assertSendChangeEmailCodeAllowed(email, ip, payload.captchaToken)
 
+    const user = await this.userService.requireUser(userId)
+
+    this.userService.assertCredentialsManagedLocally(user)
+
     const nowTimestampMs = Date.now()
     const cooldownUntil = await this.securityService.getSendChangeEmailCodeCooldown(userId)
 
@@ -99,8 +105,6 @@ export class CodesService {
         tooManyRequests: true
       }
     }
-
-    const user = await this.userService.requireUser(userId)
 
     if (email.toLowerCase() === user.personal.email.toLowerCase()) {
       throw new AppError(REQ_STATUS.badRequest, VALIDATE_CHANGE_EMAIL_CODE_I18N.emailNotChanged)
@@ -201,6 +205,8 @@ export class CodesService {
       await this.securityService.trackInvalidPasswordRecoveryCode(ip, email)
       throw new AppError(REQ_STATUS.badRequest, VALIDATE_PASSWORD_RECOVERY_CODE_I18N.invalidCode)
     }
+
+    this.userService.assertCredentialsManagedLocally(user)
 
     const userId = String(user._id)
     const currentCode = await this.securityService.getPasswordRecoveryCode(userId)

@@ -30,9 +30,9 @@ export const useAudioOutputDevice = () => {
   )
 
   const audioOutputOptions = computed(() =>
-    audioOutputDevices.value.map(({ deviceId, label }, index) => ({
+    audioOutputDevices.value.map(({ deviceId, label }) => ({
       value: deviceId || DEFAULT_AUDIO_OUTPUT_SELECT_VALUE,
-      label: label || t(SETTINGS_PAGE_DEVICES_I18N.deviceLabel, { index: index + 1 })
+      label: label || t(SETTINGS_PAGE_DEVICES_I18N.unknownDevice)
     }))
   )
   const audioOutputSelectValue = computed(() =>
