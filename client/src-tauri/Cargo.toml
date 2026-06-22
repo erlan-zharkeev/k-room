@@ -1,6 +1,6 @@
 [package]
 name = "k-room-client"
-version = "0.1.12"
+version = "0.1.13"
 description = "K-Room desktop client"
 authors = ["<erlan.zharkeev@gmail.com>"]
 license = "MIT"
