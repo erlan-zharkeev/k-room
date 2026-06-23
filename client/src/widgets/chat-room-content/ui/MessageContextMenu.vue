@@ -25,6 +25,7 @@ const {
     placement="bottom-start"
     :model-value="isMessageContextMenuOpen"
     class="message-context-menu"
+    style="display: contents"
     :trigger="messageContextMenuTrigger"
     :width="MESSAGE_CONTEXT_MENU_WIDTH"
     :options="messageContextMenuOptions"
@@ -46,10 +47,6 @@ const {
 </template>
 
 <style lang="scss">
-.message-context-menu {
-  display: contents;
-}
-
 .nmorph-context-menu__options:has(> .nmorph-context-menu__item .message-reaction-picker) {
   padding: 0 0 4px;
 }

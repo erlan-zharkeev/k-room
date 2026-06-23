@@ -17,8 +17,8 @@ export class SocketRouter {
     private readonly roomCallsSocketService: RoomCallsSocketService
   ) {}
 
-  register(socket: SocketInstance) {
-    this.userSocketService.register(socket)
+  async register(socket: SocketInstance) {
+    await this.userSocketService.register(socket)
     this.chatRoomsSocketService.register(socket)
     this.contactsSocketService.register(socket)
     this.messagesSocketService.register(socket)

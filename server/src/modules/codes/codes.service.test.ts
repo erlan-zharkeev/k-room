@@ -37,7 +37,8 @@ describe('CodesService', () => {
     }
     const userService = {
       findByEmail: vi.fn().mockResolvedValue({ _id: 'user-1', public: { nickname: 'tester' } }),
-      assertCredentialsManagedLocally: vi.fn()
+      assertCredentialsManagedLocally: vi.fn(),
+      resolveUserLanguage: vi.fn().mockReturnValue('ru')
     }
     const securityService = {
       assertSendPasswordRecoveryAllowed: vi.fn(),
@@ -64,9 +65,11 @@ describe('CodesService', () => {
     const userService = {
       findByEmail: vi.fn().mockResolvedValue({
         _id: 'user-1',
+        personal: { language: 'ru' },
         public: { nickname: 'tester' }
       }),
-      assertCredentialsManagedLocally: vi.fn()
+      assertCredentialsManagedLocally: vi.fn(),
+      resolveUserLanguage: vi.fn().mockReturnValue('ru')
     }
     const securityService = {
       assertSendPasswordRecoveryAllowed: vi.fn(),
@@ -85,6 +88,7 @@ describe('CodesService', () => {
     expect(securityService.setPasswordRecoveryCode).toHaveBeenCalledWith('user-1', '123456', 900_000, 180_000)
     expect(emailService.sendPasswordRecoveryEmail).toHaveBeenCalledWith({
       email: 'user@test.com',
+      language: 'ru',
       code: '123456',
       nickname: 'tester'
     })
@@ -127,11 +131,12 @@ describe('CodesService', () => {
     const userService = {
       requireUser: vi.fn().mockResolvedValue({
         _id: 'user-1',
-        personal: { email: 'old@test.com' },
+        personal: { email: 'old@test.com', language: 'zh' },
         public: { nickname: 'tester' }
       }),
       assertCredentialsManagedLocally: vi.fn(),
-      findByEmail: vi.fn().mockResolvedValue(null)
+      findByEmail: vi.fn().mockResolvedValue(null),
+      resolveUserLanguage: vi.fn().mockReturnValue('zh')
     }
     const securityService = {
       assertSendChangeEmailCodeAllowed: vi.fn(),
@@ -154,6 +159,7 @@ describe('CodesService', () => {
     )
     expect(emailService.sendChangeEmailCodeEmail).toHaveBeenCalledWith({
       email: 'new@test.com',
+      language: 'zh',
       code: '123456',
       nickname: 'tester'
     })

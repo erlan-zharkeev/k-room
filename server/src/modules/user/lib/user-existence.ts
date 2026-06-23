@@ -1,4 +1,4 @@
-import { normalizeNicknameKey } from 'global-shared'
+import { DEFAULT_APP_LANGUAGE, normalizeNicknameKey } from 'global-shared'
 
 import { UserModel } from '../user.model'
 import type { CreateUserParams, UserExistParams, UserExistState } from '../user.types'
@@ -40,7 +40,14 @@ export const isUserExist = async ({ nickname, email, id }: UserExistParams): Pro
   }
 }
 
-export const createUser = async ({ id, email, nickname, hashedPassword, provider = 'app' }: CreateUserParams) => {
+export const createUser = async ({
+  id,
+  email,
+  language = DEFAULT_APP_LANGUAGE,
+  nickname,
+  hashedPassword,
+  provider = 'app'
+}: CreateUserParams) => {
   const normalizedNickname = normalizeNicknameKey(nickname)
   const userExistState = await isUserExist({ id, nickname: normalizedNickname, email })
 
@@ -56,6 +63,7 @@ export const createUser = async ({ id, email, nickname, hashedPassword, provider
     },
     personal: {
       email,
+      language,
       contacts: {},
       chatRooms: [],
       pinnedChatRoomIds: [],

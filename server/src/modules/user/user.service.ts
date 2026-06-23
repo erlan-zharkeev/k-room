@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import bcrypt from 'bcryptjs'
 import {
+  type AppLanguage,
   type CreateNewPasswordPayload,
   type MediaId,
   type UserData,
@@ -65,8 +66,26 @@ export class UserService {
     return isUserExist({ nickname, email, id })
   }
 
-  async createUser({ id, email, nickname, hashedPassword, provider = 'app' }: CreateUserParams) {
-    return createUser({ id, email, nickname, hashedPassword, provider })
+  async createUser({ id, email, language, nickname, hashedPassword, provider = 'app' }: CreateUserParams) {
+    return createUser({ id, email, language, nickname, hashedPassword, provider })
+  }
+
+  resolveUserLanguage(user: Pick<UserSchema, 'personal'>, fallback: AppLanguage) {
+    return user.personal.language ?? fallback
+  }
+
+  async updateUserLanguage(userId: string, language: AppLanguage) {
+    await UserModel.updateOne(
+      {
+        _id: userId,
+        'personal.language': { $ne: language }
+      },
+      {
+        $set: {
+          'personal.language': language
+        }
+      }
+    )
   }
 
   getUserExistMessage(reason: UserExistState['reason']) {

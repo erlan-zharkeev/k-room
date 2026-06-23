@@ -8,12 +8,19 @@ import type { SocketInstance } from 'src/shared/types'
 
 import { resolveActualUserSocketData } from './lib/resolve-actual-user-socket-data'
 import { USER_SOCKET_I18N } from './user.i18n'
+import { UserService } from './user.service'
 
 @Injectable()
 export class UserSocketService {
-  constructor(private readonly presenceService: PresenceService, private readonly redisService: RedisService) {}
+  constructor(
+    private readonly presenceService: PresenceService,
+    private readonly redisService: RedisService,
+    private readonly userService: UserService
+  ) {}
 
-  register(socket: SocketInstance) {
+  async register(socket: SocketInstance) {
+    await this.userService.updateUserLanguage(socket.data.userId, socket.data.language)
+
     socket.on(
       'disconnect',
       socketErrorMiddleware(
@@ -31,6 +38,7 @@ export class UserSocketService {
         socket,
         async ({ language }) => {
           socket.data.language = language
+          await this.userService.updateUserLanguage(socket.data.userId, language)
         },
         { basicError: USER_SOCKET_I18N.updateLanguageFailed }
       )

@@ -1,3 +1,5 @@
+import type { AppLanguage } from 'global-shared'
+
 export interface RenderEmailConfirmationHtmlParams {
   appName: string
   confirmEmailButtonText: string
@@ -23,12 +25,14 @@ export interface RenderEmailCodeHtmlParams {
 
 export interface SendEmailConfirmationEmailPayload {
   email: string
+  language: AppLanguage
   token: string
   nickname?: string
 }
 
 export interface SendEmailCodeEmailPayload {
   email: string
+  language: AppLanguage
   code: string
   nickname?: string
 }

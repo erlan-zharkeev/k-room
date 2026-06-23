@@ -40,6 +40,9 @@ RUN pnpm run build
 FROM nginx:stable-alpine
 
 COPY nginx/client.conf /etc/nginx/conf.d/default.conf
+COPY client/docker-entrypoint.d/10-sync-asset-history.sh /docker-entrypoint.d/10-sync-asset-history.sh
 COPY --from=build /app/client/build /usr/share/nginx/html
+
+RUN chmod +x /docker-entrypoint.d/10-sync-asset-history.sh
 
 EXPOSE 80
