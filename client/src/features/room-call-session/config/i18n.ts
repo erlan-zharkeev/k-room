@@ -63,7 +63,17 @@ export const ROOM_CALL_SESSION_I18N = defineI18n('roomCallSession', {
     ru: i18nFormatter(['title'], (title: string) => `В ${title} идет звонок`),
     zh: i18nFormatter(['title'], (title: string) => `${title} 有来电`)
   },
+  incomingGroupRoomCallBrowserPush: {
+    en: i18nFormatter(['title'], (title: string) => `A meeting started in group chat ${title}`),
+    ru: i18nFormatter(['title'], (title: string) => `В групповом чате ${title} началась встреча`),
+    zh: i18nFormatter(['title'], (title: string) => `群聊 ${title} 中开始了一场会议`)
+  },
   incomingPrivateRoomCall: {
+    en: i18nFormatter(['title'], (title: string) => `${title} is calling you`),
+    ru: i18nFormatter(['title'], (title: string) => `Вам звонит ${title}`),
+    zh: i18nFormatter(['title'], (title: string) => `${title} 正在呼叫你`)
+  },
+  incomingPrivateRoomCallBrowserPush: {
     en: i18nFormatter(['title'], (title: string) => `${title} is calling you`),
     ru: i18nFormatter(['title'], (title: string) => `Вам звонит ${title}`),
     zh: i18nFormatter(['title'], (title: string) => `${title} 正在呼叫你`)

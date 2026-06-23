@@ -3,7 +3,7 @@ import { type EventMessageDelivered, isMessageStatusDelivered } from 'global-sha
 import { useChatRoom } from 'src/entities/chat-room'
 import { useAppSound, useSettings } from 'src/entities/setting'
 import { useSystem } from 'src/entities/system'
-import { useAppToast } from 'src/shared/lib'
+import { showBrowserPush, useAppToast } from 'src/shared/lib'
 
 export const useMessageNotification = () => {
   const { getById } = useChatRoom()
@@ -58,8 +58,22 @@ export const useMessageNotification = () => {
     }
   }
 
+  const showDeliveredMessageBrowserPush = ({ message, roomId }: EventMessageDelivered) => {
+    const { general, messages } = settings.value.notifications
+
+    if (!canNotifyDeliveredMessage({ message, roomId })) return
+    if (!general.browserPush) return
+    if (!messages.browserPush) return
+
+    showBrowserPush(message.authorNickname, {
+      body: message.body,
+      tag: message.id
+    })
+  }
+
   return {
     playDeliveredMessageSound,
+    showDeliveredMessageBrowserPush,
     showDeliveredMessageToast
   }
 }

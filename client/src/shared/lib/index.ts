@@ -24,6 +24,7 @@ export {
   readFileAsDataUrl,
   revokeObjectUrl,
   revokeObjectUrls,
+  showBrowserPush,
   useScreen
 } from './browser/browser'
 export { useMediaDevicePermission, useTouchInput } from './browser/browser.model'

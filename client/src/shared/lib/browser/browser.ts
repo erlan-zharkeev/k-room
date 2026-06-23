@@ -57,6 +57,20 @@ export const readFileAsDataUrl = (file: File) =>
     reader.readAsDataURL(file)
   })
 
+export const showBrowserPush = (title: string, options?: NotificationOptions) => {
+  if (!('Notification' in window)) return
+  if (Notification.permission !== 'granted') return
+
+  try {
+    new Notification(title, {
+      icon: '/meta/android-chrome-192x192.png',
+      ...options
+    })
+  } catch (error) {
+    void error
+  }
+}
+
 export const revokeObjectUrl = (url?: string) => {
   if (!url) return
 
