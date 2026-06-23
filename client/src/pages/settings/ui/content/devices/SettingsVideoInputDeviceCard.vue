@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import {
-  NmorphCallout,
-  NmorphCheckbox,
-  NmorphIcon,
-  NmorphIconPlay,
-  NmorphIconStop,
-  NmorphSelect,
-  NmorphMediaTile
-} from '@nmorph/nmorph-ui-kit'
+import { NmorphButton, NmorphCallout, NmorphSelect, NmorphMediaTile } from '@nmorph/nmorph-ui-kit'
 
 import { AppText } from 'src/shared/ui'
 
@@ -26,6 +18,7 @@ const {
   videoInputStream,
   isVideoInputChecking,
   videoInputCheckLabel,
+  videoInputCheckButtonLabel,
   setVideoInputChecking,
   setSelectedVideoInputDevice
 } = useVideoInputDevice()
@@ -59,20 +52,13 @@ const {
           @update:model-value="setSelectedVideoInputDevice"
         />
 
-        <NmorphCheckbox
-          :model-value="isVideoInputChecking"
-          thickness="basic"
+        <NmorphButton
+          class="settings-video-input-device-card__check-button"
+          :text="$t(videoInputCheckButtonLabel)"
           :aria-label="$t(videoInputCheckLabel)"
           :disabled="isVideoInputCheckDisabled"
-          @update:model-value="setVideoInputChecking"
-        >
-          <template #label>
-            <NmorphIcon>
-              <NmorphIconStop v-if="isVideoInputChecking" />
-              <NmorphIconPlay v-else />
-            </NmorphIcon>
-          </template>
-        </NmorphCheckbox>
+          @click="setVideoInputChecking(!isVideoInputChecking)"
+        />
       </div>
 
       <NmorphMediaTile
@@ -102,6 +88,12 @@ const {
 
 .settings-video-input-device-card__select {
   min-width: 0;
+}
+
+.settings-video-input-device-card__check-button {
+  flex: 0 0 auto;
+  min-width: 96px;
+  white-space: nowrap;
 }
 
 .settings-video-input-device-card__permission {

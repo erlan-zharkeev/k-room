@@ -69,6 +69,9 @@ export const useMediaInputDevice = ({
   )
   const isInputChecking = computed(() => Boolean(inputStream.value))
   const inputCheckLabel = computed(() => (isInputChecking.value ? stopCheckLabel : startCheckLabel))
+  const inputCheckButtonLabel = computed(() =>
+    isInputChecking.value ? SETTINGS_PAGE_DEVICES_I18N.stopDeviceCheck : SETTINGS_PAGE_DEVICES_I18N.testDeviceCheck
+  )
   const isInputCheckDisabled = computed(
     () =>
       inputCheckLoading.value ||
@@ -167,6 +170,7 @@ export const useMediaInputDevice = ({
     inputStream,
     isInputChecking,
     inputCheckLabel,
+    inputCheckButtonLabel,
     setInputChecking,
     setSelectedInputDevice
   }

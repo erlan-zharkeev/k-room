@@ -1,6 +1,6 @@
 export const TOAST_LIFE_MS = {
   success: 2_000,
-  info: 2_000,
+  info: 4_000,
   warning: 60_000,
   error: 30_000
 } as const

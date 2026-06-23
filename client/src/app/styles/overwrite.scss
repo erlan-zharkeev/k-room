@@ -3,6 +3,10 @@
   border-radius: 8px;
 }
 
+.nmorph-dialog {
+  padding: 16px;
+}
+
 .nmorph-alert.nmorph-alert--success .nmorph-alert__icon .nmorph-icon {
   --nmorph-private-icon-color: var(--nmorph-success-color);
 }
@@ -17,6 +21,14 @@
 
 .nmorph-context-menu__item {
   gap: 12px;
+}
+
+.nmorph-context-menu__item button:not(:disabled, [aria-disabled='true']) {
+  cursor: pointer;
+}
+
+.nmorph-context-menu__item button:not(:disabled, [aria-disabled='true']) * {
+  cursor: inherit;
 }
 
 .app-layout__guide-target.nmorph-tooltip {

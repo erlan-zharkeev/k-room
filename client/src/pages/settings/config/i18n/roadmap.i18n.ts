@@ -101,6 +101,16 @@ export const SETTINGS_PAGE_ROADMAP_I18N = defineI18n('settingsPageRoadmap', {
     ru: 'Во время звонков будет видно, есть ли аудиоактивность даже при выключенном микрофоне, чтобы проще замечать проблемы с устройством или соединением.',
     zh: '通话中即使麦克风关闭，也会显示是否存在音频活动，帮助更快发现设备或连接问题。'
   },
+  callChatMessagesTitle: {
+    en: 'Call messages in chat',
+    ru: 'Сообщения о звонках в чате',
+    zh: '聊天中的通话消息'
+  },
+  callChatMessagesDescription: {
+    en: 'Chats will show call events such as started, missed, ended, and joined calls so the conversation keeps the full call history.',
+    ru: 'В чате будут отображаться события звонков: начало, пропущенный звонок, завершение и подключение участников, чтобы история разговора была полной.',
+    zh: '聊天中会显示通话事件，例如开始、未接、结束和成员加入，让对话保留完整的通话历史。'
+  },
   granularStorageCleanupTitle: {
     en: 'Flexible storage cleanup',
     ru: 'Гибкая очистка кэша хранилища',

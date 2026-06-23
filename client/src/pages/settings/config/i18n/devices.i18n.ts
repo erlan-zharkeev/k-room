@@ -55,6 +55,16 @@ export const SETTINGS_PAGE_DEVICES_I18N = defineI18n('settingsPageDevices', {
     ru: 'Остановить проверку микрофона',
     zh: '停止麦克风测试'
   },
+  testDeviceCheck: {
+    en: 'Test',
+    ru: 'Проверка',
+    zh: '测试'
+  },
+  stopDeviceCheck: {
+    en: 'Stop',
+    ru: 'Остановить',
+    zh: '停止'
+  },
   audioInputLevel: {
     en: 'Microphone input level',
     ru: 'Уровень входа микрофона',

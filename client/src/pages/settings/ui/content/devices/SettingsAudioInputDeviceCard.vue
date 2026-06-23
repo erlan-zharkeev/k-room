@@ -1,12 +1,5 @@
 <script setup lang="ts">
-import {
-  NmorphButton,
-  NmorphCallout,
-  NmorphAudioMeter,
-  NmorphIconPlay,
-  NmorphIconStop,
-  NmorphSelect
-} from '@nmorph/nmorph-ui-kit'
+import { NmorphButton, NmorphCallout, NmorphAudioMeter, NmorphSelect } from '@nmorph/nmorph-ui-kit'
 
 import { AppText } from 'src/shared/ui'
 
@@ -26,6 +19,7 @@ const {
   audioVolumeDb,
   isAudioInputChecking,
   audioInputCheckLabel,
+  audioInputCheckButtonLabel,
   setAudioInputChecking,
   setSelectedAudioInputDevice
 } = useAudioInputDevice()
@@ -59,16 +53,13 @@ const {
         />
 
         <NmorphButton
+          class="settings-audio-input-device-card__check-button"
+          :text="$t(audioInputCheckButtonLabel)"
           :aria-label="$t(audioInputCheckLabel)"
           :loading="audioInputCheckLoading"
           :disabled="isAudioInputCheckDisabled"
           @click="setAudioInputChecking(!isAudioInputChecking)"
-        >
-          <template #icon-only>
-            <NmorphIconStop v-if="isAudioInputChecking" />
-            <NmorphIconPlay v-else />
-          </template>
-        </NmorphButton>
+        />
       </div>
 
       <NmorphAudioMeter
@@ -98,6 +89,12 @@ const {
 
 .settings-audio-input-device-card__select {
   min-width: 0;
+}
+
+.settings-audio-input-device-card__check-button {
+  flex: 0 0 auto;
+  min-width: 96px;
+  white-space: nowrap;
 }
 
 .settings-audio-input-device-card__level-meter.nmorph-audio-meter.nmorph-audio-meter--bars {

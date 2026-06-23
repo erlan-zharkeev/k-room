@@ -1,14 +1,11 @@
 import type { NmorphSelectModelValueType } from '@nmorph/nmorph-ui-kit'
-import { useDevicesList, useTimeoutFn } from '@vueuse/core'
+import { useDevicesList } from '@vueuse/core'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 import { useAppSound, useSettings } from 'src/entities/setting'
 import { useI18n } from 'src/shared/lib'
 
-import {
-  DEFAULT_AUDIO_OUTPUT_SELECT_VALUE,
-  SETTINGS_DEVICES_OUTPUT_INDICATOR_TIME_MS
-} from '../../config/constants/devices.constants'
+import { DEFAULT_AUDIO_OUTPUT_SELECT_VALUE } from '../../config/constants/devices.constants'
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
 import { resolveSingleSelectValue, syncSelectedDeviceId } from '../../lib/device-selection'
 
@@ -23,11 +20,6 @@ export const useAudioOutputDevice = () => {
 
   const audioOutputLoading = ref(true)
   const audioOutputTestLoading = ref(false)
-  const { start: startOutputIndicatorTimer, stop: stopOutputIndicatorTimer } = useTimeoutFn(
-    () => {},
-    SETTINGS_DEVICES_OUTPUT_INDICATOR_TIME_MS,
-    { immediate: false }
-  )
 
   const audioOutputOptions = computed(() =>
     audioOutputDevices.value.map(({ deviceId, label }) => ({
@@ -52,7 +44,6 @@ export const useAudioOutputDevice = () => {
   const audioOutputPermissionCalloutType = computed(() => (isAudioOutputSupported.value ? 'info' : 'warning'))
 
   const stopAudioOutput = () => {
-    stopOutputIndicatorTimer()
     stopAppSound('incoming-message')
   }
 
@@ -89,7 +80,6 @@ export const useAudioOutputDevice = () => {
       stopAudioOutput()
 
       await playAppSound('incoming-message')
-      startOutputIndicatorTimer()
     } catch (error) {
       stopAudioOutput()
       showDeviceWarning(error)

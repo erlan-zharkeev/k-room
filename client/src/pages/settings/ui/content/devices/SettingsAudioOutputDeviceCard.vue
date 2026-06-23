@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphCallout, NmorphIconPlay, NmorphSelect } from '@nmorph/nmorph-ui-kit'
+import { NmorphButton, NmorphCallout, NmorphSelect } from '@nmorph/nmorph-ui-kit'
 
 import { AppText } from 'src/shared/ui'
 
@@ -47,15 +47,13 @@ const {
         />
 
         <NmorphButton
+          class="settings-audio-output-device-card__check-button"
+          :text="$t(SETTINGS_PAGE_DEVICES_I18N.testDeviceCheck)"
           :aria-label="$t(SETTINGS_PAGE_DEVICES_I18N.testAudioOutput)"
           :loading="audioOutputTestLoading"
           :disabled="audioOutputLoading || audioOutputOptions.length === 0"
           @click="testAudioOutput"
-        >
-          <template #icon-only>
-            <NmorphIconPlay />
-          </template>
-        </NmorphButton>
+        />
       </div>
     </div>
   </SettingsCard>
@@ -77,5 +75,11 @@ const {
 
 .settings-audio-output-device-card__select {
   min-width: 0;
+}
+
+.settings-audio-output-device-card__check-button {
+  flex: 0 0 auto;
+  min-width: 96px;
+  white-space: nowrap;
 }
 </style>

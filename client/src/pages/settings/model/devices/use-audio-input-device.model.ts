@@ -45,6 +45,7 @@ export const useAudioInputDevice = () => {
   }
 
   const {
+    inputCheckButtonLabel: audioInputCheckButtonLabel,
     inputCheckLabel: audioInputCheckLabel,
     inputCheckLoading: audioInputCheckLoading,
     inputLoading: audioInputLoading,
@@ -79,6 +80,7 @@ export const useAudioInputDevice = () => {
     audioVolumeDb,
     isAudioInputChecking,
     audioInputCheckLabel,
+    audioInputCheckButtonLabel,
     setAudioInputChecking,
     setSelectedAudioInputDevice
   }

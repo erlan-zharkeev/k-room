@@ -9,6 +9,7 @@ export const useVideoInputDevice = () => {
   const { videoInputPermission, hasVideoInputPermissionWarning } = useMediaDevicePermission()
   const { showDeviceWarning } = useDeviceWarning('Video input device request failed')
   const {
+    inputCheckButtonLabel: videoInputCheckButtonLabel,
     inputCheckLabel: videoInputCheckLabel,
     inputLoading: videoInputLoading,
     inputOptions: videoInputOptions,
@@ -40,6 +41,7 @@ export const useVideoInputDevice = () => {
     videoInputStream,
     isVideoInputChecking,
     videoInputCheckLabel,
+    videoInputCheckButtonLabel,
     setVideoInputChecking,
     setSelectedVideoInputDevice
   }

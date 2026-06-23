@@ -41,9 +41,9 @@ export const WAIT_EMAIL_CONFIRM_I18N = defineI18n('waitEmailConfirm', {
     ru: 'Отправить ссылку повторно',
     zh: '发送确认链接'
   },
-  back: {
-    en: 'Back',
-    ru: 'Назад',
-    zh: '返回'
+  login: {
+    en: 'Login',
+    ru: 'Вход',
+    zh: '登录'
   }
 })

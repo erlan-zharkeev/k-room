@@ -6,7 +6,7 @@ import { AppText } from 'src/shared/ui'
 import { useNotificationSettings } from '../../model/notifications/use-notification-settings.model'
 import SettingsCard from '../SettingsCard.vue'
 
-const { sections, optionsBySection, getValue, setValue } = useNotificationSettings()
+const { sections, optionsBySection, getValue, isDisabled, setValue } = useNotificationSettings()
 </script>
 
 <template>
@@ -16,13 +16,14 @@ const { sections, optionsBySection, getValue, setValue } = useNotificationSettin
         <template v-for="option in optionsBySection[section.id]" :key="option.id">
           <div class="settings-notifications-content__row">
             <span class="settings-notifications-content__text">
-              <AppText color="contrast-text" :selectable="false" :text="$t(option.label)" />
-              <AppText size="small" :selectable="false" :text="$t(option.description)" />
+              <AppText color="contrast-text" style="white-space: normal" :selectable="false" :text="$t(option.label)" />
+              <AppText size="small" style="white-space: normal" :selectable="false" :text="$t(option.description)" />
             </span>
 
             <NmorphSwitch
               :aria-label="$t(option.label)"
               :model-value="getValue(section.id, option.id)"
+              :disabled="isDisabled(section.id, option.id)"
               @update:model-value="setValue(section.id, option.id, Boolean($event))"
             />
           </div>
