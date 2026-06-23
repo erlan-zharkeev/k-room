@@ -7,7 +7,11 @@ import { useI18n } from 'src/shared/lib'
 
 import { DEFAULT_AUDIO_OUTPUT_SELECT_VALUE } from '../../config/constants/devices.constants'
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
-import { resolveSingleSelectValue, syncSelectedDeviceId } from '../../lib/device-selection'
+import {
+  resolveSingleSelectValue,
+  syncSelectedDeviceId,
+  syncSelectedDeviceIdOnDeviceChange
+} from '../../lib/device-selection'
 
 import { useDeviceWarning } from './use-device-settings.model'
 
@@ -27,11 +31,14 @@ export const useAudioOutputDevice = () => {
       label: label || t(SETTINGS_PAGE_DEVICES_I18N.unknownDevice)
     }))
   )
-  const audioOutputSelectValue = computed(() =>
-    settings.value.ioDevices.audioOutputDeviceId || audioOutputOptions.value.length > 0
-      ? settings.value.ioDevices.audioOutputDeviceId || DEFAULT_AUDIO_OUTPUT_SELECT_VALUE
-      : ''
-  )
+  const audioOutputSelectValue = computed(() => {
+    const deviceId = settings.value.ioDevices.audioOutputDeviceId
+
+    if (audioOutputOptions.value.length === 0) return ''
+    if (audioOutputOptions.value.some((option) => option.value === deviceId)) return deviceId
+
+    return audioOutputOptions.value[0]?.value ?? ''
+  })
   const audioOutputPermissionStatus = computed(() =>
     t(SETTINGS_PAGE_DEVICES_I18N.permissionStatus, {
       status: t(
@@ -58,6 +65,16 @@ export const useAudioOutputDevice = () => {
   const syncSelectedAudioOutputDevice = async () => {
     await syncSelectedDeviceId(audioOutputDevices.value, settings.value.ioDevices.audioOutputDeviceId, '', (deviceId) =>
       setByPath('ioDevices.audioOutputDeviceId', deviceId)
+    )
+  }
+
+  const syncChangedAudioOutputDevice = async (devices: MediaDeviceInfo[], previousDevices: MediaDeviceInfo[]) => {
+    await syncSelectedDeviceIdOnDeviceChange(
+      devices,
+      previousDevices,
+      settings.value.ioDevices.audioOutputDeviceId,
+      '',
+      (deviceId) => setByPath('ioDevices.audioOutputDeviceId', deviceId)
     )
   }
 
@@ -96,8 +113,8 @@ export const useAudioOutputDevice = () => {
     stopAudioOutput()
   })
 
-  watch(audioOutputDevices, () => {
-    void syncSelectedAudioOutputDevice()
+  watch(audioOutputDevices, (devices, previousDevices) => {
+    void syncChangedAudioOutputDevice(devices, previousDevices)
   })
 
   return {

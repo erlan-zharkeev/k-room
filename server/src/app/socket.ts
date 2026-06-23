@@ -34,7 +34,7 @@ export const initIO = async (
         return
       }
 
-      socketRouter.register(socket)
+      await socketRouter.register(socket)
       await presenceService.markSocketConnected(socket)
     } catch (error) {
       log.error('-Socket connection failed')

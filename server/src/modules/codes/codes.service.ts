@@ -71,6 +71,7 @@ export class CodesService {
     await this.securityService.setPasswordRecoveryCode(userId, code, CODE_LIFE_MS, RESEND_CODE_INTERVAL_MS)
     await this.emailService.sendPasswordRecoveryEmail({
       email,
+      language: this.userService.resolveUserLanguage(user, request.language),
       code,
       nickname: user.public.nickname
     })
@@ -123,6 +124,7 @@ export class CodesService {
     await this.securityService.setChangeEmailCode(userId, JSON.stringify({ email, code }), CODE_LIFE_MS)
     await this.emailService.sendChangeEmailCodeEmail({
       email,
+      language: this.userService.resolveUserLanguage(user, request.language),
       code,
       nickname: user.public.nickname
     })

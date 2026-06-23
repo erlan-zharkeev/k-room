@@ -67,12 +67,14 @@ export class AuthService {
 
     await this.securityService.clearLoginFailures(payload.login)
     await this.sessionService.updateTokens(String(user._id), request, response)
+    await this.userService.updateUserLanguage(String(user._id), request.language)
 
     return this.userService.mapUserToDto(user)
   }
 
   async registration(payload: AuthRegistrationPayload, request: Request): Promise<SendConfirmationLinkResponse> {
     const ip = getRequestIp(request)
+    const { language } = request
 
     await this.securityService.assertRegistrationAllowed(ip, payload.captchaToken)
     await this.securityService.trackRegistrationAttempt(ip)
@@ -94,6 +96,7 @@ export class AuthService {
 
       await this.emailService.sendEmailConfirmationEmail({
         email: existingUserByEmail.personal.email,
+        language: this.userService.resolveUserLanguage(existingUserByEmail, language),
         token: confirmToken,
         nickname: existingUserByEmail.public.nickname
       })
@@ -120,6 +123,7 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(payload.password, 6)
     const user = await this.userService.createUser({
       email: payload.email,
+      language,
       nickname: payload.nickname,
       hashedPassword
     })
@@ -137,6 +141,7 @@ export class AuthService {
     try {
       await this.emailService.sendEmailConfirmationEmail({
         email: payload.email,
+        language,
         token: confirmToken,
         nickname: payload.nickname
       })
@@ -173,6 +178,7 @@ export class AuthService {
     request: Request
   ): Promise<SendConfirmationLinkResult> {
     const ip = getRequestIp(request)
+    const { language } = request
     const email = payload.email.trim()
     const cooldownUntil = await this.securityService.getSendConfirmationLinkCooldown(email)
 
@@ -223,6 +229,7 @@ export class AuthService {
 
     await this.emailService.sendEmailConfirmationEmail({
       email: user.personal.email,
+      language: this.userService.resolveUserLanguage(user, language),
       token: confirmToken,
       nickname: user.public.nickname
     })
@@ -248,6 +255,7 @@ export class AuthService {
     const newUser = await this.userService.createUser({
       nickname: payload.nickname,
       email: payload.email,
+      language: request.language,
       provider: payload.provider as Provider,
       hashedPassword
     })
@@ -267,6 +275,7 @@ export class AuthService {
     }
 
     await this.sessionService.updateTokens(String(user._id), request, response)
+    await this.userService.updateUserLanguage(String(user._id), request.language)
 
     return this.userService.mapUserToDto(user)
   }

@@ -75,7 +75,7 @@ export const buildRoomCallTileItems = ({
       const isLocal = participant.userId === currentUserId
       const mediaState = isLocal ? localMediaState : participant.mediaState
       const remoteStream = remoteStreamsByUserId[participant.userId]
-      const connectionQuality = isLocal ? undefined : connectionQualityByUserId[participant.userId]
+      const connectionQuality = connectionQualityByUserId[participant.userId]
       const stream = isLocal
         ? videoStream || undefined
         : resolveRemoteRoomCallParticipantStream(remoteStream, mediaState)
@@ -105,7 +105,7 @@ export const buildRoomCallTileItems = ({
       const isLocal = participant.userId === currentUserId
       const mediaState = isLocal ? localMediaState : participant.mediaState
       const remoteStream = remoteStreamsByUserId[participant.userId]
-      const connectionQuality = isLocal ? undefined : connectionQualityByUserId[participant.userId]
+      const connectionQuality = connectionQualityByUserId[participant.userId]
 
       if (!mediaState.screen) {
         return []

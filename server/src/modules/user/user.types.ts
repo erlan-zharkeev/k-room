@@ -1,4 +1,5 @@
 import type {
+  AppLanguage,
   ChangePasswordPayload,
   Interaction,
   Provider,
@@ -29,6 +30,7 @@ export interface UserSystemData {
 }
 
 export interface UserPersonalData extends Pick<UserData, 'email'> {
+  language?: AppLanguage
   contacts: Record<string, UserContact>
   chatRooms: string[]
   pinnedChatRoomIds: string[]
@@ -63,6 +65,7 @@ export interface UserExistParams {
 export interface CreateUserParams {
   id?: Types.ObjectId
   email: string
+  language?: AppLanguage
   nickname: string
   hashedPassword: string
   provider?: Provider

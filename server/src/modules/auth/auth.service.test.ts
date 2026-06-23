@@ -40,7 +40,8 @@ const createUser = async (confirmed = true) => ({
   _id: 'user-1',
   id: 'user-1',
   personal: {
-    email: 'user@test.com'
+    email: 'user@test.com',
+    language: 'ru'
   },
   public: {
     avatarId: null,
@@ -90,7 +91,8 @@ describe('AuthService', () => {
         nickname: 'tester',
         role: 'user',
         provider: 'app'
-      })
+      }),
+      updateUserLanguage: vi.fn()
     }
     const service = new AuthService(
       {} as never,
@@ -117,6 +119,7 @@ describe('AuthService', () => {
       provider: 'app'
     })
     expect(sessionService.updateTokens).toHaveBeenCalledWith('user-1', expect.any(Object), response)
+    expect(userService.updateUserLanguage).toHaveBeenCalledWith('user-1', 'en')
   })
 
   it('does not issue tokens for unconfirmed user', async () => {
@@ -158,7 +161,8 @@ describe('AuthService', () => {
     const userService = {
       createUser: vi.fn().mockResolvedValue(user),
       findByEmail: vi.fn(),
-      mapUserToDto: vi.fn().mockReturnValue({ id: 'user-1' })
+      mapUserToDto: vi.fn().mockReturnValue({ id: 'user-1' }),
+      updateUserLanguage: vi.fn()
     }
 
     googleAvatarMock.loadGoogleAvatar.mockResolvedValue(avatar)
@@ -182,6 +186,7 @@ describe('AuthService', () => {
     expect(user.public.avatarId).toBe('uploaded-avatar-id')
     expect(user.save).toHaveBeenCalled()
     expect(sessionService.updateTokens).toHaveBeenCalledWith('user-1', expect.any(Object), response)
+    expect(userService.updateUserLanguage).toHaveBeenCalledWith('user-1', 'en')
   })
 
   it('deletes newly created registration user when confirmation email sending fails', async () => {
@@ -215,7 +220,7 @@ describe('AuthService', () => {
           nickname: 'tester',
           password: 'Asdf1234'
         },
-        { headers: {}, ip: '127.0.0.1' } as never
+        { headers: {}, ip: '127.0.0.1', language: 'en' } as never
       )
     ).rejects.toBe(emailError)
 
@@ -231,7 +236,8 @@ describe('AuthService', () => {
     const userService = {
       findByEmail: vi.fn().mockResolvedValue(user),
       isUserExist: vi.fn(),
-      createUser: vi.fn()
+      createUser: vi.fn(),
+      resolveUserLanguage: vi.fn().mockReturnValue('ru')
     }
     const sessionService = {
       signToken: vi.fn().mockReturnValue('confirm-token')
@@ -252,11 +258,12 @@ describe('AuthService', () => {
         nickname: 'tester',
         password: 'Asdf1234'
       },
-      { headers: {}, ip: '127.0.0.1' } as never
+      { headers: {}, ip: '127.0.0.1', language: 'en' } as never
     )
 
     expect(emailService.sendEmailConfirmationEmail).toHaveBeenCalledWith({
       email: 'user@test.com',
+      language: 'ru',
       token: 'confirm-token',
       nickname: 'tester'
     })

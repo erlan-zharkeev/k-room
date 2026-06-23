@@ -10,6 +10,12 @@ interface RoomCallConnectionQualityStats {
 }
 
 const reconnectingPeerConnectionStates = ['connecting', 'disconnected', 'failed'] as const
+const roomCallConnectionQualityWeight = {
+  good: 0,
+  unstable: 1,
+  poor: 2,
+  reconnecting: 3
+} as const satisfies Record<RoomCallConnectionQuality, number>
 
 const resolveFiniteNumberStat = (stats: Record<string, unknown>, key: string) => {
   const value = stats[key]
@@ -115,4 +121,22 @@ export const resolveRoomCallConnectionQuality = (
   }
 
   return 'good'
+}
+
+export const resolveWorstRoomCallConnectionQuality = (
+  qualities: Array<RoomCallConnectionQuality | undefined>
+): RoomCallConnectionQuality | undefined => {
+  let worstQuality: RoomCallConnectionQuality | undefined
+
+  qualities.forEach((quality) => {
+    if (!quality) {
+      return
+    }
+
+    if (!worstQuality || roomCallConnectionQualityWeight[quality] > roomCallConnectionQualityWeight[worstQuality]) {
+      worstQuality = quality
+    }
+  })
+
+  return worstQuality
 }

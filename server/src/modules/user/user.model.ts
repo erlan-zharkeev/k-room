@@ -1,4 +1,11 @@
-import { USER_DEFAULT_ONBOARDING, USER_NICKNAME_MAX_LENGTH, USER_NICKNAME_MIN_LENGTH, USER_ROLES } from 'global-shared'
+import {
+  APP_LANGUAGE_VALUES,
+  DEFAULT_APP_LANGUAGE,
+  USER_DEFAULT_ONBOARDING,
+  USER_NICKNAME_MAX_LENGTH,
+  USER_NICKNAME_MIN_LENGTH,
+  USER_ROLES
+} from 'global-shared'
 import type { UserOnboardingData } from 'global-shared'
 import { model, Schema } from 'mongoose'
 
@@ -60,6 +67,12 @@ const personalSchema = new Schema<UserPersonalData>(
       type: String,
       unique: true,
       required: true
+    },
+    language: {
+      type: String,
+      enum: APP_LANGUAGE_VALUES,
+      required: true,
+      default: DEFAULT_APP_LANGUAGE
     },
     contacts: {
       type: Schema.Types.Mixed,

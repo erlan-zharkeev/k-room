@@ -7,7 +7,8 @@ import {
   MESSAGE_RANGE_GAP_HEIGHT,
   MESSAGE_VIRTUAL_ESTIMATED_HEIGHT,
   MESSAGE_VIRTUAL_GAP,
-  MESSAGE_VIRTUAL_OVERSCAN
+  MESSAGE_VIRTUAL_OVERSCAN,
+  MESSAGE_VIRTUAL_PADDING_START
 } from '../config/constants'
 import type { MessageVirtualListItemProps, MessageListItem } from '../config/types'
 
@@ -26,7 +27,8 @@ export const useChatRoomMessageVirtualizer = (
       getItemKey: (index: number) => messageList.value[index]?.id ?? index,
       getScrollElement: getMessagesScrollElement,
       onChange: handleMessageVirtualizerChange,
-      overscan: MESSAGE_VIRTUAL_OVERSCAN
+      overscan: MESSAGE_VIRTUAL_OVERSCAN,
+      paddingStart: MESSAGE_VIRTUAL_PADDING_START
     }))
   )
   const messageVirtualItems = computed(() => messageVirtualizer.value.getVirtualItems())

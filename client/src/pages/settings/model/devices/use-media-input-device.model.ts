@@ -7,7 +7,11 @@ import { useI18n } from 'src/shared/lib'
 
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
 import type { DevicePermissionStatus } from '../../config/types/devices.types'
-import { resolveSingleSelectValue, syncSelectedDeviceId } from '../../lib/device-selection'
+import {
+  resolveSingleSelectValue,
+  syncSelectedDeviceId,
+  syncSelectedDeviceIdOnDeviceChange
+} from '../../lib/device-selection'
 
 import { useDevicePermissionStatus } from './use-device-settings.model'
 
@@ -133,6 +137,25 @@ export const useMediaInputDevice = ({
     }
   }
 
+  const syncChangedInputDevice = async (
+    devices: MediaDeviceInfo[],
+    previousDevices: MediaDeviceInfo[],
+    clearMissing = false
+  ) => {
+    const previousDeviceId = selectedDeviceId.value
+    const nextDeviceId = await syncSelectedDeviceIdOnDeviceChange(
+      devices,
+      previousDevices,
+      previousDeviceId,
+      clearMissing ? '' : previousDeviceId,
+      updateSelectedDeviceId
+    )
+
+    if (isInputChecking.value && nextDeviceId !== previousDeviceId) {
+      await startInputCheck(nextDeviceId)
+    }
+  }
+
   const setInputChecking = async (value: boolean) => {
     if (!value) {
       stopInputCheck()
@@ -155,8 +178,8 @@ export const useMediaInputDevice = ({
 
   onBeforeUnmount(stopInputCheck)
 
-  watch(inputDevices, () => {
-    void syncSelectedInputDevice(permission.value === 'granted')
+  watch(inputDevices, (devices, previousDevices) => {
+    void syncChangedInputDevice(devices, previousDevices, permission.value === 'granted')
   })
 
   return {

@@ -11,7 +11,7 @@ vi.mock('./lib/resolve-actual-user-socket-data', () => actualUserSocketDataMock)
 
 const { UserSocketService } = await import('./user.socket')
 
-const registerUserHandlers = () => {
+const registerUserHandlers = async () => {
   const handlers: Record<string, (payload?: never) => Promise<unknown>> = {}
   const socket = {
     id: 'socket-1',
@@ -28,14 +28,20 @@ const registerUserHandlers = () => {
     markSocketDisconnected: vi.fn()
   }
   const redisService = {}
+  const userService = {
+    updateUserLanguage: vi.fn()
+  }
 
-  new UserSocketService(presenceService as never, redisService as never).register(socket as never)
+  await new UserSocketService(presenceService as never, redisService as never, userService as never).register(
+    socket as never
+  )
 
   return {
     handlers,
     presenceService,
     redisService,
-    socket
+    socket,
+    userService
   }
 }
 
@@ -45,7 +51,7 @@ describe('user.socket', () => {
   })
 
   it('marks socket disconnected through presence service', async () => {
-    const { handlers, presenceService, socket } = registerUserHandlers()
+    const { handlers, presenceService, socket } = await registerUserHandlers()
 
     await handlers.disconnect()
 
@@ -53,15 +59,22 @@ describe('user.socket', () => {
   })
 
   it('updates socket language in socket data', async () => {
-    const { handlers, socket } = registerUserHandlers()
+    const { handlers, socket, userService } = await registerUserHandlers()
 
     await handlers['update-language']({ language: 'ru' } as never)
 
     expect(socket.data.language).toBe('ru')
+    expect(userService.updateUserLanguage).toHaveBeenLastCalledWith('user-1', 'ru')
+  })
+
+  it('saves socket language when socket is registered', async () => {
+    const { userService } = await registerUserHandlers()
+
+    expect(userService.updateUserLanguage).toHaveBeenCalledWith('user-1', 'en')
   })
 
   it('actualizes contacts, rooms, and room calls when user data is available', async () => {
-    const { handlers, redisService, socket } = registerUserHandlers()
+    const { handlers, redisService, socket } = await registerUserHandlers()
     const payload = {
       contactsPayload: { contacts: [] },
       roomsPayload: { rooms: [] },

@@ -33,6 +33,7 @@ vi.mock('resend', () => ({
 }))
 
 const { EmailService } = await import('./email.service')
+const { EMAIL_I18N } = await import('./email.i18n')
 const { renderEmailConfirmationHtml } = await import('./lib/render-email-confirmation-html')
 
 describe('email.service', () => {
@@ -64,6 +65,7 @@ describe('email.service', () => {
 
     const result = await service.sendEmailConfirmationEmail({
       email: 'user@test.com',
+      language: 'en',
       token: 'token-1',
       nickname: 'Tester'
     })
@@ -82,6 +84,7 @@ describe('email.service', () => {
     await expect(
       service.sendEmailConfirmationEmail({
         email: '',
+        language: 'en',
         token: 'token-1',
         nickname: 'Tester'
       })
@@ -91,6 +94,7 @@ describe('email.service', () => {
     await expect(
       service.sendEmailConfirmationEmail({
         email: 'user@test.com',
+        language: 'en',
         token: '',
         nickname: 'Tester'
       })
@@ -111,6 +115,7 @@ describe('email.service', () => {
     const service = new EmailService()
     const result = await service.sendPasswordRecoveryEmail({
       email: 'user@test.com',
+      language: 'en',
       code: '123456',
       nickname: 'Tester'
     })
@@ -125,6 +130,33 @@ describe('email.service', () => {
     )
   })
 
+  it('sends localized confirmation email through resend when language is provided', async () => {
+    envMock.SERVER_ENV.secret.resendApiKey = 'resend-key'
+    resendSendMock.mockResolvedValue({
+      data: {
+        id: 'resend-id'
+      },
+      error: null
+    })
+
+    const service = new EmailService()
+    const result = await service.sendEmailConfirmationEmail({
+      email: 'user@test.com',
+      language: 'ru',
+      token: 'token-1',
+      nickname: 'Tester'
+    })
+
+    expect(result).toEqual({ id: 'resend-id' })
+    expect(resendSendMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: 'user@test.com',
+        subject: `K Room: ${EMAIL_I18N.emailConfirmationSubject.ru}`,
+        html: expect.stringContaining(EMAIL_I18N.emailConfirmationButton.ru)
+      })
+    )
+  })
+
   it('returns mock email in e2e mode even when resend key exists', async () => {
     envMock.SERVER_ENV.isE2E = true
     envMock.SERVER_ENV.secret.resendApiKey = 'resend-key'
@@ -132,6 +164,7 @@ describe('email.service', () => {
     const service = new EmailService()
     const result = await service.sendPasswordRecoveryEmail({
       email: 'user@test.com',
+      language: 'en',
       code: '123456',
       nickname: 'Tester'
     })

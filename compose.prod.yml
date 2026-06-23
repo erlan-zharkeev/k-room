@@ -2,6 +2,8 @@ services:
   client:
     image: erlan1/k-room_client:latest
     restart: unless-stopped
+    volumes:
+      - client-asset-history:/usr/share/nginx/asset-history
     healthcheck:
       test: ['CMD-SHELL', 'wget -q -O /dev/null http://127.0.0.1/ || exit 1']
       interval: 30s
@@ -109,4 +111,5 @@ services:
       start_period: 10s
 
 volumes:
+  client-asset-history:
   mongo-data:

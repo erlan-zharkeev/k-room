@@ -4,6 +4,7 @@ import { Resend } from 'resend'
 
 import { SERVER_ENV } from 'src/app/env'
 import { AppError } from 'src/shared/lib/app-error'
+import { localizedText } from 'src/shared/lib/localized-text'
 import { log } from 'src/shared/lib/log'
 
 import { EMAIL_I18N } from './email.i18n'
@@ -45,7 +46,7 @@ export class EmailService {
     return confirmUrl.toString()
   }
 
-  async sendEmailConfirmationEmail({ email, token, nickname }: SendEmailConfirmationEmailPayload) {
+  async sendEmailConfirmationEmail({ email, language, token, nickname }: SendEmailConfirmationEmailPayload) {
     if (!email) {
       throw new AppError(REQ_STATUS.server, EMAIL_I18N.emailRecipientMissing)
     }
@@ -66,15 +67,15 @@ export class EmailService {
     const { data, error } = await resend.emails.send({
       from: `${appName} <no-reply@k-room.space>`,
       to: email,
-      subject: `${appName}: ${EMAIL_I18N.emailConfirmationSubject.en}`,
+      subject: `${appName}: ${localizedText(EMAIL_I18N.emailConfirmationSubject, language)}`,
       html: renderEmailConfirmationHtml({
         appName,
-        confirmEmailButtonText: EMAIL_I18N.emailConfirmationButton.en,
-        confirmationText: EMAIL_I18N.emailConfirmationText.en,
+        confirmEmailButtonText: localizedText(EMAIL_I18N.emailConfirmationButton, language),
+        confirmationText: localizedText(EMAIL_I18N.emailConfirmationText, language),
         confirmUrl,
-        fallbackLinkText: EMAIL_I18N.emailConfirmationFallbackLink.en,
+        fallbackLinkText: localizedText(EMAIL_I18N.emailConfirmationFallbackLink, language),
         greeting: buildEmailGreeting({
-          greeting: EMAIL_I18N.emailConfirmationGreeting.en,
+          greeting: localizedText(EMAIL_I18N.emailConfirmationGreeting, language),
           nickname,
           punctuation: '!'
         })
@@ -90,7 +91,7 @@ export class EmailService {
     return data
   }
 
-  async sendPasswordRecoveryEmail({ email, code, nickname }: SendEmailCodeEmailPayload) {
+  async sendPasswordRecoveryEmail({ email, language, code, nickname }: SendEmailCodeEmailPayload) {
     if (!email) {
       throw new AppError(REQ_STATUS.server, EMAIL_I18N.emailRecipientMissing)
     }
@@ -100,13 +101,13 @@ export class EmailService {
     const html = renderEmailCodeHtml({
       code,
       greeting: buildEmailGreeting({
-        greeting: EMAIL_I18N.emailGreeting.en,
+        greeting: localizedText(EMAIL_I18N.emailGreeting, language),
         nickname,
         punctuation: '.'
       }),
-      ignoreText: EMAIL_I18N.passwordRecoveryIgnoreText.en,
-      text: EMAIL_I18N.passwordRecoveryCodeText.en,
-      title: EMAIL_I18N.passwordRecoveryTitle.en
+      ignoreText: localizedText(EMAIL_I18N.passwordRecoveryIgnoreText, language),
+      text: localizedText(EMAIL_I18N.passwordRecoveryCodeText, language),
+      title: localizedText(EMAIL_I18N.passwordRecoveryTitle, language)
     })
 
     if (!resend) {
@@ -117,7 +118,7 @@ export class EmailService {
     const { data, error } = await resend.emails.send({
       from: `${appName} <no-reply@k-room.space>`,
       to: email,
-      subject: `${appName}: ${EMAIL_I18N.passwordRecoveryCodeSubject.en}`,
+      subject: `${appName}: ${localizedText(EMAIL_I18N.passwordRecoveryCodeSubject, language)}`,
       html
     })
 
@@ -130,7 +131,7 @@ export class EmailService {
     return data
   }
 
-  async sendChangeEmailCodeEmail({ email, code, nickname }: SendEmailCodeEmailPayload) {
+  async sendChangeEmailCodeEmail({ email, language, code, nickname }: SendEmailCodeEmailPayload) {
     if (!email) {
       throw new AppError(REQ_STATUS.server, EMAIL_I18N.emailRecipientMissing)
     }
@@ -140,13 +141,13 @@ export class EmailService {
     const html = renderEmailCodeHtml({
       code,
       greeting: buildEmailGreeting({
-        greeting: EMAIL_I18N.emailGreeting.en,
+        greeting: localizedText(EMAIL_I18N.emailGreeting, language),
         nickname,
         punctuation: '.'
       }),
-      ignoreText: EMAIL_I18N.emailChangeIgnoreText.en,
-      text: EMAIL_I18N.emailChangeCodeText.en,
-      title: EMAIL_I18N.emailChangeTitle.en
+      ignoreText: localizedText(EMAIL_I18N.emailChangeIgnoreText, language),
+      text: localizedText(EMAIL_I18N.emailChangeCodeText, language),
+      title: localizedText(EMAIL_I18N.emailChangeTitle, language)
     })
 
     if (!resend) {
@@ -157,7 +158,7 @@ export class EmailService {
     const { data, error } = await resend.emails.send({
       from: `${appName} <no-reply@k-room.space>`,
       to: email,
-      subject: `${appName}: ${EMAIL_I18N.emailChangeCodeSubject.en}`,
+      subject: `${appName}: ${localizedText(EMAIL_I18N.emailChangeCodeSubject, language)}`,
       html
     })
 

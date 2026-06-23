@@ -18,6 +18,7 @@ import { API_I18N } from 'src/shared/api'
 import { type AppSoundKind, log, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
 import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
+import { resolveWorstRoomCallConnectionQuality } from '../lib/resolve-room-call-connection-quality'
 import { resolveRoomCallJoinMediaKind } from '../lib/resolve-room-call-join-media-kind'
 import { isRoomCallBlockingStartForUser, isRoomCallUnfinished } from '../lib/room-call-start-availability'
 
@@ -67,7 +68,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     updateRoomCallMediaState
   } = useRoomCallSession()
   const {
-    connectionQualityByUserId,
+    connectionQualityByUserId: peerConnectionQualityByUserId,
     connectRoomCallPeers,
     handleRoomCallSignalReceived,
     remoteStreamsByUserId,
@@ -84,6 +85,21 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   } = useRoomCallQuickCommandSync(activeRoomCallId)
   const localStreams = computed(() => [audioStream.value, videoStream.value, screenStream.value])
   const activeRoomCall = computed(() => roomCalls.value.find(({ id }) => id === activeRoomCallId.value))
+  const localConnectionQuality = computed(() =>
+    resolveWorstRoomCallConnectionQuality(Object.values(peerConnectionQualityByUserId.value))
+  )
+  const connectionQualityByUserId = computed(() => {
+    const quality = localConnectionQuality.value
+
+    if (!quality) {
+      return peerConnectionQualityByUserId.value
+    }
+
+    return {
+      ...peerConnectionQualityByUserId.value,
+      [user.value.id]: quality
+    }
+  })
   const activeRoomCallStatus = computed(() => activeRoomCall.value?.status)
   const isActiveRoomCallScreenSharingByAnotherParticipant = computed(() =>
     Boolean(
