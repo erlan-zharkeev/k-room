@@ -152,6 +152,10 @@ const {
   display: grid;
 }
 
+.download-page__state {
+  margin-bottom: 16px;
+}
+
 .download-page__actions {
   display: flex;
   gap: 12px;

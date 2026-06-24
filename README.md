@@ -79,7 +79,7 @@ These commands are defined in the root `package.json`.
 | `pnpm run e2e:ui`             | Opens the Playwright UI runner.                                                                                                                                                             |
 | `pnpm run smoke`              | Runs Playwright tests marked with `@smoke`.                                                                                                                                                 |
 | `pnpm run check`              | Runs the full local quality gate: FSD lint, ESLint, style lint, type checks, builds, tests, and Prettier check.                                                                             |
-| `pnpm run deploy`             | Bumps the client app patch version, creates the production deploy trigger commit, and pushes it. It only works from a clean `production` branch.                                            |
+| `pnpm run deploy`             | Checks the clean `production` branch, runs the full e2e suite, bumps the client app patch version, creates the production deploy trigger commit, and pushes it.                             |
 | `pnpm run test`               | Runs workspace test tasks through Turbo.                                                                                                                                                    |
 
 ## Scripts Directory
@@ -92,7 +92,7 @@ The root `scripts/` directory contains implementation files used by the package 
 | `scripts/desktop/prepare-desktop-download-artifact.mjs` | Collects platform-specific Tauri build output, normalizes public installer names, and stores installer metadata for the production Docker image build.                                                                                                                                                                      |
 | `scripts/desktop/finalize-desktop-downloads.mjs`        | Rebuilds `client/public/downloads` from desktop installer artifacts and generates the public download manifest plus the Tauri updater `latest.json` file before the client Docker image is built.                                                                                                                           |
 | `scripts/sync-public-config.mjs`                        | Reads shared and stage env files, extracts public domains and paths, and writes `nginx/webserver.conf` from the nginx template.                                                                                                                                                                                             |
-| `scripts/deploy/create-production-deploy-commit.mjs`    | Checks that the current branch is clean `production`, bumps the client app version, creates a `deploy(production): v...` commit, and pushes it.                                                                                                                                                                             |
+| `scripts/deploy/create-production-deploy-commit.mjs`    | Checks that the current branch is clean `production`, runs the full e2e suite, bumps the client app version, creates a `deploy(production): v...` commit, and pushes it.                                                                                                                                                    |
 | `scripts/version/bump-client-version.mjs`               | Bumps `client/package.json` and `client/src-tauri/Cargo.toml`; patch is the default bump, while minor and major require explicit flags.                                                                                                                                                                                     |
 | `scripts/deploy/deploy.sh`                              | Server-side production deploy script used by GitHub Actions or the host: merges env files, syncs certificates when available, logs in to Docker Hub, pulls images, and runs Docker Compose.                                                                                                                                 |
 | `scripts/deploy/sync-certs.sh`                          | Copies Let's Encrypt certificate files for the production domain into `scripts/deploy/certs/` for Docker Compose.                                                                                                                                                                                                           |
@@ -101,8 +101,10 @@ The root `scripts/` directory contains implementation files used by the package 
 
 - CI runs `pnpm run check`.
 - The local pre-commit hook runs `pnpm run check`.
-- Smoke and e2e tests are manual local checks and are not part of `pnpm run deploy` or the GitHub Actions production deploy flow.
-- Run `pnpm run smoke` for smoke tests or `pnpm run e2e` for the full e2e suite.
+- Smoke tests are manual local checks.
+- The full e2e suite runs during local `pnpm run deploy` after deploy prechecks and before the version bump.
+- E2E tests are not part of the GitHub Actions production deploy flow.
+- Run `pnpm run smoke` for smoke tests or `pnpm run e2e` for the full e2e suite manually.
 - Smoke and e2e tests require MongoDB on `127.0.0.1:27017`.
 
 ## Production Deploy
@@ -115,7 +117,7 @@ To deploy, use a clean local `production` branch and run:
 pnpm run deploy
 ```
 
-The command bumps the client app patch version by default, for example `0.1.0` to `0.1.1`, then creates and pushes a commit with a message like:
+The command checks the clean `production` branch, runs `pnpm run e2e`, then bumps the client app patch version by default, for example `0.1.0` to `0.1.1`, and creates and pushes a commit with a message like:
 
 ```text
 deploy(production): v0.1.1

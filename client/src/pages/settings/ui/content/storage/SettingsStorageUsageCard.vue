@@ -12,7 +12,9 @@ const { availableFormatted, isStorageUsageWarning, quotaFormatted, usageFormatte
 
 <template>
   <SettingsCard :title="$t(SETTINGS_PAGE_STORAGE_I18N.storage)" :has-warning="isStorageUsageWarning">
-    <NmorphProgress :percentage="usagePercent" :max="100" />
+    <div class="settings-storage-usage-card__progress">
+      <NmorphProgress :percentage="usagePercent" :max="100" />
+    </div>
 
     <div class="settings-storage-usage-card__stats">
       <div class="settings-storage-usage-card__stat">
@@ -32,13 +34,19 @@ const { availableFormatted, isStorageUsageWarning, quotaFormatted, usageFormatte
 </template>
 
 <style lang="scss">
+.settings-storage-usage-card__progress {
+  padding-right: 12px;
+  padding-left: 12px;
+}
+
 .settings-storage-usage-card__stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   align-items: start;
 
-  margin-right: 24px;
+  padding-right: 12px;
+  padding-left: 12px;
 }
 
 .settings-storage-usage-card__stat {

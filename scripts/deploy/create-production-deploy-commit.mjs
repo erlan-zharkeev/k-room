@@ -6,6 +6,8 @@ const CLIENT_PACKAGE_JSON_PATH = 'client/package.json'
 const CLIENT_CARGO_TOML_PATH = 'client/src-tauri/Cargo.toml'
 const VERSION_BUMP_SCRIPT_PATH = 'scripts/version/bump-client-version.mjs'
 const VERSION_BUMP_FLAGS = ['--patch', '--minor', '--major']
+const E2E_SCRIPT_NAME = 'e2e'
+const PACKAGE_MANAGER_COMMAND = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm'
 
 const versionBumpFlag = readVersionBumpFlag()
 
@@ -28,9 +30,10 @@ const read = (command, args, { trim = false } = {}) => {
   return trim ? result.stdout.trim() : result.stdout
 }
 
-const run = (command, args) => {
+const run = (command, args, options = {}) => {
   const result = spawnSync(command, args, {
-    stdio: 'inherit'
+    stdio: 'inherit',
+    ...options
   })
 
   if (result.error) {
@@ -43,6 +46,16 @@ const run = (command, args) => {
   }
 }
 
+const assertCleanWorkingTree = (message) => {
+  const status = read('git', ['status', '--porcelain'], { trim: true })
+
+  if (status) {
+    console.error(message)
+    console.error('Commit, stash, or discard local changes before deploying.')
+    process.exit(1)
+  }
+}
+
 const currentBranch = read('git', ['branch', '--show-current'], { trim: true })
 
 if (currentBranch !== PRODUCTION_BRANCH) {
@@ -51,14 +64,11 @@ if (currentBranch !== PRODUCTION_BRANCH) {
   process.exit(1)
 }
 
-const status = read('git', ['status', '--porcelain'], { trim: true })
-
-if (status) {
-  console.error('Deploy requires a clean working tree.')
-  console.error('Commit, stash, or discard local changes before deploying.')
-  process.exit(1)
-}
-
+assertCleanWorkingTree('Deploy requires a clean working tree.')
+run(PACKAGE_MANAGER_COMMAND, ['run', E2E_SCRIPT_NAME], {
+  shell: process.platform === 'win32'
+})
+assertCleanWorkingTree('E2E tests changed the working tree.')
 run('node', [VERSION_BUMP_SCRIPT_PATH, versionBumpFlag])
 run('git', ['add', CLIENT_PACKAGE_JSON_PATH, CLIENT_CARGO_TOML_PATH])
 run('git', ['commit', '-m', `deploy(production): v${readClientVersion()}`])

@@ -9,18 +9,23 @@ import { AppLogo, AppHeader } from 'src/shared/ui'
 
 import { AUTH_LAYOUT_TABS } from './constants'
 import type { AuthLayoutProps } from './types'
-import { useAuthLayoutNetBackground } from './use-auth-layout-net-background.model'
 
 const props = defineProps<AuthLayoutProps>()
 const route = useRoute()
-useAuthLayoutNetBackground()
 </script>
 
 <template>
   <section class="auth-layout">
-    <div ref="authLayoutNetBackground" class="auth-layout__net-background" />
     <div class="auth-layout__top-side">
-      <AppLogo />
+      <NmorphCard
+        class="auth-layout__logo-card"
+        content-class="auth-layout__logo-card-content"
+        :card-padding="8"
+        :fill="false"
+        shadow-type="inset"
+      >
+        <AppLogo />
+      </NmorphCard>
       <div class="auth-layout__controls">
         <SelectLanguage compact class="auth-layout__language" />
         <SelectTheme compact />
@@ -74,72 +79,6 @@ useAuthLayoutNetBackground()
   overflow: hidden;
   display: grid;
   place-items: center;
-
-  background: radial-gradient(
-        circle,
-        color-mix(in srgb, var(--nmorph-text-color) 18%, transparent) 0.8px,
-        transparent 1px
-      )
-      0 0 / 18px 18px,
-    linear-gradient(135deg, color-mix(in srgb, var(--nmorph-light-shade-color) 14%, transparent), transparent 42%),
-    var(--nmorph-main-color);
-}
-
-.auth-layout::before {
-  pointer-events: none;
-  content: '';
-
-  position: fixed;
-  z-index: 0;
-  inset: 0;
-
-  opacity: 0.45;
-  background: repeating-linear-gradient(
-      0deg,
-      color-mix(in srgb, var(--nmorph-light-shade-color) 10%, transparent) 0 1px,
-      transparent 1px 5px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent 0 10px,
-      color-mix(in srgb, var(--nmorph-dark-shade-color) 10%, transparent) 10px 11px,
-      transparent 11px 20px
-    );
-}
-
-.auth-layout::after {
-  pointer-events: none;
-  content: '';
-
-  position: fixed;
-  z-index: 0;
-  inset: 0;
-
-  opacity: 0.55;
-  background: radial-gradient(
-      circle at 20% 20%,
-      color-mix(in srgb, var(--nmorph-light-shade-color) 18%, transparent),
-      transparent 34%
-    ),
-    radial-gradient(
-      circle at 80% 72%,
-      color-mix(in srgb, var(--nmorph-dark-shade-color) 14%, transparent),
-      transparent 38%
-    );
-}
-
-.auth-layout__net-background {
-  position: fixed;
-  z-index: 1;
-  inset: 0;
-  opacity: 0.42;
-}
-
-.auth-layout__net-background > canvas {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100dvh;
 }
 
 .auth-layout__top-side {
@@ -160,6 +99,14 @@ useAuthLayoutNetBackground()
   z-index: 2;
   width: 100%;
   max-width: var(--app-card-basic-width);
+}
+
+.auth-layout__logo-card {
+  width: fit-content;
+}
+
+.auth-layout__logo-card-content {
+  display: flex;
 }
 
 .auth-layout__tabs {
