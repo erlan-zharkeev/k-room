@@ -1,9 +1,10 @@
 import { expect, test, type Page } from '@playwright/test'
 
 import { dismissFirstRunOverlays, logoutFromApp } from 'e2e/shared/app'
-import { loginByCredentials, signInWithProvider } from 'e2e/shared/auth'
+import { loginByCredentials } from 'e2e/shared/auth'
+import { createConfirmedAppUserWithFixturePassword } from 'e2e/shared/user'
 
-import { SETTINGS_FIXTURE_USER } from './constants'
+import { AUTH_FIXTURE_PASSWORD, SETTINGS_FIXTURE_USER } from './constants'
 
 const SETTINGS_ACCOUNT_TEST_TIMEOUT_MS = 90_000
 
@@ -92,6 +93,7 @@ const changeEmail = async (page: Page, currentEmail: string, nextEmail: string) 
   const sendCodeButton = changeEmailCard.getByRole('button', { name: 'Send code', exact: true })
   const validateCodeButton = changeEmailCard.getByRole('button', { name: 'Validate code', exact: true })
 
+  await changeEmailCard.scrollIntoViewIfNeeded()
   await expect(changeEmailCard.getByText(currentEmail, { exact: true })).toBeVisible()
   await changeEmailCard.locator('input[autocomplete="email"]').fill(nextEmail)
   await expect(sendCodeButton).toBeEnabled()
@@ -203,15 +205,17 @@ test.describe('settings account', () => {
   test('changes email with email code', async ({ page }) => {
     const { nickname, email, nextEmail } = buildEmailChangeUser()
 
-    await signInWithProvider(page, nickname, email)
+    await createConfirmedAppUserWithFixturePassword({ nickname, email })
+    await loginByCredentials(page, email, AUTH_FIXTURE_PASSWORD)
     await openAccountSettings(page)
     await changeEmail(page, email, nextEmail)
     await logout(page)
-    await signInWithProvider(page, nickname, nextEmail)
+    await loginByCredentials(page, nextEmail, AUTH_FIXTURE_PASSWORD)
     await openAccountSettings(page)
 
-    await expect(
-      page.locator('.settings-card').filter({ hasText: 'Change email' }).getByText(nextEmail, { exact: true })
-    ).toBeVisible()
+    const changeEmailCard = page.locator('.settings-card').filter({ hasText: 'Change email' })
+
+    await changeEmailCard.scrollIntoViewIfNeeded()
+    await expect(changeEmailCard.getByText(nextEmail, { exact: true })).toBeVisible()
   })
 })

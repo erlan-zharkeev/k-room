@@ -7,11 +7,12 @@ import { useChatRoomContextMenu } from '../model/use-chat-room-context-menu.mode
 
 const props = defineProps<ChatRoomContextMenuProps>()
 const emit = defineEmits<ChatRoomContextMenuEmits>()
-const { contextMenuOptions, selectChatRoomAction } = useChatRoomContextMenu(props, emit)
+const { isContextMenuOpen, contextMenuOptions, selectChatRoomAction } = useChatRoomContextMenu(props, emit)
 </script>
 
 <template>
   <NmorphContextMenu
+    v-model="isContextMenuOpen"
     placement="bottom-end"
     class="chat-room-context-menu"
     trigger="click"

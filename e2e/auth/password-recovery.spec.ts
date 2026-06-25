@@ -1,23 +1,11 @@
-import { expect, test, type APIRequestContext, type Page } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 
-import { E2E_ENV } from 'e2e/config'
 import { loginByCredentials } from 'e2e/shared/auth'
+import { createConfirmedAppUserWithFixturePassword } from 'e2e/shared/user'
 
 import { buildPasswordRecoveryFixtureUser } from './lib'
 
 const PASSWORD_RECOVERY_TEST_TIMEOUT_MS = 90_000
-
-const createConfirmedProviderUser = async (request: APIRequestContext, nickname: string, email: string) => {
-  const response = await request.post(`${E2E_ENV.PLAYWRIGHT_API_URL}/auth/provider-login`, {
-    data: {
-      nickname,
-      email,
-      provider: 'google'
-    }
-  })
-
-  expect(response.ok()).toBeTruthy()
-}
 
 const getRecoverySendResponse = (page: Page) =>
   page.waitForResponse(
@@ -97,10 +85,10 @@ const recoverPassword = async ({
 test.describe('password recovery', () => {
   test.setTimeout(PASSWORD_RECOVERY_TEST_TIMEOUT_MS)
 
-  test('opens as SPA from login and completes full recovery flow', async ({ page, request }) => {
+  test('opens as SPA from login and completes full recovery flow', async ({ page }) => {
     const { nickname, email, password } = buildPasswordRecoveryFixtureUser()
 
-    await createConfirmedProviderUser(request, nickname, email)
+    await createConfirmedAppUserWithFixturePassword({ nickname, email })
 
     await recoverPassword({
       page,

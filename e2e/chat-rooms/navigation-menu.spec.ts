@@ -6,6 +6,7 @@ import { loginByCredentials } from 'e2e/shared/auth'
 
 import {
   ACTIVE_OVERLAY_SELECTOR,
+  ACTIVE_TRANSPARENT_OVERLAY_SELECTOR,
   CANCEL_BUTTON_NAME,
   CHAT_ACTIONS_BUTTON_NAME,
   CHAT_NAME_PLACEHOLDER,
@@ -72,6 +73,7 @@ const updateSearchInput = async (searchInput: Locator, value: string) => {
 }
 
 const openChatRoomMenu = async (page: Page, row: Locator) => {
+  await expect(page.locator(ACTIVE_TRANSPARENT_OVERLAY_SELECTOR)).toHaveCount(0)
   await row.locator(`[aria-label="${CHAT_ACTIONS_BUTTON_NAME}"]`).click()
   await expect(page.getByRole('menu', { name: CHAT_ACTIONS_BUTTON_NAME })).toBeVisible()
 }
@@ -79,11 +81,16 @@ const openChatRoomMenu = async (page: Page, row: Locator) => {
 const closeMenu = async (page: Page) => {
   await page.keyboard.press('Escape')
   await expect(page.getByRole('menu', { name: CHAT_ACTIONS_BUTTON_NAME })).toBeHidden()
+  await expect(page.locator(ACTIVE_TRANSPARENT_OVERLAY_SELECTOR)).toHaveCount(0)
 }
 
 const clickChatRoomMenuAction = async (page: Page, row: Locator, actionName: string) => {
+  const menu = page.getByRole('menu', { name: CHAT_ACTIONS_BUTTON_NAME })
+
   await openChatRoomMenu(page, row)
   await page.getByRole('menuitem', { name: actionName, exact: true }).click()
+  await expect(menu).toBeHidden()
+  await expect(page.locator(ACTIVE_TRANSPARENT_OVERLAY_SELECTOR)).toHaveCount(0)
 }
 
 const expectChatRoomMenuAction = async (page: Page, row: Locator, actionName: string) => {
@@ -101,6 +108,8 @@ const ensureChatRoomUnpinned = async (page: Page) => {
 
   if (await unpinAction.isVisible()) {
     await unpinAction.click()
+    await expect(page.getByRole('menu', { name: CHAT_ACTIONS_BUTTON_NAME })).toBeHidden()
+    await expect(page.locator(ACTIVE_TRANSPARENT_OVERLAY_SELECTOR)).toHaveCount(0)
     await expect(getChatRoomRow(page, FRONTEND_CORE_CHAT_NAME).locator(CHAT_ROOM_LIST_ITEM_PIN_SELECTOR)).toHaveCount(0)
     return
   }
@@ -117,6 +126,8 @@ const ensureChatRoomUnmuted = async (page: Page) => {
 
   if (await unmuteAction.isVisible()) {
     await unmuteAction.click()
+    await expect(page.getByRole('menu', { name: CHAT_ACTIONS_BUTTON_NAME })).toBeHidden()
+    await expect(page.locator(ACTIVE_TRANSPARENT_OVERLAY_SELECTOR)).toHaveCount(0)
     await expectChatRoomMenuAction(page, getChatRoomRow(page, FRONTEND_CORE_CHAT_NAME), MUTE_CHAT_ACTION)
     return
   }

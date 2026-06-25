@@ -115,7 +115,6 @@ export const useChatRoomContextMenu = (props: ChatRoomContextMenuProps, emit: Ch
   return {
     isContextMenuOpen,
     contextMenuOptions,
-    updateContextMenuOpen,
     selectChatRoomAction
   }
 }
