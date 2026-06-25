@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { NmorphFileUpload, NmorphSelectButton, NmorphSlider } from '@nmorph/nmorph-ui-kit'
-
-import { AppText } from 'src/shared/ui'
+import { NmorphText, NmorphFileUpload, NmorphSelectButton, NmorphSlider } from '@nmorph/nmorph-ui-kit'
 
 import {
   SETTINGS_WALLPAPER_ALLOWED_TYPES,
@@ -18,6 +16,7 @@ import SettingsCard from '../../SettingsCard.vue'
 
 const {
   effectiveTheme,
+  hasWallpaper,
   isSelectedThemeCustom,
   setAngle,
   setDarkness,
@@ -36,7 +35,7 @@ const {
   <SettingsCard :title="$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaper)">
     <div class="settings-wallpaper-card">
       <div class="settings-wallpaper-card__visibility settings-wallpaper-card__input-element">
-        <AppText :selectable="false" :text="$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperEnabled)" />
+        <NmorphText>{{ $t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperEnabled) }}</NmorphText>
         <NmorphSelectButton
           thickness="thick"
           :model-value="wallpaperVisibilityValue"
@@ -60,14 +59,12 @@ const {
         </div>
 
         <label class="settings-wallpaper-card__input-element">
-          <AppText
-            tag="small"
-            :selectable="false"
-            :text="`${$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperAngle)} ${effectiveTheme.wallpaper.angle}deg`"
-            class="settings-wallpaper-card__slider-label"
-          />
+          <NmorphText as="small" class="settings-wallpaper-card__slider-label" variant="body-small">{{
+            `${$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperAngle)} ${effectiveTheme.wallpaper.angle}deg`
+          }}</NmorphText>
           <NmorphSlider
             :model-value="effectiveTheme.wallpaper.angle"
+            :disabled="!hasWallpaper"
             :min="SETTINGS_WALLPAPER_ANGLE_MIN"
             :max="SETTINGS_WALLPAPER_ANGLE_MAX"
             :step="1"
@@ -77,14 +74,12 @@ const {
         </label>
 
         <label class="settings-wallpaper-card__input-element">
-          <AppText
-            tag="small"
-            :selectable="false"
-            :text="`${$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperScale)} ${effectiveTheme.wallpaper.scale}%`"
-            class="settings-wallpaper-card__slider-label"
-          />
+          <NmorphText as="small" class="settings-wallpaper-card__slider-label" variant="body-small">{{
+            `${$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperScale)} ${effectiveTheme.wallpaper.scale}%`
+          }}</NmorphText>
           <NmorphSlider
             :model-value="effectiveTheme.wallpaper.scale"
+            :disabled="!hasWallpaper"
             :min="SETTINGS_WALLPAPER_SCALE_MIN"
             :max="SETTINGS_WALLPAPER_SCALE_MAX"
             :step="1"
@@ -94,14 +89,12 @@ const {
         </label>
 
         <label class="settings-wallpaper-card__input-element">
-          <AppText
-            tag="small"
-            :selectable="false"
-            :text="`${$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperDarkness)} ${effectiveTheme.wallpaper.darkness}%`"
-            class="settings-wallpaper-card__slider-label"
-          />
+          <NmorphText as="small" class="settings-wallpaper-card__slider-label" variant="body-small">{{
+            `${$t(SETTINGS_PAGE_APPEARANCE_I18N.wallpaperDarkness)} ${effectiveTheme.wallpaper.darkness}%`
+          }}</NmorphText>
           <NmorphSlider
             :model-value="effectiveTheme.wallpaper.darkness"
+            :disabled="!hasWallpaper"
             :min="SETTINGS_WALLPAPER_DARKNESS_MIN"
             :max="SETTINGS_WALLPAPER_DARKNESS_MAX"
             :step="1"

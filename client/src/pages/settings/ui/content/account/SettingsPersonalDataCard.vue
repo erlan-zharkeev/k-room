@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  NmorphText,
   NmorphButton,
   NmorphFileUpload,
   NmorphForm,
@@ -10,7 +11,7 @@ import {
   NmorphCallout
 } from '@nmorph/nmorph-ui-kit'
 
-import { AppProfileBasicData, AppText } from 'src/shared/ui'
+import { AppProfileBasicData } from 'src/shared/ui'
 
 import {
   SETTINGS_ACCOUNT_AVATAR_ALLOWED_TYPES,
@@ -57,7 +58,7 @@ const {
       >
         <template #title>
           <div class="settings-personal-data-card__profile-title">
-            <AppText bold :selectable="false" :text="user.nickname" />
+            <NmorphText weight="bold">{{ user.nickname }}</NmorphText>
             <NmorphButton
               class="settings-personal-data-card__copy-button"
               design="plain"
@@ -76,7 +77,7 @@ const {
         </template>
         <template #description>
           <div v-if="user.id" class="settings-personal-data-card__profile-description">
-            <AppText tag="small" :selectable="false" :text="displayedUserId" />
+            <NmorphText as="small" variant="body-small">{{ displayedUserId }}</NmorphText>
             <NmorphButton
               class="settings-personal-data-card__copy-button"
               design="plain"

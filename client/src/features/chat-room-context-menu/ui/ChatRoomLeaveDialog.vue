@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphDialog } from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphButton, NmorphDialog } from '@nmorph/nmorph-ui-kit'
 
-import { AppProfilePicker, AppText } from 'src/shared/ui'
+import { AppProfilePicker } from 'src/shared/ui'
 
 import { CHAT_ROOM_CONTEXT_MENU_I18N } from '../config/i18n'
 import type { ChatRoomLeaveDialogProps } from '../config/types'
@@ -23,17 +23,17 @@ const {
 <template>
   <NmorphDialog v-model="model" :title="$t(CHAT_ROOM_CONTEXT_MENU_I18N.leaveGroupTitle)">
     <div class="app-dialog-stack">
-      <AppText
-        :text="
-          $t(
-            isCurrentUserChatRoomAdmin
-              ? CHAT_ROOM_CONTEXT_MENU_I18N.leaveGroupAdminConfirm
-              : CHAT_ROOM_CONTEXT_MENU_I18N.leaveGroupConfirm
-          )
-        "
-      />
+      <NmorphText>{{
+        $t(
+          isCurrentUserChatRoomAdmin
+            ? CHAT_ROOM_CONTEXT_MENU_I18N.leaveGroupAdminConfirm
+            : CHAT_ROOM_CONTEXT_MENU_I18N.leaveGroupConfirm
+        )
+      }}</NmorphText>
       <div v-if="isCurrentUserChatRoomAdmin" class="app-dialog-stack">
-        <AppText tag="small" color="semi-contrast-text" :text="$t(CHAT_ROOM_CONTEXT_MENU_I18N.newGroupAdministrator)" />
+        <NmorphText as="small" color="semi-contrast" variant="body-small">{{
+          $t(CHAT_ROOM_CONTEXT_MENU_I18N.newGroupAdministrator)
+        }}</NmorphText>
         <AppProfilePicker
           v-model="selectedNewAdminIds"
           :items="newAdminItems"

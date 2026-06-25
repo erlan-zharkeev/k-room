@@ -23,7 +23,9 @@ const initializeClientData = async () => {
     }
 
     try {
-      const response = await doHttpRequest<UserData>('get', USER_ENDPOINTS.getUserData)
+      const response = await doHttpRequest<UserData>('get', USER_ENDPOINTS.getUserData, undefined, {
+        showErrorToast: false
+      })
 
       await activateClientSession(response.data.payload, false)
     } catch (error) {

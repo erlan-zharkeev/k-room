@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphCallout, NmorphSelect, NmorphMediaTile } from '@nmorph/nmorph-ui-kit'
-
-import { AppText } from 'src/shared/ui'
+import { NmorphText, NmorphButton, NmorphCallout, NmorphSelect, NmorphMediaTile } from '@nmorph/nmorph-ui-kit'
 
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../../config/i18n/devices.i18n'
 import { useVideoInputDevice } from '../../../model/devices/use-video-input-device.model'
@@ -27,7 +25,7 @@ const {
 <template>
   <SettingsCard :title="$t(SETTINGS_PAGE_DEVICES_I18N.videoInputDevice)" :has-warning="hasVideoInputPermissionWarning">
     <div class="settings-video-input-device-card">
-      <AppText size="small" :text="$t(SETTINGS_PAGE_DEVICES_I18N.videoInputDeviceDescription)" />
+      <NmorphText variant="body-small">{{ $t(SETTINGS_PAGE_DEVICES_I18N.videoInputDeviceDescription) }}</NmorphText>
 
       <div class="settings-video-input-device-card__permission">
         <NmorphCallout :type="videoInputPermissionCalloutType" :content="videoInputPermissionStatus" />

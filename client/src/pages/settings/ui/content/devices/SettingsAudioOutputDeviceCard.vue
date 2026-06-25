@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphCallout, NmorphSelect } from '@nmorph/nmorph-ui-kit'
-
-import { AppText } from 'src/shared/ui'
+import { NmorphText, NmorphButton, NmorphCallout, NmorphSelect } from '@nmorph/nmorph-ui-kit'
 
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../../config/i18n/devices.i18n'
 import { useAudioOutputDevice } from '../../../model/devices/use-audio-output-device.model'
@@ -22,15 +20,15 @@ const {
 <template>
   <SettingsCard :title="$t(SETTINGS_PAGE_DEVICES_I18N.audioOutputDevice)">
     <div class="settings-audio-output-device-card">
-      <AppText size="small" :text="$t(SETTINGS_PAGE_DEVICES_I18N.audioOutputDeviceDescription)" />
+      <NmorphText variant="body-small">{{ $t(SETTINGS_PAGE_DEVICES_I18N.audioOutputDeviceDescription) }}</NmorphText>
 
       <NmorphCallout :type="audioOutputPermissionCalloutType" :content="audioOutputPermissionStatus" />
-      <AppText
+      <NmorphText
         v-if="!audioOutputLoading && audioOutputOptions.length === 0"
-        size="small"
-        color="warn"
-        :text="$t(SETTINGS_PAGE_DEVICES_I18N.notAvailable)"
-      />
+        color="var(--nmorph-warn-color)"
+        variant="body-small"
+        >{{ $t(SETTINGS_PAGE_DEVICES_I18N.notAvailable) }}</NmorphText
+      >
 
       <div class="settings-audio-output-device-card__control">
         <NmorphSelect

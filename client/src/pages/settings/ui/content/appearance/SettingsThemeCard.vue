@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  NmorphText,
   NmorphButton,
   NmorphColorPicker,
   NmorphDivider,
@@ -10,7 +11,6 @@ import {
 } from '@nmorph/nmorph-ui-kit'
 
 import { useSettings } from 'src/entities/setting'
-import { AppText } from 'src/shared/ui'
 
 import {
   CUSTOM_THEME_COLOR_GROUPS,
@@ -57,7 +57,7 @@ const { resetThemeMode, changeResetThemeMode, resetCustomTheme } = useCustomThem
         <NmorphDivider v-if="index > 0" class="settings-theme-card__divider" />
 
         <label v-for="item in group.items" :key="item.id" class="settings-theme-card__field">
-          <AppText :selectable="false" :text="$t(item.label)" />
+          <NmorphText>{{ $t(item.label) }}</NmorphText>
           <NmorphColorPicker
             :model-value="effectiveTheme.colorSchema[item.id]"
             show-value
@@ -70,7 +70,9 @@ const { resetThemeMode, changeResetThemeMode, resetCustomTheme } = useCustomThem
 
       <label v-for="item in CUSTOM_THEME_SHADOW_ITEMS" :key="item.id" class="settings-theme-card__slider">
         <div class="settings-theme-card__slider-label">
-          <AppText tag="small" :selectable="false" :text="`${$t(item.label)} ${effectiveTheme[item.id]}${item.unit}`" />
+          <NmorphText as="small" variant="body-small">{{
+            `${$t(item.label)} ${effectiveTheme[item.id]}${item.unit}`
+          }}</NmorphText>
         </div>
         <NmorphSlider
           :model-value="effectiveTheme[item.id]"

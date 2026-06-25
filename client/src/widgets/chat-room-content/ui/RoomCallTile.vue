@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  NmorphText,
   NmorphAudioMeter,
   NmorphButton,
   NmorphIcon,
@@ -17,7 +18,6 @@ import {
 } from '@nmorph/nmorph-ui-kit'
 
 import { ROOM_CALL_SESSION_I18N } from 'src/features/room-call-session'
-import { AppText } from 'src/shared/ui'
 
 import { ROOM_CALL_TILE_STATE_ICON_SIZE } from '../config/constants'
 import type { RoomCallTileEmits, RoomCallTileProps } from '../config/types'
@@ -68,14 +68,14 @@ const {
     <div class="room-call-tile__top" @click.stop>
       <div class="room-call-tile__bar room-call-tile__overlay">
         <div class="room-call-tile__identity">
-          <AppText
+          <NmorphText
             class="room-call-tile__name"
-            tag="small"
-            color="contrast-text"
+            as="small"
+            color="var(--nmorph-contrast-text-color)"
             truncate
-            :selectable="false"
-            :text="props.item.name"
-          />
+            variant="body-small"
+            >{{ props.item.name }}</NmorphText
+          >
           <NmorphAudioMeter
             v-if="isRoomCallTileAudioMeterVisible"
             class="room-call-tile__audio-meter"
@@ -132,12 +132,9 @@ const {
           :key="props.item.temporaryQuickCommand.id"
           class="room-call-tile__quick-command room-call-tile__quick-command--temporary"
         >
-          <AppText
-            tag="small"
-            :color="temporaryQuickCommandTextColor"
-            :selectable="false"
-            :text="$t(temporaryQuickCommandI18n)"
-          />
+          <NmorphText as="small" :color="temporaryQuickCommandTextColor" variant="body-small">{{
+            $t(temporaryQuickCommandI18n)
+          }}</NmorphText>
         </div>
       </div>
     </div>

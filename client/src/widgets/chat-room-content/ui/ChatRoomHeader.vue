@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { NmorphCard, NmorphSelectButton, NmorphSelectButtonItem } from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphCard, NmorphSelectButton, NmorphSelectButtonItem } from '@nmorph/nmorph-ui-kit'
 
 import { ChatRoomContextMenu } from 'src/features/chat-room-context-menu'
 import { ChatRoomTypingStatus } from 'src/features/chat-room-typing'
 import { ContentNavigationBackButton } from 'src/features/content-navigation-back-button'
 import { ROOM_CALL_SESSION_I18N, RoomCallMediaButtons } from 'src/features/room-call-session'
 import { UserActivityStatus } from 'src/features/user-activity-status'
-import { AppProfileBasicData, AppText } from 'src/shared/ui'
+import { AppProfileBasicData } from 'src/shared/ui'
 
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { ChatRoomHeaderEmits, ChatRoomHeaderProps } from '../config/types'
@@ -34,26 +34,22 @@ const { interlocutor, isPortraitTabletOrLess, membersQuantityText, updateChatRoo
         class="chat-room-content-header__profile"
       >
         <template #description>
-          <AppText
+          <NmorphText
             v-if="!props.isPrivateRoom && props.joinableRoomCall"
-            tag="small"
+            as="small"
             color="accent"
-            :selectable="false"
-            :text="$t(ROOM_CALL_SESSION_I18N.activeRoomCall)"
-          />
+            variant="body-small"
+            >{{ $t(ROOM_CALL_SESSION_I18N.activeRoomCall) }}</NmorphText
+          >
           <ChatRoomTypingStatus v-else :room-id="props.room.id">
             <UserActivityStatus
               v-if="props.isPrivateRoom && interlocutor"
               :online="interlocutor.online"
               :last-seen="interlocutor.lastSeen"
             />
-            <AppText
-              v-else-if="!props.isPrivateRoom"
-              tag="small"
-              color="semi-contrast-text"
-              :selectable="false"
-              :text="membersQuantityText"
-            />
+            <NmorphText v-else-if="!props.isPrivateRoom" as="small" color="semi-contrast" variant="body-small">{{
+              membersQuantityText
+            }}</NmorphText>
           </ChatRoomTypingStatus>
         </template>
       </AppProfileBasicData>

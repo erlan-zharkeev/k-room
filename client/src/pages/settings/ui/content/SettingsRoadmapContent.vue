@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AppText } from 'src/shared/ui'
+import { NmorphText } from '@nmorph/nmorph-ui-kit'
 
 import { SETTINGS_PAGE_ROADMAP_I18N } from '../../config/i18n/roadmap.i18n'
 import { useRoadmap } from '../../model/use-roadmap.model'
@@ -11,39 +11,29 @@ const { roadmapItems } = useRoadmap()
 <template>
   <div class="settings-roadmap-content settings-content-grid">
     <SettingsCard :title="$t(SETTINGS_PAGE_ROADMAP_I18N.roadmap)">
-      <AppText
-        class="settings-roadmap-content__intro"
-        tag="p"
-        color="semi-contrast-text"
-        :text="$t(SETTINGS_PAGE_ROADMAP_I18N.intro)"
-      />
+      <NmorphText class="settings-roadmap-content__intro" as="p" color="semi-contrast">{{
+        $t(SETTINGS_PAGE_ROADMAP_I18N.intro)
+      }}</NmorphText>
 
       <div class="settings-roadmap-content__list">
         <article v-for="(item, index) in roadmapItems" :key="item.id" class="settings-roadmap-content__item">
           <div class="settings-roadmap-content__item-header">
             <span class="settings-roadmap-content__item-number">{{ index + 1 }}</span>
-            <AppText
+            <NmorphText
               class="settings-roadmap-content__item-title"
-              tag="span"
-              color="contrast-text"
-              bold
-              :text="item.title"
-            />
-            <AppText
-              tag="span"
-              class="settings-roadmap-content__item-status"
-              color="accent"
-              bold
-              :text="item.statusText"
-            />
+              as="span"
+              color="var(--nmorph-contrast-text-color)"
+              weight="bold"
+              >{{ item.title }}</NmorphText
+            >
+            <NmorphText as="span" class="settings-roadmap-content__item-status" color="accent" weight="bold">{{
+              item.statusText
+            }}</NmorphText>
           </div>
 
-          <AppText
-            class="settings-roadmap-content__item-description"
-            tag="p"
-            color="semi-contrast-text"
-            :text="item.description"
-          />
+          <NmorphText class="settings-roadmap-content__item-description" as="p" color="semi-contrast">{{
+            item.description
+          }}</NmorphText>
         </article>
       </div>
     </SettingsCard>

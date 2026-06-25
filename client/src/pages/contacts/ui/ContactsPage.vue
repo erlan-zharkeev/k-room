@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { NmorphIconSearch, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphIconSearch, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 import { CONTACT_SEARCH_QUERY_MAX_LENGTH } from 'global-shared'
-
-import { AppHeader, AppText } from 'src/shared/ui'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
 import { useContactListSearch } from '../model/use-contact-list-search.model'
@@ -45,7 +43,7 @@ const { searchQuery, contactList, contactListEmptyText } = useContactListSearch(
     </NmorphTextInput>
     <ContactsSearch class="contacts-page__list" :loading-contact-ids="loadingContactIds" @add="addContact">
       <div class="contacts-page__block">
-        <AppHeader tag="h5" :text="$t(CONTACTS_PAGE_I18N.listTitle)" />
+        <NmorphText as="h5" variant="title-small" weight="bold">{{ $t(CONTACTS_PAGE_I18N.listTitle) }}</NmorphText>
         <ContactList
           v-if="contactList.length"
           :contact-list="contactList"
@@ -59,7 +57,7 @@ const { searchQuery, contactList, contactListEmptyText } = useContactListSearch(
           @go-to-chat="goToChatRoom"
           @update-interaction="updateInteraction"
         />
-        <AppText v-else color="semi-contrast-text" :text="$t(contactListEmptyText)" />
+        <NmorphText v-else color="semi-contrast">{{ $t(contactListEmptyText) }}</NmorphText>
       </div>
     </ContactsSearch>
     <ContactsDeleteDialog v-model="isDeleteDialogOpen" @cancel="closeDeleteDialog" @confirm="deleteContact" />

@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphForm, NmorphFormItem, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphButton, NmorphForm, NmorphFormItem, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES } from 'global-shared'
 import { onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
-
-import { AppHeader, AppText } from 'src/shared/ui'
 
 import { CREATE_NEW_PASSWORD_I18N } from '../config/i18n'
 import { useCreateNewPassword } from '../model/use-create-new-password.model'
@@ -24,10 +22,10 @@ onMounted(initializeCreateNewPassword)
 
 <template>
   <div class="create-new-password-page">
-    <AppHeader :text="$t(CREATE_NEW_PASSWORD_I18N.title)" />
+    <NmorphText as="h3" variant="title" weight="bold">{{ $t(CREATE_NEW_PASSWORD_I18N.title) }}</NmorphText>
 
     <template v-if="isPasswordChanged">
-      <AppText v-if="successMessage" tag="p" :text="successMessage" />
+      <NmorphText v-if="successMessage" as="p">{{ successMessage }}</NmorphText>
       <div class="create-new-password-page__action-btns">
         <RouterLink custom :to="ROUTE_NAMES.authLogin" v-slot="{ navigate }">
           <NmorphButton :text="$t(CREATE_NEW_PASSWORD_I18N.toLogin)" @click="navigate" />
@@ -36,8 +34,8 @@ onMounted(initializeCreateNewPassword)
     </template>
 
     <template v-else>
-      <AppText tag="p" :text="$t(CREATE_NEW_PASSWORD_I18N.enterNewPasswordHint)" />
-      <AppText tag="p" :text="$t(CREATE_NEW_PASSWORD_I18N.repeatPasswordHint)" />
+      <NmorphText as="p">{{ $t(CREATE_NEW_PASSWORD_I18N.enterNewPasswordHint) }}</NmorphText>
+      <NmorphText as="p">{{ $t(CREATE_NEW_PASSWORD_I18N.repeatPasswordHint) }}</NmorphText>
 
       <NmorphForm ref="formRef" :value="formData" class="create-new-password-page__form" @submit.prevent="submit">
         <NmorphFormItem id="firstPassword" class="create-new-password-page__field" :show-validation-icon="false">

@@ -2,8 +2,13 @@ import { computed } from 'vue'
 
 import { db, dexieKeyValueStore } from 'src/shared/lib'
 
-import { DARK_WALLPAPER_SETTINGS, LIGHT_WALLPAPER_SETTINGS } from '../config/appearance.constants'
-import type { WallpaperSettings } from '../config/appearance.types'
+import {
+  DARK_COLOR_SCHEMA,
+  DARK_WALLPAPER_SETTINGS,
+  LIGHT_COLOR_SCHEMA,
+  LIGHT_WALLPAPER_SETTINGS
+} from '../config/appearance.constants'
+import type { ColorSchema, WallpaperSettings } from '../config/appearance.types'
 import { DEFAULT_SETTINGS } from '../config/constants'
 import type { DeviceSetting } from '../config/types'
 
@@ -11,6 +16,9 @@ const settingsStore = dexieKeyValueStore<DeviceSetting>(db.settings, 'settings')
 
 const isWallpaperSynced = (wallpaper: WallpaperSettings, defaultWallpaper: WallpaperSettings) =>
   wallpaper.url === defaultWallpaper.url && wallpaper.filename === defaultWallpaper.filename
+
+const isColorSchemaSynced = (colorSchema: ColorSchema, defaultColorSchema: ColorSchema) =>
+  Object.entries(defaultColorSchema).every(([key, value]) => colorSchema[key as keyof ColorSchema] === value)
 
 export const useSettings = () => {
   const { ensure, get, mutate, reset, setByPath, shallowUpdate } = settingsStore
@@ -31,10 +39,20 @@ export const useSettings = () => {
     const { dark, light } = initializedSettings.appearance.themes
     const isDarkWallpaperSynced = isWallpaperSynced(dark.wallpaper, DARK_WALLPAPER_SETTINGS)
     const isLightWallpaperSynced = isWallpaperSynced(light.wallpaper, LIGHT_WALLPAPER_SETTINGS)
+    const isDarkColorSchemaSynced = isColorSchemaSynced(dark.colorSchema, DARK_COLOR_SCHEMA)
+    const isLightColorSchemaSynced = isColorSchemaSynced(light.colorSchema, LIGHT_COLOR_SCHEMA)
 
-    if (isDarkWallpaperSynced && isLightWallpaperSynced) return
+    if (isDarkWallpaperSynced && isLightWallpaperSynced && isDarkColorSchemaSynced && isLightColorSchemaSynced) return
 
     await mutate((data) => {
+      if (!isDarkColorSchemaSynced) {
+        data.appearance.themes.dark.colorSchema = { ...DARK_COLOR_SCHEMA }
+      }
+
+      if (!isLightColorSchemaSynced) {
+        data.appearance.themes.light.colorSchema = { ...LIGHT_COLOR_SCHEMA }
+      }
+
       if (!isDarkWallpaperSynced) {
         data.appearance.themes.dark.wallpaper = { ...DARK_WALLPAPER_SETTINGS }
       }

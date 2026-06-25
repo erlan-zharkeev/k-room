@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { NmorphButton } from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphButton } from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES } from 'global-shared'
 import { onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
-import { AppCaptcha, AppHeader, AppText } from 'src/shared/ui'
+import { AppCaptcha } from 'src/shared/ui'
 
 import { WAIT_EMAIL_CONFIRM_I18N } from '../config/i18n'
 import { useWaitEmailConfirm } from '../model/use-wait-email-confirm.model'
@@ -18,19 +18,17 @@ onMounted(initializeWaitEmailConfirm)
 
 <template>
   <div class="wait-email-confirm-page">
-    <AppHeader :text="$t(WAIT_EMAIL_CONFIRM_I18N.title)" />
+    <NmorphText as="h3" variant="title" weight="bold">{{ $t(WAIT_EMAIL_CONFIRM_I18N.title) }}</NmorphText>
 
-    <AppText tag="p" :text="$t(WAIT_EMAIL_CONFIRM_I18N.sentToEmail)" />
-    <AppText bold color="accent" :text="email" />
-    <AppText tag="p" :text="$t(WAIT_EMAIL_CONFIRM_I18N.followLink)" />
-    <AppText v-if="attempts <= 0" tag="p" :text="$t(WAIT_EMAIL_CONFIRM_I18N.attemptsExhausted)" />
-    <AppText v-else tag="p" :text="`${$t(WAIT_EMAIL_CONFIRM_I18N.attemptsLeft)} ${attempts}`" />
-    <AppText tag="p" :text="$t(WAIT_EMAIL_CONFIRM_I18N.resendHint)" />
-    <AppText
-      v-if="counterValue > 0"
-      tag="p"
-      :text="$t(WAIT_EMAIL_CONFIRM_I18N.resendInSeconds, { seconds: counterValue })"
-    />
+    <NmorphText as="p">{{ $t(WAIT_EMAIL_CONFIRM_I18N.sentToEmail) }}</NmorphText>
+    <NmorphText color="accent" weight="bold">{{ email }}</NmorphText>
+    <NmorphText as="p">{{ $t(WAIT_EMAIL_CONFIRM_I18N.followLink) }}</NmorphText>
+    <NmorphText v-if="attempts <= 0" as="p">{{ $t(WAIT_EMAIL_CONFIRM_I18N.attemptsExhausted) }}</NmorphText>
+    <NmorphText v-else as="p">{{ `${$t(WAIT_EMAIL_CONFIRM_I18N.attemptsLeft)} ${attempts}` }}</NmorphText>
+    <NmorphText as="p">{{ $t(WAIT_EMAIL_CONFIRM_I18N.resendHint) }}</NmorphText>
+    <NmorphText v-if="counterValue > 0" as="p">{{
+      $t(WAIT_EMAIL_CONFIRM_I18N.resendInSeconds, { seconds: counterValue })
+    }}</NmorphText>
 
     <AppCaptcha
       v-if="captchaRequired"

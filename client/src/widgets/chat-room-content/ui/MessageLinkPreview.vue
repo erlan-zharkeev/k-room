@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { NmorphCallout } from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphCallout } from '@nmorph/nmorph-ui-kit'
 
-import { AppMediaImage, AppText } from 'src/shared/ui'
+import { AppMediaImage } from 'src/shared/ui'
 
 import type { MessageLinkPreviewProps } from '../config/types'
 import { useMessageLinkPreview } from '../model/use-message-link-preview.model'
@@ -26,15 +26,16 @@ const { canShowPreview, previewImage, previewTitle } = useMessageLinkPreview(pro
   >
     <span class="message-link-preview__layout" :class="previewImage && 'message-link-preview__layout--with-image'">
       <span class="message-link-preview__content">
-        <AppText tag="small" color="semi-contrast-text" :text="props.preview.host" truncate />
-        <AppText :text="previewTitle" bold />
-        <AppText
+        <NmorphText as="small" color="semi-contrast" truncate variant="body-small">{{ props.preview.host }}</NmorphText>
+        <NmorphText weight="bold">{{ previewTitle }}</NmorphText>
+        <NmorphText
           v-if="props.preview.description"
-          tag="small"
-          color="semi-contrast-text"
-          :text="props.preview.description"
+          as="small"
+          color="semi-contrast"
           :line-clamp="2"
-        />
+          variant="body-small"
+          >{{ props.preview.description }}</NmorphText
+        >
       </span>
       <AppMediaImage v-if="previewImage" v-slot="{ src }" :media-id="previewImage.src" :alt="previewImage.name">
         <img v-if="src" class="message-link-preview__image" :src="src" :alt="previewImage.name" />

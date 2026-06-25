@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { NmorphIcon, NmorphSelectButton, NmorphSelectButtonItem } from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphIcon, NmorphSelectButton, NmorphSelectButtonItem } from '@nmorph/nmorph-ui-kit'
 
 import { useI18n } from 'src/shared/lib'
-import { AppHeader } from 'src/shared/ui'
 
 import { SELECT_THEME_DEFAULT_PROPS, SELECT_THEME_OPTIONS } from '../config/constants'
 import { SELECT_THEME_I18N } from '../config/i18n'
@@ -32,12 +31,9 @@ const { settings, changeTheme, isPortraitTabletOrLess, themeIconWidth } = useSel
             <NmorphIcon :width="themeIconWidth" aria-hidden="true">
               <component :is="option.icon" />
             </NmorphIcon>
-            <AppHeader
-              v-if="!props.compact && !isPortraitTabletOrLess"
-              tag="h5"
-              :selectable="false"
-              :text="t(option.label)"
-            />
+            <NmorphText v-if="!props.compact && !isPortraitTabletOrLess" as="h5" variant="title-small" weight="bold">{{
+              t(option.label)
+            }}</NmorphText>
           </div>
         </NmorphSelectButtonItem>
       </template>

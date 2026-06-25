@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { NmorphCard } from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphCard } from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES } from 'global-shared'
 import { RouterLink, RouterView, useRoute } from 'vue-router'
 
 import { SelectLanguage } from 'src/features/select-language'
 import { SelectTheme } from 'src/features/select-theme'
-import { AppLogo, AppHeader } from 'src/shared/ui'
+import { AppLogo } from 'src/shared/ui'
 
 import { AUTH_LAYOUT_TABS } from './constants'
 import type { AuthLayoutProps } from './types'
@@ -53,12 +53,13 @@ const route = useRoute()
             :to="tab.path"
             @click.prevent="props.blockNavigation"
           >
-            <AppHeader
-              tag="h4"
+            <NmorphText
+              as="h4"
               :color="route.path === tab.path ? 'accent' : 'text'"
-              :selectable="false"
-              :text="$t(tab.label)"
-            />
+              variant="title-small"
+              weight="bold"
+              >{{ $t(tab.label) }}</NmorphText
+            >
           </RouterLink>
         </div>
         <RouterView v-slot="{ Component, route }">

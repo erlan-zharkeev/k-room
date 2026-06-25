@@ -13,7 +13,7 @@ export const CONTACTS_SEARCH_BADGE_BY_INTERACTION = {
     visible: false
   },
   ['blocked']: {
-    color: 'var(--nmorph-warn-color)',
+    color: 'var(--nmorph-warn-text-color)',
     label: CONTACTS_PAGE_I18N.blocked,
     visible: true
   },

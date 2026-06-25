@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { NmorphProgress } from '@nmorph/nmorph-ui-kit'
-
-import { AppText } from 'src/shared/ui'
+import { NmorphText, NmorphProgress } from '@nmorph/nmorph-ui-kit'
 
 import { SETTINGS_PAGE_STORAGE_I18N } from '../../../config/i18n/storage.i18n'
 import { useStorageUsage } from '../../../model/storage/use-storage-usage.model'
@@ -18,16 +16,16 @@ const { availableFormatted, isStorageUsageWarning, quotaFormatted, usageFormatte
 
     <div class="settings-storage-usage-card__stats">
       <div class="settings-storage-usage-card__stat">
-        <AppText size="small" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storageUsed)" />
-        <AppText color="contrast-text" :text="usageFormatted" />
+        <NmorphText variant="body-small">{{ $t(SETTINGS_PAGE_STORAGE_I18N.storageUsed) }}</NmorphText>
+        <NmorphText color="var(--nmorph-contrast-text-color)">{{ usageFormatted }}</NmorphText>
       </div>
       <div class="settings-storage-usage-card__stat">
-        <AppText size="small" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storageAvailable)" />
-        <AppText color="contrast-text" :text="availableFormatted" />
+        <NmorphText variant="body-small">{{ $t(SETTINGS_PAGE_STORAGE_I18N.storageAvailable) }}</NmorphText>
+        <NmorphText color="var(--nmorph-contrast-text-color)">{{ availableFormatted }}</NmorphText>
       </div>
       <div class="settings-storage-usage-card__stat">
-        <AppText alignment="center" size="small" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storageTotal)" />
-        <AppText color="contrast-text" :text="quotaFormatted" />
+        <NmorphText align="center" variant="body-small">{{ $t(SETTINGS_PAGE_STORAGE_I18N.storageTotal) }}</NmorphText>
+        <NmorphText color="var(--nmorph-contrast-text-color)">{{ quotaFormatted }}</NmorphText>
       </div>
     </div>
   </SettingsCard>

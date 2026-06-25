@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AppText } from 'src/shared/ui'
+import { NmorphText } from '@nmorph/nmorph-ui-kit'
 
 import { SETTINGS_PAGE_STORAGE_I18N } from '../../../config/i18n/storage.i18n'
 import { useStoragePersistent } from '../../../model/storage/use-storage-persistent.model'
@@ -16,12 +16,12 @@ const { isPersistenceSupported, isPersistent, isPersistenceLoading, requestPersi
     :button-loading="isPersistenceLoading"
     :on-button-click="isPersistent ? undefined : requestPersistence"
   >
-    <AppText
-      class="settings-storage-persistent-card__description"
-      tag="p"
-      :text="$t(SETTINGS_PAGE_STORAGE_I18N.storagePersistentDescription)"
-    />
-    <AppText v-if="isPersistent" color="accent" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storagePersistentGranted)" />
+    <NmorphText class="settings-storage-persistent-card__description" as="p">{{
+      $t(SETTINGS_PAGE_STORAGE_I18N.storagePersistentDescription)
+    }}</NmorphText>
+    <NmorphText v-if="isPersistent" color="accent">{{
+      $t(SETTINGS_PAGE_STORAGE_I18N.storagePersistentGranted)
+    }}</NmorphText>
   </SettingsCard>
 </template>
 

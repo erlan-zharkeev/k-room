@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { NmorphCard, NmorphIcon } from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphCard, NmorphIcon } from '@nmorph/nmorph-ui-kit'
 
-import { AppProfileBasicData, AppText } from 'src/shared/ui'
+import { AppProfileBasicData } from 'src/shared/ui'
 
 import type { RoomCallHistoryItemEmits, RoomCallHistoryItemProps } from '../config/types'
 import { useRoomCallHistoryItem } from '../model/use-room-call-history-item.model'
@@ -39,13 +39,14 @@ const {
     >
       <template #description>
         <div class="room-call-history-item__description">
-          <AppText
+          <NmorphText
             class="room-call-history-item__status"
-            tag="small"
+            as="small"
             truncate
             :style="{ color: props.item.statusColor }"
-            :text="props.item.statusText"
-          />
+            variant="body-small"
+            >{{ props.item.statusText }}</NmorphText
+          >
           <NmorphIcon
             class="room-call-history-item__media-icon"
             width="14px"
@@ -59,8 +60,8 @@ const {
       </template>
     </AppProfileBasicData>
     <div class="room-call-history-item__meta">
-      <AppText tag="small" color="semi-contrast-text" :text="props.item.timeText" />
-      <AppText tag="small" color="semi-contrast-text" :text="props.item.meta" />
+      <NmorphText as="small" color="semi-contrast" variant="body-small">{{ props.item.timeText }}</NmorphText>
+      <NmorphText as="small" color="semi-contrast" variant="body-small">{{ props.item.meta }}</NmorphText>
     </div>
   </NmorphCard>
 </template>

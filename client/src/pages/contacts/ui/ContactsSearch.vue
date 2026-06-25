@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import { NmorphBadge, NmorphCard, NmorphButton, NmorphIconPlusThin, NmorphScroll } from '@nmorph/nmorph-ui-kit'
+import {
+  NmorphText,
+  NmorphBadge,
+  NmorphCard,
+  NmorphButton,
+  NmorphIconPlusThin,
+  NmorphScroll
+} from '@nmorph/nmorph-ui-kit'
 import { isDefaultContactInteraction } from 'global-shared'
 
 import { useScrollContentNavigation } from 'src/features/scroll-content-navigation'
-import { AppHeader, AppProfileBasicData, AppText } from 'src/shared/ui'
+import { AppProfileBasicData } from 'src/shared/ui'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
 import type { ContactsSearchEmits, ContactsSearchProps } from '../config/types'
@@ -36,13 +43,10 @@ const {
     >
       <div class="contacts-search__scroll-container">
         <div v-if="showSearchResults" class="contacts-search__results">
-          <AppHeader tag="h5" :text="$t(CONTACTS_PAGE_I18N.globalSearch)" />
-          <AppText
-            v-if="isSearchLoading"
-            tag="small"
-            color="semi-contrast-text"
-            :text="$t(CONTACTS_PAGE_I18N.loading)"
-          />
+          <NmorphText as="h5" variant="title-small" weight="bold">{{ $t(CONTACTS_PAGE_I18N.globalSearch) }}</NmorphText>
+          <NmorphText v-if="isSearchLoading" as="small" color="semi-contrast" variant="body-small">{{
+            $t(CONTACTS_PAGE_I18N.loading)
+          }}</NmorphText>
           <TransitionGroup
             v-else
             class="contacts-search__list app-list-motion-container"
@@ -62,7 +66,7 @@ const {
                   <AppProfileBasicData :image-id="contact.avatarId" :title="contact.nickname" :name="contact.nickname">
                     <template #title>
                       <div class="contacts-search__name">
-                        <AppText truncate :text="contact.nickname" />
+                        <NmorphText truncate>{{ contact.nickname }}</NmorphText>
                       </div>
                     </template>
                   </AppProfileBasicData>

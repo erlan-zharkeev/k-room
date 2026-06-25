@@ -102,7 +102,7 @@ export const useContactContextMenu = (props: ContactContextMenuProps, emit: Cont
         : buildContactContextMenuActionOption('block', t(CONTACTS_PAGE_I18N.block))
     )
 
-    options.push(buildContactContextMenuActionOption('delete', t(CONTACTS_PAGE_I18N.delete), { color: 'error-text' }))
+    options.push(buildContactContextMenuActionOption('delete', t(CONTACTS_PAGE_I18N.delete), { color: 'error' }))
 
     return options
   })

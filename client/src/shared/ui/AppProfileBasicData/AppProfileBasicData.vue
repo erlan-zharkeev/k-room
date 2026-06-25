@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { NmorphAvatar, NmorphBadge } from '@nmorph/nmorph-ui-kit'
-
-import { AppHeader } from '../AppHeader'
+import { NmorphText, NmorphAvatar, NmorphBadge } from '@nmorph/nmorph-ui-kit'
 
 import { APP_PROFILE_BASIC_DATA_DEFAULT_PROPS } from './constants'
 import type { AppProfileBasicDataProps } from './types'
@@ -16,7 +14,7 @@ const { imageSrc } = useAppProfileBasicData(props)
     <NmorphBadge
       type="dot"
       size="large"
-      color="var(--nmorph-success-color)"
+      color="var(--nmorph-success-text-color)"
       :hidden="!props.showOnline"
       :offset-x="-1"
       :offset-y="-1"
@@ -32,7 +30,7 @@ const { imageSrc } = useAppProfileBasicData(props)
     </NmorphBadge>
     <div class="app-profile-basic-data__content">
       <slot name="title">
-        <AppHeader tag="h5" truncate :selectable="props.selectable" :text="props.title" />
+        <NmorphText as="h5" truncate variant="title-small" weight="bold">{{ props.title }}</NmorphText>
       </slot>
       <div v-if="$slots.description" class="app-profile-basic-data__description">
         <slot name="description" />

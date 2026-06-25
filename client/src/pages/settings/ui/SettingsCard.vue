@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { NmorphBadge, NmorphButton, NmorphCard } from '@nmorph/nmorph-ui-kit'
-
-import { AppHeader } from 'src/shared/ui'
+import { NmorphText, NmorphBadge, NmorphButton, NmorphCard } from '@nmorph/nmorph-ui-kit'
 
 import { CARD_DEFAULT_PROPS } from '../config/constants/card.constants'
 import type { CardProps } from '../config/types/card.types'
@@ -16,13 +14,15 @@ const { hasFooter } = useSettingsCard(props)
   <NmorphBadge
     class="settings-card-badge"
     :value="props.hasWarning ? '!' : undefined"
-    color="var(--nmorph-warn-color)"
+    color="var(--nmorph-warn-text-color)"
     type="ribbon"
     ribbon-corner="top-right"
   >
     <NmorphCard class="settings-card" :card-padding="12">
       <div class="settings-card__title">
-        <AppHeader tag="h5" color="contrast-text" :selectable="false" :text="title" />
+        <NmorphText as="h5" color="var(--nmorph-contrast-text-color)" variant="title-small" weight="bold">{{
+          title
+        }}</NmorphText>
       </div>
 
       <div class="settings-card__content">

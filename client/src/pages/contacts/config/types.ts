@@ -1,7 +1,6 @@
 import type { Component } from 'vue'
 
 import type { ContactRecord, I18nKey } from 'src/shared/lib'
-import type { AppTextColor } from 'src/shared/ui'
 
 export interface ContactsSearchProps {
   loadingContactIds: Set<string>
@@ -62,7 +61,7 @@ export interface ContactContextMenuOption {
   component?: Component
   componentProps?: Record<string, unknown>
   closeOnClick?: boolean
-  color?: AppTextColor
+  color?: string
   disabled?: boolean
 }
 
@@ -75,7 +74,7 @@ export interface ContactContextMenuEmitFn {
 
 export interface ContactContextMenuActionItemProps {
   action: ContactContextMenuAction
-  color?: AppTextColor
+  color?: string
   contactId: string
   createChat: (id: string) => void
   deleteContact: (id: string) => void

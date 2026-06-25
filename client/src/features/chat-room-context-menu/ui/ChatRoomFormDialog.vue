@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  NmorphText,
   NmorphButton,
   NmorphCard,
   NmorphDialog,
@@ -11,7 +12,7 @@ import {
 } from '@nmorph/nmorph-ui-kit'
 import { CHAT_ROOM_NAME_MAX_LENGTH } from 'global-shared'
 
-import { AppProfilePicker, AppText } from 'src/shared/ui'
+import { AppProfilePicker } from 'src/shared/ui'
 
 import { CREATE_CHAT_ROOM_AVATAR_ALLOWED_TYPES } from '../config/constants'
 import { CHAT_ROOM_CONTEXT_MENU_I18N } from '../config/i18n'
@@ -86,19 +87,13 @@ const {
         </NmorphTextInput>
       </NmorphFormItem>
       <NmorphFormItem id="members" :show-validation-icon="false">
-        <AppText
-          v-if="!contactPickerItems.length"
-          color="semi-contrast-text"
-          :selectable="false"
-          :text="$t(CHAT_ROOM_CONTEXT_MENU_I18N.noContacts)"
-        />
+        <NmorphText v-if="!contactPickerItems.length" color="semi-contrast">{{
+          $t(CHAT_ROOM_CONTEXT_MENU_I18N.noContacts)
+        }}</NmorphText>
         <NmorphCard v-else shadow-type="inset" class="chat-room-form-dialog__contacts-card">
-          <AppText
-            v-if="showNoContactSearchResults"
-            color="semi-contrast-text"
-            :selectable="false"
-            :text="$t(CHAT_ROOM_CONTEXT_MENU_I18N.noContactSearchResults)"
-          />
+          <NmorphText v-if="showNoContactSearchResults" color="semi-contrast">{{
+            $t(CHAT_ROOM_CONTEXT_MENU_I18N.noContactSearchResults)
+          }}</NmorphText>
           <AppProfilePicker
             v-else
             :model-value="selectedMemberIds"

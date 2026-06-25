@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphCard } from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphButton, NmorphCard } from '@nmorph/nmorph-ui-kit'
 
 import { PageBackButton } from 'src/features/page-back-button'
-import { AppHeader, AppText } from 'src/shared/ui'
 
 import { DOWNLOAD_PAGE_I18N } from '../config/i18n'
 import { useDownloadPage } from '../model/use-download-page.model'
@@ -35,40 +34,34 @@ const {
       <PageBackButton />
 
       <header class="download-page__header">
-        <AppHeader tag="h1" alignment="center" :text="$t(DOWNLOAD_PAGE_I18N.title, { appName: appName })" />
-        <AppText tag="p" alignment="center" color="semi-contrast-text" :text="$t(DOWNLOAD_PAGE_I18N.description)" />
+        <NmorphText as="h1" align="center" variant="display-medium" weight="bold">{{
+          $t(DOWNLOAD_PAGE_I18N.title, { appName: appName })
+        }}</NmorphText>
+        <NmorphText as="p" align="center" color="semi-contrast">{{ $t(DOWNLOAD_PAGE_I18N.description) }}</NmorphText>
       </header>
 
       <div class="download-page__meta">
-        <AppText
-          tag="span"
-          alignment="center"
-          color="contrast-text"
-          :text="`${$t(DOWNLOAD_PAGE_I18N.versionLabel)} ${appVersion}`"
-        />
-        <AppText
-          v-if="showReleasedAt"
-          tag="span"
-          alignment="center"
-          color="semi-contrast-text"
-          :text="`${$t(DOWNLOAD_PAGE_I18N.releasedLabel)} ${releasedAt}`"
-        />
+        <NmorphText as="span" align="center" color="var(--nmorph-contrast-text-color)">{{
+          `${$t(DOWNLOAD_PAGE_I18N.versionLabel)} ${appVersion}`
+        }}</NmorphText>
+        <NmorphText v-if="showReleasedAt" as="span" align="center" color="semi-contrast">{{
+          `${$t(DOWNLOAD_PAGE_I18N.releasedLabel)} ${releasedAt}`
+        }}</NmorphText>
       </div>
 
-      <AppText v-if="isLoading" alignment="center" color="semi-contrast-text" :text="$t(DOWNLOAD_PAGE_I18N.loading)" />
+      <NmorphText v-if="isLoading" align="center" color="semi-contrast">{{
+        $t(DOWNLOAD_PAGE_I18N.loading)
+      }}</NmorphText>
 
       <div v-else-if="hasLoadError" class="download-page__state">
-        <AppText alignment="center" color="warn" :text="$t(DOWNLOAD_PAGE_I18N.error)" />
+        <NmorphText align="center" color="var(--nmorph-warn-color)">{{ $t(DOWNLOAD_PAGE_I18N.error) }}</NmorphText>
         <NmorphButton :text="$t(DOWNLOAD_PAGE_I18N.retry)" @click="loadReleasesManifest" />
       </div>
 
       <div v-else-if="showPlatformItems" class="download-page__download-area">
-        <AppText
-          v-if="hasDownloadError"
-          alignment="center"
-          color="warn"
-          :text="$t(DOWNLOAD_PAGE_I18N.downloadUnavailable)"
-        />
+        <NmorphText v-if="hasDownloadError" align="center" color="var(--nmorph-warn-color)">{{
+          $t(DOWNLOAD_PAGE_I18N.downloadUnavailable)
+        }}</NmorphText>
 
         <div class="download-page__actions">
           <NmorphButton
@@ -108,20 +101,22 @@ const {
                 </svg>
               </span>
               <span class="download-page__download-button-text">
-                <AppText color="contrast-text" bold :selectable="false" :text="item.label" />
+                <NmorphText color="var(--nmorph-contrast-text-color)" weight="bold">{{ item.label }}</NmorphText>
               </span>
             </span>
           </NmorphButton>
         </div>
 
         <div class="download-page__install-help">
-          <AppText tag="p" color="semi-contrast-text" :text="$t(DOWNLOAD_PAGE_I18N.windowsInstallHelp)" />
-          <AppText tag="p" color="semi-contrast-text" :text="$t(DOWNLOAD_PAGE_I18N.macosInstallHelp)" />
+          <NmorphText as="p" color="semi-contrast">{{ $t(DOWNLOAD_PAGE_I18N.windowsInstallHelp) }}</NmorphText>
+          <NmorphText as="p" color="semi-contrast">{{ $t(DOWNLOAD_PAGE_I18N.macosInstallHelp) }}</NmorphText>
         </div>
       </div>
 
       <div v-else class="download-page__state">
-        <AppText alignment="center" color="warn" :text="$t(DOWNLOAD_PAGE_I18N.downloadUnavailable)" />
+        <NmorphText align="center" color="var(--nmorph-warn-color)">{{
+          $t(DOWNLOAD_PAGE_I18N.downloadUnavailable)
+        }}</NmorphText>
       </div>
     </NmorphCard>
   </div>

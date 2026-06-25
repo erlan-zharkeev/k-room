@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphForm, NmorphFormItem, NmorphSwitch, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
+import {
+  NmorphText,
+  NmorphButton,
+  NmorphForm,
+  NmorphFormItem,
+  NmorphSwitch,
+  NmorphTextInput
+} from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES } from 'global-shared'
 import { RouterLink } from 'vue-router'
 
-import { AppCaptcha, AppText } from 'src/shared/ui'
+import { AppCaptcha } from 'src/shared/ui'
 
 import { REGISTRATION_NICKNAME_INPUT_ATTRS } from '../config/constants'
 import { REGISTRATION_FORM_I18N } from '../config/i18n'
@@ -56,9 +63,9 @@ const {
       <div class="registration-page__policy">
         <NmorphSwitch :disabled="isFormDisabled" />
         <span>
-          <AppText tag="span" :text="$t(REGISTRATION_FORM_I18N.agreement)" />
+          <NmorphText as="span">{{ $t(REGISTRATION_FORM_I18N.agreement) }}</NmorphText>
           <RouterLink :to="ROUTE_NAMES.privacyPolicy">
-            <AppText tag="span" :text="$t(REGISTRATION_FORM_I18N.link)" color="accent" />
+            <NmorphText as="span" color="accent">{{ $t(REGISTRATION_FORM_I18N.link) }}</NmorphText>
           </RouterLink>
         </span>
       </div>

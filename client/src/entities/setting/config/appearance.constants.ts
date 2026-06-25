@@ -9,16 +9,16 @@ import type {
   SystemTheme
 } from './appearance.types'
 
-const ACCENT_COLOR = '#418fde'
 const SHARED_THEME_COLORS = {
-  info: '#d4e5edbb',
-  infoText: '#506c80',
-  success: '#67C23A',
-  successText: '#0b5b1d',
-  error: '#F56C6C',
-  errorText: '#8d3333',
-  warn: '#E6A21C',
-  warnText: '#7a6712',
+  info: '#4592c936',
+  infoText: '#4592c9',
+  success: '#2ba74833',
+  successText: '#2ba748',
+  error: '#e84f4f49',
+  errorText: '#e84f4f',
+  warn: '#e6a31c3f',
+  warnText: '#E6A21C',
+  gray: '#c9d2dee6',
   white: '#ffffff',
   black: '#000000',
   overlay: '#00000095'
@@ -39,8 +39,8 @@ export const DEFAULT_THEME_SHADOW_SETTINGS = {
 
 export const DARK_COLOR_SCHEMA = {
   main: '#1c1f21',
-  darkShade: '#0f1112',
-  lightShade: '#292d30',
+  darkShade: '#131415',
+  lightShade: '#242728',
   text: '#778288',
   scrollThumb: '#778288',
   accent: '#006cb6',
@@ -48,39 +48,24 @@ export const DARK_COLOR_SCHEMA = {
   placeholderText: '#68747b',
   semiContrastText: '#9caab0',
   contrastText: '#c3cdd1',
-  gray: '#c8d0dc',
   ...SHARED_THEME_COLORS
 } as const satisfies ColorSchema
 
 export const LIGHT_COLOR_SCHEMA = {
-  darkShade: '#c8c9ca',
+  darkShade: '#c4c8ca',
   main: '#e9ecec',
-  lightShade: '#fdfdfd',
+  lightShade: '#fcfcfc',
   text: '#687b9e',
   accent: '#4a90e2',
   scrollThumb: '#687b9e',
   focusText: '#ffffff',
   placeholderText: '#9aa8b3',
   semiContrastText: '#8a9dc0',
-  contrastText: '#b4c4de',
-  gray: '#656565',
+  contrastText: '#40506f',
   ...SHARED_THEME_COLORS
 } as const satisfies ColorSchema
 
-export const CUSTOM_COLOR_SCHEMA = {
-  main: '#1c1c1c',
-  darkShade: '#0e0e0e',
-  lightShade: '#2a2a2a',
-  text: '#9eabbc',
-  accent: ACCENT_COLOR,
-  scrollThumb: '#9eabbc',
-  focusText: '#f4f7fb',
-  placeholderText: '#68747b',
-  semiContrastText: '#c8d0dc',
-  contrastText: '#f4f7fb',
-  gray: '#c8d0dc',
-  ...SHARED_THEME_COLORS
-} as const satisfies ColorSchema
+export const CUSTOM_COLOR_SCHEMA = { ...DARK_COLOR_SCHEMA } as const satisfies ColorSchema
 
 export const DEFAULT_CUSTOM_SCHEMA = { ...DARK_COLOR_SCHEMA } as const satisfies ColorSchema
 export const DEFAULT_CUSTOM_THEME_MODE = 'dark' as const satisfies SystemTheme

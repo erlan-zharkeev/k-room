@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphForm, NmorphFormItem, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphButton, NmorphForm, NmorphFormItem, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 import { ROUTE_NAMES } from 'global-shared'
 import { RouterLink } from 'vue-router'
 
-import { AppCaptcha, AppHeader, AppText } from 'src/shared/ui'
+import { AppCaptcha } from 'src/shared/ui'
 
 import { PASSWORD_RECOVERY_I18N } from '../config/i18n'
 import { usePasswordRecovery } from '../model/use-password-recovery.model'
@@ -35,13 +35,13 @@ const {
 
 <template>
   <div class="password-recovery-page">
-    <AppHeader :text="$t(PASSWORD_RECOVERY_I18N.title)" />
+    <NmorphText as="h3" variant="title" weight="bold">{{ $t(PASSWORD_RECOVERY_I18N.title) }}</NmorphText>
 
-    <AppText v-if="!codeSent" tag="p" :text="$t(PASSWORD_RECOVERY_I18N.enterEmailHint)" />
+    <NmorphText v-if="!codeSent" as="p">{{ $t(PASSWORD_RECOVERY_I18N.enterEmailHint) }}</NmorphText>
     <template v-else>
-      <AppText v-if="codeSentMessage" tag="p" :text="codeSentMessage" />
-      <AppText bold color="accent" :text="emailFormData.email.value" />
-      <AppText tag="p" :text="$t(PASSWORD_RECOVERY_I18N.enterCodeHint)" />
+      <NmorphText v-if="codeSentMessage" as="p">{{ codeSentMessage }}</NmorphText>
+      <NmorphText color="accent" weight="bold">{{ emailFormData.email.value }}</NmorphText>
+      <NmorphText as="p">{{ $t(PASSWORD_RECOVERY_I18N.enterCodeHint) }}</NmorphText>
     </template>
 
     <NmorphForm
@@ -77,13 +77,11 @@ const {
       :reset-key="sendCaptchaResetKey"
     />
 
-    <AppText
-      v-if="counterValue > 0"
-      tag="p"
-      :text="$t(PASSWORD_RECOVERY_I18N.resendTimer, { seconds: counterValue })"
-    />
+    <NmorphText v-if="counterValue > 0" as="p">{{
+      $t(PASSWORD_RECOVERY_I18N.resendTimer, { seconds: counterValue })
+    }}</NmorphText>
 
-    <AppText v-if="debugCode" tag="p" :text="`${$t(PASSWORD_RECOVERY_I18N.debugCode)}: ${debugCode}`" />
+    <NmorphText v-if="debugCode" as="p">{{ `${$t(PASSWORD_RECOVERY_I18N.debugCode)}: ${debugCode}` }}</NmorphText>
 
     <NmorphForm
       v-if="codeSent"

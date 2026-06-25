@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  NmorphText,
   NmorphAvatar,
   NmorphButton,
   NmorphIcon,
@@ -7,8 +8,6 @@ import {
   NmorphIconPhone,
   NmorphIconVideoCamera
 } from '@nmorph/nmorph-ui-kit'
-
-import { AppHeader, AppText } from 'src/shared/ui'
 
 import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
 import type { CallActivityPanelItemEmits, CallActivityPanelItemProps } from '../config/types'
@@ -45,22 +44,17 @@ const {
     />
     <div class="call-activity-panel-item__label">
       <span class="call-activity-panel-item__dot" />
-      <AppText
+      <NmorphText
         v-if="props.compact"
         class="call-activity-panel-item__text"
-        tag="small"
+        as="small"
         truncate
-        :selectable="false"
-        :text="props.item.text"
-      />
-      <AppHeader
-        v-else
-        class="call-activity-panel-item__title"
-        tag="h3"
-        alignment="center"
-        :selectable="false"
-        :text="props.item.text"
-      />
+        variant="body-small"
+        >{{ props.item.text }}</NmorphText
+      >
+      <NmorphText v-else class="call-activity-panel-item__title" as="h3" align="center" variant="title" weight="bold">{{
+        props.item.text
+      }}</NmorphText>
     </div>
     <div
       class="call-activity-panel-item__actions"

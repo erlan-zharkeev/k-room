@@ -1,4 +1,3 @@
-import { isString } from 'global-shared'
 import { computed, watch } from 'vue'
 import { useRouter, type LocationQueryValue, useRoute } from 'vue-router'
 
@@ -8,7 +7,14 @@ import { useScreen } from 'src/shared/lib'
 import { isContentTitleKey } from '../content-layout/types'
 import { isContentNavigationTitleKey } from '../content-navigation-layout/types'
 
-import { CONTENT_LAYOUT_EXCLUDED_ROUTE_SEGMENTS } from './constants'
+import {
+  CONTENT_LAYOUT_EXCLUDED_ROUTE_SEGMENTS,
+  TABLET_APP_LAYOUT_CONTENT_VIEW,
+  TABLET_APP_LAYOUT_DEFAULT_VIEW,
+  TABLET_APP_LAYOUT_VIEWS
+} from './constants'
+
+type TabletAppLayoutView = (typeof TABLET_APP_LAYOUT_VIEWS)[number]
 
 export const useAppLayout = () => {
   const router = useRouter()
@@ -16,16 +22,17 @@ export const useAppLayout = () => {
   const { isPortraitTabletOrLess } = useScreen()
   const { effectiveTheme, settings } = useSettings()
 
-  const isSupportedTabletAppLayoutView = (view?: LocationQueryValue | LocationQueryValue[]) =>
-    isString(view) && ['content', 'content-navigation'].includes(view)
+  const isSupportedTabletAppLayoutView = (
+    view?: LocationQueryValue | LocationQueryValue[]
+  ): view is TabletAppLayoutView => TABLET_APP_LAYOUT_VIEWS.some((supportedView) => supportedView === view)
 
   watch(
-    isPortraitTabletOrLess,
-    (tablet) => {
+    [isPortraitTabletOrLess, () => route.path, () => route.query.view],
+    ([tablet]) => {
       if (tablet) {
         if (isSupportedTabletAppLayoutView(route.query.view)) return
 
-        router.replace({ query: { ...route.query, view: 'content-navigation' } })
+        router.replace({ query: { ...route.query, view: TABLET_APP_LAYOUT_DEFAULT_VIEW } })
         return
       }
 
@@ -50,8 +57,15 @@ export const useAppLayout = () => {
     return isContentTitleKey(titleKey) ? titleKey : undefined
   })
 
-  const showNavigation = computed(() => !isPortraitTabletOrLess.value || route.query.view === 'content-navigation')
-  const showContent = computed(() => !isPortraitTabletOrLess.value || route.query.view !== 'content-navigation')
+  const tabletAppLayoutView = computed(() =>
+    isSupportedTabletAppLayoutView(route.query.view) ? route.query.view : TABLET_APP_LAYOUT_DEFAULT_VIEW
+  )
+  const showNavigation = computed(
+    () => !isPortraitTabletOrLess.value || tabletAppLayoutView.value === TABLET_APP_LAYOUT_DEFAULT_VIEW
+  )
+  const showContent = computed(
+    () => !isPortraitTabletOrLess.value || tabletAppLayoutView.value === TABLET_APP_LAYOUT_CONTENT_VIEW
+  )
   const showWallpaper = computed(
     () => settings.value.appearance.showWallpaper && Boolean(effectiveTheme.value.wallpaper.url)
   )

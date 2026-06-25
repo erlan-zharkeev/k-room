@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphIconSearch, NmorphScroll, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
-
-import { AppText } from 'src/shared/ui'
+import { NmorphText, NmorphButton, NmorphIconSearch, NmorphScroll, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 
 import { CALLS_PAGE_I18N } from '../config/i18n'
 import { useCallsPage } from '../model/use-calls-page.model'
@@ -36,14 +34,9 @@ const {
       </NmorphTextInput>
     </div>
 
-    <AppText v-if="showNoCalls" alignment="center" :selectable="false" :text="$t(CALLS_PAGE_I18N.noCalls)" />
-    <AppText v-else-if="isSearchLoading" alignment="center" :selectable="false" :text="$t(CALLS_PAGE_I18N.loading)" />
-    <AppText
-      v-else-if="showNoSearchResults"
-      alignment="center"
-      :selectable="false"
-      :text="$t(CALLS_PAGE_I18N.noSearchResults)"
-    />
+    <NmorphText v-if="showNoCalls" align="center">{{ $t(CALLS_PAGE_I18N.noCalls) }}</NmorphText>
+    <NmorphText v-else-if="isSearchLoading" align="center">{{ $t(CALLS_PAGE_I18N.loading) }}</NmorphText>
+    <NmorphText v-else-if="showNoSearchResults" align="center">{{ $t(CALLS_PAGE_I18N.noSearchResults) }}</NmorphText>
     <NmorphScroll v-else scroll-x-prop="hidden" css-scroll-behavior="auto" :y-gap-in-px="0">
       <TransitionGroup class="calls-page__list app-list-motion-container" name="app-list-motion" tag="div">
         <div v-for="item in roomCallHistoryItems" :key="item.id" class="app-list-motion-item">

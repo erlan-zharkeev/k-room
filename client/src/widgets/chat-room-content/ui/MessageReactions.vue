@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphDropdown, NmorphTagList } from '@nmorph/nmorph-ui-kit'
-
-import { AppText } from 'src/shared/ui'
+import { NmorphText, NmorphButton, NmorphDropdown, NmorphTagList } from '@nmorph/nmorph-ui-kit'
 
 import type { MessageReactionsProps } from '../config/types'
 import { useMessageReactions } from '../model/use-message-reactions.model'
@@ -33,14 +31,15 @@ const {
     >
       <template #item="{ item: reaction }">
         <span class="message-reactions__glyph">{{ reaction.glyphKey }}</span>
-        <AppText
+        <NmorphText
           v-if="reaction.count > 1"
           class="message-reactions__count"
-          tag="small"
-          color="contrast-text"
-          :text="reaction.count"
+          as="small"
+          color="var(--nmorph-contrast-text-color)"
           no-line-height
-        />
+          variant="body-small"
+          >{{ reaction.count }}</NmorphText
+        >
         <span class="message-reactions__avatars">
           <span
             v-for="reactionUser in reaction.visibleUsers"
@@ -79,7 +78,7 @@ const {
       <div class="message-reactions__details">
         <div v-for="reaction in reactionDetailsList" :key="reaction.id" class="message-reactions__detail">
           <span class="message-reactions__detail-glyph">{{ reaction.glyphKey }}</span>
-          <AppText class="message-reactions__detail-name" :text="reaction.user.nickname" truncate :selectable="false" />
+          <NmorphText class="message-reactions__detail-name" truncate>{{ reaction.user.nickname }}</NmorphText>
         </div>
       </div>
     </NmorphDropdown>

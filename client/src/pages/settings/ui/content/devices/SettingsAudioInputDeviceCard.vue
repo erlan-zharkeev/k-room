@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphCallout, NmorphAudioMeter, NmorphSelect } from '@nmorph/nmorph-ui-kit'
-
-import { AppText } from 'src/shared/ui'
+import { NmorphText, NmorphButton, NmorphCallout, NmorphAudioMeter, NmorphSelect } from '@nmorph/nmorph-ui-kit'
 
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../../config/i18n/devices.i18n'
 import { useAudioInputDevice } from '../../../model/devices/use-audio-input-device.model'
@@ -28,15 +26,15 @@ const {
 <template>
   <SettingsCard :title="$t(SETTINGS_PAGE_DEVICES_I18N.audioInputDevice)" :has-warning="hasAudioInputPermissionWarning">
     <div class="settings-audio-input-device-card">
-      <AppText size="small" :text="$t(SETTINGS_PAGE_DEVICES_I18N.audioInputDeviceDescription)" />
+      <NmorphText variant="body-small">{{ $t(SETTINGS_PAGE_DEVICES_I18N.audioInputDeviceDescription) }}</NmorphText>
 
       <NmorphCallout :type="audioInputPermissionCalloutType" :content="audioInputPermissionStatus" />
-      <AppText
+      <NmorphText
         v-if="!audioInputLoading && audioInputOptions.length === 0"
-        size="small"
-        color="warn"
-        :text="$t(SETTINGS_PAGE_DEVICES_I18N.notAvailable)"
-      />
+        color="var(--nmorph-warn-color)"
+        variant="body-small"
+        >{{ $t(SETTINGS_PAGE_DEVICES_I18N.notAvailable) }}</NmorphText
+      >
 
       <div class="settings-audio-input-device-card__control">
         <NmorphSelect

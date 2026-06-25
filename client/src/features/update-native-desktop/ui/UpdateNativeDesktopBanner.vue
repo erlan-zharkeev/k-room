@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { NmorphButton } from '@nmorph/nmorph-ui-kit'
-
-import { AppText } from 'src/shared/ui'
+import { NmorphText, NmorphButton } from '@nmorph/nmorph-ui-kit'
 
 import { UPDATE_NATIVE_DESKTOP_I18N } from '../config/i18n'
 import { useUpdateNativeDesktop } from '../model/use-update-native-desktop.model'
@@ -21,18 +19,16 @@ const {
 <template>
   <aside v-if="showUpdateNativeDesktopBanner" class="update-native-desktop-banner" aria-live="polite">
     <div class="update-native-desktop-banner__content">
-      <AppText
-        color="contrast-text"
-        bold
-        :text="$t(UPDATE_NATIVE_DESKTOP_I18N.title, { appName: appName, version: updateVersion })"
-      />
-      <AppText
-        v-if="isInstalling"
-        color="semi-contrast-text"
-        :text="$t(UPDATE_NATIVE_DESKTOP_I18N.installing, { progress: downloadProgress })"
-      />
-      <AppText v-else-if="hasInstallError" color="warn" :text="$t(UPDATE_NATIVE_DESKTOP_I18N.installFailed)" />
-      <AppText v-else color="semi-contrast-text" :text="$t(UPDATE_NATIVE_DESKTOP_I18N.description)" />
+      <NmorphText color="var(--nmorph-contrast-text-color)" weight="bold">{{
+        $t(UPDATE_NATIVE_DESKTOP_I18N.title, { appName: appName, version: updateVersion })
+      }}</NmorphText>
+      <NmorphText v-if="isInstalling" color="semi-contrast">{{
+        $t(UPDATE_NATIVE_DESKTOP_I18N.installing, { progress: downloadProgress })
+      }}</NmorphText>
+      <NmorphText v-else-if="hasInstallError" color="var(--nmorph-warn-color)">{{
+        $t(UPDATE_NATIVE_DESKTOP_I18N.installFailed)
+      }}</NmorphText>
+      <NmorphText v-else color="semi-contrast">{{ $t(UPDATE_NATIVE_DESKTOP_I18N.description) }}</NmorphText>
     </div>
 
     <div class="update-native-desktop-banner__actions">

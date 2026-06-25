@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { NmorphSwitch } from '@nmorph/nmorph-ui-kit'
-
-import { AppText } from 'src/shared/ui'
+import { NmorphText, NmorphSwitch } from '@nmorph/nmorph-ui-kit'
 
 import { useNotificationSettings } from '../../model/notifications/use-notification-settings.model'
 import SettingsCard from '../SettingsCard.vue'
@@ -16,8 +14,10 @@ const { sections, optionsBySection, getValue, isDisabled, setValue } = useNotifi
         <template v-for="option in optionsBySection[section.id]" :key="option.id">
           <div class="settings-notifications-content__row">
             <span class="settings-notifications-content__text">
-              <AppText color="contrast-text" style="white-space: normal" :selectable="false" :text="$t(option.label)" />
-              <AppText size="small" style="white-space: normal" :selectable="false" :text="$t(option.description)" />
+              <NmorphText color="var(--nmorph-contrast-text-color)" style="white-space: normal">{{
+                $t(option.label)
+              }}</NmorphText>
+              <NmorphText style="white-space: normal" variant="body-small">{{ $t(option.description) }}</NmorphText>
             </span>
 
             <NmorphSwitch

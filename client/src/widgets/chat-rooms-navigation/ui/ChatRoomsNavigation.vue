@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  NmorphText,
   NmorphButton,
   NmorphIconPlusThin,
   NmorphIconSearch,
@@ -9,7 +10,6 @@ import {
 
 import { ChatRoomFormDialog } from 'src/features/chat-room-context-menu'
 import { useScrollContentNavigation } from 'src/features/scroll-content-navigation'
-import { AppText } from 'src/shared/ui'
 
 import { CHAT_ROOMS_NAVIGATION_I18N } from '../config/i18n'
 import { useChatRoomsNavigation } from '../model/use-chat-rooms-navigation.model'
@@ -38,17 +38,14 @@ const { saveScrollContentNavigationState } = useScrollContentNavigation('chat-ro
         <template #icon>
           <NmorphIconPlusThin />
         </template>
-        <AppText :selectable="false" :text="$t(CHAT_ROOMS_NAVIGATION_I18N.createChat)" />
+        <NmorphText>{{ $t(CHAT_ROOMS_NAVIGATION_I18N.createChat) }}</NmorphText>
       </NmorphButton>
     </div>
 
-    <AppText v-if="showNoChats" alignment="center" :selectable="false" :text="$t(CHAT_ROOMS_NAVIGATION_I18N.noChats)" />
-    <AppText
-      v-else-if="showNoSearchResults"
-      alignment="center"
-      :selectable="false"
-      :text="$t(CHAT_ROOMS_NAVIGATION_I18N.noSearchResults)"
-    />
+    <NmorphText v-if="showNoChats" align="center">{{ $t(CHAT_ROOMS_NAVIGATION_I18N.noChats) }}</NmorphText>
+    <NmorphText v-else-if="showNoSearchResults" align="center">{{
+      $t(CHAT_ROOMS_NAVIGATION_I18N.noSearchResults)
+    }}</NmorphText>
     <NmorphScroll
       v-else
       ref="scrollContentNavigation"

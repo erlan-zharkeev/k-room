@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  NmorphText,
   NmorphButton,
   NmorphForm,
   NmorphFormItem,
@@ -10,7 +11,7 @@ import {
 import { ROUTE_NAMES } from 'global-shared'
 import { RouterLink } from 'vue-router'
 
-import { AppCaptcha, AppText } from 'src/shared/ui'
+import { AppCaptcha } from 'src/shared/ui'
 
 import { LOGIN_FORM_I18N } from '../config/i18n'
 import { useLogin } from '../model/use-login.model'
@@ -69,13 +70,13 @@ const {
           <NmorphIcon>
             <NmorphIconGoogle />
           </NmorphIcon>
-          <AppText :selectable="false" :text="$t(LOGIN_FORM_I18N.withGoogle)" />
+          <NmorphText>{{ $t(LOGIN_FORM_I18N.withGoogle) }}</NmorphText>
         </div>
       </NmorphButton>
 
       <div class="login-page__forgot">
         <RouterLink :to="ROUTE_NAMES.passwordRecovery">
-          <AppText :selectable="false" :text="$t(LOGIN_FORM_I18N.forgotPassword)" color="accent" />
+          <NmorphText color="accent">{{ $t(LOGIN_FORM_I18N.forgotPassword) }}</NmorphText>
         </RouterLink>
       </div>
     </div>

@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { NmorphIcon, NmorphIconChatLineSquare } from '@nmorph/nmorph-ui-kit'
-
-import { AppText } from 'src/shared/ui'
+import { NmorphText, NmorphIcon, NmorphIconChatLineSquare } from '@nmorph/nmorph-ui-kit'
 
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 </script>
@@ -11,7 +9,7 @@ import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
     <NmorphIcon size="large">
       <NmorphIconChatLineSquare />
     </NmorphIcon>
-    <AppText alignment="center" :selectable="false" :text="$t(CHAT_ROOM_CONTENT_I18N.noRoomSelected)" />
+    <NmorphText align="center">{{ $t(CHAT_ROOM_CONTENT_I18N.noRoomSelected) }}</NmorphText>
   </div>
 </template>
 

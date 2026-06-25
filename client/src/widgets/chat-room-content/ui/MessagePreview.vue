@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AppText } from 'src/shared/ui'
+import { NmorphText } from '@nmorph/nmorph-ui-kit'
 
 import type { MessagePreviewProps } from '../config/types'
 
@@ -8,8 +8,8 @@ const props = defineProps<MessagePreviewProps>()
 
 <template>
   <div class="message-preview">
-    <AppText color="accent" :text="props.title" truncate />
-    <AppText tag="small" color="semi-contrast-text" :text="props.text" :line-clamp="2" />
+    <NmorphText color="accent" truncate>{{ props.title }}</NmorphText>
+    <NmorphText as="small" color="semi-contrast" :line-clamp="2" variant="body-small">{{ props.text }}</NmorphText>
   </div>
 </template>
 

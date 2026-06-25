@@ -1,7 +1,14 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphCard, NmorphDialog, NmorphIconSearch, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
+import {
+  NmorphText,
+  NmorphButton,
+  NmorphCard,
+  NmorphDialog,
+  NmorphIconSearch,
+  NmorphTextInput
+} from '@nmorph/nmorph-ui-kit'
 
-import { AppProfilePicker, AppText } from 'src/shared/ui'
+import { AppProfilePicker } from 'src/shared/ui'
 
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { MessageForwardDialogProps } from '../config/types'
@@ -43,12 +50,9 @@ const {
         </template>
       </NmorphTextInput>
       <NmorphCard v-if="hasMessageForwardChatRooms" shadow-type="inset" class="message-forward-dialog__rooms-card">
-        <AppText
-          v-if="showMessageForwardSearchEmpty"
-          color="semi-contrast-text"
-          :selectable="false"
-          :text="$t(CHAT_ROOM_CONTENT_I18N.noChatSearchResults)"
-        />
+        <NmorphText v-if="showMessageForwardSearchEmpty" color="semi-contrast">{{
+          $t(CHAT_ROOM_CONTENT_I18N.noChatSearchResults)
+        }}</NmorphText>
         <AppProfilePicker
           v-else
           :model-value="selectedMessageForwardRoomIds"
@@ -57,7 +61,7 @@ const {
           @update:model-value="updateSelectedMessageForwardRoomIds"
         />
       </NmorphCard>
-      <AppText v-else color="semi-contrast-text" :selectable="false" :text="$t(CHAT_ROOM_CONTENT_I18N.noChats)" />
+      <NmorphText v-else color="semi-contrast">{{ $t(CHAT_ROOM_CONTENT_I18N.noChats) }}</NmorphText>
       <div class="message-forward-dialog__actions">
         <NmorphButton
           design="plain"

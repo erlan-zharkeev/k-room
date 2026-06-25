@@ -7,6 +7,8 @@ import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useMediaDevicePermission, useStorageEstimate } from 'src/shared/lib'
 
+import { APP_PAGE_ROUTES } from '../config/constants'
+
 export const useAppNavigation = () => {
   const route = useRoute()
   const { chatRooms } = useChatRoom()
@@ -21,10 +23,17 @@ export const useAppNavigation = () => {
   const routePath = computed(() => route.path)
   const unreadMessagesQuantity = computed(() => sumBy(chatRooms.value, 'unreadMessagesQuantity'))
   const hasSettingsWarning = computed(() => isStorageUsageWarning.value || hasMediaDevicePermissionWarning.value)
+  const buildNavigationRoute = (itemId: string, itemPath: string, footer?: boolean) => {
+    const path = itemId === 'settings' ? `${APP_PAGE_ROUTES.settings}/${selectedSettingsId.value}` : itemPath
+
+    if (!footer) return path
+
+    return { path, query: { ...route.query, view: 'content-navigation' } }
+  }
 
   return {
     routePath,
-    selectedSettingsId,
+    buildNavigationRoute,
     unreadMessagesQuantity,
     invitationsQuantity,
     hasSettingsWarning

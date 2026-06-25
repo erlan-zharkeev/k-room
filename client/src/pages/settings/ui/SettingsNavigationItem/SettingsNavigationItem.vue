@@ -1,8 +1,13 @@
 <script setup lang="ts">
-import { NmorphBadge, NmorphIcon, NmorphCard, NmorphIconArrowRight, NmorphIconArrowDown } from '@nmorph/nmorph-ui-kit'
+import {
+  NmorphText,
+  NmorphBadge,
+  NmorphIcon,
+  NmorphCard,
+  NmorphIconArrowRight,
+  NmorphIconArrowDown
+} from '@nmorph/nmorph-ui-kit'
 import { RouterLink } from 'vue-router'
-
-import { AppHeader, AppText } from 'src/shared/ui'
 
 import type { SettingsNavigationItemProps } from './types'
 import { useSettingsNavigationItem } from './use-settings-navigation-item.model'
@@ -15,7 +20,7 @@ const { buttonClass, showIcon } = useSettingsNavigationItem(props)
   <NmorphBadge
     class="settings-navigation-item-badge"
     :value="props.hasWarning ? '!' : undefined"
-    color="var(--nmorph-warn-color)"
+    color="var(--nmorph-warn-text-color)"
     type="ribbon"
     ribbon-corner="top-right"
   >
@@ -27,8 +32,10 @@ const { buttonClass, showIcon } = useSettingsNavigationItem(props)
         :aria-label="props.ariaLabel"
       >
         <div class="settings-navigation-item__text">
-          <AppHeader tag="h5" truncate :selectable="false" :text="props.label" />
-          <AppText tag="small" truncate color="semi-contrast-text" :selectable="false" :text="props.description" />
+          <NmorphText as="h5" truncate variant="title-small" weight="bold">{{ props.label }}</NmorphText>
+          <NmorphText as="small" truncate color="semi-contrast" variant="body-small">{{
+            props.description
+          }}</NmorphText>
         </div>
         <NmorphIcon v-if="showIcon">
           <NmorphIconArrowRight v-if="props.active" />

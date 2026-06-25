@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { NmorphCard, NmorphScroll } from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphCard, NmorphScroll } from '@nmorph/nmorph-ui-kit'
 
 import { ContentNavigationBackButton } from 'src/features/content-navigation-back-button'
 import { SETTINGS_CONTENT_TITLE } from 'src/pages/settings'
-import { AppHeader } from 'src/shared/ui'
 
 import { type ContentLayoutProps } from './types'
 import { useContentLayout } from './use-content-layout.model'
@@ -16,7 +15,9 @@ const { isPortraitTabletOrLess, showHeader } = useContentLayout(props)
   <section class="content-layout">
     <div v-if="showHeader" class="content-layout__header">
       <ContentNavigationBackButton v-if="isPortraitTabletOrLess" />
-      <AppHeader v-if="props.titleKey" :text="$t(SETTINGS_CONTENT_TITLE[props.titleKey])" />
+      <NmorphText as="h3" v-if="props.titleKey" variant="title" weight="bold">{{
+        $t(SETTINGS_CONTENT_TITLE[props.titleKey])
+      }}</NmorphText>
     </div>
     <NmorphCard shadow-type="inset" class="content-layout__content">
       <NmorphScroll>

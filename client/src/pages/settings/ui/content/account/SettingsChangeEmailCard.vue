@@ -1,8 +1,13 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphForm, NmorphFormItem, NmorphOTPInput, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
+import {
+  NmorphText,
+  NmorphButton,
+  NmorphForm,
+  NmorphFormItem,
+  NmorphOTPInput,
+  NmorphTextInput
+} from '@nmorph/nmorph-ui-kit'
 import { EMAIL_CODE_LENGTH } from 'global-shared'
-
-import { AppText } from 'src/shared/ui'
 
 import { SETTINGS_ACCOUNT_CHANGE_EMAIL_I18N } from '../../../config/i18n/account-change-email.i18n'
 import { useChangeEmail } from '../../../model/account/use-change-email.model'
@@ -31,7 +36,7 @@ const {
         :label="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_I18N.currentEmail)"
         :show-validation-icon="false"
       >
-        <AppText :text="currentEmail" />
+        <NmorphText>{{ currentEmail }}</NmorphText>
       </NmorphFormItem>
 
       <NmorphFormItem
@@ -56,7 +61,7 @@ const {
     </NmorphForm>
 
     <label v-if="isEmailCodeVisible" class="settings-change-email-card__field">
-      <AppText tag="small" :selectable="false" :text="$t(SETTINGS_ACCOUNT_CHANGE_EMAIL_I18N.emailCode)" />
+      <NmorphText as="small" variant="body-small">{{ $t(SETTINGS_ACCOUNT_CHANGE_EMAIL_I18N.emailCode) }}</NmorphText>
       <NmorphOTPInput
         v-model="otpCode"
         :length="EMAIL_CODE_LENGTH"

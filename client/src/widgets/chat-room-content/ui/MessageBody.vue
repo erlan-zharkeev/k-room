@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AppText } from 'src/shared/ui'
+import { NmorphText } from '@nmorph/nmorph-ui-kit'
 
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { MessageBodyEmits, MessageBodyProps } from '../config/types'
@@ -47,7 +47,7 @@ const {
       ]"
     >
       <div class="message-body__content">
-        <AppText v-if="showAuthorNickname" color="accent" :text="props.message.authorNickname" />
+        <NmorphText v-if="showAuthorNickname" color="accent">{{ props.message.authorNickname }}</NmorphText>
         <button
           v-if="messageReference && canSelectMessageReference"
           type="button"
@@ -66,8 +66,10 @@ const {
         <MessageLinkPreview v-if="props.message.linkPreview" :preview="props.message.linkPreview" />
         <div class="message-body__footer">
           <MessageReactions :message="props.message" :room="props.room" />
-          <AppText v-if="props.message.editedAt" tag="small" italic :text="$t(CHAT_ROOM_CONTENT_I18N.editedMessage)" />
-          <AppText v-if="sentAt" tag="small" color="semi-contrast-text" :text="sentAt" />
+          <NmorphText v-if="props.message.editedAt" as="small" variant="body-small">{{
+            $t(CHAT_ROOM_CONTENT_I18N.editedMessage)
+          }}</NmorphText>
+          <NmorphText v-if="sentAt" as="small" color="semi-contrast" variant="body-small">{{ sentAt }}</NmorphText>
           <MessageStatusDots :message="props.message" />
         </div>
       </div>

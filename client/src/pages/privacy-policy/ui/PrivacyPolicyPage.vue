@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AppHeader, AppText } from 'src/shared/ui'
+import { NmorphText } from '@nmorph/nmorph-ui-kit'
 
 import { LEGAL_INFO_PAGE_I18N } from '../config/i18n'
 
@@ -8,33 +8,39 @@ const { appName } = __CLIENT_ENV_DATA__
 
 <template>
   <div class="privacy-policy-page">
-    <AppHeader tag="h1" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.title, { appName: appName })" />
+    <NmorphText as="h1" color="var(--nmorph-contrast-text-color)" variant="display-medium" weight="bold">{{
+      $t(LEGAL_INFO_PAGE_I18N.title, { appName: appName })
+    }}</NmorphText>
 
-    <AppText tag="p" color="semi-contrast-text">
-      <AppText bold color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.lastUpdatedLabel)" />
+    <NmorphText as="p" color="semi-contrast">
+      <NmorphText color="var(--nmorph-contrast-text-color)" weight="bold">{{
+        $t(LEGAL_INFO_PAGE_I18N.lastUpdatedLabel)
+      }}</NmorphText>
       June 20, 2026
-    </AppText>
+    </NmorphText>
 
-    <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.intro, { appName: appName })" />
+    <NmorphText as="p" color="semi-contrast">{{ $t(LEGAL_INFO_PAGE_I18N.intro, { appName: appName }) }}</NmorphText>
 
-    <AppText tag="p" color="semi-contrast-text">
-      <AppText bold color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.warning)" />
+    <NmorphText as="p" color="semi-contrast">
+      <NmorphText color="var(--nmorph-contrast-text-color)" weight="bold">{{
+        $t(LEGAL_INFO_PAGE_I18N.warning)
+      }}</NmorphText>
       {{ $t(LEGAL_INFO_PAGE_I18N.warningText, { appName: appName }) }}
-    </AppText>
+    </NmorphText>
 
-    <AppText
-      tag="p"
-      color="semi-contrast-text"
-      :text="$t(LEGAL_INFO_PAGE_I18N.demoProjectNotice, { appName: appName })"
-    />
+    <NmorphText as="p" color="semi-contrast">{{
+      $t(LEGAL_INFO_PAGE_I18N.demoProjectNotice, { appName: appName })
+    }}</NmorphText>
 
-    <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.storageRisk)" />
+    <NmorphText as="p" color="semi-contrast">{{ $t(LEGAL_INFO_PAGE_I18N.storageRisk) }}</NmorphText>
 
-    <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.noConfidentialCommunications)" />
+    <NmorphText as="p" color="semi-contrast">{{ $t(LEGAL_INFO_PAGE_I18N.noConfidentialCommunications) }}</NmorphText>
 
     <section>
-      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section1Title)" />
-      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section1Intro)" />
+      <NmorphText as="h2" color="var(--nmorph-contrast-text-color)" variant="title-large" weight="bold">{{
+        $t(LEGAL_INFO_PAGE_I18N.section1Title)
+      }}</NmorphText>
+      <NmorphText as="p" color="semi-contrast">{{ $t(LEGAL_INFO_PAGE_I18N.section1Intro) }}</NmorphText>
       <ul>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.accountData) }}</li>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.profileData) }}</li>
@@ -47,12 +53,16 @@ const { appName } = __CLIENT_ENV_DATA__
     </section>
 
     <section>
-      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section2Title)" />
-      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section2Text)" />
+      <NmorphText as="h2" color="var(--nmorph-contrast-text-color)" variant="title-large" weight="bold">{{
+        $t(LEGAL_INFO_PAGE_I18N.section2Title)
+      }}</NmorphText>
+      <NmorphText as="p" color="semi-contrast">{{ $t(LEGAL_INFO_PAGE_I18N.section2Text) }}</NmorphText>
     </section>
 
     <section>
-      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section3Title)" />
+      <NmorphText as="h2" color="var(--nmorph-contrast-text-color)" variant="title-large" weight="bold">{{
+        $t(LEGAL_INFO_PAGE_I18N.section3Title)
+      }}</NmorphText>
       <ul>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.useAccounts) }}</li>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.useAuth) }}</li>
@@ -65,57 +75,77 @@ const { appName } = __CLIENT_ENV_DATA__
     </section>
 
     <section>
-      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section4Title)" />
-      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.discloseIntro)" />
+      <NmorphText as="h2" color="var(--nmorph-contrast-text-color)" variant="title-large" weight="bold">{{
+        $t(LEGAL_INFO_PAGE_I18N.section4Title)
+      }}</NmorphText>
+      <NmorphText as="p" color="semi-contrast">{{ $t(LEGAL_INFO_PAGE_I18N.discloseIntro) }}</NmorphText>
       <ul>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.discloseProviders) }}</li>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.discloseUsers) }}</li>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.discloseLegal) }}</li>
         <li>{{ $t(LEGAL_INFO_PAGE_I18N.discloseBusiness) }}</li>
       </ul>
-      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.discloseNote)" />
+      <NmorphText as="p" color="semi-contrast">{{ $t(LEGAL_INFO_PAGE_I18N.discloseNote) }}</NmorphText>
     </section>
 
     <section>
-      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section5Title)" />
-      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section5Text)" />
+      <NmorphText as="h2" color="var(--nmorph-contrast-text-color)" variant="title-large" weight="bold">{{
+        $t(LEGAL_INFO_PAGE_I18N.section5Title)
+      }}</NmorphText>
+      <NmorphText as="p" color="semi-contrast">{{ $t(LEGAL_INFO_PAGE_I18N.section5Text) }}</NmorphText>
     </section>
 
     <section>
-      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section6Title)" />
-      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section6Text1)" />
-      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section6Text2)" />
-      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section6Text3)" />
+      <NmorphText as="h2" color="var(--nmorph-contrast-text-color)" variant="title-large" weight="bold">{{
+        $t(LEGAL_INFO_PAGE_I18N.section6Title)
+      }}</NmorphText>
+      <NmorphText as="p" color="semi-contrast">{{ $t(LEGAL_INFO_PAGE_I18N.section6Text1) }}</NmorphText>
+      <NmorphText as="p" color="semi-contrast">{{ $t(LEGAL_INFO_PAGE_I18N.section6Text2) }}</NmorphText>
+      <NmorphText as="p" color="semi-contrast">{{ $t(LEGAL_INFO_PAGE_I18N.section6Text3) }}</NmorphText>
     </section>
 
     <section>
-      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section7Title)" />
-      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section7Text)" />
+      <NmorphText as="h2" color="var(--nmorph-contrast-text-color)" variant="title-large" weight="bold">{{
+        $t(LEGAL_INFO_PAGE_I18N.section7Title)
+      }}</NmorphText>
+      <NmorphText as="p" color="semi-contrast">{{ $t(LEGAL_INFO_PAGE_I18N.section7Text) }}</NmorphText>
     </section>
 
     <section>
-      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section8Title)" />
-      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section8Text)" />
+      <NmorphText as="h2" color="var(--nmorph-contrast-text-color)" variant="title-large" weight="bold">{{
+        $t(LEGAL_INFO_PAGE_I18N.section8Title)
+      }}</NmorphText>
+      <NmorphText as="p" color="semi-contrast">{{ $t(LEGAL_INFO_PAGE_I18N.section8Text) }}</NmorphText>
     </section>
 
     <section>
-      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section9Title)" />
-      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section9Text, { appName: appName })" />
+      <NmorphText as="h2" color="var(--nmorph-contrast-text-color)" variant="title-large" weight="bold">{{
+        $t(LEGAL_INFO_PAGE_I18N.section9Title)
+      }}</NmorphText>
+      <NmorphText as="p" color="semi-contrast">{{
+        $t(LEGAL_INFO_PAGE_I18N.section9Text, { appName: appName })
+      }}</NmorphText>
     </section>
 
     <section>
-      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section10Title)" />
-      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section10Text)" />
+      <NmorphText as="h2" color="var(--nmorph-contrast-text-color)" variant="title-large" weight="bold">{{
+        $t(LEGAL_INFO_PAGE_I18N.section10Title)
+      }}</NmorphText>
+      <NmorphText as="p" color="semi-contrast">{{ $t(LEGAL_INFO_PAGE_I18N.section10Text) }}</NmorphText>
     </section>
 
     <section>
-      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section11Title)" />
-      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section11Text)" />
+      <NmorphText as="h2" color="var(--nmorph-contrast-text-color)" variant="title-large" weight="bold">{{
+        $t(LEGAL_INFO_PAGE_I18N.section11Title)
+      }}</NmorphText>
+      <NmorphText as="p" color="semi-contrast">{{ $t(LEGAL_INFO_PAGE_I18N.section11Text) }}</NmorphText>
     </section>
 
     <section>
-      <AppHeader tag="h2" color="contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section12Title)" />
-      <AppText tag="p" color="semi-contrast-text" :text="$t(LEGAL_INFO_PAGE_I18N.section12Text)" />
+      <NmorphText as="h2" color="var(--nmorph-contrast-text-color)" variant="title-large" weight="bold">{{
+        $t(LEGAL_INFO_PAGE_I18N.section12Title)
+      }}</NmorphText>
+      <NmorphText as="p" color="semi-contrast">{{ $t(LEGAL_INFO_PAGE_I18N.section12Text) }}</NmorphText>
     </section>
   </div>
 </template>

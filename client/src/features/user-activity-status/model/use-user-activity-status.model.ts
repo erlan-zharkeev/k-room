@@ -20,7 +20,7 @@ export const useUserActivityStatus = (props: UserActivityStatusProps) => {
     return `${t(USER_ACTIVITY_STATUS_I18N.lastSeen)} ${formatRelativeTime(normalizedLastSeen)}`
   })
   const color = computed(() =>
-    props.online ? 'var(--nmorph-success-color)' : 'var(--nmorph-semi-contrast-text-color)'
+    props.online ? 'var(--nmorph-success-text-color)' : 'var(--nmorph-semi-contrast-text-color)'
   )
 
   return {

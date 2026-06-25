@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AppText } from 'src/shared/ui'
+import { NmorphText } from '@nmorph/nmorph-ui-kit'
 
 import { SETTINGS_PAGE_STORAGE_I18N } from '../../../config/i18n/storage.i18n'
 import { useStorageClear } from '../../../model/storage/use-storage-clear.model'
@@ -16,8 +16,10 @@ const { isClearingMedia, clearMedia } = useStorageClear()
     :on-button-click="clearMedia"
   >
     <div class="settings-storage-clear-card">
-      <AppText color="contrast-text" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storageClearMedia)" />
-      <AppText size="small" :text="$t(SETTINGS_PAGE_STORAGE_I18N.storageClearMediaDescription)" />
+      <NmorphText color="var(--nmorph-contrast-text-color)">{{
+        $t(SETTINGS_PAGE_STORAGE_I18N.storageClearMedia)
+      }}</NmorphText>
+      <NmorphText variant="body-small">{{ $t(SETTINGS_PAGE_STORAGE_I18N.storageClearMediaDescription) }}</NmorphText>
     </div>
   </SettingsCard>
 </template>

@@ -129,7 +129,7 @@ const MAX_BYTES = 1_024 * 1_024
 
 3. Do not use `defineOptions` unless required.
 
-4. Use `AppText` and `AppHeader` for text. Do not override their styles externally.
+4. Use `NmorphText` from `@nmorph/nmorph-ui-kit` for text and headings. Do not override its styles externally.
 
 5. Use a root block class for each component.
 

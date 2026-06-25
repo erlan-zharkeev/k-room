@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { NmorphCheckbox, NmorphCheckboxGroup, NmorphScroll } from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphCheckbox, NmorphCheckboxGroup, NmorphScroll } from '@nmorph/nmorph-ui-kit'
 
 import { AppProfileBasicData } from '../AppProfileBasicData'
-import { AppText } from '../AppText'
 
 import { APP_PROFILE_PICKER_PROPS_DEFAULTS } from './constants'
 import type { AppProfilePickerProps } from './types'
@@ -36,17 +35,12 @@ const { profileItems, selectProfiles } = useAppProfilePicker(props, selectedProf
           :show-online="item.online"
         >
           <template #title>
-            <AppText truncate :selectable="false" :text="item.title" />
+            <NmorphText truncate>{{ item.title }}</NmorphText>
           </template>
           <template #description>
-            <AppText
-              v-if="item.description"
-              tag="small"
-              truncate
-              color="semi-contrast-text"
-              :selectable="false"
-              :text="item.description"
-            />
+            <NmorphText v-if="item.description" as="small" truncate color="semi-contrast" variant="body-small">{{
+              item.description
+            }}</NmorphText>
           </template>
         </AppProfileBasicData>
       </NmorphCheckbox>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AppText } from 'src/shared/ui'
+import { NmorphText } from '@nmorph/nmorph-ui-kit'
 
 import type { ContactContextMenuActionItemEmits, ContactContextMenuActionItemProps } from '../config/types'
 import { useContactContextMenuActionItem } from '../model/use-contact-context-menu-action-item.model'
@@ -16,7 +16,7 @@ const { selectContactContextMenuAction } = useContactContextMenuActionItem(props
     :disabled="props.disabled"
     @click.stop="selectContactContextMenuAction"
   >
-    <AppText :selectable="false" :text="props.label" :color="props.color" />
+    <NmorphText :color="props.color">{{ props.label }}</NmorphText>
   </button>
 </template>
 

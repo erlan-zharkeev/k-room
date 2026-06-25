@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { NmorphBadge, NmorphCard } from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphBadge, NmorphCard } from '@nmorph/nmorph-ui-kit'
 
 import { UserActivityStatus } from 'src/features/user-activity-status'
-import { AppText, AppProfileBasicData } from 'src/shared/ui'
+import { AppProfileBasicData } from 'src/shared/ui'
 
 import type { ContactListEmits, ContactListProps } from '../config/types'
 import { getContactStatusTagColor } from '../lib/get-contact-status-tag-color'
@@ -36,7 +36,7 @@ const emit = defineEmits<ContactListEmits>()
             <template #title>
               <div class="contact-list__title">
                 <div class="contact-list__name">
-                  <AppText truncate :text="contact.nickname" />
+                  <NmorphText truncate>{{ contact.nickname }}</NmorphText>
                 </div>
               </div>
             </template>

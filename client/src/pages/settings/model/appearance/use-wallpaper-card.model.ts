@@ -24,6 +24,11 @@ export const useWallpaperCard = () => {
     SETTINGS_WALLPAPER_VISIBILITY_OPTIONS.map((option) => ({ ...option, label: t(option.label) }))
   )
   const wallpaperVisibilityValue = computed(() => (settings.value.appearance.showWallpaper ? 'show' : 'hide'))
+  const hasWallpaper = computed(() => {
+    const { filename, url } = effectiveTheme.value.wallpaper
+
+    return Boolean(filename && url)
+  })
 
   const updateWallpaperVisibility = (value: string | number) => {
     setWallpaperVisibility(value === 'show')
@@ -31,6 +36,7 @@ export const useWallpaperCard = () => {
 
   return {
     effectiveTheme,
+    hasWallpaper,
     isSelectedThemeCustom,
     setAngle,
     setDarkness,

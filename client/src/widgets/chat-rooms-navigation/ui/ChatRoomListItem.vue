@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import { NmorphBadge, NmorphCard, NmorphIcon, NmorphIconMuteNotification, NmorphIconPin } from '@nmorph/nmorph-ui-kit'
+import {
+  NmorphText,
+  NmorphBadge,
+  NmorphCard,
+  NmorphIcon,
+  NmorphIconMuteNotification,
+  NmorphIconPin
+} from '@nmorph/nmorph-ui-kit'
 import { toRef } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import { ChatRoomContextMenu } from 'src/features/chat-room-context-menu'
 import { ChatRoomTypingStatus } from 'src/features/chat-room-typing'
-import { AppProfileBasicData, AppText } from 'src/shared/ui'
+import { AppProfileBasicData } from 'src/shared/ui'
 
 import type { ChatRoomListItemProps } from '../config/types'
 import { useChatRoomListItem } from '../model/use-chat-room-list-item.model'
@@ -22,7 +29,11 @@ const { contextMenuActionOptions, isPressed } = useChatRoomListItem(item)
     content-class="chat-room-list-item__content"
     :shadow-type="isPressed ? 'inset' : 'outset'"
   >
-    <RouterLink :to="props.item.to" :aria-current="props.item.selected ? 'page' : undefined">
+    <RouterLink
+      class="chat-room-list-item__link"
+      :to="props.item.to"
+      :aria-current="props.item.selected ? 'page' : undefined"
+    >
       <AppProfileBasicData
         :image-id="props.item.imageId"
         :title="props.item.title"
@@ -32,20 +43,15 @@ const { contextMenuActionOptions, isPressed } = useChatRoomListItem(item)
         <template #title>
           <div class="chat-room-list-item__title">
             <div class="chat-room-list-item__name">
-              <AppText truncate :selectable="false" :text="props.item.title" />
+              <NmorphText truncate>{{ props.item.title }}</NmorphText>
             </div>
           </div>
         </template>
         <template #description>
           <ChatRoomTypingStatus :room-id="props.item.id" truncate>
-            <AppText
-              v-if="props.item.description"
-              tag="small"
-              truncate
-              color="semi-contrast-text"
-              :selectable="false"
-              :text="props.item.description"
-            />
+            <NmorphText v-if="props.item.description" as="p" truncate color="semi-contrast" variant="body-small">{{
+              props.item.description
+            }}</NmorphText>
           </ChatRoomTypingStatus>
         </template>
       </AppProfileBasicData>
@@ -56,7 +62,7 @@ const { contextMenuActionOptions, isPressed } = useChatRoomListItem(item)
         class="chat-room-list-item__mute"
         :value="''"
         size="tiny"
-        color="var(--nmorph-warn-color)"
+        color="var(--nmorph-warn-text-color)"
         type="tag"
       >
         <template #value>
@@ -70,7 +76,7 @@ const { contextMenuActionOptions, isPressed } = useChatRoomListItem(item)
         class="chat-room-list-item__unread"
         :value="props.item.unreadMessagesQuantity"
         size="tiny"
-        color="var(--nmorph-warn-color)"
+        color="var(--nmorph-warn-text-color)"
         type="tag"
       />
     </div>
@@ -105,10 +111,16 @@ const { contextMenuActionOptions, isPressed } = useChatRoomListItem(item)
   padding-right: 4px;
 }
 
+.chat-room-list-item__link {
+  display: block;
+  min-width: 0;
+}
+
 .chat-room-list-item__title {
   display: flex;
   gap: 8px;
   align-items: center;
+  min-width: 0;
 }
 
 .chat-room-list-item__name {

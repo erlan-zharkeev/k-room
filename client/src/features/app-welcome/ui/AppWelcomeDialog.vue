@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphDialog } from '@nmorph/nmorph-ui-kit'
-
-import { AppHeader, AppText } from 'src/shared/ui'
+import { NmorphText, NmorphButton, NmorphDialog } from '@nmorph/nmorph-ui-kit'
 
 import welcomeImageSrc from '../assets/welcome.webp'
 import { APP_WELCOME_I18N } from '../config/i18n'
@@ -30,8 +28,8 @@ const { completeAppWelcome, dialogContentStyle, isAppWelcomeVisible, updateAppWe
     <div class="app-welcome-dialog" :style="dialogContentStyle" tabindex="0">
       <img class="app-welcome-dialog__image" :src="welcomeImageSrc" :alt="$t(APP_WELCOME_I18N.imageAlt)" />
       <div class="app-welcome-dialog__content">
-        <AppHeader tag="h3" alignment="center" :text="$t(APP_WELCOME_I18N.title)" />
-        <AppText tag="p" alignment="center" color="semi-contrast-text" :text="$t(APP_WELCOME_I18N.description)" />
+        <NmorphText as="h3" align="center" variant="title" weight="bold">{{ $t(APP_WELCOME_I18N.title) }}</NmorphText>
+        <NmorphText as="p" align="center" color="semi-contrast">{{ $t(APP_WELCOME_I18N.description) }}</NmorphText>
         <div class="app-welcome-dialog__actions">
           <NmorphButton design="plain" borderless :text="$t(APP_WELCOME_I18N.action)" @click="completeAppWelcome" />
         </div>

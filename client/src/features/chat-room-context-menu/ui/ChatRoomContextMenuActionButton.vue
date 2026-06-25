@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AppText } from 'src/shared/ui'
+import { NmorphText } from '@nmorph/nmorph-ui-kit'
 
 import type { ChatRoomContextMenuActionButtonEmits, ChatRoomContextMenuActionButtonProps } from '../config/types'
 
@@ -14,7 +14,7 @@ const emit = defineEmits<ChatRoomContextMenuActionButtonEmits>()
     :disabled="props.disabled"
     @click.stop="emit('select')"
   >
-    <AppText :selectable="false" :text="props.label" />
+    <NmorphText>{{ props.label }}</NmorphText>
   </button>
 </template>
 

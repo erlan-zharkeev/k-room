@@ -7,6 +7,32 @@
   padding: 16px;
 }
 
+.nmorph-dialog__close-icon .nmorph-icon {
+  position: relative;
+}
+
+.nmorph-dialog__close-icon .nmorph-icon svg {
+  display: none;
+}
+
+.nmorph-dialog__close-icon .nmorph-icon::before,
+.nmorph-dialog__close-icon .nmorph-icon::after {
+  position: absolute;
+  width: 18px;
+  height: 2px;
+  background: var(--nmorph-private-icon-color);
+  border-radius: 999px;
+  content: '';
+}
+
+.nmorph-dialog__close-icon .nmorph-icon::before {
+  transform: rotate(45deg);
+}
+
+.nmorph-dialog__close-icon .nmorph-icon::after {
+  transform: rotate(-45deg);
+}
+
 .nmorph-alert.nmorph-alert--success .nmorph-alert__icon .nmorph-icon {
   --nmorph-private-icon-color: var(--nmorph-success-color);
 }

@@ -27,7 +27,7 @@ const { isContextMenuOpen, showContactActionBadge, contextMenuOptions, setContex
     <NmorphBadge
       type="dot"
       :hidden="!showContactActionBadge"
-      color="var(--nmorph-warn-color)"
+      color="var(--nmorph-warn-text-color)"
       size="base"
       :offset-x="-6"
       :offset-y="-6"

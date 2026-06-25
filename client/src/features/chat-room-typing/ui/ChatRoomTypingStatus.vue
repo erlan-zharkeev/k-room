@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AppText } from 'src/shared/ui'
+import { NmorphText } from '@nmorph/nmorph-ui-kit'
 
 import type { ChatRoomTypingStatusProps } from '../config/types'
 import { useChatRoomTypingStatus } from '../model/use-chat-room-typing.model'
@@ -9,13 +9,8 @@ const { typingText } = useChatRoomTypingStatus(props)
 </script>
 
 <template>
-  <AppText
-    v-if="typingText"
-    tag="small"
-    color="accent"
-    :truncate="props.truncate"
-    :selectable="false"
-    :text="typingText"
-  />
+  <NmorphText v-if="typingText" as="small" color="accent" :truncate="props.truncate" variant="body-small">{{
+    typingText
+  }}</NmorphText>
   <slot v-else />
 </template>

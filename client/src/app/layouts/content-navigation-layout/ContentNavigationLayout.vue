@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { NmorphCard } from '@nmorph/nmorph-ui-kit'
-
-import { AppHeader } from 'src/shared/ui'
+import { NmorphText, NmorphCard } from '@nmorph/nmorph-ui-kit'
 
 import { ROUTE_TITLE_MAP } from '../app-layout/constants'
 
@@ -13,7 +11,7 @@ const props = defineProps<ContentNavigationLayoutProps>()
 <template>
   <section class="content-navigation-layout">
     <div v-if="props.titleKey" class="content-navigation-layout__header">
-      <AppHeader :text="$t(ROUTE_TITLE_MAP[props.titleKey])" />
+      <NmorphText as="h3" variant="title" weight="bold">{{ $t(ROUTE_TITLE_MAP[props.titleKey]) }}</NmorphText>
     </div>
     <NmorphCard shadow-type="inset" class="content-navigation-layout__content">
       <slot />

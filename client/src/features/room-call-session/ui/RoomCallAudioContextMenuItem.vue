@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AppText } from 'src/shared/ui'
+import { NmorphText } from '@nmorph/nmorph-ui-kit'
 
 import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
 import type { RoomCallAudioContextMenuItemEmits, RoomCallAudioContextMenuItemProps } from '../config/types'
@@ -17,7 +17,7 @@ const { isRoomCallAudioContextMenuItemDisabled, startAudioRoomCall } = useRoomCa
     :aria-disabled="isRoomCallAudioContextMenuItemDisabled"
     @click.stop="startAudioRoomCall"
   >
-    <AppText :selectable="false" :text="$t(ROOM_CALL_SESSION_I18N.startAudioRoomCall)" />
+    <NmorphText>{{ $t(ROOM_CALL_SESSION_I18N.startAudioRoomCall) }}</NmorphText>
   </button>
 </template>
 

@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { NmorphBadge, NmorphCard, NmorphIcon, NmorphRadio } from '@nmorph/nmorph-ui-kit'
 
-import { APP_PAGE_NAV_ITEMS, APP_PAGE_ROUTES } from '../config/constants'
+import { APP_PAGE_NAV_ITEMS } from '../config/constants'
 import { getBadgeValue, isNavBtnActive } from '../lib/template-helpers'
 import { useAppNavigation } from '../model/use-app-navigation.model'
 
 import type { AppNavigationProps } from './types'
 
 const props = defineProps<AppNavigationProps>()
-const { routePath, selectedSettingsId, unreadMessagesQuantity, invitationsQuantity, hasSettingsWarning } =
+const { routePath, buildNavigationRoute, unreadMessagesQuantity, invitationsQuantity, hasSettingsWarning } =
   useAppNavigation()
 </script>
 
@@ -24,13 +24,13 @@ const { routePath, selectedSettingsId, unreadMessagesQuantity, invitationsQuanti
     <RouterLink
       v-for="item in APP_PAGE_NAV_ITEMS"
       :key="item.id"
-      :to="item.id === 'settings' ? `${APP_PAGE_ROUTES.settings}/${selectedSettingsId}` : item.path"
+      :to="buildNavigationRoute(item.id, item.path, props.footer)"
       custom
       v-slot="{ navigate, isExactActive }"
     >
       <NmorphBadge
         :value="getBadgeValue(item.id, unreadMessagesQuantity, invitationsQuantity, hasSettingsWarning)"
-        color="var(--nmorph-warn-color)"
+        color="var(--nmorph-warn-text-color)"
         :offset-y="4"
         size="tiny"
       >

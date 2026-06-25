@@ -1,7 +1,12 @@
 <script setup lang="ts">
-import { NmorphButton, NmorphIcon, NmorphIconArrowDown, NmorphProgress, NmorphScroll } from '@nmorph/nmorph-ui-kit'
-
-import { AppText } from 'src/shared/ui'
+import {
+  NmorphText,
+  NmorphButton,
+  NmorphIcon,
+  NmorphIconArrowDown,
+  NmorphProgress,
+  NmorphScroll
+} from '@nmorph/nmorph-ui-kit'
 
 import { MESSAGE_LOADING_PROGRESS_PERCENTAGE } from '../config/constants'
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
@@ -72,10 +77,10 @@ const {
       </div>
       <div v-if="hasMessages" ref="messagesBottom" class="chat-room-messages__bottom" />
       <div v-if="showInitialMessagesLoading" class="chat-room-messages__empty">
-        <AppText alignment="center" :selectable="false" :text="$t(CHAT_ROOM_CONTENT_I18N.loadingMessages)" />
+        <NmorphText align="center">{{ $t(CHAT_ROOM_CONTENT_I18N.loadingMessages) }}</NmorphText>
       </div>
       <div v-else-if="!hasMessages" class="chat-room-messages__empty">
-        <AppText alignment="center" :selectable="false" :text="$t(CHAT_ROOM_CONTENT_I18N.noMessages)" />
+        <NmorphText align="center">{{ $t(CHAT_ROOM_CONTENT_I18N.noMessages) }}</NmorphText>
       </div>
     </NmorphScroll>
     <div v-if="messageRemovalOverlayItems.length" class="chat-room-messages__removal-layer">

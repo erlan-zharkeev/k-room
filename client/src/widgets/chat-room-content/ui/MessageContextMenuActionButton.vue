@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { NmorphIcon } from '@nmorph/nmorph-ui-kit'
-
-import { AppText } from 'src/shared/ui'
+import { NmorphText, NmorphIcon } from '@nmorph/nmorph-ui-kit'
 
 import type { MessageContextMenuActionButtonEmits, MessageContextMenuActionButtonProps } from '../config/types'
 
@@ -19,7 +17,7 @@ const emit = defineEmits<MessageContextMenuActionButtonEmits>()
     <NmorphIcon v-if="$slots.icon" class="message-context-menu-action-button__icon">
       <slot name="icon" />
     </NmorphIcon>
-    <AppText :selectable="false" :text="props.label" />
+    <NmorphText>{{ props.label }}</NmorphText>
   </button>
 </template>
 

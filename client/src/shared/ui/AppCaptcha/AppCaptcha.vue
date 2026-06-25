@@ -1,7 +1,6 @@
 <script setup lang="ts">
+import { NmorphText } from '@nmorph/nmorph-ui-kit'
 import { toRef } from 'vue'
-
-import { AppText } from '../AppText'
 
 import { APP_CAPTCHA_DEFAULT_PROPS } from './constants'
 import { APP_CAPTCHA_I18N } from './i18n'
@@ -20,7 +19,9 @@ const { showUnavailable } = useAppCaptcha({
 
 <template>
   <div class="app-captcha">
-    <AppText v-if="showUnavailable" color="warn" :text="$t(APP_CAPTCHA_I18N.unavailable)" />
+    <NmorphText v-if="showUnavailable" color="var(--nmorph-warn-color)">{{
+      $t(APP_CAPTCHA_I18N.unavailable)
+    }}</NmorphText>
     <div v-else ref="containerRef" class="app-captcha__widget" />
   </div>
 </template>
