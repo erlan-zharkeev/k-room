@@ -1,4 +1,5 @@
 import { useFullscreen } from '@vueuse/core'
+import { isFunction } from 'global-shared'
 import { computed, ref, useTemplateRef } from 'vue'
 
 import { useUser } from 'src/entities/user'
@@ -92,7 +93,10 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
       return hasActiveScreenSharing && isAnotherParticipant
     })
   )
-  const isScreenSharingControlVisible = computed(() => props.roomCall.status === 'in-progress')
+  const isScreenSharingSupported = computed(() => isFunction(navigator.mediaDevices?.getDisplayMedia))
+  const isScreenSharingControlVisible = computed(
+    () => props.roomCall.status === 'in-progress' && isScreenSharingSupported.value
+  )
   const isScreenSharingControlDisabled = computed(() => {
     const isScreenSharingBlockedByParticipant = !props.localMediaState.screen && isAnotherParticipantScreenSharing.value
 
@@ -110,6 +114,10 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
   }
 
   const toggleScreenSharing = () => {
+    if (!isScreenSharingSupported.value) {
+      return
+    }
+
     if (props.localMediaState.screen) {
       emit('stop-screen')
       return

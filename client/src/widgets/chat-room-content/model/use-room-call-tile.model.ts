@@ -33,6 +33,9 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
   const isMediaTileVideoOff = computed(() => !hasVisibleVideo.value)
   const isMediaTileMuted = computed(() => props.item.isLocal || isRoomCallScreenTile.value || isRemoteAudioMuted.value)
   const isRoomCallTileAudioMeterVisible = computed(() => isRoomCallParticipantTile.value)
+  const isRoomCallTileParticipantMediaStateVisible = computed(
+    () => isRoomCallParticipantTile.value && !props.item.isLocal
+  )
   const isRoomCallTileQuickCommandsVisible = computed(
     () => isRoomCallParticipantTile.value && Boolean(props.item.isHandRaised || props.item.temporaryQuickCommand)
   )
@@ -173,6 +176,7 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
     isRoomCallParticipantTile,
     isRoomCallScreenTile,
     isRoomCallTileAudioMeterVisible,
+    isRoomCallTileParticipantMediaStateVisible,
     isRoomCallTileQuickCommandsVisible,
     isRoomCallTileRemoteActionsVisible,
     roomCallTileAudioVolumeDb,

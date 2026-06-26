@@ -31,9 +31,9 @@ const {
   isMediaTileVideoOff,
   isRemoteAudioMuted,
   isRemoteVideoHidden,
-  isRoomCallParticipantTile,
   isRoomCallScreenTile,
   isRoomCallTileAudioMeterVisible,
+  isRoomCallTileParticipantMediaStateVisible,
   isRoomCallTileQuickCommandsVisible,
   isRoomCallTileRemoteActionsVisible,
   remoteHideButtonText,
@@ -86,7 +86,7 @@ const {
         </div>
         <div class="room-call-tile__states">
           <NmorphIcon
-            v-if="isRoomCallParticipantTile"
+            v-if="isRoomCallTileParticipantMediaStateVisible"
             class="room-call-tile__state"
             :class="{ 'room-call-tile__state--off': !props.item.mediaState.audio }"
             :width="ROOM_CALL_TILE_STATE_ICON_SIZE"
@@ -97,7 +97,7 @@ const {
             <NmorphIconMute v-else />
           </NmorphIcon>
           <NmorphIcon
-            v-if="isRoomCallParticipantTile"
+            v-if="isRoomCallTileParticipantMediaStateVisible"
             class="room-call-tile__state"
             :class="{ 'room-call-tile__state--off': !props.item.mediaState.video }"
             :width="ROOM_CALL_TILE_STATE_ICON_SIZE"
