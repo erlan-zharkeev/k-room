@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => {
   const envDir = path.resolve(__dirname, '..')
   const { TAURI_ENV_DEBUG, TAURI_ENV_PLATFORM } = process.env
   const clientEnvData = createClientEnvData(mode, envDir)
+  const isTauriBuild = Boolean(TAURI_ENV_PLATFORM)
 
   const tauriBuildConfig = TAURI_ENV_PLATFORM
     ? ({
@@ -68,7 +69,9 @@ export default defineConfig(({ mode }) => {
           }
         }
       }),
-      !clientEnvData.isDev && generatePWAConfig({ appName: clientEnvData.appName, themeBg: clientEnvData.themeBg })
+      !clientEnvData.isDev &&
+        !isTauriBuild &&
+        generatePWAConfig({ appName: clientEnvData.appName, themeBg: clientEnvData.themeBg })
     ],
     resolve: {
       alias: [

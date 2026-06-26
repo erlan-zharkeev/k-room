@@ -33,6 +33,7 @@ const {
 
     <div class="update-native-desktop-banner__actions">
       <NmorphButton
+        class="update-native-desktop-banner__action"
         fill
         :disabled="isInstalling"
         :loading="isInstalling"
@@ -40,6 +41,7 @@ const {
         @click="installUpdateNativeDesktop"
       />
       <NmorphButton
+        class="update-native-desktop-banner__action"
         :disabled="isInstalling"
         :text="$t(UPDATE_NATIVE_DESKTOP_I18N.dismissAction)"
         @click="dismissUpdateNativeDesktop"
@@ -59,7 +61,7 @@ const {
   gap: 16px;
   align-items: center;
 
-  width: min(520px, calc(100vw - 32px));
+  width: min(720px, calc(100vw - 32px));
   padding: 12px;
   border: var(--nmorph-plain-border);
   border-radius: 8px;
@@ -81,6 +83,11 @@ const {
   gap: 8px;
 }
 
+.update-native-desktop-banner__action {
+  min-width: 96px;
+  white-space: nowrap;
+}
+
 @media (width <= 520px) {
   .update-native-desktop-banner {
     display: grid;
@@ -88,6 +95,10 @@ const {
 
   .update-native-desktop-banner__actions {
     justify-content: end;
+  }
+
+  .update-native-desktop-banner__action {
+    min-width: 104px;
   }
 }
 </style>

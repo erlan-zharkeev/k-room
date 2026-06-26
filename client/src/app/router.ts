@@ -7,6 +7,7 @@ import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { initClientData, useLogoutNavigation } from 'src/features/client-session'
 import { DEFAULT_SETTINGS_CONTENT_ID } from 'src/pages/settings'
 
+import { isDynamicImportFetchError, recoverNativeDesktopChunkLoad } from './lib/native-desktop-cache'
 import { getAppPathFromSettings, getContentTabFromPath } from './lib/router'
 
 const loadAppLayout = () => import('./layouts/app-layout/AppLayout.vue')
@@ -165,6 +166,12 @@ const routes: RouteRecordRaw[] = [
 export const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+router.onError((error) => {
+  if (!isDynamicImportFetchError(error)) return
+
+  void recoverNativeDesktopChunkLoad()
 })
 
 router.beforeEach(async (to) => {

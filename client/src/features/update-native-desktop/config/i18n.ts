@@ -10,9 +10,9 @@ export const UPDATE_NATIVE_DESKTOP_I18N = defineI18n('updateNativeDesktop', {
     zh: i18nFormatter(['appName', 'version'], (appName: string, version: string) => `${appName} ${version} 可用`)
   },
   description: {
-    en: 'Install the desktop update and restart the app.',
-    ru: 'Установите обновление desktop-клиента и перезапустите приложение.',
-    zh: '安装桌面客户端更新并重启应用。'
+    en: 'To avoid errors, we recommend installing the new version.',
+    ru: 'Во избежание ошибок рекомендуется установить новую версию.',
+    zh: '为避免错误，建议安装新版本。'
   },
   installAction: {
     en: 'Update',

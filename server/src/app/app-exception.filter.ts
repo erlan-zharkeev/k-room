@@ -1,4 +1,4 @@
-import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common'
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from '@nestjs/common'
 import { type Request, type Response } from 'express'
 import { type BackendResponse, REQ_STATUS } from 'global-shared'
 
@@ -36,6 +36,26 @@ export class AppExceptionFilter implements ExceptionFilter {
         message: {
           text: message,
           silent
+        }
+      })
+
+      return
+    }
+
+    if (error instanceof HttpException) {
+      const status = error.getStatus()
+      const message = error.message
+
+      serverCaptureSentryHttpError({
+        message,
+        status
+      })
+
+      response.status(status).json({
+        payload: null,
+        message: {
+          text: message,
+          silent: false
         }
       })
 

@@ -194,6 +194,9 @@ importers:
       '@adminjs/mongoose':
         specifier: ^4.1.0
         version: 4.1.0(adminjs@7.8.17(@types/react-dom@18.2.0)(@types/react@19.2.14))(mongoose@8.23.1)
+      '@babel/plugin-syntax-import-assertions':
+        specifier: 7.28.6
+        version: 7.28.6(@babel/core@7.29.0)
       '@nestjs/common':
         specifier: ^10.0.0
         version: 10.4.22(reflect-metadata@0.2.2)(rxjs@7.8.2)

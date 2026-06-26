@@ -3,6 +3,7 @@ import { initClientData, initClientIndexedDbData } from 'src/features/client-ses
 import { setHttpClientLanguage, setSocketLanguage } from 'src/shared/api'
 import { log } from 'src/shared/lib'
 
+import { initNativeDesktopWebCache } from '../lib/native-desktop-cache'
 import { pinia } from '../providers/pinia'
 import { router } from '../router'
 
@@ -16,6 +17,10 @@ export const initApp = async (app: VueApp) => {
 
   document.title = appName
   log('success', `${appName} (v${appVersion})`)
+  const isNativeDesktopCacheReloading = await initNativeDesktopWebCache()
+
+  if (isNativeDesktopCacheReloading) return
+
   app.use(pinia)
   await app.runWithContext(initClientIndexedDbData)
   const { settings } = useSettings()
