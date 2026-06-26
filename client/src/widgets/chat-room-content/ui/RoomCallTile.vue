@@ -27,7 +27,6 @@ const props = defineProps<RoomCallTileProps>()
 const emit = defineEmits<RoomCallTileEmits>()
 const {
   avatarImageSrc,
-  isMediaTileMuted,
   isMediaTileVideoOff,
   isRemoteAudioMuted,
   isRemoteVideoHidden,
@@ -57,7 +56,7 @@ const {
       :name="props.item.name"
       :avatar-src="avatarImageSrc"
       :mirrored="props.item.mirrored"
-      :muted="isMediaTileMuted"
+      muted
       :video-off="isMediaTileVideoOff"
       :show-status="false"
       aspect="fill"
@@ -283,7 +282,7 @@ const {
 }
 
 .room-call-tile__connection-quality {
-  --room-call-tile-connection-quality-color: var(--nmorph-success-color);
+  --room-call-tile-connection-quality-color: var(--nmorph-success-text-color);
 
   position: absolute;
   right: 8px;
@@ -297,7 +296,7 @@ const {
 }
 
 .room-call-tile__connection-quality--unstable {
-  --room-call-tile-connection-quality-color: var(--nmorph-warn-color);
+  --room-call-tile-connection-quality-color: var(--nmorph-warn-text-color);
 }
 
 .room-call-tile__connection-quality--poor,

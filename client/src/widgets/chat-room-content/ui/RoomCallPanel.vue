@@ -131,7 +131,7 @@ const {
           <template v-for="command in ROOM_CALL_QUICK_COMMANDS" :key="command.id">
             <NmorphButton
               v-if="command.id === 'raise-hand'"
-              class="room-call-panel__quick-command"
+              class="room-call-panel__quick-command room-call-panel__quick-command--icon"
               design="plain"
               borderless
               thickness="thin"
@@ -149,7 +149,7 @@ const {
             </NmorphButton>
             <NmorphButton
               v-if="command.id !== 'raise-hand'"
-              class="room-call-panel__quick-command"
+              class="room-call-panel__quick-command room-call-panel__quick-command--text"
               design="plain"
               borderless
               thickness="thin"
@@ -365,52 +365,67 @@ const {
 }
 
 .room-call-panel__quick-commands-bar {
+  --room-call-panel-quick-commands-toggle-width: 48px;
+  --room-call-panel-quick-command-icon-width: 28px;
+  --room-call-panel-quick-command-text-min-width: 56px;
+  --room-call-panel-quick-command-gap: 4px;
+  --room-call-panel-quick-commands-expanded-width: calc(
+    var(--room-call-panel-quick-commands-toggle-width) + var(--room-call-panel-quick-command-icon-width) +
+      var(--room-call-panel-quick-command-text-min-width) + var(--room-call-panel-quick-command-text-min-width) +
+      var(--room-call-panel-quick-command-text-min-width) + var(--room-call-panel-quick-command-gap) +
+      var(--room-call-panel-quick-command-gap) + var(--room-call-panel-quick-command-gap)
+  );
+
   overflow: hidden;
   display: flex;
-  flex: 0 1 auto;
+  flex: 0 0 var(--room-call-panel-quick-commands-toggle-width);
   align-items: center;
   justify-content: flex-start;
 
   box-sizing: border-box;
-  width: max-content;
-  min-width: 48px;
-  max-width: 48px;
+  width: var(--room-call-panel-quick-commands-toggle-width);
+  min-width: var(--room-call-panel-quick-commands-toggle-width);
 
-  transition: max-width 0.16s ease;
+  transition: flex-basis 0.18s ease, width 0.18s ease;
 }
 
 .room-call-panel__quick-commands-bar--expanded {
-  max-width: 100%;
+  flex-basis: var(--room-call-panel-quick-commands-expanded-width);
+  width: var(--room-call-panel-quick-commands-expanded-width);
 }
 
 .room-call-panel__quick-commands-toggle {
   display: flex;
-  flex: 0 0 48px;
+  flex: 0 0 var(--room-call-panel-quick-commands-toggle-width);
   justify-content: center;
 }
 
 .room-call-panel__quick-commands {
+  transform: translateX(100%);
+
   display: flex;
   flex: 0 0 auto;
-  gap: 4px;
+  gap: var(--room-call-panel-quick-command-gap);
   align-items: center;
 
-  opacity: 0;
-
-  transition: opacity 0.4s ease;
+  transition: transform 0.18s ease;
 }
 
 .room-call-panel__quick-commands-bar--expanded .room-call-panel__quick-commands {
-  opacity: 1;
+  transform: translateX(0);
 }
 
 .room-call-panel__quick-command {
-  opacity: 0;
-  transition: opacity 0.4s ease;
+  flex: 0 0 auto;
 }
 
-.room-call-panel__quick-commands-bar--expanded .room-call-panel__quick-command {
-  opacity: 1;
+.room-call-panel__quick-command--icon {
+  width: var(--room-call-panel-quick-command-icon-width);
+  min-width: var(--room-call-panel-quick-command-icon-width);
+}
+
+.room-call-panel__quick-command--text {
+  min-width: var(--room-call-panel-quick-command-text-min-width);
 }
 
 .room-call-panel__self {

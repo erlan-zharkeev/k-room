@@ -31,7 +31,7 @@ const {
       <NmorphCallout :type="audioInputPermissionCalloutType" :content="audioInputPermissionStatus" />
       <NmorphText
         v-if="!audioInputLoading && audioInputOptions.length === 0"
-        color="var(--nmorph-warn-color)"
+        color="var(--nmorph-warn-text-color)"
         variant="body-small"
         >{{ $t(SETTINGS_PAGE_DEVICES_I18N.notAvailable) }}</NmorphText
       >

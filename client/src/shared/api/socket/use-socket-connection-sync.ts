@@ -6,16 +6,19 @@ import { socket } from './socket'
 import { setSocketConnected, setSocketReconnecting } from './socket-status'
 import { useSocketConnect } from './use-socket-connect'
 import { useSocketReconnect } from './use-socket-reconnect'
+import { useSocketTransportErrorToast } from './use-socket-transport-error-toast'
 
 export const useSocketConnectionSync = () => {
   const { t } = useI18n()
   const toast = useAppToast()
   const { actualizeSocketData } = useSocketConnect()
   const { socketReconnect } = useSocketReconnect()
+  const { hideSocketTransportErrorToast } = useSocketTransportErrorToast()
 
   const syncSocketConnected = () => {
     setSocketConnected(true)
     setSocketReconnecting(false)
+    hideSocketTransportErrorToast()
     actualizeSocketData()
   }
 

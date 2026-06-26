@@ -54,12 +54,12 @@ const {
       }}</NmorphText>
 
       <div v-else-if="hasLoadError" class="download-page__state">
-        <NmorphText align="center" color="var(--nmorph-warn-color)">{{ $t(DOWNLOAD_PAGE_I18N.error) }}</NmorphText>
+        <NmorphText align="center" color="var(--nmorph-warn-text-color)">{{ $t(DOWNLOAD_PAGE_I18N.error) }}</NmorphText>
         <NmorphButton :text="$t(DOWNLOAD_PAGE_I18N.retry)" @click="loadReleasesManifest" />
       </div>
 
       <div v-else-if="showPlatformItems" class="download-page__download-area">
-        <NmorphText v-if="hasDownloadError" align="center" color="var(--nmorph-warn-color)">{{
+        <NmorphText v-if="hasDownloadError" align="center" color="var(--nmorph-warn-text-color)">{{
           $t(DOWNLOAD_PAGE_I18N.downloadUnavailable)
         }}</NmorphText>
 
@@ -114,7 +114,7 @@ const {
       </div>
 
       <div v-else class="download-page__state">
-        <NmorphText align="center" color="var(--nmorph-warn-color)">{{
+        <NmorphText align="center" color="var(--nmorph-warn-text-color)">{{
           $t(DOWNLOAD_PAGE_I18N.downloadUnavailable)
         }}</NmorphText>
       </div>

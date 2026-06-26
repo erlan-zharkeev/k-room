@@ -19,7 +19,7 @@ const { showUnavailable } = useAppCaptcha({
 
 <template>
   <div class="app-captcha">
-    <NmorphText v-if="showUnavailable" color="var(--nmorph-warn-color)">{{
+    <NmorphText v-if="showUnavailable" color="var(--nmorph-warn-text-color)">{{
       $t(APP_CAPTCHA_I18N.unavailable)
     }}</NmorphText>
     <div v-else ref="containerRef" class="app-captcha__widget" />

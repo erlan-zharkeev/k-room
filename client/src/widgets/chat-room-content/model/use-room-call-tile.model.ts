@@ -1,5 +1,6 @@
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
+import { useRoomCallRuntimeState } from 'src/features/room-call-session'
 import { calculateAudioVolumeDb, createAudioMeterAnalyser, log, useLiveMediaUrl } from 'src/shared/lib'
 
 import {
@@ -11,14 +12,20 @@ import {
 import type { RoomCallTileAudioActivityMonitor, RoomCallTileProps } from '../config/types'
 
 export const useRoomCallTile = (props: RoomCallTileProps) => {
-  const isRemoteAudioMuted = ref(false)
-  const isRemoteVideoHidden = ref(false)
   const roomCallTileAudioVolumeDb = ref(Number.NEGATIVE_INFINITY)
   const avatarImageSrc = useLiveMediaUrl(() => props.item.avatarId)
+  const {
+    hiddenRemoteVideoByUserId,
+    mutedRemoteAudioByUserId,
+    toggleRemoteAudioMuted: toggleRoomCallRemoteAudioMuted,
+    toggleRemoteVideoHidden: toggleRoomCallRemoteVideoHidden
+  } = useRoomCallRuntimeState()
   let audioActivityMonitor: RoomCallTileAudioActivityMonitor | null = null
   let monitoredStream: MediaStream | null = null
   const hasStream = computed(() => Boolean(props.item.stream))
   const isRoomCallScreenTile = computed(() => props.item.kind === 'screen')
+  const isRemoteAudioMuted = computed(() => Boolean(mutedRemoteAudioByUserId.value[props.item.id]))
+  const isRemoteVideoHidden = computed(() => Boolean(hiddenRemoteVideoByUserId.value[props.item.id]))
   const hasEnabledVideo = computed(() =>
     isRoomCallScreenTile.value ? props.item.mediaState.screen : props.item.mediaState.video
   )
@@ -31,7 +38,6 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
   const remoteHideButtonText = computed(() => (isRemoteVideoHidden.value ? 'show' : 'hide'))
   const remoteMuteButtonText = computed(() => (isRemoteAudioMuted.value ? 'unmute' : 'mute'))
   const isMediaTileVideoOff = computed(() => !hasVisibleVideo.value)
-  const isMediaTileMuted = computed(() => props.item.isLocal || isRoomCallScreenTile.value || isRemoteAudioMuted.value)
   const isRoomCallTileAudioMeterVisible = computed(() => isRoomCallParticipantTile.value)
   const isRoomCallTileParticipantMediaStateVisible = computed(
     () => isRoomCallParticipantTile.value && !props.item.isLocal
@@ -153,11 +159,11 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
   }
 
   const toggleRemoteAudioMuted = () => {
-    isRemoteAudioMuted.value = !isRemoteAudioMuted.value
+    toggleRoomCallRemoteAudioMuted(props.item.id)
   }
 
   const toggleRemoteVideoHidden = () => {
-    isRemoteVideoHidden.value = !isRemoteVideoHidden.value
+    toggleRoomCallRemoteVideoHidden(props.item.id)
   }
 
   watch(() => props.item.audioActivityStream, syncRoomCallTileAudioActivityStream, { immediate: true })
@@ -169,7 +175,6 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
 
   return {
     avatarImageSrc,
-    isMediaTileMuted,
     isRemoteAudioMuted,
     isRemoteVideoHidden,
     isMediaTileVideoOff,

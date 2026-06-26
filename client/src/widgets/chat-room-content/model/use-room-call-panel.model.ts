@@ -1,17 +1,12 @@
 import { useFullscreen } from '@vueuse/core'
 import { isFunction } from 'global-shared'
-import { computed, ref, useTemplateRef } from 'vue'
+import { computed, useTemplateRef, watch } from 'vue'
 
 import { useUser } from 'src/entities/user'
+import { useRoomCallRuntimeState } from 'src/features/room-call-session'
 
 import { ROOM_CALL_PANEL_DISPLAY_MODE_TOGGLE_I18N } from '../config/constants'
-import type {
-  RoomCallPanelDisplayMode,
-  RoomCallPanelEmit,
-  RoomCallPanelProps,
-  RoomCallQuickCommand,
-  RoomCallTileItem
-} from '../config/types'
+import type { RoomCallPanelEmit, RoomCallPanelProps, RoomCallQuickCommand, RoomCallTileItem } from '../config/types'
 import { buildRoomCallTileItems } from '../lib/build-room-call-tile-items'
 import {
   resolveRoomCallPanelGridColumnCount,
@@ -22,11 +17,17 @@ import { useChatRoomUserLookup } from './use-chat-room-user-lookup.model'
 
 export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelEmit) => {
   const roomCallPanelRef = useTemplateRef<HTMLElement>('roomCallPanel')
-  const roomCallPanelDisplayMode = ref<RoomCallPanelDisplayMode>('grid')
-  const selectedRoomCallTileId = ref<string>()
-  const isRoomCallQuickCommandsExpanded = ref(false)
   const { user } = useUser()
   const { getUserById } = useChatRoomUserLookup()
+  const {
+    isRoomCallQuickCommandsExpanded,
+    roomCallPanelDisplayMode,
+    selectRoomCallTile,
+    selectedRoomCallTileId,
+    setRoomCallPanelDisplayMode,
+    syncRoomCallRuntimeState,
+    toggleRoomCallQuickCommandsExpanded
+  } = useRoomCallRuntimeState()
   const { isFullscreen: isRoomCallFullscreen, toggle: toggleRoomCallFullscreen } = useFullscreen(roomCallPanelRef, {
     autoExit: true
   })
@@ -135,7 +136,7 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
       return
     }
 
-    isRoomCallQuickCommandsExpanded.value = !isRoomCallQuickCommandsExpanded.value
+    toggleRoomCallQuickCommandsExpanded()
   }
 
   const sendRoomCallQuickCommand = (command: RoomCallQuickCommand) => {
@@ -153,19 +154,21 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
 
   const toggleRoomCallPanelDisplayMode = () => {
     if (isRoomCallFocusDisplayMode.value) {
-      roomCallPanelDisplayMode.value = 'grid'
+      setRoomCallPanelDisplayMode('grid')
       return
     }
 
-    selectedRoomCallTileId.value = user.value.id
-    roomCallPanelDisplayMode.value = 'focus'
+    selectRoomCallTile(user.value.id)
+    setRoomCallPanelDisplayMode('focus')
   }
 
   const focusRoomCallTile = (item: RoomCallTileItem) => {
-    selectedRoomCallTileId.value = item.id
+    selectRoomCallTile(item.id)
 
-    roomCallPanelDisplayMode.value = 'focus'
+    setRoomCallPanelDisplayMode('focus')
   }
+
+  watch(() => props.roomCall.id, syncRoomCallRuntimeState, { immediate: true })
 
   return {
     focusRoomCallTile,

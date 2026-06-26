@@ -2,9 +2,9 @@ import { ROOM_CALL_SESSION_I18N } from './i18n'
 import type { RoomCallActivityKind, RoomCallConnectionQuality } from './types'
 
 export const ROOM_CALL_ACTIVITY_DOT_COLOR_BY_KIND = {
-  active: 'var(--nmorph-success-color)',
-  incoming: 'var(--nmorph-warn-color)',
-  joinable: 'var(--nmorph-success-color)',
+  active: 'var(--nmorph-success-text-color)',
+  incoming: 'var(--nmorph-warn-text-color)',
+  joinable: 'var(--nmorph-success-text-color)',
   outgoing: 'var(--nmorph-accent-color)'
 } as const satisfies Record<RoomCallActivityKind, string>
 

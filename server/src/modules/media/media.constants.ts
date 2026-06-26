@@ -9,6 +9,9 @@ export const STREAM_MEDIA_BUCKET_NAMES = [
   'video'
 ] as const satisfies readonly MediaBucketName[]
 
+export const ADMIN_MEDIA_PREVIEW_BASE_PATH = '/media-preview'
+export const ADMIN_MEDIA_PREVIEW_ROUTE = `${ADMIN_MEDIA_PREVIEW_BASE_PATH}/:bucketName/:id`
+
 export const SHARP_PRESETS = {
   avatar: {
     dimensions: {

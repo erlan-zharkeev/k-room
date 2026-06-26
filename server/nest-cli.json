@@ -9,6 +9,10 @@
       {
         "include": "modules/fixtures/images/**/*",
         "outDir": "build"
+      },
+      {
+        "include": "modules/media/admin-components/**/*",
+        "outDir": "build"
       }
     ]
   }

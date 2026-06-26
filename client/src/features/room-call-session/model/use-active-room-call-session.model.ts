@@ -26,6 +26,7 @@ import { useRoomCallLocalMedia } from './use-room-call-local-media.model'
 import { useRoomCallPeerManager } from './use-room-call-peer-manager.model'
 import { useRoomCallQuickCommandMonitor } from './use-room-call-quick-command-monitor.model'
 import { useRoomCallQuickCommandSync } from './use-room-call-quick-command-sync.model'
+import { useRoomCallRuntimeState } from './use-room-call-runtime-state.model'
 import { useRoomCallSession } from './use-room-call-session.model'
 import { useRoomCallSignalMonitor } from './use-room-call-signal-monitor.model'
 
@@ -83,6 +84,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     syncRoomCallQuickCommandReceived,
     temporaryQuickCommandByUserId
   } = useRoomCallQuickCommandSync(activeRoomCallId)
+  const { resetRoomCallRuntimeState, syncRoomCallRuntimeState } = useRoomCallRuntimeState()
   const localStreams = computed(() => [audioStream.value, videoStream.value, screenStream.value])
   const activeRoomCall = computed(() => roomCalls.value.find(({ id }) => id === activeRoomCallId.value))
   const localConnectionQuality = computed(() =>
@@ -217,6 +219,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     activeRoomCallId.value = ''
     resetRoomCallPeers()
     resetRoomCallQuickCommands()
+    resetRoomCallRuntimeState()
     stopOutgoingRoomCallSound()
     stopRoomCallLocalMedia()
   }
@@ -320,6 +323,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       const { roomCallId } = response.payload
 
       activeRoomCallId.value = roomCallId
+      syncRoomCallRuntimeState(roomCallId)
       await syncActiveRoomCallLocalState()
       void startOutgoingRoomCallSound(roomCallId)
 
@@ -349,6 +353,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       const localMediaKind = resolveRoomCallJoinMediaKind(roomCall, mediaKind)
 
       activeRoomCallId.value = roomCall.id
+      syncRoomCallRuntimeState(roomCall.id)
 
       await startRoomCallLocalMedia(localMediaKind)
 

@@ -19,11 +19,15 @@ export type RoomCallActivityKind = 'active' | 'incoming' | 'joinable' | 'outgoin
 
 export type RoomCallConnectionQuality = 'good' | 'poor' | 'reconnecting' | 'unstable'
 
+export type RoomCallPanelDisplayMode = 'focus' | 'grid'
+
 export type RoomCallLocalMediaStreamList = Array<MediaStream | null | undefined>
 
 export type RoomCallRemoteStreamsByUserId = Record<string, MediaStream | undefined>
 
 export type RoomCallConnectionQualityByUserId = Record<string, RoomCallConnectionQuality | undefined>
+
+export type RoomCallUserFlagByUserId = Record<string, boolean | undefined>
 
 export type SendRoomCallSignal = (payload: EventSendRoomCallSignal) => void
 
@@ -41,6 +45,16 @@ export interface RoomCallLocalTrackEntry {
 export interface RoomCallTemporaryQuickCommandState {
   id: string
   command: RoomCallTemporaryQuickCommand
+}
+
+export interface RoomCallAudioOutputItem {
+  muted: boolean
+  stream: MediaStream
+  userId: string
+}
+
+export interface RoomCallAudioOutputItemProps {
+  item: RoomCallAudioOutputItem
 }
 
 export type RoomCallTemporaryQuickCommandByUserId = Record<string, RoomCallTemporaryQuickCommandState | undefined>

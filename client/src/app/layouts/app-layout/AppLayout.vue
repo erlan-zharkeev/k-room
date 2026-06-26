@@ -4,6 +4,7 @@ import { RouterView } from 'vue-router'
 
 import { AppWelcomeDialog } from 'src/features/app-welcome'
 import { OnboardingGuide, OnboardingGuideTarget, useOnboardingGuide } from 'src/features/onboarding-guide'
+import { RoomCallAudioOutput } from 'src/features/room-call-session'
 import { useAppMonitors } from 'src/pages/app'
 import { useScreen } from 'src/shared/lib'
 import { LeftBar } from 'src/widgets/left-bar'
@@ -30,6 +31,7 @@ const {
 
 <template>
   <div class="app-layout-root">
+    <RoomCallAudioOutput />
     <AppWelcomeDialog @complete="openPendingGuide" />
     <OnboardingGuide>
       <main class="app-layout" :class="{ 'app-layout--wallpaper': showWallpaper }" :style="wallpaperStyle">

@@ -36,6 +36,8 @@ import type {
 } from 'src/features/room-call-session'
 import type { AudioMeterAnalyser } from 'src/shared/lib'
 
+export type { RoomCallPanelDisplayMode } from 'src/features/room-call-session'
+
 export type ChatRoomContentView = 'text' | 'call'
 
 export interface ChatRoomMessagesProps {
@@ -102,8 +104,6 @@ export type RoomCallPanelEmit = {
   (event: 'set-hand-raised', handRaised: boolean): void
   (event: 'leave'): void
 }
-
-export type RoomCallPanelDisplayMode = 'focus' | 'grid'
 
 export type RoomCallQuickCommand = 'no' | 'ok' | 'raise-hand' | 'yes'
 

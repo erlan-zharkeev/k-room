@@ -25,7 +25,7 @@ const {
       <NmorphText v-if="isInstalling" color="semi-contrast">{{
         $t(UPDATE_NATIVE_DESKTOP_I18N.installing, { progress: downloadProgress })
       }}</NmorphText>
-      <NmorphText v-else-if="hasInstallError" color="var(--nmorph-warn-color)">{{
+      <NmorphText v-else-if="hasInstallError" color="var(--nmorph-warn-text-color)">{{
         $t(UPDATE_NATIVE_DESKTOP_I18N.installFailed)
       }}</NmorphText>
       <NmorphText v-else color="semi-contrast">{{ $t(UPDATE_NATIVE_DESKTOP_I18N.description) }}</NmorphText>
