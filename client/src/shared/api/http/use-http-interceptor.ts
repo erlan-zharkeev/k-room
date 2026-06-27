@@ -7,6 +7,7 @@ import { log, useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
 
 import { API_I18N } from '../i18n'
+import { handleHttpTransportMeta } from '../transport-meta'
 
 import { createHttpError } from './create-http-error'
 import { extractErrorPayload } from './extract-error-payload'
@@ -33,6 +34,11 @@ export const useHttpInterceptor = () => {
     if (error instanceof AxiosError) {
       const status = error.response?.status as ReqStatus | undefined
       const mediaRequestError = isMediaRequestError(error)
+
+      if (error.response) {
+        handleHttpTransportMeta(error.response)
+      }
+
       const payload = (await extractErrorPayload(error)) as BackendResponse<unknown> | null
       let text: string | undefined
       let silent: boolean | undefined

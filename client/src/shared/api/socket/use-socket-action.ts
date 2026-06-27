@@ -6,6 +6,8 @@ import type {
   SocketAckResponse
 } from 'global-shared'
 
+import { handleTransportMeta } from '../transport-meta'
+
 import { SOCKET_ACTION_ACK_TIMEOUT_MS } from './constants'
 import { socket } from './socket'
 import type { EmitSocketActionOptions, SocketWithAck } from './types'
@@ -40,6 +42,8 @@ export const useSocketAction = () => {
 
     try {
       const response = await emitWithAckSocket.emitWithAck<TEvent, TReason>(event, payload)
+
+      handleTransportMeta(response.meta)
 
       if (response.ok) {
         options.onSuccess?.(response)

@@ -1,11 +1,11 @@
 import { type ChatRoom, type EventSendMessage, type Message } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
-import { computed, type Ref, ref, toRef, watch } from 'vue'
+import { computed, onScopeDispose, type Ref, ref, toRef, watch } from 'vue'
 
 import { getRoomOtherUserIds, isRoomPrivate, useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useUser } from 'src/entities/user'
-import { socket, useSocketAvailability, useSocketTransportErrorToast } from 'src/shared/api'
+import { setClientUpdateReloadBlock, socket, useSocketAvailability, useSocketTransportErrorToast } from 'src/shared/api'
 import type { AppProfilePickerItem } from 'src/shared/ui'
 
 import type { MessageForwardDialogProps } from '../config/types'
@@ -13,6 +13,8 @@ import { buildChatRoomTitle } from '../lib/build-chat-room-title'
 import { buildRepliedMessage } from '../lib/build-replied-message'
 
 import { useChatRoomUserLookup } from './use-chat-room-user-lookup.model'
+
+let messageForwardClientUpdateReloadBlockerId = 0
 
 export const useMessageForward = (props: MessageForwardDialogProps, isMessageForwardDialogOpen: Ref<boolean>) => {
   const forwardedMessage = toRef(props, 'message')
@@ -26,6 +28,7 @@ export const useMessageForward = (props: MessageForwardDialogProps, isMessageFor
   const selectedMessageForwardRoomIds = ref<string[]>([])
   const messageForwardSearchQuery = ref('')
   const isForwardingMessage = ref(false)
+  const clientUpdateReloadBlockerId = `message-forward:${(messageForwardClientUpdateReloadBlockerId += 1)}`
   const normalizedMessageForwardSearchQuery = computed(() => messageForwardSearchQuery.value.trim().toLowerCase())
 
   const buildMessageForwardChatRoomItem = (room: ChatRoom): AppProfilePickerItem => {
@@ -127,10 +130,20 @@ export const useMessageForward = (props: MessageForwardDialogProps, isMessageFor
     }
   }
 
-  watch(isMessageForwardDialogOpen, (isOpen) => {
-    if (isOpen) return
+  watch(
+    isMessageForwardDialogOpen,
+    (isOpen) => {
+      setClientUpdateReloadBlock(clientUpdateReloadBlockerId, isOpen)
 
-    resetMessageForwardDialog()
+      if (isOpen) return
+
+      resetMessageForwardDialog()
+    },
+    { immediate: true }
+  )
+
+  onScopeDispose(() => {
+    setClientUpdateReloadBlock(clientUpdateReloadBlockerId, false)
   })
 
   return {

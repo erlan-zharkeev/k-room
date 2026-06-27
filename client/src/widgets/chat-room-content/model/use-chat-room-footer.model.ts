@@ -1,12 +1,12 @@
 import { MESSAGE_BODY_MAX_LENGTH, type ChatRoom, type EventSendMessage, type Message } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
-import { computed, type Ref, ref } from 'vue'
+import { computed, onScopeDispose, type Ref, ref, watch } from 'vue'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useUser } from 'src/entities/user'
 import { useChatRoomTypingEmitter } from 'src/features/chat-room-typing'
-import { socket, useSocketAvailability, useSocketTransportErrorToast } from 'src/shared/api'
+import { setClientUpdateReloadBlock, socket, useSocketAvailability, useSocketTransportErrorToast } from 'src/shared/api'
 
 import type { ChatRoomFooterSelectEditingMessage } from '../config/types'
 import { cloneMediaObjects } from '../lib/clone-media-objects'
@@ -15,6 +15,8 @@ import { useChatRoomMessageEmojiPicker } from './use-chat-room-message-emoji-pic
 import { useMessageAttachmentDraft } from './use-message-attachment-draft.model'
 import { useMessageDraftReference } from './use-message-draft-reference.model'
 import { useMessageEdit } from './use-message-edit.model'
+
+let chatRoomFooterClientUpdateReloadBlockerId = 0
 
 export const useChatRoomFooter = (room: Ref<ChatRoom>, onSelectEditingMessage: ChatRoomFooterSelectEditingMessage) => {
   const { mutate } = useChatRoom()
@@ -75,9 +77,16 @@ export const useChatRoomFooter = (room: Ref<ChatRoom>, onSelectEditingMessage: C
     messageDraftReferenceTitle,
     buildMessageDraftReferencePayload,
     cancelMessageDraftReference,
+    isMessageDraftReferenceActive,
     isMessageDraftReferenceCurrentRoom
   } = useMessageDraftReference(room)
   const isEditingCurrentRoomMessage = computed(() => isEditingRoomMessage(room.value.id))
+  const clientUpdateReloadBlockerId = `chat-room-message-draft:${(chatRoomFooterClientUpdateReloadBlockerId += 1)}`
+  const hasClientUpdateBlockingMessageDraft = computed(() => {
+    const hasMessageTextDraft = Boolean(messageText.value)
+
+    return [hasMessageTextDraft, hasMessageAttachmentDraft.value, isMessageDraftReferenceActive.value].some(Boolean)
+  })
   const isSendDisabled = computed(() => {
     const hasMessageBody = Boolean(messageText.value.trim())
     const hasMessageDraft = hasMessageAttachmentDraft.value
@@ -177,6 +186,18 @@ export const useChatRoomFooter = (room: Ref<ChatRoom>, onSelectEditingMessage: C
     clearSentMessageAttachmentDraft()
     closeMessageEmojiDropdown()
   }
+
+  watch(
+    hasClientUpdateBlockingMessageDraft,
+    (isBlocked) => {
+      setClientUpdateReloadBlock(clientUpdateReloadBlockerId, isBlocked)
+    },
+    { immediate: true }
+  )
+
+  onScopeDispose(() => {
+    setClientUpdateReloadBlock(clientUpdateReloadBlockerId, false)
+  })
 
   return {
     messageText,

@@ -246,6 +246,7 @@ export type {
 } from './security/types'
 
 export {
+  CLIENT_VERSION_HEADER,
   DAY_IN_MS,
   DAY_IN_SEC,
   firebaseProviders,
@@ -270,7 +271,8 @@ export type {
   BasicStreamSettings,
   StreamSettings,
   BackendMessage,
-  BackendResponse
+  BackendResponse,
+  TransportMeta
 } from './shared/types'
 
 export type {

@@ -92,7 +92,7 @@ const {
 
   overflow-wrap: anywhere;
 
-  background: var(--app-content-surface);
+  background: var(--app-message-surface);
 }
 
 @include screen-tablet {
@@ -102,7 +102,7 @@ const {
 }
 
 .message-body--self {
-  background: var(--nmorph-dark-shade-color);
+  background: var(--app-message-self-surface);
 }
 
 .message-body--editing {
@@ -149,7 +149,9 @@ const {
 .message-body__footer {
   display: flex;
   gap: 8px;
-  align-items: baseline;
+  align-items: center;
   justify-content: flex-end;
+
+  min-height: 28px;
 }
 </style>

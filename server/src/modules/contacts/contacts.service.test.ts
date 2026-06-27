@@ -71,7 +71,11 @@ describe('contacts.service', () => {
     emitSearchedContacts('socket-1', payload)
 
     expect(ioMock.to).toHaveBeenCalledWith('socket-1')
-    expect(ioMock.emit).toHaveBeenCalledWith('get-searched-contact', payload)
+    expect(ioMock.emit).toHaveBeenCalledWith(
+      'get-searched-contact',
+      payload,
+      expect.objectContaining({ clientVersion: expect.any(String) })
+    )
   })
 
   it('searches by nickname, filters current user, sorts accepted contacts last, and paginates', async () => {

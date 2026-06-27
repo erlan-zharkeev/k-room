@@ -1,6 +1,7 @@
 import type { ServerToClientSocketAction, ServerToClientSocketPayloadMap } from 'global-shared'
 
 import { getIO } from 'src/shared/lib/io'
+import { emitSocketEvent } from 'src/shared/lib/transport-meta'
 import type { EmitServerToClientSocketEvent, MongoId } from 'src/shared/types'
 
 import { USER_SOCKET_ROOM_PREFIX } from './presence.constants'
@@ -18,8 +19,8 @@ export const emitToUsers = <TEvent extends ServerToClientSocketAction>(
 
   userIds.forEach((userId) => {
     const room = io.to(buildUserRoomName(userId))
-    const emitSocketEvent = room.emit.bind(room) as EmitServerToClientSocketEvent
+    const emit = room.emit.bind(room) as EmitServerToClientSocketEvent
 
-    emitSocketEvent(event, ...payload)
+    emitSocketEvent(emit, event, ...payload)
   })
 }

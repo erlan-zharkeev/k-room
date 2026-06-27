@@ -1,6 +1,7 @@
 export { createHttpError, getHandledErrorMessage, isHttpError, isHandledError } from './http/create-http-error'
 export { allowAuthRefresh, blockAuthRefresh } from './http/auth-refresh'
 export { API_I18N } from './i18n'
+export { setClientUpdateReloadBlock } from './transport-meta'
 export { getHeaderValue } from './http/get-header-value'
 export { loadPublicJson } from './http/load-public-json'
 export { setHttpClientLanguage } from './http/http-client'

@@ -20,6 +20,14 @@ const hasMediaUrlCacheKeyChanges = (currentKeys: string[], nextKeys: string[]) =
   return currentKeys.some((key, index) => key !== nextKeys[index])
 }
 
+const hasMediaIdChanges = (currentIds: readonly string[], nextIds: readonly string[]) => {
+  const hasDifferentLength = currentIds.length !== nextIds.length
+
+  if (hasDifferentLength) return true
+
+  return currentIds.some((id, index) => id !== nextIds[index])
+}
+
 export const acquireUrl = (key: string, blob: Blob) => {
   const hit = cache.get(key)
 
@@ -124,7 +132,9 @@ export const useLiveMediaUrl = (id: MaybeRefOrGetter<string | null | undefined>)
 
 export const useLiveMediaUrls = (ids: MaybeRefOrGetter<readonly string[]>) => {
   const urls = shallowRef<string[]>([])
+  let currentIds: readonly string[] = []
   let currentKeys: string[] = []
+  let unsubscribeCurrent: (() => void) | null = null
 
   const clearUrls = () => {
     if (!currentKeys.length) {
@@ -140,12 +150,17 @@ export const useLiveMediaUrls = (ids: MaybeRefOrGetter<readonly string[]>) => {
 
   const stop = watch(
     () => [...toValue(ids)],
-    (mediaIds, _previous, onCleanup) => {
+    (mediaIds) => {
+      if (!hasMediaIdChanges(currentIds, mediaIds)) return
+
+      unsubscribeCurrent?.()
+      unsubscribeCurrent = null
       clearUrls()
+      currentIds = mediaIds
 
       if (!mediaIds.length) return
 
-      const unsubscribe = subscribeDexieLiveQuery(() => getDexieMediaRecords(mediaIds), {
+      unsubscribeCurrent = subscribeDexieLiveQuery(() => getDexieMediaRecords(mediaIds), {
         next: (records) => {
           const entries = records.flatMap((record, index) => {
             if (!record?.blob) return []
@@ -169,17 +184,16 @@ export const useLiveMediaUrls = (ids: MaybeRefOrGetter<readonly string[]>) => {
         },
         error: clearUrls
       })
-
-      onCleanup(() => {
-        unsubscribe()
-        clearUrls()
-      })
     },
     { immediate: true }
   )
 
   if (getCurrentScope()) {
-    onScopeDispose(stop)
+    onScopeDispose(() => {
+      stop()
+      unsubscribeCurrent?.()
+      clearUrls()
+    })
   }
 
   return urls
@@ -187,7 +201,9 @@ export const useLiveMediaUrls = (ids: MaybeRefOrGetter<readonly string[]>) => {
 
 export const useLiveMediaUrlMap = (ids: MaybeRefOrGetter<readonly string[]>) => {
   const urlMap = shallowRef(new Map<string, string>())
+  let currentIds: readonly string[] = []
   let currentKeys: string[] = []
+  let unsubscribeCurrent: (() => void) | null = null
 
   const clearUrls = () => {
     if (!currentKeys.length) {
@@ -203,12 +219,17 @@ export const useLiveMediaUrlMap = (ids: MaybeRefOrGetter<readonly string[]>) => 
 
   const stop = watch(
     () => [...toValue(ids)],
-    (mediaIds, _previous, onCleanup) => {
+    (mediaIds) => {
+      if (!hasMediaIdChanges(currentIds, mediaIds)) return
+
+      unsubscribeCurrent?.()
+      unsubscribeCurrent = null
       clearUrls()
+      currentIds = mediaIds
 
       if (!mediaIds.length) return
 
-      const unsubscribe = subscribeDexieLiveQuery(() => getDexieMediaRecords(mediaIds), {
+      unsubscribeCurrent = subscribeDexieLiveQuery(() => getDexieMediaRecords(mediaIds), {
         next: (records) => {
           const entries = records.flatMap((record, index) => {
             if (!record?.blob) return []
@@ -232,17 +253,16 @@ export const useLiveMediaUrlMap = (ids: MaybeRefOrGetter<readonly string[]>) => 
         },
         error: clearUrls
       })
-
-      onCleanup(() => {
-        unsubscribe()
-        clearUrls()
-      })
     },
     { immediate: true }
   )
 
   if (getCurrentScope()) {
-    onScopeDispose(stop)
+    onScopeDispose(() => {
+      stop()
+      unsubscribeCurrent?.()
+      clearUrls()
+    })
   }
 
   return urlMap

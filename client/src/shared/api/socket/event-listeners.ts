@@ -1,20 +1,29 @@
-import type { ServerToClientSocketAction, ServerToClientSocketEvents } from 'global-shared'
+import type { TransportMeta } from 'global-shared'
+
+import { handleTransportMeta } from '../transport-meta'
 
 import { socket } from './socket'
-
-type SocketEventListener =
-  | {
-      [Event in ServerToClientSocketAction]: readonly [Event, ServerToClientSocketEvents[Event]]
-    }[ServerToClientSocketAction]
-  | readonly ['connect' | 'disconnect', () => void]
+import type { SocketEventListener } from './types'
 
 export const registerSocketEventListeners = (listeners: readonly SocketEventListener[]) => {
-  listeners.forEach(([event, listener]) => {
-    socket.on(event, listener as never)
+  const registeredListeners = listeners.map(([event, listener]) => {
+    const registeredListener =
+      event === 'connect' || event === 'disconnect'
+        ? listener
+        : (payload: never, meta?: TransportMeta) => {
+            const eventListener = listener as (payload: never) => void
+
+            handleTransportMeta(meta)
+            eventListener(payload)
+          }
+
+    socket.on(event, registeredListener as never)
+
+    return [event, registeredListener] as const
   })
 
   return () => {
-    listeners.forEach(([event, listener]) => {
+    registeredListeners.forEach(([event, listener]) => {
       socket.off(event, listener as never)
     })
   }

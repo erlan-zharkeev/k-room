@@ -21,7 +21,11 @@ const { canUpdatePinnedMessage, isUpdatingPinnedMessage, pinnedMessage, pinnedMe
     shadow-type="inset"
     @click="emit('select', pinnedMessage.id)"
   >
-    <MessagePreview :title="$t(CHAT_ROOM_CONTENT_I18N.pinnedMessage)" :text="pinnedMessageText" />
+    <MessagePreview
+      class="chat-room-pinned-message__preview"
+      :title="$t(CHAT_ROOM_CONTENT_I18N.pinnedMessage)"
+      :text="pinnedMessageText"
+    />
     <NmorphButton
       design="plain"
       borderless
@@ -49,5 +53,10 @@ const { canUpdatePinnedMessage, isUpdatingPinnedMessage, pinnedMessage, pinnedMe
   grid-template-columns: minmax(0, 1fr) max-content;
   gap: 8px;
   align-items: center;
+}
+
+.chat-room-pinned-message__preview {
+  justify-items: start;
+  text-align: left;
 }
 </style>

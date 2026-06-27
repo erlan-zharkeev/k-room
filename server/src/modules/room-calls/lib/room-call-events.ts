@@ -1,11 +1,12 @@
 import type { EventRoomCallSignalReceived } from 'global-shared'
 
 import { getIO } from 'src/shared/lib/io'
+import { emitSocketEvent } from 'src/shared/lib/transport-meta'
 import type { EmitServerToClientSocketEvent } from 'src/shared/types'
 
 export const emitRoomCallSignalReceived = (socketId: string, payload: EventRoomCallSignalReceived) => {
   const room = getIO().to(socketId)
-  const emitSocketEvent = room.emit.bind(room) as EmitServerToClientSocketEvent
+  const emit = room.emit.bind(room) as EmitServerToClientSocketEvent
 
-  emitSocketEvent('room-call-signal-received', payload)
+  emitSocketEvent(emit, 'room-call-signal-received', payload)
 }

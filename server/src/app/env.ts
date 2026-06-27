@@ -39,7 +39,11 @@ const SERVER_PORT = getEnv('SERVER_PORT', sharedEnvs)
 const SOCKET_PATH = getEnv('SOCKET_PATH', sharedEnvs)
 
 const packageData = JSON.parse(fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')) as PackageData
+const clientPackageData = JSON.parse(
+  fs.readFileSync(path.resolve(envDir, 'client/package.json'), 'utf-8')
+) as PackageData
 const APP_NAME = getEnv('APP_NAME', sharedEnvs) || formatAppName(packageData.name)
+const CLIENT_APP_VERSION = getEnv('CLIENT_APP_VERSION', sharedEnvs) || clientPackageData.version
 
 const isDev = stage !== 'production'
 const isE2E = process.env.SERVER_E2E === 'true'
@@ -81,7 +85,8 @@ export const SERVER_ENV = {
   },
   info: {
     appName: APP_NAME,
-    appVersion: packageData.version
+    appVersion: packageData.version,
+    clientAppVersion: CLIENT_APP_VERSION
   },
   mongo: {
     mongoHost: MONGO_HOST,

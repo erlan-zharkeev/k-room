@@ -2,6 +2,8 @@ import type {
   ClientToServerSocketAckAction,
   ClientToServerSocketAckPayloadMap,
   ClientToServerSocketPayloadMap,
+  ServerToClientSocketAction,
+  ServerToClientSocketEvents,
   SocketAckFailure,
   SocketAckResponse,
   SocketAckSuccess
@@ -10,6 +12,12 @@ import type {
 import type { socket } from './socket'
 
 export type SocketAvailabilityStatus = 'online' | 'reconnecting' | 'offline'
+
+export type SocketEventListener =
+  | {
+      [Event in ServerToClientSocketAction]: readonly [Event, ServerToClientSocketEvents[Event]]
+    }[ServerToClientSocketAction]
+  | readonly ['connect' | 'disconnect', () => void]
 
 export interface EmitSocketActionOptions<TResponsePayload = void, TReason extends string = string> {
   onSuccess?: (response: SocketAckSuccess<TResponsePayload>) => void

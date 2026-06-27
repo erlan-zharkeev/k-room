@@ -6,6 +6,7 @@ import 'reflect-metadata'
 import { NestFactory } from '@nestjs/core'
 import cookieParser from 'cookie-parser'
 import { type NextFunction, type Request, type Response } from 'express'
+import { CLIENT_VERSION_HEADER } from 'global-shared'
 
 import { createAdminRouter, getAdminFaviconPath } from './app/adminjs'
 import { AppExceptionFilter } from './app/app-exception.filter'
@@ -17,6 +18,7 @@ import { errorToMessage } from './shared/lib/error-to-message'
 import { getRequestLanguage } from './shared/lib/get-request-language'
 import { log } from './shared/lib/log'
 import { serverCaptureSentryException } from './shared/lib/sentry'
+import { setClientVersionHeader } from './shared/lib/transport-meta'
 
 const bootstrap = async () => {
   initSentry()
@@ -37,12 +39,17 @@ const bootstrap = async () => {
   app.enableCors({
     origin: SERVER_ENV.origins,
     credentials: true,
+    exposedHeaders: [CLIENT_VERSION_HEADER],
     optionsSuccessStatus: 200
   })
   expressApp.set('trust proxy', true)
   app.use(cookieParser())
   app.use((request: Request, _response: Response, next: NextFunction) => {
     request.language = getRequestLanguage(request.headers)
+    next()
+  })
+  app.use((_request: Request, response: Response, next: NextFunction) => {
+    setClientVersionHeader(response)
     next()
   })
   app.useGlobalFilters(new AppExceptionFilter())

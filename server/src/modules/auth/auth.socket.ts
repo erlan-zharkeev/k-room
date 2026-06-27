@@ -3,12 +3,15 @@ import jwt from 'jsonwebtoken'
 
 import { SERVER_ENV } from 'src/app/env'
 import { getSocketLanguage } from 'src/shared/lib/get-request-language'
-import type { SocketInstance } from 'src/shared/types'
+import { emitSocketEvent } from 'src/shared/lib/transport-meta'
+import type { EmitServerToClientSocketEvent, SocketInstance } from 'src/shared/types'
 
 import type { SocketTokenPayload } from './auth.types'
 
 const emitAuthError = (socket: SocketInstance) => {
-  socket.emit('auth-error', {
+  const emit = socket.emit.bind(socket) as EmitServerToClientSocketEvent
+
+  emitSocketEvent(emit, 'auth-error', {
     event: 'connection',
     payload: null
   })

@@ -120,7 +120,7 @@ export const useMessageSync = () => {
       }
     })
     showDeliveredMessageToast({ roomId, message })
-    showDeliveredMessageBrowserPush({ roomId, message })
+    void showDeliveredMessageBrowserPush({ roomId, message })
     void playDeliveredMessageSound({ roomId, message })
   }
 

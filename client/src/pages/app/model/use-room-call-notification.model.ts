@@ -10,16 +10,20 @@ import type {
 import { isRoomPrivate, useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useKnownUser } from 'src/entities/known-user'
+import { useMedia } from 'src/entities/media-file'
 import { useAppSound, useSettings } from 'src/entities/setting'
 import { useSystem } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
 import { ROOM_CALL_SESSION_I18N } from 'src/features/room-call-session'
-import { showBrowserPush, useI18n } from 'src/shared/lib'
+import { useI18n } from 'src/shared/lib'
+
+import { showBrowserPushWithImage } from '../lib/browser-push-image'
 
 export const useRoomCallNotification = () => {
   const { getById } = useChatRoom()
   const { contactById } = useContact()
   const { knownUserById } = useKnownUser()
+  const { get: getMedia } = useMedia()
   const { settings } = useSettings()
   const { hasInteracted } = useSystem()
   const { startLoopAppSound, stopAppSound } = useAppSound()
@@ -43,6 +47,10 @@ export const useRoomCallNotification = () => {
 
   const resolveRoomCallInitiatorNickname = (initiatorId: string) => {
     return contactById.value.get(initiatorId)?.nickname ?? knownUserById.value.get(initiatorId)?.nickname
+  }
+
+  const resolveRoomCallInitiatorAvatarId = (initiatorId: string) => {
+    return contactById.value.get(initiatorId)?.avatarId ?? knownUserById.value.get(initiatorId)?.avatarId ?? null
   }
 
   const resolveStartedRoomCallBrowserPushTitle = ({ roomCall }: EventRoomCallStarted, room: ChatRoom) => {
@@ -90,7 +98,7 @@ export const useRoomCallNotification = () => {
     }
   }
 
-  const showStartedRoomCallBrowserPush = (payload: EventRoomCallStarted) => {
+  const showStartedRoomCallBrowserPush = async (payload: EventRoomCallStarted) => {
     const { calls, general } = settings.value.notifications
     const { roomCall } = payload
     const room = resolveStartedRoomCallNotificationRoom(payload)
@@ -99,9 +107,14 @@ export const useRoomCallNotification = () => {
     if (!calls.browserPush) return
     if (!room) return
 
-    showBrowserPush(resolveStartedRoomCallBrowserPushTitle(payload, room), {
-      tag: roomCall.id
-    })
+    await showBrowserPushWithImage(
+      resolveStartedRoomCallBrowserPushTitle(payload, room),
+      {
+        tag: roomCall.id
+      },
+      resolveRoomCallInitiatorAvatarId(roomCall.initiatorId),
+      getMedia
+    )
   }
 
   const stopStartedRoomCallSound = () => {
@@ -110,7 +123,7 @@ export const useRoomCallNotification = () => {
   }
 
   const notifyStartedRoomCall = (payload: EventRoomCallStarted) => {
-    showStartedRoomCallBrowserPush(payload)
+    void showStartedRoomCallBrowserPush(payload)
     void playStartedRoomCallSound(payload)
   }
 

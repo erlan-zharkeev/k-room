@@ -4,7 +4,8 @@ import type { EventUpdateLanguage } from 'global-shared'
 import { PresenceService } from 'src/modules/presence/presence.service'
 import { RedisService } from 'src/modules/security/redis.service'
 import { socketErrorMiddleware } from 'src/shared/lib/socket-error'
-import type { SocketInstance } from 'src/shared/types'
+import { emitSocketEvent } from 'src/shared/lib/transport-meta'
+import type { EmitServerToClientSocketEvent, SocketInstance } from 'src/shared/types'
 
 import { resolveActualUserSocketData } from './lib/resolve-actual-user-socket-data'
 import { USER_SOCKET_I18N } from './user.i18n'
@@ -20,6 +21,7 @@ export class UserSocketService {
 
   async register(socket: SocketInstance) {
     await this.userService.updateUserLanguage(socket.data.userId, socket.data.language)
+    const emit = socket.emit.bind(socket) as EmitServerToClientSocketEvent
 
     socket.on(
       'disconnect',
@@ -55,9 +57,9 @@ export class UserSocketService {
             return
           }
 
-          socket.emit('actual-contacts', data.contactsPayload)
-          socket.emit('actual-chat-rooms', data.roomsPayload)
-          socket.emit('room-calls-updated', data.roomCallsPayload)
+          emitSocketEvent(emit, 'actual-contacts', data.contactsPayload)
+          emitSocketEvent(emit, 'actual-chat-rooms', data.roomsPayload)
+          emitSocketEvent(emit, 'room-calls-updated', data.roomCallsPayload)
         },
         { basicError: USER_SOCKET_I18N.actualizeUserDataFailed }
       )

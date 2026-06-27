@@ -30,7 +30,10 @@ export const useChatRoomMessages = (
   const { removingMessageIds, stopMessageRemovalMotion } = useMessageRemovalMotion()
   const { isSocketOnlineActionAvailable } = useSocketAvailability()
   const messageListItemElements = new Map<string, HTMLElement>()
+  const measuredMessageListItemElements = new Map<string, HTMLElement>()
+  const measuredMessageListItemHeights = new Map<string, number>()
   const messageRemovalOverlayItems = ref<MessageRemovalOverlayItem[]>([])
+
   const {
     loadedMessageRanges,
     isLoading,
@@ -170,8 +173,30 @@ export const useChatRoomMessages = (
     start()
   }
 
-  const registerMessageListItemElement = (element: unknown, item: MessageVirtualListItem) => {
+  const measureMessageListItemElementIfNeeded = (element: unknown, item: MessageVirtualListItem) => {
+    if (!(element instanceof HTMLElement)) {
+      measuredMessageListItemElements.delete(item.id)
+      measuredMessageListItemHeights.delete(item.id)
+      measureMessageListItemElement(element)
+      return
+    }
+
+    const height = Math.ceil(element.getBoundingClientRect().height)
+    const previousElement = measuredMessageListItemElements.get(item.id)
+    const previousHeight = measuredMessageListItemHeights.get(item.id)
+    const hasSameMeasurementTarget = previousElement === element && previousHeight === height
+
+    if (hasSameMeasurementTarget) {
+      return
+    }
+
+    measuredMessageListItemElements.set(item.id, element)
+    measuredMessageListItemHeights.set(item.id, height)
     measureMessageListItemElement(element)
+  }
+
+  const registerMessageListItemElement = (element: unknown, item: MessageVirtualListItem) => {
+    measureMessageListItemElementIfNeeded(element, item)
 
     if (item.type !== 'message') return
 

@@ -8,6 +8,7 @@ export const HOUR_IN_MS = HOUR_IN_SEC * SECOND_IN_MS
 export const DAY_IN_MS = DAY_IN_SEC * SECOND_IN_MS
 export const WEEK_IN_MS = 7 * DAY_IN_MS
 export const ROOM_PARTICIPANT_LIMIT = 5
+export const CLIENT_VERSION_HEADER = 'x-k-room-client-version'
 
 export const firebaseProviders = ['google', 'facebook'] as const
 

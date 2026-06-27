@@ -13,6 +13,7 @@ export {
   TIME_PATTERN_BY_DATE_TIME_FORMAT
 } from './time/constants'
 export {
+  canShowBrowserPush,
   clearCookie,
   formatBytes,
   getClientPlatform,

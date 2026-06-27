@@ -14,7 +14,7 @@ import { useRoomCall } from 'src/entities/room-call'
 import { useAppSound, useSettings } from 'src/entities/setting'
 import { useSystem } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
-import { API_I18N } from 'src/shared/api'
+import { API_I18N, setClientUpdateReloadBlock } from 'src/shared/api'
 import { type AppSoundKind, log, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
 import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
@@ -139,6 +139,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   const hasBlockingUserRoomCall = computed(() =>
     roomCalls.value.some((roomCall) => isRoomCallBlockingStartForUser(roomCall, user.value.id))
   )
+  const isClientUpdateReloadBlocked = computed(() => Boolean(activeRoomCallId.value) || isRoomCallSessionBusy.value)
   const resolveActiveRoomCallByRoomId = (roomId: string) =>
     roomCalls.value.find((roomCall) => {
       const { roomId: activeRoomId } = roomCall
@@ -501,6 +502,13 @@ export const useActiveRoomCallSession = createGlobalState(() => {
 
     stopScreen()
   })
+  watch(
+    isClientUpdateReloadBlocked,
+    (isBlocked) => {
+      setClientUpdateReloadBlock('room-call-session', isBlocked)
+    },
+    { immediate: true }
+  )
 
   onMounted(() => {
     initializeRoomCallSignalMonitor()

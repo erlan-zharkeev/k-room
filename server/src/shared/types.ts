@@ -5,7 +5,8 @@ import type {
   ReqStatus,
   ServerToClientSocketAction,
   ServerToClientSocketEvents,
-  ServerToClientSocketPayloadMap
+  ServerToClientSocketPayloadMap,
+  TransportMeta
 } from 'global-shared'
 import type { Types } from 'mongoose'
 import type { DefaultEventsMap, Server, Socket } from 'socket.io'
@@ -29,8 +30,8 @@ export type SocketIO = Server<
 export type EmitServerToClientSocketEvent = <TEvent extends ServerToClientSocketAction>(
   event: TEvent,
   ...payload: ServerToClientSocketPayloadMap[TEvent] extends void
-    ? []
-    : [payload: ServerToClientSocketPayloadMap[TEvent]]
+    ? [meta: TransportMeta]
+    : [payload: ServerToClientSocketPayloadMap[TEvent], meta: TransportMeta]
 ) => boolean
 
 export interface ThrowSocketErrorOptions {

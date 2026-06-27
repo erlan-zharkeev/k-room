@@ -30,6 +30,7 @@ export interface EnvSharedVariables {
   ADMIN_ROOT_PATH: string
   ADMIN_COOKIE: string
   SUPPORT_EMAIL: string
+  CLIENT_APP_VERSION?: string
 }
 
 export type EnvKey = keyof EnvVariables | keyof EnvSharedVariables
