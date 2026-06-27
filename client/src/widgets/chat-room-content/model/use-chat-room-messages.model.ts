@@ -1,6 +1,6 @@
 import type { Virtualizer } from '@tanstack/vue-virtual'
 import { useTimeoutFn } from '@vueuse/core'
-import { computed, ref, toRef, watch } from 'vue'
+import { computed, onActivated, onDeactivated, ref, toRef, watch } from 'vue'
 
 import { useMessage, useMessageRemovalMotion } from 'src/entities/message'
 import { useSocketAvailability } from 'src/shared/api'
@@ -33,6 +33,7 @@ export const useChatRoomMessages = (
   const measuredMessageListItemElements = new Map<string, HTMLElement>()
   const measuredMessageListItemHeights = new Map<string, number>()
   const messageRemovalOverlayItems = ref<MessageRemovalOverlayItem[]>([])
+  const isMessagesActive = ref(true)
 
   const {
     loadedMessageRanges,
@@ -124,6 +125,8 @@ export const useChatRoomMessages = (
   }
 
   const handleMessageVirtualizerChange = (virtualizer: Virtualizer<HTMLElement, HTMLElement>) => {
+    if (!isMessagesActive.value) return
+
     updateBackToBottomButtonVisibility()
     markVisibleMessagesAsRead(virtualizer)
     preloadAdjacentMessages(virtualizer)
@@ -306,6 +309,8 @@ export const useChatRoomMessages = (
   watch(
     () => [...removingMessageIds],
     (messageIds) => {
+      if (!isMessagesActive.value) return
+
       messageIds.forEach((messageId) => {
         captureMessageRemovalOverlay(messageId)
         stopMessageRemovalMotion(messageId)
@@ -326,6 +331,17 @@ export const useChatRoomMessages = (
     },
     { immediate: true }
   )
+
+  onActivated(() => {
+    isMessagesActive.value = true
+    updateBackToBottomButtonVisibility()
+    markVisibleMessagesAsRead(messageVirtualizer.value)
+  })
+
+  onDeactivated(() => {
+    isMessagesActive.value = false
+    messageRemovalOverlayItems.value = []
+  })
 
   return {
     hasMessages,

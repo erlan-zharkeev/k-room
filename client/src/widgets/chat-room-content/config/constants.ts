@@ -18,6 +18,7 @@ import type {
 
 export const ROOM_MESSAGES_PAGE_LIMIT = 30
 export const ROOM_MESSAGES_PRELOAD_EDGE_ITEMS = 20
+export const CHAT_ROOM_MESSAGES_CACHE_MAX = 7
 export const CHAT_ROOM_CONTENT_VIEW_QUERY_KEY = 'chat-view'
 export const ROOM_CALL_SCREEN_TILE_ID_SUFFIX = 'screen'
 export const ROOM_CALL_PANEL_GRID_ROWS_PER_COLUMN = 2

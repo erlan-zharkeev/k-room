@@ -3,6 +3,7 @@ import { NmorphCard } from '@nmorph/nmorph-ui-kit'
 
 import { CallActivityPanel } from 'src/features/room-call-session'
 
+import { CHAT_ROOM_MESSAGES_CACHE_MAX } from '../config/constants'
 import { useChatRoomContent } from '../model/use-chat-room-content.model'
 
 import ChatRoomFooter from './ChatRoomFooter.vue'
@@ -68,14 +69,16 @@ const {
       <template v-if="isChatRoomTextView">
         <ChatRoomPinnedMessage :room="selectedChatRoom" @select="selectCurrentChatRoomMessage" />
         <NmorphCard shadow-type="inset" class="chat-room-page__messages">
-          <ChatRoomMessages
-            :key="selectedChatRoom.id"
-            :room="selectedChatRoom"
-            :is-private-room="isSelectedChatRoomPrivate"
-            :target-message-id="selectedMessageId"
-            @select-message="selectChatRoomMessage"
-            @target-message-scrolled="clearSelectedMessage"
-          />
+          <KeepAlive :max="CHAT_ROOM_MESSAGES_CACHE_MAX">
+            <ChatRoomMessages
+              :key="selectedChatRoom.id"
+              :room="selectedChatRoom"
+              :is-private-room="isSelectedChatRoomPrivate"
+              :target-message-id="selectedMessageId"
+              @select-message="selectChatRoomMessage"
+              @target-message-scrolled="clearSelectedMessage"
+            />
+          </KeepAlive>
         </NmorphCard>
         <ChatRoomFooter :room="selectedChatRoom" @select-editing-message="selectCurrentChatRoomMessage" />
       </template>

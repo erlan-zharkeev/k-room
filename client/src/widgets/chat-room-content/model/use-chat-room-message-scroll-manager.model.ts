@@ -1,7 +1,17 @@
 import type { INmorphScrollExpose, NmorphCoordsType } from '@nmorph/nmorph-ui-kit'
 import type { Virtualizer } from '@tanstack/vue-virtual'
 import type { ChatRoom } from 'global-shared'
-import { nextTick, onBeforeUnmount, ref, useTemplateRef, watch, type ComputedRef, type Ref } from 'vue'
+import {
+  nextTick,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  ref,
+  useTemplateRef,
+  watch,
+  type ComputedRef,
+  type Ref
+} from 'vue'
 
 import { useSettings, type MessageScrollAnchorState, type MessageScrollBottomState } from 'src/entities/setting'
 
@@ -239,6 +249,8 @@ export const useChatRoomMessageScrollManager = (
     }
   })
 
+  onActivated(updateBackToBottomButtonVisibility)
+  onDeactivated(() => saveCurrentMessagesScrollState())
   onBeforeUnmount(() => saveCurrentMessagesScrollState())
 
   return {
