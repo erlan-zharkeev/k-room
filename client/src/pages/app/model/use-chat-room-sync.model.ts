@@ -11,6 +11,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useChatRoom } from 'src/entities/chat-room'
 import { useSyncMedia } from 'src/entities/media-file'
 import { useMessage } from 'src/entities/message'
+import { useSettings } from 'src/entities/setting'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { usePinChatRoomOrder } from 'src/features/pin-chat-room'
 
@@ -22,6 +23,7 @@ export const useChatRoomSync = () => {
   const { bulkUpdate, chatRooms, getById, merge, put, remove } = useChatRoom()
   const { syncWithOptions } = useSyncMedia()
   const { bulkDelete, bulkPut } = useMessage()
+  const { settings, shallowUpdate } = useSettings()
   const { updatePinnedChatRoomOrder } = usePinChatRoomOrder()
 
   const saveRoomPayloadMessages = async (rooms: EventGetRooms) => {
@@ -55,9 +57,14 @@ export const useChatRoomSync = () => {
 
   const removeChatRoom = async ({ roomId }: EventChatRoomDeleted | EventChatRoomLeft) => {
     const room = getById(roomId)
+    const clearSavedRoomId = async () => {
+      if (settings.value.chatRoomId === roomId) {
+        await shallowUpdate({ chatRoomId: '' })
+      }
+    }
 
     if (!room) {
-      await remove(roomId)
+      await Promise.all([remove(roomId), clearSavedRoomId()])
 
       if (route.params.chatRoomId === roomId) {
         await router.push(APP_PAGE_ROUTES.chatRooms)
@@ -68,7 +75,7 @@ export const useChatRoomSync = () => {
 
     const { messages: messageIds } = room
 
-    await Promise.all([remove(roomId), bulkDelete(messageIds)])
+    await Promise.all([remove(roomId), bulkDelete(messageIds), clearSavedRoomId()])
 
     if (route.params.chatRoomId === roomId) {
       await router.push(APP_PAGE_ROUTES.chatRooms)

@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { NmorphForm, NmorphFormItem, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 
+import { useUser } from 'src/entities/user'
+
 import { SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N } from '../../../config/i18n/account-change-password.i18n'
 import { useChangePassword } from '../../../model/account/use-change-password.model'
 import SettingsCard from '../../SettingsCard.vue'
 
 const { changePassword, formData, formResetKey, isPasswordChanging, isPasswordSubmitDisabled } = useChangePassword()
+const { user } = useUser()
 </script>
 
 <template>
@@ -18,12 +21,15 @@ const { changePassword, formData, formResetKey, isPasswordChanging, isPasswordSu
     :title="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N.changePassword)"
   >
     <NmorphForm :key="formResetKey" ref="formRef" :value="formData" @submit.prevent="changePassword">
+      <!-- Fake username field for browser password manager autocomplete. -->
+      <input autocomplete="username" hidden readonly :value="user.email" />
+
       <NmorphFormItem
         id="currentPassword"
         :label="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N.currentPassword)"
         :show-validation-icon="false"
       >
-        <NmorphTextInput :disabled="isPasswordChanging" type-password />
+        <NmorphTextInput autocomplete="current-password" :disabled="isPasswordChanging" type-password />
       </NmorphFormItem>
 
       <NmorphFormItem
@@ -31,7 +37,7 @@ const { changePassword, formData, formResetKey, isPasswordChanging, isPasswordSu
         :label="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N.newPassword)"
         :show-validation-icon="false"
       >
-        <NmorphTextInput :disabled="isPasswordChanging" type-password />
+        <NmorphTextInput autocomplete="new-password" :disabled="isPasswordChanging" type-password />
       </NmorphFormItem>
 
       <NmorphFormItem
@@ -39,7 +45,7 @@ const { changePassword, formData, formResetKey, isPasswordChanging, isPasswordSu
         :label="$t(SETTINGS_ACCOUNT_CHANGE_PASSWORD_I18N.confirmPassword)"
         :show-validation-icon="false"
       >
-        <NmorphTextInput :disabled="isPasswordChanging" type-password />
+        <NmorphTextInput autocomplete="new-password" :disabled="isPasswordChanging" type-password />
       </NmorphFormItem>
     </NmorphForm>
   </SettingsCard>

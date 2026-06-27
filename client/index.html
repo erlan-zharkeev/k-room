@@ -15,7 +15,15 @@
     <title>__APP_NAME__</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <div class="app-bootstrap-loader" aria-busy="true">
+        <div class="app-bootstrap-loader__dots">
+          <span class="app-bootstrap-loader__dot"></span>
+          <span class="app-bootstrap-loader__dot app-bootstrap-loader__dot--second"></span>
+          <span class="app-bootstrap-loader__dot app-bootstrap-loader__dot--third"></span>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
