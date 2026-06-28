@@ -5,6 +5,10 @@ const toastMock = vi.hoisted(() => ({
   remove: vi.fn()
 }))
 
+const TEST_SOCKET_TRANSPORT_ERROR_TOAST_DELAY_MS = 5
+const TEST_SOCKET_TRANSPORT_ERROR_TOAST_THROTTLE_MS = 5
+const TEST_SOCKET_TRANSPORT_ERROR_TOAST_ID = 'socket-transport-error'
+
 vi.mock('src/shared/lib', () => ({
   TOAST_I18N: {
     error: {
@@ -25,6 +29,15 @@ vi.mock('src/shared/lib', () => ({
 }))
 
 const loadSocketTransportErrorToast = async () => {
+  vi.doMock('./constants', () => ({
+    SOCKET_ACTION_ACK_TIMEOUT_MS: 1,
+    SOCKET_MAX_RECONNECTION_DELAY_MS: 1,
+    SOCKET_RECONNECTION_DELAY_MS: 1,
+    SOCKET_TRANSPORT_ERROR_TOAST_DELAY_MS: TEST_SOCKET_TRANSPORT_ERROR_TOAST_DELAY_MS,
+    SOCKET_TRANSPORT_ERROR_TOAST_ID: TEST_SOCKET_TRANSPORT_ERROR_TOAST_ID,
+    SOCKET_TRANSPORT_ERROR_TOAST_THROTTLE_MS: TEST_SOCKET_TRANSPORT_ERROR_TOAST_THROTTLE_MS
+  }))
+
   const { setSocketConnected } = await import('./socket-status')
   const constants = await import('./constants')
   const { useSocketTransportErrorToast } = await import('./use-socket-transport-error-toast')
@@ -59,11 +72,11 @@ describe('useSocketTransportErrorToast', () => {
 
     expect(toastMock.add).not.toHaveBeenCalled()
 
-    vi.advanceTimersByTime(socketTransportErrorToastDelayMs - 1)
+    await vi.advanceTimersByTimeAsync(socketTransportErrorToastDelayMs - 1)
 
     expect(toastMock.add).not.toHaveBeenCalled()
 
-    vi.advanceTimersByTime(1)
+    await vi.advanceTimersByTimeAsync(1)
 
     expect(toastMock.add).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -81,7 +94,7 @@ describe('useSocketTransportErrorToast', () => {
     showSocketTransportErrorToast()
     setSocketConnected(true)
     hideSocketTransportErrorToast()
-    vi.advanceTimersByTime(socketTransportErrorToastDelayMs)
+    await vi.advanceTimersByTimeAsync(socketTransportErrorToastDelayMs)
 
     expect(toastMock.add).not.toHaveBeenCalled()
     expect(toastMock.remove).not.toHaveBeenCalled()
@@ -93,7 +106,7 @@ describe('useSocketTransportErrorToast', () => {
     const { hideSocketTransportErrorToast, showSocketTransportErrorToast } = useSocketTransportErrorToast()
 
     showSocketTransportErrorToast()
-    vi.advanceTimersByTime(socketTransportErrorToastDelayMs)
+    await vi.advanceTimersByTimeAsync(socketTransportErrorToastDelayMs)
     hideSocketTransportErrorToast()
 
     expect(toastMock.remove).toHaveBeenCalledWith(socketTransportErrorToastId)

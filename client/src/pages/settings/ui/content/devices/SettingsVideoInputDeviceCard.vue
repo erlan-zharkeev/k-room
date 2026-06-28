@@ -27,14 +27,7 @@ const {
     <div class="settings-video-input-device-card">
       <NmorphText variant="body-small">{{ $t(SETTINGS_PAGE_DEVICES_I18N.videoInputDeviceDescription) }}</NmorphText>
 
-      <div class="settings-video-input-device-card__permission">
-        <NmorphCallout :type="videoInputPermissionCalloutType" :content="videoInputPermissionStatus" />
-        <NmorphCallout
-          v-if="!videoInputLoading && videoInputOptions.length === 0"
-          type="warning"
-          :content="$t(SETTINGS_PAGE_DEVICES_I18N.notAvailable)"
-        />
-      </div>
+      <NmorphCallout :type="videoInputPermissionCalloutType" :content="videoInputPermissionStatus" />
 
       <div class="settings-video-input-device-card__control">
         <NmorphSelect
@@ -92,11 +85,6 @@ const {
   flex: 0 0 auto;
   min-width: 96px;
   white-space: nowrap;
-}
-
-.settings-video-input-device-card__permission {
-  display: grid;
-  gap: 4px;
 }
 
 .settings-video-input-device-card__preview {

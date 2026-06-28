@@ -10,7 +10,7 @@ import {
 import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
 
 import { useUser } from 'src/entities/user'
-import { useHttp } from 'src/shared/api'
+import { isExpectedHttpError, useHttp } from 'src/shared/api'
 import { createDifferentOrEmptyValidationPattern, useI18n } from 'src/shared/lib'
 
 import { SETTINGS_EMAIL_PATTERN } from '../../config/constants/account.constants'
@@ -56,6 +56,10 @@ export const useChangeEmail = () => {
       })
       codeSentEmail.value = normalizedNextEmail.value
       otpCode.value = ''
+    } catch (error) {
+      if (isExpectedHttpError(error)) return
+
+      throw error
     } finally {
       isEmailCodeSending.value = false
     }
@@ -75,6 +79,10 @@ export const useChangeEmail = () => {
       otpCode.value = ''
       codeSentEmail.value = ''
       formResetKey.value += 1
+    } catch (error) {
+      if (isExpectedHttpError(error)) return
+
+      throw error
     } finally {
       isEmailCodeValidating.value = false
     }

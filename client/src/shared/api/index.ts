@@ -1,4 +1,10 @@
-export { createHttpError, getHandledErrorMessage, isHttpError, isHandledError } from './http/create-http-error'
+export {
+  createHttpError,
+  getHandledErrorMessage,
+  isExpectedHttpError,
+  isHttpError,
+  isHandledError
+} from './http/create-http-error'
 export { allowAuthRefresh, blockAuthRefresh } from './http/auth-refresh'
 export { API_I18N } from './i18n'
 export { setClientUpdateReloadBlock } from './transport-meta'

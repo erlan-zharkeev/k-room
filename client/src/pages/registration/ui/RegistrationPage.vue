@@ -62,7 +62,7 @@ const {
     <NmorphFormItem id="policy" :show-validation-icon="false">
       <div class="registration-page__policy">
         <NmorphSwitch :disabled="isFormDisabled" />
-        <span>
+        <span class="registration-page__policy-text">
           <NmorphText as="span">{{ $t(REGISTRATION_FORM_I18N.agreement) }}</NmorphText>
           <RouterLink :to="ROUTE_NAMES.privacyPolicy">
             <NmorphText as="span" color="accent">{{ $t(REGISTRATION_FORM_I18N.link) }}</NmorphText>
@@ -92,5 +92,11 @@ const {
 .registration-page__policy {
   display: flex;
   gap: 12px;
+}
+
+.registration-page__policy-text {
+  display: inline-flex;
+  flex-wrap: wrap;
+  column-gap: 4px;
 }
 </style>

@@ -94,9 +94,9 @@ describe('contacts.service', () => {
     ])
 
     persistenceMock.loadContactSearchUsersByNickname.mockResolvedValue([
-      createUser('user-3', 'Zed'),
-      createUser('user-1', 'Self'),
-      createUser('user-2', 'Alice')
+      createUser('user-3', 'zed'),
+      createUser('user-1', 'self'),
+      createUser('user-2', 'alice')
     ])
     persistenceMock.loadUserContactsById.mockResolvedValue(currentUser)
     presenceService.onlineMapByUserIds.mockResolvedValue(onlineMap)
@@ -107,7 +107,7 @@ describe('contacts.service', () => {
     expect(result.contacts.map((contact) => contact.id)).toEqual(['user-2', 'user-3'])
     expect(result.contacts[0]).toMatchObject({
       id: 'user-2',
-      nickname: 'Alice',
+      nickname: 'alice',
       interactionType: 'invite-received',
       online: true
     })
@@ -118,7 +118,7 @@ describe('contacts.service', () => {
   it('searches by id when query starts with mongo id marker', async () => {
     const contactId = '68a09410778b70d522ea8faa'
 
-    persistenceMock.loadContactSearchUsersById.mockResolvedValue([createUser(contactId, 'Alice')])
+    persistenceMock.loadContactSearchUsersById.mockResolvedValue([createUser(contactId, 'alice')])
     persistenceMock.loadUserContactsById.mockResolvedValue({ personal: { contacts: {} } })
 
     await searchContacts('user-1', `#${contactId}`, -10, presenceService as never)
@@ -135,7 +135,7 @@ describe('contacts.service', () => {
   })
 
   it('saves default contact and returns online contact data', async () => {
-    const contact = createUser('user-2', 'Alice')
+    const contact = createUser('user-2', 'alice')
 
     persistenceMock.loadUserContactsById.mockResolvedValue({ personal: { contacts: {} } })
     persistenceMock.loadUserById.mockResolvedValue(contact)
@@ -146,15 +146,15 @@ describe('contacts.service', () => {
     expect(persistenceMock.setDefaultUserContact).toHaveBeenCalledWith('user-1', 'user-2')
     expect(result?.contactData).toMatchObject({
       id: 'user-2',
-      nickname: 'Alice',
+      nickname: 'alice',
       interactionType: 'default',
       online: true
     })
   })
 
   it('sends invite to contact side and emits both interaction updates', async () => {
-    const author = createUser('user-1', 'Author')
-    const contactSide = createUser('user-2', 'Contact')
+    const author = createUser('user-1', 'author')
+    const contactSide = createUser('user-2', 'contact')
 
     persistenceMock.loadUserContactsById.mockResolvedValue({
       personal: {

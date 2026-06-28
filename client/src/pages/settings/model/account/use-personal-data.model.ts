@@ -14,7 +14,7 @@ import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
 import { useMedia } from 'src/entities/media-file'
 import { useUser } from 'src/entities/user'
-import { useHttp } from 'src/shared/api'
+import { isExpectedHttpError, useHttp } from 'src/shared/api'
 import { revokeObjectUrl, revokeObjectUrls, useAppToast, useI18n } from 'src/shared/lib'
 
 import { SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE } from '../../config/constants/account.constants'
@@ -146,9 +146,7 @@ export const usePersonalData = () => {
 
     try {
       isAccountSaving.value = true
-      const response = await doHttpRequest<UserData>('patch', USER_ENDPOINTS.editUserData, requestFormData, {
-        contentType: 'multipart/form-data'
-      })
+      const response = await doHttpRequest<UserData>('patch', USER_ENDPOINTS.editUserData, requestFormData)
       const updatedUserData = response.data.payload
       const { avatarId } = updatedUserData
 
@@ -174,6 +172,10 @@ export const usePersonalData = () => {
       accountAvatarWasReset.value = false
       clearAccountAvatarUploadValue()
       clearAccountAvatarPreview()
+    } catch (error) {
+      if (isExpectedHttpError(error)) return
+
+      throw error
     } finally {
       isAccountSaving.value = false
     }

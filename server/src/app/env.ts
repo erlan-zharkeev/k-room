@@ -49,6 +49,7 @@ const isDev = stage !== 'production'
 const isE2E = process.env.SERVER_E2E === 'true'
 const TURNSTILE_TEST_SITE_KEY = '1x00000000000000000000AA'
 const TURNSTILE_TEST_SECRET_KEY = '1x0000000000000000000000000000000AA'
+const nativeDesktopOrigins = ['http://tauri.localhost'] as const
 const redisUrl = getEnv('REDIS_URL', envs) || (isDev ? 'redis://127.0.0.1:6380' : '')
 const turnstileSiteKey = getEnv('TURNSTILE_SITE_KEY', envs) || (isDev ? TURNSTILE_TEST_SITE_KEY : '')
 const turnstileSecretKey = getEnv('TURNSTILE_SECRET_KEY', envs) || (isDev ? TURNSTILE_TEST_SECRET_KEY : '')
@@ -59,7 +60,8 @@ const devOrigins = [
   `http://127.0.0.1:${CLIENT_PORT}`,
   `http://localhost:${CLIENT_PORT}`,
   `https://127.0.0.1:${CLIENT_PORT}`,
-  `https://localhost:${CLIENT_PORT}`
+  `https://localhost:${CLIENT_PORT}`,
+  ...nativeDesktopOrigins
 ]
 
 export const SERVER_ENV = {
@@ -75,7 +77,8 @@ export const SERVER_ENV = {
   clientPort: Number(CLIENT_PORT),
   serverUrl: isDev ? `${API_HOST}:${SERVER_PORT}${API_PATH}` : `${API_HOST}${API_PATH}`,
   clientUrl,
-  origins: isDev ? devOrigins : [APP_HOST],
+  origins: isDev ? devOrigins : [APP_HOST, ...nativeDesktopOrigins],
+  nativeDesktopOrigins,
   secret: {
     accessTokenSecret: ACCESS_TOKEN_SECRET,
     emailConfirmSecret: EMAIL_CONFIRM_SECRET,

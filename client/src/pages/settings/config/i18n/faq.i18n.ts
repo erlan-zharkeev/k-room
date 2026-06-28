@@ -191,17 +191,17 @@ export const SETTINGS_PAGE_FAQ_I18N = defineI18n('settingsPageFaq', {
     en: i18nFormatter(
       ['appName'],
       (appName: string) =>
-        `First check Settings → Devices in ${appName} and the site permissions in the browser address bar. On Windows, open Start → Settings → Privacy & security → Microphone or Camera, then enable device access and desktop app access for the browser. On macOS, open Apple menu → System Settings → Privacy & Security → Microphone, Camera, and Screen & System Audio Recording, then allow your browser.`
+        `First check Settings → Devices in ${appName} and the site permissions in the browser address bar. On Windows, open Start → Settings → Privacy & security → Microphone or Camera, then enable device access and desktop app access for the browser. On macOS, open Apple menu → System Settings → Privacy & Security → Microphone, Camera, and Screen & System Audio Recording, then allow your browser. On iPad, iOS may ask you to confirm camera or microphone access every time, even on HTTPS; this is controlled by iOS and browser permissions.`
     ),
     ru: i18nFormatter(
       ['appName'],
       (appName: string) =>
-        `Сначала проверьте Настройки → Устройства в ${appName} и разрешения сайта в адресной строке браузера. На Windows: Пуск → Параметры → Конфиденциальность и безопасность → Микрофон или Камера; включите доступ к устройству и доступ для классических приложений/браузера. На macOS: меню Apple → Системные настройки → Конфиденциальность и безопасность → Микрофон, Камера, Запись экрана и системного аудио; разрешите доступ браузеру.`
+        `Сначала проверьте Настройки → Устройства в ${appName} и разрешения сайта в адресной строке браузера. На Windows: Пуск → Параметры → Конфиденциальность и безопасность → Микрофон или Камера; включите доступ к устройству и доступ для классических приложений/браузера. На macOS: меню Apple → Системные настройки → Конфиденциальность и безопасность → Микрофон, Камера, Запись экрана и системного аудио; разрешите доступ браузеру. На iPad iOS может запрашивать подтверждение доступа к камере или микрофону каждый раз даже на HTTPS; это управляется iOS и разрешениями браузера.`
     ),
     zh: i18nFormatter(
       ['appName'],
       (appName: string) =>
-        `先检查 ${appName} 的设置 → 设备，以及浏览器地址栏中的网站权限。在 Windows 上，打开开始 → 设置 → 隐私和安全性 → 麦克风或摄像头，然后为浏览器启用设备访问和桌面应用访问。在 macOS 上，打开 Apple 菜单 → 系统设置 → 隐私与安全性 → 麦克风、摄像头、屏幕与系统音频录制，然后允许浏览器访问。`
+        `先检查 ${appName} 的设置 → 设备，以及浏览器地址栏中的网站权限。在 Windows 上，打开开始 → 设置 → 隐私和安全性 → 麦克风或摄像头，然后为浏览器启用设备访问和桌面应用访问。在 macOS 上，打开 Apple 菜单 → 系统设置 → 隐私与安全性 → 麦克风、摄像头、屏幕与系统音频录制，然后允许浏览器访问。在 iPad 上，即使使用 HTTPS，iOS 也可能每次都要求确认摄像头或麦克风访问；这是由 iOS 和浏览器权限控制的。`
     )
   },
   faqQ16: {

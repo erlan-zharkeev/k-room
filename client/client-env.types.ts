@@ -15,6 +15,7 @@ export interface ClientEnv {
   appHost: string
   apiHost: string
   firebaseApiKey: string
+  firebaseAuthDomain: string
   turnstileSiteKey: string
   sentryDsnClient: string
   sentryEnvironment: string

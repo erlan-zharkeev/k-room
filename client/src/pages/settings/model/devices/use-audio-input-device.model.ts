@@ -8,7 +8,12 @@ import { useDeviceWarning } from './use-device-settings.model'
 import { useMediaInputDevice } from './use-media-input-device.model'
 
 export const useAudioInputDevice = () => {
-  const { audioInputPermission, hasAudioInputPermissionWarning } = useMediaDevicePermission()
+  const {
+    audioInputPermission,
+    hasAudioInputPermissionWarning,
+    markAudioInputPermissionDenied,
+    markAudioInputPermissionGranted
+  } = useMediaDevicePermission()
   const { showDeviceWarning } = useDeviceWarning('Audio input device request failed')
   const audioVolumeDb = ref(Number.NEGATIVE_INFINITY)
   const audioFrameId = ref(0)
@@ -59,6 +64,8 @@ export const useAudioInputDevice = () => {
     settings
   } = useMediaInputDevice({
     kind: 'audio',
+    onPermissionDenied: markAudioInputPermissionDenied,
+    onPermissionGranted: markAudioInputPermissionGranted,
     onStopCheck: stopAudioVolume,
     onStreamStarted: startAudioVolume,
     permission: audioInputPermission,

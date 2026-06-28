@@ -61,10 +61,11 @@ export const useHttpInterceptor = () => {
       }
 
       const message = !silent && text ? text : fallbackMessage
+      const errorMessage = error.response ? message : error.message
 
       if (mediaRequestError) {
         return createHttpError({
-          message,
+          message: errorMessage,
           status,
           silent: true,
           payload
@@ -75,7 +76,7 @@ export const useHttpInterceptor = () => {
         log('error', text ?? fallbackMessage)
 
         return createHttpError({
-          message,
+          message: errorMessage,
           status,
           silent,
           payload
@@ -87,7 +88,7 @@ export const useHttpInterceptor = () => {
       }
 
       return createHttpError({
-        message,
+        message: errorMessage,
         status,
         silent,
         payload
