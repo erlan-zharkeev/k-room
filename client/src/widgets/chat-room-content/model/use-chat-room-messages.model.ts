@@ -12,6 +12,7 @@ import type {
   MessageRemovalOverlayItem,
   MessageVirtualListItem
 } from '../config/types'
+import { waitMessageScrollRestoreStabilization } from '../lib/wait-message-scroll-restore-stabilization'
 
 import { useChatRoomMessageList } from './use-chat-room-message-list.model'
 import { useChatRoomMessageNavigation } from './use-chat-room-message-navigation.model'
@@ -32,8 +33,10 @@ export const useChatRoomMessages = (
   const messageListItemElements = new Map<string, HTMLElement>()
   const measuredMessageListItemElements = new Map<string, HTMLElement>()
   const measuredMessageListItemHeights = new Map<string, number>()
+  const isInitialMessagesRendering = ref(true)
   const messageRemovalOverlayItems = ref<MessageRemovalOverlayItem[]>([])
   const isMessagesActive = ref(true)
+  let initialMessagesRenderingRevision = 0
 
   const {
     loadedMessageRanges,
@@ -55,6 +58,7 @@ export const useChatRoomMessages = (
     room.value.messages.some((messageId) => messageById.value.has(messageId))
   )
   const showInitialMessagesLoading = computed(() => hasMessages.value && !hasCachedRoomMessages.value)
+  const showMessagesLoadingProgress = computed(() => isLoading.value || isInitialMessagesRendering.value)
   const messageItemsQuantity = computed(() => messageList.value.filter((item) => item.type === 'message').length)
   const {
     getSavedMessagesScrollAnchorMessageId,
@@ -243,7 +247,25 @@ export const useChatRoomMessages = (
     })
   )
 
+  const startInitialMessagesRendering = () => {
+    initialMessagesRenderingRevision += 1
+    isInitialMessagesRendering.value = true
+
+    return initialMessagesRenderingRevision
+  }
+
+  const finishInitialMessagesRendering = (roomId: string, revision: number) => {
+    const isSameRoom = room.value.id === roomId
+    const isLatestRendering = initialMessagesRenderingRevision === revision
+
+    if (!isSameRoom || !isLatestRendering) return
+
+    isInitialMessagesRendering.value = false
+  }
+
   const loadInitialMessages = async (roomId: string, previousRoomId: string | undefined) => {
+    const renderingRevision = startInitialMessagesRendering()
+
     clearPendingReadMessageIds()
     suspendTargetNavigation()
 
@@ -261,11 +283,16 @@ export const useChatRoomMessages = (
         await loadLatestMessages()
       })
     } finally {
-      const isSameRoom = room.value.id === roomId
+      try {
+        const isSameRoom = room.value.id === roomId
 
-      if (isSameRoom) {
-        resumeTargetNavigation()
-        await navigateToCurrentTargetMessage()
+        if (isSameRoom) {
+          resumeTargetNavigation()
+          await navigateToCurrentTargetMessage()
+          await waitMessageScrollRestoreStabilization()
+        }
+      } finally {
+        finishInitialMessagesRendering(roomId, renderingRevision)
       }
     }
   }
@@ -345,13 +372,14 @@ export const useChatRoomMessages = (
 
   return {
     hasMessages,
-    isLoading,
+    isInitialMessagesRendering,
     messageRemovalOverlayItems,
     registerMessageListItemElement,
     messageVirtualListStyle,
     messageVirtualListItems,
     saveMessagesScrollState,
     scrollMessagesToBottom,
+    showMessagesLoadingProgress,
     showInitialMessagesLoading,
     showBackToBottomButton
   }

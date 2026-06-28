@@ -61,7 +61,7 @@ export const LIGHT_COLOR_SCHEMA = {
   focusText: '#ffffff',
   placeholderText: '#9aa8b3',
   semiContrastText: '#8a9dc0',
-  contrastText: '#40506f',
+  contrastText: '#536381',
   ...SHARED_THEME_COLORS
 } as const satisfies ColorSchema
 

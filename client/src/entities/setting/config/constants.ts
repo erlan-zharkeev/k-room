@@ -9,6 +9,7 @@ import type { DeviceSetting } from './types'
 export const DEFAULT_SETTINGS: DeviceSetting = {
   contentTab: 'contacts',
   chatRoomId: '',
+  settingsContentId: '',
   scrollContentNavigationByTab: {
     'chat-rooms': 0,
     contacts: 0

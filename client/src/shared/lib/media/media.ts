@@ -1,7 +1,9 @@
+import { useTimeoutFn } from '@vueuse/core'
 import { getCurrentScope, nextTick, onScopeDispose, shallowRef, toValue, watch, type MaybeRefOrGetter } from 'vue'
 
 import { getDexieMediaRecord, getDexieMediaRecords, subscribeDexieLiveQuery } from '../db/db.model'
 
+import { MEDIA_URL_RELEASE_DELAY_MS } from './constants'
 import type { MediaUrlCacheKeyParams, MediaUrlCacheValue } from './types'
 
 const cache = new Map<string, MediaUrlCacheValue>()
@@ -28,10 +30,26 @@ const hasMediaIdChanges = (currentIds: readonly string[], nextIds: readonly stri
   return currentIds.some((id, index) => id !== nextIds[index])
 }
 
+const cancelUrlRelease = (hit: MediaUrlCacheValue) => {
+  hit.cancelRelease?.()
+  hit.cancelRelease = undefined
+}
+
+const revokeReleasedUrl = (key: string) => {
+  const hit = cache.get(key)
+
+  if (!hit) return
+  if (hit.refs > 0) return
+
+  URL.revokeObjectURL(hit.url)
+  cache.delete(key)
+}
+
 export const acquireUrl = (key: string, blob: Blob) => {
   const hit = cache.get(key)
 
   if (hit) {
+    cancelUrlRelease(hit)
     hit.refs += 1
 
     return hit.url
@@ -48,13 +66,20 @@ export const releaseUrl = (key: string) => {
   const hit = cache.get(key)
 
   if (!hit) return
+  if (hit.refs <= 0) return
 
   hit.refs -= 1
 
-  if (hit.refs <= 0) {
-    URL.revokeObjectURL(hit.url)
-    cache.delete(key)
-  }
+  if (hit.refs > 0) return
+
+  cancelUrlRelease(hit)
+
+  const { start, stop } = useTimeoutFn(() => revokeReleasedUrl(key), MEDIA_URL_RELEASE_DELAY_MS, {
+    immediate: false
+  })
+
+  hit.cancelRelease = stop
+  start()
 }
 
 const releaseUrlAfterRender = (key: string) => {
@@ -78,9 +103,11 @@ export const useLiveMediaUrl = (id: MaybeRefOrGetter<string | null | undefined>)
       return
     }
 
-    releaseUrlAfterRender(currentKey)
+    const previousKey = currentKey
+
     currentKey = ''
     url.value = undefined
+    releaseUrlAfterRender(previousKey)
   }
 
   const stop = watch(
@@ -105,12 +132,12 @@ export const useLiveMediaUrl = (id: MaybeRefOrGetter<string | null | undefined>)
 
           const previousKey = currentKey
 
+          currentKey = key
+          url.value = acquireUrl(key, blob)
+
           if (previousKey) {
             releaseUrlAfterRender(previousKey)
           }
-
-          currentKey = key
-          url.value = acquireUrl(key, blob)
         },
         error: clearUrl
       })
@@ -143,9 +170,11 @@ export const useLiveMediaUrls = (ids: MaybeRefOrGetter<readonly string[]>) => {
       return
     }
 
-    releaseUrlsAfterRender(currentKeys)
+    const previousKeys = currentKeys
+
     currentKeys = []
     urls.value = []
+    releaseUrlsAfterRender(previousKeys)
   }
 
   const stop = watch(
@@ -212,9 +241,11 @@ export const useLiveMediaUrlMap = (ids: MaybeRefOrGetter<readonly string[]>) => 
       return
     }
 
-    releaseUrlsAfterRender(currentKeys)
+    const previousKeys = currentKeys
+
     currentKeys = []
     urlMap.value = new Map()
+    releaseUrlsAfterRender(previousKeys)
   }
 
   const stop = watch(

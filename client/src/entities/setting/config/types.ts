@@ -24,6 +24,7 @@ export type MessageScrollByRoom = Record<string, MessageScrollState>
 export interface DeviceSetting {
   contentTab: ContentTab
   chatRoomId: string
+  settingsContentId: string
   scrollContentNavigationByTab: ScrollContentNavigationByTab
   messageScrollByRoom: MessageScrollByRoom
   quickReactions: string[]

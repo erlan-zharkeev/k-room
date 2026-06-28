@@ -5,10 +5,28 @@
   --app-accent-surface-subtle: color-mix(in srgb, var(--nmorph-accent-color), transparent 88%);
   --app-accent-on-dark-surface-soft: color-mix(in srgb, var(--nmorph-dark-shade-color), var(--nmorph-accent-color) 12%);
   --app-content-surface: color-mix(in srgb, var(--nmorph-dark-shade-color), var(--nmorph-light-shade-color) 20%);
-  --app-message-surface: color-mix(in srgb, var(--nmorph-dark-shade-color), var(--nmorph-light-shade-color) 24%);
-  --app-message-self-surface: color-mix(in srgb, var(--nmorph-light-shade-color), var(--nmorph-accent-color) 24%);
+  --app-message-surface-dark: color-mix(in srgb, var(--nmorph-dark-shade-color), var(--nmorph-light-shade-color) 5%);
+  --app-message-self-surface-dark: color-mix(
+    in srgb,
+    var(--nmorph-dark-shade-color),
+    var(--nmorph-light-shade-color) 25%
+  );
+  --app-message-surface-light: color-mix(in srgb, var(--nmorph-dark-shade-color), var(--nmorph-light-shade-color) 38%);
+  --app-message-self-surface-light: color-mix(in srgb, var(--nmorph-light-shade-color), var(--nmorph-accent-color) 20%);
+  --app-message-surface: var(--app-message-surface-dark);
+  --app-message-self-surface: var(--app-message-self-surface-dark);
   --app-muted-surface-soft: color-mix(in srgb, var(--nmorph-placeholder-text-color), transparent 78%);
   --app-card-basic-width: 420px;
   --app-shadow-dark: color-mix(in srgb, var(--nmorph-dark-shade-color), transparent 20%);
   --app-shadow-dark-soft: color-mix(in srgb, var(--nmorph-dark-shade-color), transparent 32%);
+}
+
+:root[data-app-theme-mode='dark'] {
+  --app-message-surface: var(--app-message-surface-dark);
+  --app-message-self-surface: var(--app-message-self-surface-dark);
+}
+
+:root[data-app-theme-mode='light'] {
+  --app-message-surface: var(--app-message-surface-light);
+  --app-message-self-surface: var(--app-message-self-surface-light);
 }

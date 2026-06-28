@@ -21,7 +21,7 @@ export const useAppNavigation = () => {
 
   const selectedSettingsId = computed(() => {
     const { settingsId } = route.params
-    return isString(settingsId) && settingsId ? settingsId : 'account'
+    return isString(settingsId) && settingsId ? settingsId : settings.value.settingsContentId || 'account'
   })
   const routePath = computed(() => route.path)
   const unreadMessagesQuantity = computed(() => sumBy(chatRooms.value, 'unreadMessagesQuantity'))
