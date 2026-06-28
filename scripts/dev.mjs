@@ -22,6 +22,7 @@ const SERVER_READY_TIMEOUT_MS = 120_000
 const SERVER_READY_POLL_INTERVAL_MS = 1_000
 const SERVER_READY_REQUEST_TIMEOUT_MS = 3_000
 const DEV_SERVICE_RESTART_DELAY_MS = 1_000
+const TIMING_PREFIX = '[dev-timing]'
 
 if (isLan) {
   process.env.APP_HOST = `https://${lanIp}`
@@ -31,49 +32,61 @@ if (isLan) {
 await runDev()
 
 async function runDev() {
+  const startupStartedAt = Date.now()
   process.chdir(rootDir)
-  loadEnvFile('.env.development')
-  loadEnvFile('.env.secret', { fillEmptyOnly: true })
-  validateRequiredEnv()
 
-  run(pnpmCommand, ['install'])
-  run(pnpmCommand, ['run', 'husky-prepare'])
-  await makeHookExecutableIfPossible()
-  ensureDevCertificates({
-    lanIp: lanIp || DEFAULT_LAN_IP,
-    shouldMatchLanIp: isLan
-  })
-  await ensureDockerAvailable()
-
-  ensureDockerContainer({
-    name: 'db',
-    image: 'mongo:latest',
-    args: ['-d', '-p', '27017:27017', '--name', 'db']
+  await timeStep('environment', () => {
+    loadEnvFile('.env.development')
+    loadEnvFile('.env.secret', { fillEmptyOnly: true })
+    validateRequiredEnv()
   })
 
-  ensureDockerContainer({
-    name: 'mongo-express',
-    image: 'mongo-express:latest',
-    args: [
-      '-d',
-      '-p',
-      '47821:8081',
-      '--name',
-      'mongo-express',
-      '-e',
-      'ME_CONFIG_BASICAUTH_USERNAME=admin',
-      '-e',
-      'ME_CONFIG_BASICAUTH_PASSWORD=admin',
-      '-e',
-      'ME_CONFIG_MONGODB_URL=mongodb://host.docker.internal:27017/k-room-db'
-    ]
-  })
+  await timeStep('pnpm install', () => run(pnpmCommand, ['install']))
+  await timeStep('husky prepare', () => run(pnpmCommand, ['run', 'husky-prepare']))
+  await timeStep('husky chmod', () => makeHookExecutableIfPossible())
+  await timeStep('dev certificates', () =>
+    ensureDevCertificates({
+      lanIp: lanIp || DEFAULT_LAN_IP,
+      shouldMatchLanIp: isLan
+    })
+  )
+  await timeStep('docker daemon', () => ensureDockerAvailable())
 
-  ensureDockerContainer({
-    name: 'k-room-redis',
-    image: 'redis:7-alpine',
-    args: ['-d', '-p', '6380:6379', '--name', 'k-room-redis']
-  })
+  await timeStep('docker db', () =>
+    ensureDockerContainer({
+      name: 'db',
+      image: 'mongo:latest',
+      args: ['-d', '-p', '27017:27017', '--name', 'db']
+    })
+  )
+
+  await timeStep('docker mongo-express', () =>
+    ensureDockerContainer({
+      name: 'mongo-express',
+      image: 'mongo-express:latest',
+      args: [
+        '-d',
+        '-p',
+        '47821:8081',
+        '--name',
+        'mongo-express',
+        '-e',
+        'ME_CONFIG_BASICAUTH_USERNAME=admin',
+        '-e',
+        'ME_CONFIG_BASICAUTH_PASSWORD=admin',
+        '-e',
+        'ME_CONFIG_MONGODB_URL=mongodb://host.docker.internal:27017/k-room-db'
+      ]
+    })
+  )
+
+  await timeStep('docker redis', () =>
+    ensureDockerContainer({
+      name: 'k-room-redis',
+      image: 'redis:7-alpine',
+      args: ['-d', '-p', '6380:6379', '--name', 'k-room-redis']
+    })
+  )
 
   const sharedEnv = readEnvFile('.env.shared')
   const serverPort = sharedEnv.SERVER_PORT ?? ''
@@ -81,13 +94,15 @@ async function runDev() {
   const clientHost = process.env.APP_HOST ?? 'https://localhost'
   const serverHost = process.env.API_HOST ?? 'https://localhost'
   const serverHealthUrl = serverPort ? `${serverHost}:${serverPort}/health` : ''
+  const serverReadinessUrl = serverPort ? `https://127.0.0.1:${serverPort}/health` : ''
 
   console.log(`Client: ${clientPort ? `${clientHost}:${clientPort}` : ''}`)
   console.log(`Server: ${serverPort ? `${serverHost}:${serverPort}` : ''}`)
   console.log(`Health: ${serverHealthUrl}`)
+  console.log(`Readiness: ${serverReadinessUrl}`)
 
-  run(pnpmCommand, ['--dir', 'global-shared', 'run', 'build'])
-  await runDevServices(serverHealthUrl)
+  await timeStep('global-shared build', () => run(pnpmCommand, ['--dir', 'global-shared', 'run', 'build']))
+  await runDevServices(serverReadinessUrl, startupStartedAt)
 }
 
 function commandExists(command) {
@@ -375,6 +390,37 @@ function wait(duration) {
   })
 }
 
+async function timeStep(label, action) {
+  const startedAt = Date.now()
+
+  console.log(`${TIMING_PREFIX} ${label}: started`)
+
+  try {
+    return await action()
+  } finally {
+    reportTiming(label, startedAt)
+  }
+}
+
+function reportTiming(label, startedAt, details = '') {
+  const detailsText = details ? ` ${details}` : ''
+
+  console.log(`${TIMING_PREFIX} ${label}: ${formatDuration(Date.now() - startedAt)}${detailsText}`)
+}
+
+function formatDuration(durationMs) {
+  if (durationMs < 1_000) return `${durationMs}ms`
+
+  const seconds = Math.round(durationMs / 1_000)
+
+  if (seconds < 60) return `${seconds}s`
+
+  const minutes = Math.floor(seconds / 60)
+  const remainingSeconds = seconds % 60
+
+  return `${minutes}m ${String(remainingSeconds).padStart(2, '0')}s`
+}
+
 function ensureDockerContainer({ name, image, args }) {
   if (isDockerContainerRunning(name)) return
 
@@ -429,7 +475,7 @@ function run(command, args) {
   }
 }
 
-async function runDevServices(serverHealthUrl) {
+async function runDevServices(serverHealthUrl, startupStartedAt) {
   const services = []
   let isShuttingDown = false
 
@@ -444,6 +490,8 @@ async function runDevServices(serverHealthUrl) {
   process.once('SIGINT', () => shutdown(130))
   process.once('SIGTERM', () => shutdown(143))
 
+  const servicesStartedAt = Date.now()
+
   services.push(startDevService('global-shared', pnpmCommand, ['--dir', 'global-shared', 'run', 'serve']))
   services.push(startDevService('client', pnpmCommand, ['--dir', 'client', 'run', 'serve']))
   services.push(
@@ -451,6 +499,7 @@ async function runDevServices(serverHealthUrl) {
       restartOnExit: true
     })
   )
+  reportTiming('dev service processes', servicesStartedAt)
 
   const startupResult = await Promise.race([
     waitForServerReady(serverHealthUrl).then((isReady) => ({ type: 'server-ready', isReady })),
@@ -458,17 +507,21 @@ async function runDevServices(serverHealthUrl) {
   ])
 
   if (startupResult.type === 'service-exit') {
+    reportTiming('dev startup total', startupStartedAt, '(service exited)')
     reportDevServiceExit(startupResult.exit)
     shutdown(exitCodeFromDevServiceExit(startupResult.exit))
     return
   }
 
   if (!startupResult.isReady) {
+    reportTiming('dev startup total', startupStartedAt, '(server readiness timeout)')
     console.error('Server did not become ready within 120 seconds.')
     console.error('Check the server logs above, then run pnpm dev again.')
     shutdown(1)
     return
   }
+
+  reportTiming('dev startup total', startupStartedAt)
 
   const exit = await waitForDevServiceExit(services)
   reportDevServiceExit(exit)
@@ -580,13 +633,22 @@ async function waitForServerReady(serverHealthUrl) {
     return false
   }
 
+  const startedAt = Date.now()
   const deadline = Date.now() + SERVER_READY_TIMEOUT_MS
+  let checksCount = 0
 
   while (Date.now() < deadline) {
-    if (await requestServerHealth(serverHealthUrl)) return true
+    checksCount += 1
+
+    if (await requestServerHealth(serverHealthUrl)) {
+      reportTiming('server readiness', startedAt, `(${checksCount} checks)`)
+      return true
+    }
 
     await wait(SERVER_READY_POLL_INTERVAL_MS)
   }
+
+  reportTiming('server readiness', startedAt, `(${checksCount} checks, timeout)`)
 
   return false
 }

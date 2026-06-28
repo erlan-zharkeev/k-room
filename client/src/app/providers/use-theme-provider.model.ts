@@ -16,6 +16,7 @@ export const useThemeProvider = () => {
   const applyAppearanceTheme = (themeName: string, theme = effectiveTheme.value) => {
     const { colorSchema } = theme
 
+    document.documentElement.dataset.appThemeMode = theme.mode
     nmorphTheme.data.darkShadeGeneratorCoefficient = theme.darkShadeGeneratorCoefficient
     nmorphTheme.data.lightShadeGeneratorCoefficient = theme.lightShadeGeneratorCoefficient
     nmorphTheme.data.other = getNmorphThemeShadowOptions(theme)

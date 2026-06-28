@@ -47,6 +47,19 @@ const {
 </template>
 
 <style lang="scss">
+/* stylelint-disable property-no-vendor-prefix */
+.message-context-menu,
+.message-context-menu *,
+.nmorph-context-menu__dropdown,
+.nmorph-context-menu__dropdown * {
+  -webkit-user-select: none;
+  user-select: none;
+
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+}
+/* stylelint-enable property-no-vendor-prefix */
+
 .nmorph-context-menu__options:has(> .nmorph-context-menu__item .message-reaction-picker) {
   padding: 0 0 4px;
 }

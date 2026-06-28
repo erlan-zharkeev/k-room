@@ -1,8 +1,19 @@
 import type { INmorphScrollExpose, NmorphCoordsType } from '@nmorph/nmorph-ui-kit'
 import type { Virtualizer } from '@tanstack/vue-virtual'
 import type { ChatRoom } from 'global-shared'
-import { nextTick, onBeforeUnmount, ref, useTemplateRef, watch, type ComputedRef, type Ref } from 'vue'
+import {
+  nextTick,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  ref,
+  useTemplateRef,
+  watch,
+  type ComputedRef,
+  type Ref
+} from 'vue'
 
+import { useMessage } from 'src/entities/message'
 import { useSettings, type MessageScrollAnchorState, type MessageScrollBottomState } from 'src/entities/setting'
 
 import { MESSAGE_BACK_TO_BOTTOM_VISIBLE_OFFSET } from '../config/constants'
@@ -22,6 +33,7 @@ export const useChatRoomMessageScrollManager = (
   messageList: ComputedRef<MessageListItem[]>,
   messageItemsQuantity: ComputedRef<number>
 ) => {
+  const { messageById } = useMessage()
   const { settings, setByPath } = useSettings()
   const messagesScrollRef = useTemplateRef<INmorphScrollExpose>('messagesScroll')
   const messagesBottomRef = useTemplateRef<HTMLElement>('messagesBottom')
@@ -50,6 +62,8 @@ export const useChatRoomMessageScrollManager = (
     return distanceFromBottom <= MESSAGE_BACK_TO_BOTTOM_VISIBLE_OFFSET
   }
 
+  const isMessageSelf = (messageId: string | null) => Boolean(messageId && messageById.value.get(messageId)?.isSelf)
+
   const updateBackToBottomButtonVisibility = () => {
     const distanceFromBottom = getMessagesBottomDistance()
     const hasBottomDistance = distanceFromBottom > MESSAGE_BACK_TO_BOTTOM_VISIBLE_OFFSET
@@ -57,12 +71,38 @@ export const useChatRoomMessageScrollManager = (
     showBackToBottomButton.value = messageItemsQuantity.value > 0 && hasBottomDistance
   }
 
+  const scrollMessagesToMaxOffset = async () => {
+    const scrollElement = getMessagesScrollElement()
+
+    if (!scrollElement) return
+
+    const maxScrollTop = Math.max(scrollElement.scrollHeight - scrollElement.clientHeight, 0)
+
+    messageVirtualizer?.value.scrollToOffset(maxScrollTop, { behavior: 'auto' })
+    scrollElement.scrollTop = maxScrollTop
+
+    await nextTick()
+    await waitMessageScrollRestoreStabilization()
+  }
+
   const scrollMessagesToBottom = async () => {
     await nextTick()
 
     if (!messageItemsQuantity.value) return
 
-    messagesBottomRef.value?.scrollIntoView({ block: 'end', inline: 'nearest', behavior: 'auto' })
+    const virtualizer = messageVirtualizer?.value
+    const lastItemIndex = messageList.value.length - 1
+
+    if (virtualizer && lastItemIndex >= 0) {
+      virtualizer.scrollToIndex(lastItemIndex, { align: 'end', behavior: 'auto' })
+      await nextTick()
+      await waitMessageScrollRestoreStabilization()
+      await scrollMessagesToMaxOffset()
+      await scrollMessagesToMaxOffset()
+    } else {
+      messagesBottomRef.value?.scrollIntoView({ block: 'end', inline: 'nearest', behavior: 'auto' })
+    }
+
     showBackToBottomButton.value = false
   }
 
@@ -227,18 +267,22 @@ export const useChatRoomMessageScrollManager = (
     }
   })
 
-  watch(displayedLastMessageId, (displayedLastMessageId, previousDisplayedLastMessageId) => {
-    const hasDisplayedLastMessageChanged = previousDisplayedLastMessageId !== displayedLastMessageId
+  watch(displayedLastMessageId, (nextDisplayedLastMessageId, previousDisplayedLastMessageId) => {
+    const hasDisplayedLastMessageChanged = previousDisplayedLastMessageId !== nextDisplayedLastMessageId
     const isInitialScrollSettled = hasInitialScrollSettled.value
+    const isOwnDisplayedLastMessage = isMessageSelf(nextDisplayedLastMessageId)
     const isScrolledNearBottom = isMessagesScrolledNearBottom()
     const canAutoScrollToBottom = isInitialScrollSettled && hasDisplayedLastMessageChanged
-    const shouldScrollToBottom = canAutoScrollToBottom && isScrolledNearBottom
+    const shouldAutoScrollToBottom = isOwnDisplayedLastMessage || isScrolledNearBottom
+    const shouldScrollToBottom = canAutoScrollToBottom && shouldAutoScrollToBottom
 
     if (shouldScrollToBottom) {
       void scrollMessagesToBottom()
     }
   })
 
+  onActivated(updateBackToBottomButtonVisibility)
+  onDeactivated(() => saveCurrentMessagesScrollState())
   onBeforeUnmount(() => saveCurrentMessagesScrollState())
 
   return {

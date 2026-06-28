@@ -1,0 +1,1 @@
+export const MEDIA_URL_RELEASE_DELAY_MS = 10_000

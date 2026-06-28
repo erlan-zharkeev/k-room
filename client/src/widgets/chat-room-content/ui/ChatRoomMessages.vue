@@ -20,13 +20,14 @@ const props = defineProps<ChatRoomMessagesProps>()
 const emit = defineEmits<ChatRoomMessagesEmits>()
 const {
   hasMessages,
-  isLoading,
+  isInitialMessagesRendering,
   messageRemovalOverlayItems,
   registerMessageListItemElement,
   messageVirtualListStyle,
   messageVirtualListItems,
   saveMessagesScrollState,
   scrollMessagesToBottom,
+  showMessagesLoadingProgress,
   showInitialMessagesLoading,
   showBackToBottomButton
 } = useChatRoomMessages(props, () => emit('target-message-scrolled'))
@@ -34,7 +35,7 @@ const {
 
 <template>
   <div class="chat-room-messages">
-    <div v-if="isLoading" class="chat-room-messages__loading-progress">
+    <div v-if="showMessagesLoadingProgress" class="chat-room-messages__loading-progress">
       <NmorphProgress
         class="chat-room-messages__loading-progress-line"
         :percentage="MESSAGE_LOADING_PROGRESS_PERCENTAGE"
@@ -46,6 +47,8 @@ const {
     <NmorphScroll
       ref="messagesScroll"
       class="chat-room-messages__scroll"
+      :class="{ 'chat-room-messages__scroll--initial-rendering': isInitialMessagesRendering }"
+      :aria-busy="isInitialMessagesRendering"
       scroll-x-prop="hidden"
       css-scroll-behavior="auto"
       update-only-on-scroll-end
@@ -164,6 +167,11 @@ const {
 .chat-room-messages__scroll,
 .chat-room-messages__scroll * {
   overflow-anchor: none;
+}
+
+.chat-room-messages__scroll--initial-rendering {
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .chat-room-messages__virtual {

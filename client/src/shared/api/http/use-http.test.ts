@@ -11,6 +11,10 @@ const toastMock = vi.hoisted(() => ({
 
 const interceptErrorMock = vi.hoisted(() => vi.fn())
 
+const transportMetaMock = vi.hoisted(() => ({
+  handleHttpTransportMeta: vi.fn()
+}))
+
 vi.mock('src/shared/lib', () => ({
   TOAST_I18N: {
     success: 'success',
@@ -36,6 +40,8 @@ vi.mock('./use-http-interceptor', () => ({
     interceptError: interceptErrorMock
   })
 }))
+
+vi.mock('../transport-meta', () => transportMetaMock)
 
 const { useHttp } = await import('./use-http')
 
@@ -88,6 +94,7 @@ describe('useHttp', () => {
 
     await expect(doHttpRequest('post', MEDIA_ENDPOINTS.getMediaFile)).resolves.toBe(response)
 
+    expect(transportMetaMock.handleHttpTransportMeta).toHaveBeenCalledWith(response)
     expect(toastMock.add).toHaveBeenCalledWith({
       type: 'success',
       title: 'success',

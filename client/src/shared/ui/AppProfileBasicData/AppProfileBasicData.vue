@@ -13,7 +13,7 @@ const { imageSrc } = useAppProfileBasicData(props)
   <div class="app-profile-basic-data">
     <NmorphBadge
       type="dot"
-      size="large"
+      size="extra-large"
       color="var(--nmorph-success-text-color)"
       :hidden="!props.showOnline"
       :offset-x="-1"

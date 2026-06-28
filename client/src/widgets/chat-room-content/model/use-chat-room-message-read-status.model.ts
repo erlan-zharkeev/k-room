@@ -5,7 +5,7 @@ import {
   type ChatRoom,
   type EventChangeMessageStatus
 } from 'global-shared'
-import { onBeforeUnmount, type ComputedRef, type Ref } from 'vue'
+import { onActivated, onBeforeUnmount, onDeactivated, ref, type ComputedRef, type Ref } from 'vue'
 
 import { useMessage } from 'src/entities/message'
 import { socket, useSocketAvailability } from 'src/shared/api'
@@ -17,6 +17,7 @@ export const useChatRoomMessageReadStatus = (room: Ref<ChatRoom>, messageList: C
   const pendingReadMessageIds = new Set<string>()
   const { messageById } = useMessage()
   const { isSocketOnlineActionAvailable } = useSocketAvailability()
+  const isReadStatusActive = ref(true)
 
   const markMessageAsRead = (messageId: string) => {
     if (!isSocketOnlineActionAvailable.value) return
@@ -54,6 +55,8 @@ export const useChatRoomMessageReadStatus = (room: Ref<ChatRoom>, messageList: C
   }
 
   const markVisibleMessagesAsRead = (virtualizer: Virtualizer<HTMLElement, HTMLElement>) => {
+    if (!isReadStatusActive.value) return
+
     const scrollOffset = virtualizer.scrollOffset ?? 0
     const viewportHeight = virtualizer.scrollRect?.height ?? 0
 
@@ -71,6 +74,15 @@ export const useChatRoomMessageReadStatus = (room: Ref<ChatRoom>, messageList: C
   const clearPendingReadMessageIds = () => {
     pendingReadMessageIds.clear()
   }
+
+  onActivated(() => {
+    isReadStatusActive.value = true
+  })
+
+  onDeactivated(() => {
+    isReadStatusActive.value = false
+    clearPendingReadMessageIds()
+  })
 
   onBeforeUnmount(clearPendingReadMessageIds)
 

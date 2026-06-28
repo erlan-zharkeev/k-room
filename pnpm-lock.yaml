@@ -70,8 +70,8 @@ importers:
   client:
     dependencies:
       '@nmorph/nmorph-ui-kit':
-        specifier: ^3.0.19
-        version: 3.0.19(vue-i18n@9.14.5(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
+        specifier: ^3.0.20
+        version: 3.0.20(vue-i18n@9.14.5(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
       '@sentry/vue':
         specifier: 10.50.0
         version: 10.50.0(pinia@3.0.4(typescript@5.9.3)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
@@ -2019,8 +2019,8 @@ packages:
   '@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3':
     resolution: {integrity: sha512-s88O1aVtXftvp5bCPB7WnmXc5IwOZZ7YPuwNPt+GtOOXpPvad1LfbmjYv+qII7zP6RU2QGnqve27dnLycEnyEQ==}
 
-  '@nmorph/nmorph-ui-kit@3.0.19':
-    resolution: {integrity: sha512-HkxOiZIWW5L3S5Y7b+ETExL6OtQXyVVCElDVAN6qi4lGlKvqhruiLq4v3p1x7iS463L9vxmi7kEK25/eKyO0qg==}
+  '@nmorph/nmorph-ui-kit@3.0.20':
+    resolution: {integrity: sha512-xehH/9rk653WTq3VsLG7oGyIDF02tqg8H1VzglPiDQoRDgOARKFxanXGmm2yLFQVi61VT5IMpO8EtZqujGQ4RQ==}
     engines: {node: '>=18.13.0'}
     peerDependencies:
       nuxt: '>=3.0.0'
@@ -10120,7 +10120,7 @@ snapshots:
   '@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3':
     optional: true
 
-  '@nmorph/nmorph-ui-kit@3.0.19(vue-i18n@9.14.5(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))':
+  '@nmorph/nmorph-ui-kit@3.0.20(vue-i18n@9.14.5(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))':
     dependencies:
       vue: 3.5.33(typescript@5.9.3)
       vue-i18n: 9.14.5(vue@3.5.33(typescript@5.9.3))

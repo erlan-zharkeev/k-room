@@ -29,4 +29,8 @@ export interface BackendResponse<T> {
   message: BackendMessage
 }
 
+export interface TransportMeta {
+  clientVersion: string
+}
+
 export type { RouteName, Endpoints } from '../endpoints/types'

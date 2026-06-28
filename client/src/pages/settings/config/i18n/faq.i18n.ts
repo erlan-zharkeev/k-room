@@ -333,5 +333,15 @@ export const SETTINGS_PAGE_FAQ_I18N = defineI18n('settingsPageFaq', {
     en: 'No. If the account was registered through Google, email and password are managed by Google. To unlink the account from Google, contact support.',
     ru: 'Нет. Если аккаунт зарегистрирован через Google, email и пароль управляются Google. Чтобы отвязать аккаунт от Google, напишите в поддержку.',
     zh: '不可以。如果账号是通过 Google 注册的，email 和密码由 Google 管理。如需解除账号与 Google 的绑定，请联系支持。'
+  },
+  faqQ29: {
+    en: 'How do I open message actions on a touch device?',
+    ru: 'Как открыть действия сообщения на сенсорном устройстве?',
+    zh: '如何在触控设备上打开消息操作？'
+  },
+  faqA29: {
+    en: 'Press and hold a message. This long press opens the message actions menu, where you can reply, forward, copy text, edit, pin, delete or add a reaction.',
+    ru: 'Нажмите и удерживайте сообщение. Это долгое нажатие (long press) открывает меню действий сообщения: ответ, пересылку, копирование текста, редактирование, закрепление, удаление и реакции.',
+    zh: '长按一条消息。长按会打开消息操作菜单，你可以回复、转发、复制文本、编辑、置顶、删除或添加回应。'
   }
 })

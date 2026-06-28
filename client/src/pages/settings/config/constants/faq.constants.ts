@@ -29,5 +29,6 @@ export const FAQ_ITEMS: FaqItem[] = [
   { id: 25, question: SETTINGS_PAGE_FAQ_I18N.faqQ25, answer: SETTINGS_PAGE_FAQ_I18N.faqA25 },
   { id: 26, question: SETTINGS_PAGE_FAQ_I18N.faqQ26, answer: SETTINGS_PAGE_FAQ_I18N.faqA26 },
   { id: 27, question: SETTINGS_PAGE_FAQ_I18N.faqQ27, answer: SETTINGS_PAGE_FAQ_I18N.faqA27 },
-  { id: 28, question: SETTINGS_PAGE_FAQ_I18N.faqQ28, answer: SETTINGS_PAGE_FAQ_I18N.faqA28 }
+  { id: 28, question: SETTINGS_PAGE_FAQ_I18N.faqQ28, answer: SETTINGS_PAGE_FAQ_I18N.faqA28 },
+  { id: 29, question: SETTINGS_PAGE_FAQ_I18N.faqQ29, answer: SETTINGS_PAGE_FAQ_I18N.faqA29 }
 ]

@@ -33,4 +33,5 @@ export const initApp = async (app: VueApp) => {
   app.use(router)
   initSentry(app)
   void app.runWithContext(initClientData)
+  await router.isReady()
 }

@@ -1,7 +1,9 @@
+import { useTimeoutFn } from '@vueuse/core'
 import { getCurrentScope, nextTick, onScopeDispose, shallowRef, toValue, watch, type MaybeRefOrGetter } from 'vue'
 
 import { getDexieMediaRecord, getDexieMediaRecords, subscribeDexieLiveQuery } from '../db/db.model'
 
+import { MEDIA_URL_RELEASE_DELAY_MS } from './constants'
 import type { MediaUrlCacheKeyParams, MediaUrlCacheValue } from './types'
 
 const cache = new Map<string, MediaUrlCacheValue>()
@@ -20,10 +22,34 @@ const hasMediaUrlCacheKeyChanges = (currentKeys: string[], nextKeys: string[]) =
   return currentKeys.some((key, index) => key !== nextKeys[index])
 }
 
+const hasMediaIdChanges = (currentIds: readonly string[], nextIds: readonly string[]) => {
+  const hasDifferentLength = currentIds.length !== nextIds.length
+
+  if (hasDifferentLength) return true
+
+  return currentIds.some((id, index) => id !== nextIds[index])
+}
+
+const cancelUrlRelease = (hit: MediaUrlCacheValue) => {
+  hit.cancelRelease?.()
+  hit.cancelRelease = undefined
+}
+
+const revokeReleasedUrl = (key: string) => {
+  const hit = cache.get(key)
+
+  if (!hit) return
+  if (hit.refs > 0) return
+
+  URL.revokeObjectURL(hit.url)
+  cache.delete(key)
+}
+
 export const acquireUrl = (key: string, blob: Blob) => {
   const hit = cache.get(key)
 
   if (hit) {
+    cancelUrlRelease(hit)
     hit.refs += 1
 
     return hit.url
@@ -40,13 +66,20 @@ export const releaseUrl = (key: string) => {
   const hit = cache.get(key)
 
   if (!hit) return
+  if (hit.refs <= 0) return
 
   hit.refs -= 1
 
-  if (hit.refs <= 0) {
-    URL.revokeObjectURL(hit.url)
-    cache.delete(key)
-  }
+  if (hit.refs > 0) return
+
+  cancelUrlRelease(hit)
+
+  const { start, stop } = useTimeoutFn(() => revokeReleasedUrl(key), MEDIA_URL_RELEASE_DELAY_MS, {
+    immediate: false
+  })
+
+  hit.cancelRelease = stop
+  start()
 }
 
 const releaseUrlAfterRender = (key: string) => {
@@ -70,9 +103,11 @@ export const useLiveMediaUrl = (id: MaybeRefOrGetter<string | null | undefined>)
       return
     }
 
-    releaseUrlAfterRender(currentKey)
+    const previousKey = currentKey
+
     currentKey = ''
     url.value = undefined
+    releaseUrlAfterRender(previousKey)
   }
 
   const stop = watch(
@@ -97,12 +132,12 @@ export const useLiveMediaUrl = (id: MaybeRefOrGetter<string | null | undefined>)
 
           const previousKey = currentKey
 
+          currentKey = key
+          url.value = acquireUrl(key, blob)
+
           if (previousKey) {
             releaseUrlAfterRender(previousKey)
           }
-
-          currentKey = key
-          url.value = acquireUrl(key, blob)
         },
         error: clearUrl
       })
@@ -124,7 +159,9 @@ export const useLiveMediaUrl = (id: MaybeRefOrGetter<string | null | undefined>)
 
 export const useLiveMediaUrls = (ids: MaybeRefOrGetter<readonly string[]>) => {
   const urls = shallowRef<string[]>([])
+  let currentIds: readonly string[] = []
   let currentKeys: string[] = []
+  let unsubscribeCurrent: (() => void) | null = null
 
   const clearUrls = () => {
     if (!currentKeys.length) {
@@ -133,19 +170,26 @@ export const useLiveMediaUrls = (ids: MaybeRefOrGetter<readonly string[]>) => {
       return
     }
 
-    releaseUrlsAfterRender(currentKeys)
+    const previousKeys = currentKeys
+
     currentKeys = []
     urls.value = []
+    releaseUrlsAfterRender(previousKeys)
   }
 
   const stop = watch(
     () => [...toValue(ids)],
-    (mediaIds, _previous, onCleanup) => {
+    (mediaIds) => {
+      if (!hasMediaIdChanges(currentIds, mediaIds)) return
+
+      unsubscribeCurrent?.()
+      unsubscribeCurrent = null
       clearUrls()
+      currentIds = mediaIds
 
       if (!mediaIds.length) return
 
-      const unsubscribe = subscribeDexieLiveQuery(() => getDexieMediaRecords(mediaIds), {
+      unsubscribeCurrent = subscribeDexieLiveQuery(() => getDexieMediaRecords(mediaIds), {
         next: (records) => {
           const entries = records.flatMap((record, index) => {
             if (!record?.blob) return []
@@ -169,17 +213,16 @@ export const useLiveMediaUrls = (ids: MaybeRefOrGetter<readonly string[]>) => {
         },
         error: clearUrls
       })
-
-      onCleanup(() => {
-        unsubscribe()
-        clearUrls()
-      })
     },
     { immediate: true }
   )
 
   if (getCurrentScope()) {
-    onScopeDispose(stop)
+    onScopeDispose(() => {
+      stop()
+      unsubscribeCurrent?.()
+      clearUrls()
+    })
   }
 
   return urls
@@ -187,7 +230,9 @@ export const useLiveMediaUrls = (ids: MaybeRefOrGetter<readonly string[]>) => {
 
 export const useLiveMediaUrlMap = (ids: MaybeRefOrGetter<readonly string[]>) => {
   const urlMap = shallowRef(new Map<string, string>())
+  let currentIds: readonly string[] = []
   let currentKeys: string[] = []
+  let unsubscribeCurrent: (() => void) | null = null
 
   const clearUrls = () => {
     if (!currentKeys.length) {
@@ -196,19 +241,26 @@ export const useLiveMediaUrlMap = (ids: MaybeRefOrGetter<readonly string[]>) => 
       return
     }
 
-    releaseUrlsAfterRender(currentKeys)
+    const previousKeys = currentKeys
+
     currentKeys = []
     urlMap.value = new Map()
+    releaseUrlsAfterRender(previousKeys)
   }
 
   const stop = watch(
     () => [...toValue(ids)],
-    (mediaIds, _previous, onCleanup) => {
+    (mediaIds) => {
+      if (!hasMediaIdChanges(currentIds, mediaIds)) return
+
+      unsubscribeCurrent?.()
+      unsubscribeCurrent = null
       clearUrls()
+      currentIds = mediaIds
 
       if (!mediaIds.length) return
 
-      const unsubscribe = subscribeDexieLiveQuery(() => getDexieMediaRecords(mediaIds), {
+      unsubscribeCurrent = subscribeDexieLiveQuery(() => getDexieMediaRecords(mediaIds), {
         next: (records) => {
           const entries = records.flatMap((record, index) => {
             if (!record?.blob) return []
@@ -232,17 +284,16 @@ export const useLiveMediaUrlMap = (ids: MaybeRefOrGetter<readonly string[]>) => 
         },
         error: clearUrls
       })
-
-      onCleanup(() => {
-        unsubscribe()
-        clearUrls()
-      })
     },
     { immediate: true }
   )
 
   if (getCurrentScope()) {
-    onScopeDispose(stop)
+    onScopeDispose(() => {
+      stop()
+      unsubscribeCurrent?.()
+      clearUrls()
+    })
   }
 
   return urlMap

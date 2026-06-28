@@ -1,4 +1,5 @@
 export type MediaUrlCacheValue = {
+  cancelRelease?: () => void
   refs: number
   url: string
 }

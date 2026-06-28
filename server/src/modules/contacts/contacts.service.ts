@@ -15,6 +15,8 @@ import {
 import { AppError } from 'src/shared/lib/app-error'
 import { getIO } from 'src/shared/lib/io'
 import { isValidMongoId } from 'src/shared/lib/normalize-object-id'
+import { emitSocketEvent } from 'src/shared/lib/transport-meta'
+import type { EmitServerToClientSocketEvent } from 'src/shared/types'
 
 import type { PresenceService } from '../presence/presence.service'
 import { emitToUsers } from '../presence/presence.utils'
@@ -36,7 +38,10 @@ import { CONTACTS_I18N } from './contacts.i18n'
 import { assertContactLimit } from './contacts.utils'
 
 export const emitSearchedContacts = (socketId: string, payload: EventGetSearchedContact) => {
-  getIO().to(socketId).emit('get-searched-contact', payload)
+  const room = getIO().to(socketId)
+  const emit = room.emit.bind(room) as EmitServerToClientSocketEvent
+
+  emitSocketEvent(emit, 'get-searched-contact', payload)
 }
 
 export const searchContacts = async (

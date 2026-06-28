@@ -3,9 +3,9 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import { useSettings, type DeviceSetting } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
-import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
+import { getChatRoomContentRoutePath } from 'src/features/app-navigation'
 import { initClientData, useLogoutNavigation } from 'src/features/client-session'
-import { DEFAULT_SETTINGS_CONTENT_ID } from 'src/pages/settings'
+import { getSettingsContentId, getSettingsPath } from 'src/pages/settings'
 
 import { isDynamicImportFetchError, recoverNativeDesktopChunkLoad } from './lib/native-desktop-cache'
 import { getAppPathFromSettings, getContentTabFromPath } from './lib/router'
@@ -125,25 +125,21 @@ const routes: RouteRecordRaw[] = [
         }
       },
       {
-        path: 'calls',
+        path: 'calls/:chatRoomId?',
         components: {
           'content-navigation': loadCallsPage,
           content: loadChatRoomContent
         }
       },
       {
-        path: 'contacts',
+        path: 'contacts/:chatRoomId?',
         components: {
           'content-navigation': loadContactsPage,
           content: loadChatRoomContent
         }
       },
       {
-        path: 'settings',
-        redirect: `${APP_PAGE_ROUTES.settings}/${DEFAULT_SETTINGS_CONTENT_ID}`
-      },
-      {
-        path: 'settings/:settingsId',
+        path: 'settings/:settingsId?',
         components: {
           'content-navigation': loadSettingsNavigationPage,
           content: loadSettingsContentPage
@@ -205,15 +201,54 @@ router.beforeEach(async (to) => {
 
   if (!contentTab) return
 
-  const chatRoomId = contentTab === 'chat-rooms' && isString(to.params.chatRoomId) ? to.params.chatRoomId : ''
+  const chatRoomId = isString(to.params.chatRoomId) ? to.params.chatRoomId : ''
+  const savedChatRoomContentPath = getChatRoomContentRoutePath(contentTab, settings.value.chatRoomId)
+  const settingsId = isString(to.params.settingsId) ? to.params.settingsId : ''
+
+  if (!chatRoomId && settings.value.chatRoomId && savedChatRoomContentPath) {
+    return {
+      path: savedChatRoomContentPath,
+      query: to.query,
+      hash: to.hash
+    }
+  }
+
+  if (contentTab === 'settings') {
+    const settingsContentId = getSettingsContentId(settingsId)
+
+    if (!settingsId) {
+      return {
+        path: getSettingsPath(getSettingsContentId(settings.value.settingsContentId)),
+        query: to.query,
+        hash: to.hash
+      }
+    }
+
+    if (settingsId !== settingsContentId) {
+      return {
+        path: getSettingsPath(settingsContentId),
+        query: to.query,
+        hash: to.hash
+      }
+    }
+  }
+
   const changes: Partial<DeviceSetting> = {}
 
   if (settings.value.contentTab !== contentTab) {
     changes.contentTab = contentTab
   }
 
-  if (contentTab === 'chat-rooms' && settings.value.chatRoomId !== chatRoomId) {
+  if (chatRoomId && settings.value.chatRoomId !== chatRoomId) {
     changes.chatRoomId = chatRoomId
+  }
+
+  if (contentTab === 'settings') {
+    const settingsContentId = getSettingsContentId(settingsId)
+
+    if (settings.value.settingsContentId !== settingsContentId) {
+      changes.settingsContentId = settingsContentId
+    }
   }
 
   if (Object.keys(changes).length) {

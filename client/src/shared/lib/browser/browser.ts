@@ -1,7 +1,7 @@
 import { useBreakpoints } from '@vueuse/core'
 import { isString, MB_IN_BYTES } from 'global-shared'
 
-import { CONSOLE_COLOR_MAP, GB, IMAGE_RESOLUTIONS, SCREEN_BREAKPOINTS } from './constants'
+import { BROWSER_PUSH_FALLBACK_ICON, CONSOLE_COLOR_MAP, GB, IMAGE_RESOLUTIONS, SCREEN_BREAKPOINTS } from './constants'
 import { BROWSER_I18N } from './i18n'
 import type { ClientPlatform } from './types'
 import type { ImageToBase64Params } from './types'
@@ -57,15 +57,18 @@ export const readFileAsDataUrl = (file: File) =>
     reader.readAsDataURL(file)
   })
 
+export const canShowBrowserPush = () => 'Notification' in window && Notification.permission === 'granted'
+
 export const showBrowserPush = (title: string, options?: NotificationOptions) => {
-  if (!('Notification' in window)) return
-  if (Notification.permission !== 'granted') return
+  if (!canShowBrowserPush()) return
 
   try {
-    new Notification(title, {
-      icon: '/meta/android-chrome-192x192.png',
+    const notification = new Notification(title, {
+      icon: BROWSER_PUSH_FALLBACK_ICON,
       ...options
     })
+
+    return notification
   } catch (error) {
     void error
   }

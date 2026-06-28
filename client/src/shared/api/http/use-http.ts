@@ -5,6 +5,8 @@ import { TOAST_I18N } from 'src/shared/lib'
 import { useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
 
+import { handleHttpTransportMeta } from '../transport-meta'
+
 import { refreshAuthTokens, shouldSkipAuthRefresh } from './auth-refresh'
 import { httpClient } from './http-client'
 import { isBackendResponse } from './is-backend-response'
@@ -65,6 +67,8 @@ export const useHttp = () => {
     try {
       const response = await request()
 
+      handleHttpTransportMeta(response)
+
       if (!isHttpSuccessStatus(response.status)) {
         throw new Error('No response')
       }
@@ -84,6 +88,7 @@ export const useHttp = () => {
 
           const response = await request()
 
+          handleHttpTransportMeta(response)
           successMessageHandler(response, showSuccessToast)
 
           return response as R extends 'json' ? AxiosResponse<BackendResponse<T>> : AxiosResponse<Blob>

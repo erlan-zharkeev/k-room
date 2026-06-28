@@ -3,6 +3,7 @@ import { MB_IN_BYTES } from 'global-shared'
 import type { ConsoleColor, ScreenBreakpoints } from './types'
 
 export const GB = MB_IN_BYTES * 1_024
+export const BROWSER_PUSH_FALLBACK_ICON = '/meta/android-chrome-192x192.png'
 
 export const IMAGE_RESOLUTIONS = {
   png: 'image/png',

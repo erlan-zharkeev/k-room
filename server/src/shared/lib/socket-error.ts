@@ -2,12 +2,14 @@ import { isString, type LocalizedText, REQ_STATUS, type SocketAckFailure, type S
 
 import { SHARED_I18N } from '../i18n'
 import type { SocketErrorMiddlewareOptions, SocketInstance, ThrowSocketErrorOptions } from '../types'
+import type { EmitServerToClientSocketEvent } from '../types'
 
 import { getAppErrorMessage, isAppError } from './app-error'
 import { getIO } from './io'
 import { localizedText } from './localized-text'
 import { log } from './log'
 import { serverCaptureSentryException, serverCaptureSentrySocketError } from './sentry'
+import { emitSocketEvent, withTransportMeta } from './transport-meta'
 
 export const throwSocketError = (
   socketId: string,
@@ -32,7 +34,10 @@ export const throwSocketError = (
     serverCaptureSentrySocketError({ message: logMessage, silent, status })
   }
 
-  io.to(socketId).emit('error-message', {
+  const room = io.to(socketId)
+  const emit = room.emit.bind(room) as EmitServerToClientSocketEvent
+
+  emitSocketEvent(emit, 'error-message', {
     message: userMessage,
     silent,
     status
@@ -101,12 +106,12 @@ export const socketAckMiddleware =
     try {
       const response = await handler(payload)
 
-      ack?.(response ?? ({ ok: true } as SocketAckResponse<TResponsePayload, TReason>))
+      ack?.(withTransportMeta(response ?? ({ ok: true } as SocketAckResponse<TResponsePayload, TReason>)))
     } catch (error) {
       const shouldHandleByAckReason = isAppError(error) && isString(error.payload)
 
       if (shouldHandleByAckReason) {
-        ack?.(buildSocketAckFailure<TReason>(socket, error))
+        ack?.(withTransportMeta(buildSocketAckFailure<TReason>(socket, error)))
         return
       }
 
@@ -124,6 +129,6 @@ export const socketAckMiddleware =
         })
       }
 
-      ack?.(buildSocketAckFailure<TReason>(socket, error))
+      ack?.(withTransportMeta(buildSocketAckFailure<TReason>(socket, error)))
     }
   }

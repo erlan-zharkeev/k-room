@@ -17,6 +17,13 @@ const imageSrc = useLiveMediaUrl(() => props.user.avatarId)
     touch="disable"
     class="message-reactions__tooltip"
   >
-    <NmorphAvatar :src="imageSrc" :alt="props.user.nickname" :name="props.user.nickname" :size="20" shape="circle" />
+    <NmorphAvatar
+      :src="imageSrc"
+      :alt="props.user.nickname"
+      :name="props.user.nickname"
+      :size="20"
+      design="plain"
+      shape="circle"
+    />
   </NmorphTooltip>
 </template>

@@ -90,8 +90,20 @@ describe('user.socket', () => {
       expect.any(Object),
       redisService
     )
-    expect(socket.emit).toHaveBeenCalledWith('actual-contacts', payload.contactsPayload)
-    expect(socket.emit).toHaveBeenCalledWith('actual-chat-rooms', payload.roomsPayload)
-    expect(socket.emit).toHaveBeenCalledWith('room-calls-updated', payload.roomCallsPayload)
+    expect(socket.emit).toHaveBeenCalledWith(
+      'actual-contacts',
+      payload.contactsPayload,
+      expect.objectContaining({ clientVersion: expect.any(String) })
+    )
+    expect(socket.emit).toHaveBeenCalledWith(
+      'actual-chat-rooms',
+      payload.roomsPayload,
+      expect.objectContaining({ clientVersion: expect.any(String) })
+    )
+    expect(socket.emit).toHaveBeenCalledWith(
+      'room-calls-updated',
+      payload.roomCallsPayload,
+      expect.objectContaining({ clientVersion: expect.any(String) })
+    )
   })
 })

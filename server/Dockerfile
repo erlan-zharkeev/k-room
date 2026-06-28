@@ -16,6 +16,7 @@ COPY global-shared ./global-shared
 COPY .env.shared ./.env.shared
 COPY .env.production ./.env.production
 
+COPY client/package.json ./client/package.json
 COPY server/package.json ./server/package.json
 COPY server/nest-cli.json ./server/nest-cli.json
 COPY server/tsconfig.json ./server/tsconfig.json
@@ -52,6 +53,7 @@ COPY global-shared ./global-shared
 COPY .env.shared ./.env.shared
 COPY .env.production ./.env.production
 
+COPY client/package.json ./client/package.json
 COPY server/package.json ./server/package.json
 COPY server/nest-cli.json ./server/nest-cli.json
 

@@ -13,6 +13,10 @@ const socketToastMock = vi.hoisted(() => ({
   showSocketTransportErrorToast: vi.fn()
 }))
 
+const transportMetaMock = vi.hoisted(() => ({
+  handleTransportMeta: vi.fn()
+}))
+
 vi.mock('./socket', () => ({
   socket: socketMock
 }))
@@ -22,6 +26,7 @@ vi.mock('./use-socket-availability.model', () => ({
 vi.mock('./use-socket-transport-error-toast', () => ({
   useSocketTransportErrorToast: () => socketToastMock
 }))
+vi.mock('../transport-meta', () => transportMetaMock)
 
 const { useSocketAction } = await import('./use-socket-action')
 
@@ -54,8 +59,10 @@ describe('useSocketAction', () => {
     const { emitSocketAction } = useSocketAction()
     const onSuccess = vi.fn()
     const onFailure = vi.fn()
-    const successResponse = { ok: true, payload: { roomId: 'room-1' } }
-    const failureResponse = { ok: false, reason: 'failed' }
+    const successMeta = { clientVersion: '0.1.18' }
+    const failureMeta = { clientVersion: '0.1.19' }
+    const successResponse = { ok: true, payload: { roomId: 'room-1' }, meta: successMeta }
+    const failureResponse = { ok: false, reason: 'failed', meta: failureMeta }
 
     socketMock.emitWithAck.mockResolvedValueOnce(successResponse).mockResolvedValueOnce(failureResponse)
 
@@ -67,6 +74,8 @@ describe('useSocketAction', () => {
     ).resolves.toBe(failureResponse)
 
     expect(socketMock.timeout).toHaveBeenCalledWith(expect.any(Number))
+    expect(transportMetaMock.handleTransportMeta).toHaveBeenNthCalledWith(1, successMeta)
+    expect(transportMetaMock.handleTransportMeta).toHaveBeenNthCalledWith(2, failureMeta)
     expect(onSuccess).toHaveBeenCalledWith(successResponse)
     expect(onFailure).toHaveBeenCalledWith(failureResponse)
   })

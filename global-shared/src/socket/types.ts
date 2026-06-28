@@ -76,19 +76,20 @@ import type {
   JoinRoomCallAckPayload,
   StartRoomCallAckPayload
 } from '../room-calls/types'
-import type { BackendMessage } from '../shared/types'
+import type { BackendMessage, TransportMeta } from '../shared/types'
 import type { ReqStatus } from '../status/types'
 import type { UserPreview } from '../user/types'
 
 export type SocketAckSuccess<TPayload = void> = [TPayload] extends [void]
-  ? { ok: true }
-  : { ok: true; payload: TPayload }
+  ? { ok: true; meta?: TransportMeta }
+  : { ok: true; payload: TPayload; meta?: TransportMeta }
 
 export interface SocketAckFailure<TReason extends string = string> {
   ok: false
   reason?: TReason
   message?: BackendMessage
   handledByGlobalError?: boolean
+  meta?: TransportMeta
 }
 
 export type SocketAckResponse<TPayload = void, TReason extends string = string> =
@@ -110,7 +111,9 @@ export type SocketAckCallback<TPayload = void, TReason extends string = string> 
   response: SocketAckResponse<TPayload, TReason>
 ) => void
 
-export type SocketEventPayloadHandler<TPayload> = [TPayload] extends [void] ? () => void : (payload: TPayload) => void
+export type SocketEventPayloadHandler<TPayload> = [TPayload] extends [void]
+  ? (meta?: TransportMeta) => void
+  : (payload: TPayload, meta?: TransportMeta) => void
 
 export type SocketAckEventPayloadHandler<TPayload, TAckPayload> = [TPayload] extends [void]
   ? (ack?: SocketAckCallback<TAckPayload>) => void
