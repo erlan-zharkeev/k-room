@@ -72,7 +72,7 @@ const createSecondUserPage = async (browser: Browser) => {
 const openContactsPage = async (page: Page) => {
   await page.goto(CONTACTS_PAGE_PATH)
   await expect(page).toHaveURL(new RegExp(CONTACTS_PAGE_PATH))
-  await expect(page.getByPlaceholder(CONTACTS_SEARCH_PLACEHOLDER)).toBeVisible()
+  await expect(page.getByPlaceholder(CONTACTS_SEARCH_PLACEHOLDER, { exact: true })).toBeVisible()
   await dismissFirstRunOverlays(page)
 }
 
@@ -161,7 +161,7 @@ const expectStoredPrivateChatRoom = async (page: Page, dbName: string, userId: s
 }
 
 const addContactFromSearch = async (page: Page, contact: ContactE2EUser) => {
-  await page.getByPlaceholder(CONTACTS_SEARCH_PLACEHOLDER).fill(contact.nickname)
+  await page.getByPlaceholder(CONTACTS_SEARCH_PLACEHOLDER, { exact: true }).fill(contact.nickname)
 
   const searchRow = getContactSearchRow(page, contact.nickname)
 
