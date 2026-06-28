@@ -1,7 +1,7 @@
 export const AUTH_FIXTURE_PASSWORD = 'Asdf1234'
 
 export const LOGIN_FIXTURE_USER = {
-  nickname: 'Ethan',
+  nickname: 'ethan',
   email: 'ethan@gmail.com',
   password: AUTH_FIXTURE_PASSWORD
 } as const
