@@ -1,4 +1,4 @@
-import { isString, isUnknownObject } from 'global-shared'
+import { isString, isUnknownObject, shouldIgnoreSentryError } from 'global-shared'
 
 import type { HttpError, CreateHttpErrorPayload } from './types'
 
@@ -20,6 +20,14 @@ export const isHttpError = (error: unknown): error is HttpError => {
 
   return error.type === 'http-error' && isString(error.message)
 }
+
+export const isExpectedHttpError = (error: unknown): error is HttpError =>
+  isHttpError(error) &&
+  shouldIgnoreSentryError({
+    message: error.message,
+    silent: error.silent,
+    status: error.status
+  })
 
 export const isHandledError = (error: unknown): error is HttpError | Error =>
   isHttpError(error) || error instanceof Error

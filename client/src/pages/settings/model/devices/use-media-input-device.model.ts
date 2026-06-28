@@ -25,9 +25,14 @@ interface UseMediaInputDeviceOptions {
   startCheckLabel: string
   stopCheckLabel: string
   showDeviceWarning: (error: unknown) => void
+  onPermissionDenied?: () => void
+  onPermissionGranted?: () => void
   onStopCheck?: () => void
   onStreamStarted?: (stream: MediaStream) => void
 }
+
+const isPermissionDeniedError = (error: unknown) =>
+  error instanceof DOMException && (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError')
 
 const buildInputDeviceConstraints = (devices: MediaDeviceInfo[], deviceId: string) => {
   if (deviceId && devices.some((device) => device.deviceId === deviceId)) {
@@ -39,6 +44,8 @@ const buildInputDeviceConstraints = (devices: MediaDeviceInfo[], deviceId: strin
 
 export const useMediaInputDevice = ({
   kind,
+  onPermissionDenied,
+  onPermissionGranted,
   onStopCheck,
   onStreamStarted,
   permission,
@@ -126,11 +133,15 @@ export const useMediaInputDevice = ({
       const stream = await userMedia.start()
 
       if (stream) {
+        onPermissionGranted?.()
         await refreshInputDevices(true)
         onStreamStarted?.(stream)
       }
     } catch (error) {
       stopInputCheck()
+      if (isPermissionDeniedError(error)) {
+        onPermissionDenied?.()
+      }
       showDeviceWarning(error)
     } finally {
       inputCheckLoading.value = false

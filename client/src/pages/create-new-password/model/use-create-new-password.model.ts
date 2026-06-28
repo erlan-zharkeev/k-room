@@ -5,7 +5,7 @@ import clone from 'lodash/clone'
 import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { useHttp } from 'src/shared/api'
+import { isExpectedHttpError, useHttp } from 'src/shared/api'
 import { createExactOrEmptyValidationPattern, createPasswordValidationRules, useI18n } from 'src/shared/lib'
 
 import { DEFAULT_CREATE_NEW_PASSWORD_FORM_DATA } from '../config/constants'
@@ -49,6 +49,10 @@ export const useCreateNewPassword = () => {
 
       successMessage.value = response.data.message.silent ? '' : response.data.message.text
       isPasswordChanged.value = true
+    } catch (error) {
+      if (isExpectedHttpError(error)) return
+
+      throw error
     } finally {
       isLoading.value = false
     }

@@ -52,11 +52,11 @@ describe('email.service', () => {
       confirmationText: 'Please confirm your email address to finish registration.',
       confirmUrl: 'https://localhost/confirm?token=abc',
       fallbackLinkText: 'If the button does not work, open this link manually:',
-      greeting: 'Hi, Tester!'
+      greeting: 'Hi, tester!'
     })
 
     expect(html).toContain('K Room')
-    expect(html).toContain('Hi, Tester!')
+    expect(html).toContain('Hi, tester!')
     expect(html).toContain('https://localhost/confirm?token=abc')
   })
 
@@ -67,7 +67,7 @@ describe('email.service', () => {
       email: 'user@test.com',
       language: 'en',
       token: 'token-1',
-      nickname: 'Tester'
+      nickname: 'tester'
     })
 
     const confirmUrl = new URL(ROUTE_NAMES.emailConfirmation, envMock.SERVER_ENV.clientUrl)
@@ -86,7 +86,7 @@ describe('email.service', () => {
         email: '',
         language: 'en',
         token: 'token-1',
-        nickname: 'Tester'
+        nickname: 'tester'
       })
     ).rejects.toMatchObject({
       status: REQ_STATUS.server
@@ -96,7 +96,7 @@ describe('email.service', () => {
         email: 'user@test.com',
         language: 'en',
         token: '',
-        nickname: 'Tester'
+        nickname: 'tester'
       })
     ).rejects.toMatchObject({
       status: REQ_STATUS.server
@@ -117,7 +117,7 @@ describe('email.service', () => {
       email: 'user@test.com',
       language: 'en',
       code: '123456',
-      nickname: 'Tester'
+      nickname: 'tester'
     })
 
     expect(result).toEqual({ id: 'resend-id' })
@@ -144,7 +144,7 @@ describe('email.service', () => {
       email: 'user@test.com',
       language: 'ru',
       token: 'token-1',
-      nickname: 'Tester'
+      nickname: 'tester'
     })
 
     expect(result).toEqual({ id: 'resend-id' })
@@ -166,7 +166,7 @@ describe('email.service', () => {
       email: 'user@test.com',
       language: 'en',
       code: '123456',
-      nickname: 'Tester'
+      nickname: 'tester'
     })
 
     expect(result).toEqual({ id: 'mock-recovery-email-id' })

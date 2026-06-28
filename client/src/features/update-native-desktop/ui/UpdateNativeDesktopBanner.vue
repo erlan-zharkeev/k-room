@@ -34,7 +34,6 @@ const {
     <div class="update-native-desktop-banner__actions">
       <NmorphButton
         class="update-native-desktop-banner__action"
-        fill
         :disabled="isInstalling"
         :loading="isInstalling"
         :text="$t(UPDATE_NATIVE_DESKTOP_I18N.installAction)"
@@ -81,10 +80,16 @@ const {
   display: flex;
   flex-shrink: 0;
   gap: 8px;
+  align-items: center;
 }
 
 .update-native-desktop-banner__action {
+  flex: 0 0 auto;
   min-width: 96px;
+}
+
+.update-native-desktop-banner__action .nmorph-button__label {
+  overflow-wrap: normal;
   white-space: nowrap;
 }
 

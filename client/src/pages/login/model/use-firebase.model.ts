@@ -4,7 +4,7 @@ import { ref } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
 import { useClientSession } from 'src/features/client-session'
-import { useHttp } from 'src/shared/api'
+import { isExpectedHttpError, useHttp } from 'src/shared/api'
 import { log, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
 import { E2E_FIREBASE_AUTH_RESULT } from '../config/constants'
@@ -87,6 +87,10 @@ export const useFirebase = () => {
       if (!credential) return
 
       await signInWithCredential(credential)
+    } catch (error) {
+      if (isExpectedHttpError(error)) return
+
+      throw error
     } finally {
       isFirebaseLoginLoading.value = false
     }

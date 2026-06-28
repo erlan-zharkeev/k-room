@@ -10,27 +10,27 @@ export const FIXTURE_USER_ONBOARDING = {
 
 const FIXTURE_USERS = [
   {
-    nickname: 'Ethan',
+    nickname: 'ethan',
     avatarId: '68f100000000000000000001',
     avatarPath: 'ethan.png'
   },
   {
-    nickname: 'Olivia',
+    nickname: 'olivia',
     avatarId: '68f100000000000000000002',
     avatarPath: 'olivia.png'
   },
   {
-    nickname: 'Maya',
+    nickname: 'maya',
     avatarId: '68f100000000000000000003',
     avatarPath: 'maya.png'
   },
   {
-    nickname: 'Noah',
+    nickname: 'noah',
     avatarId: '68f100000000000000000004',
     avatarPath: 'noah.png'
   },
   {
-    nickname: 'Lucas',
+    nickname: 'lucas',
     avatarId: '68f100000000000000000005',
     avatarPath: 'lucas.png'
   },
@@ -65,11 +65,11 @@ export const USER_FIXTURES = FIXTURE_USERS.map((user, index) => {
   }
 }) satisfies FixtureUserData[]
 export const PRIMARY_FIXTURE_USERNAMES = {
-  ethan: 'Ethan',
-  olivia: 'Olivia',
-  maya: 'Maya',
-  noah: 'Noah',
-  lucas: 'Lucas'
+  ethan: 'ethan',
+  olivia: 'olivia',
+  maya: 'maya',
+  noah: 'noah',
+  lucas: 'lucas'
 } as const
 export const PRIMARY_FIXTURE_NICKNAME = PRIMARY_FIXTURE_USERNAMES.ethan
 export const DIRECT_FIXTURE_CONTACT_NICKNAME = PRIMARY_FIXTURE_USERNAMES.olivia
@@ -180,7 +180,7 @@ export const FIXTURE_CONTACTS = [
 export const DIRECT_FIXTURE_MESSAGES = [
   {
     authorNickname: PRIMARY_FIXTURE_USERNAMES.ethan,
-    body: 'Morning Olivia. I tightened the onboarding flow and left the guide open so we can capture it from a clean first-run state.',
+    body: 'Morning olivia. I tightened the onboarding flow and left the guide open so we can capture it from a clean first-run state.',
     imageIds: [],
     reactions: [],
     replyToIndex: null
@@ -282,7 +282,7 @@ export const DIRECT_FIXTURE_MESSAGES = [
 export const SECONDARY_DIRECT_FIXTURE_MESSAGES = [
   {
     authorNickname: PRIMARY_FIXTURE_USERNAMES.maya,
-    body: 'Hey Ethan, I reviewed the settings page. The FAQ button for reopening the guide is in the right place.',
+    body: 'Hey ethan, I reviewed the settings page. The FAQ button for reopening the guide is in the right place.',
     imageIds: [],
     reactions: [],
     replyToIndex: null
@@ -346,7 +346,7 @@ export const SECONDARY_DIRECT_FIXTURE_MESSAGES = [
 export const TERTIARY_DIRECT_FIXTURE_MESSAGES = [
   {
     authorNickname: PRIMARY_FIXTURE_USERNAMES.noah,
-    body: 'Hey Ethan, I checked the call screen after the route animation changes. The canvas background stays stable now.',
+    body: 'Hey ethan, I checked the call screen after the route animation changes. The canvas background stays stable now.',
     imageIds: [],
     reactions: [],
     replyToIndex: null

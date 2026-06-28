@@ -29,12 +29,6 @@ const {
       <NmorphText variant="body-small">{{ $t(SETTINGS_PAGE_DEVICES_I18N.audioInputDeviceDescription) }}</NmorphText>
 
       <NmorphCallout :type="audioInputPermissionCalloutType" :content="audioInputPermissionStatus" />
-      <NmorphText
-        v-if="!audioInputLoading && audioInputOptions.length === 0"
-        color="var(--nmorph-warn-text-color)"
-        variant="body-small"
-        >{{ $t(SETTINGS_PAGE_DEVICES_I18N.notAvailable) }}</NmorphText
-      >
 
       <div class="settings-audio-input-device-card__control">
         <NmorphSelect

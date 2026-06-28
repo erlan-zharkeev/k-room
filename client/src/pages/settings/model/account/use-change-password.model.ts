@@ -2,7 +2,7 @@ import type { INmorphFormDataExpose } from '@nmorph/nmorph-ui-kit'
 import { createValidationMessages, NON_EMPTY_PATTERN, USER_ENDPOINTS } from 'global-shared'
 import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
 
-import { useHttp } from 'src/shared/api'
+import { isExpectedHttpError, useHttp } from 'src/shared/api'
 import {
   createDifferentOrEmptyValidationPattern,
   createExactOrEmptyValidationPattern,
@@ -79,6 +79,10 @@ export const useChangePassword = () => {
       formData.nextPassword.value = ''
       formData.repeatPassword.value = ''
       formResetKey.value += 1
+    } catch (error) {
+      if (isExpectedHttpError(error)) return
+
+      throw error
     } finally {
       isPasswordChanging.value = false
     }

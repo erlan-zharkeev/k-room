@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 const envMock = vi.hoisted(() => ({
   SERVER_ENV: {
     domain: '',
+    nativeDesktopOrigins: ['http://tauri.localhost'],
     secret: {
       accessTokenSecret: 'access-secret',
       refreshTokenSecret: 'refresh-secret'
@@ -44,6 +45,7 @@ describe('SessionService', () => {
     await service.updateTokens(
       'user-1',
       {
+        headers: {},
         cookies: {
           'device-id': 'device-1'
         }
@@ -77,6 +79,7 @@ describe('SessionService', () => {
     await service.clearSession(
       'user-1',
       {
+        headers: {},
         cookies: {
           'device-id': 'device-1'
         }
@@ -104,6 +107,38 @@ describe('SessionService', () => {
     expect(response.clearCookie).toHaveBeenCalledWith(
       'device-id',
       expect.objectContaining({ httpOnly: true, secure: true, sameSite: 'strict', path: '/' })
+    )
+  })
+
+  it('uses cross-site cookies for native desktop requests', async () => {
+    const response = createResponse()
+    const service = new SessionService()
+
+    await service.updateTokens(
+      'user-1',
+      {
+        headers: {
+          origin: 'http://tauri.localhost'
+        },
+        cookies: {}
+      } as never,
+      response as never
+    )
+
+    expect(response.cookie).toHaveBeenCalledWith(
+      'jwt',
+      expect.any(String),
+      expect.objectContaining({ secure: true, sameSite: 'none' })
+    )
+    expect(response.cookie).toHaveBeenCalledWith(
+      'refresh-jwt',
+      expect.any(String),
+      expect.objectContaining({ secure: true, sameSite: 'none' })
+    )
+    expect(response.cookie).toHaveBeenCalledWith(
+      'device-id',
+      expect.any(String),
+      expect.objectContaining({ secure: true, sameSite: 'none' })
     )
   })
 })

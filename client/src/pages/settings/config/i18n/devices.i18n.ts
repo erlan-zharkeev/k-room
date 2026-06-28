@@ -26,7 +26,7 @@ export const SETTINGS_PAGE_DEVICES_I18N = defineI18n('settingsPageDevices', {
     zh: '已拒绝'
   },
   permissionPrompt: {
-    en: 'not requested',
+    en: 'not granted or browser could not confirm access',
     ru: 'не запрошено',
     zh: '未请求'
   },

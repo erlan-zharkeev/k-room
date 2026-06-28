@@ -23,6 +23,7 @@ export const createClientEnvData = (mode: string, envDir: string): ClientEnv => 
   const appHost = getEnv('APP_HOST', modeEnv)
   const apiHost = getEnv('API_HOST', modeEnv)
   const firebaseApiKey = getEnv('FIREBASE_API_KEY', modeEnv)
+  const firebaseAuthDomain = isDev ? 'k-room-3a49a.firebaseapp.com' : new URL(appHost).host
   const turnstileSiteKey = getEnv('TURNSTILE_SITE_KEY', modeEnv) || (isDev ? '1x00000000000000000000AA' : '')
   const themeBg = '#1c1f21'
   const themeAccent = '#006cb6'
@@ -54,6 +55,7 @@ export const createClientEnvData = (mode: string, envDir: string): ClientEnv => 
     appHost,
     apiHost,
     firebaseApiKey,
+    firebaseAuthDomain,
     turnstileSiteKey,
     sentryDsnClient: SENTRY_DSN_CLIENT,
     sentryEnvironment: getEnv('SENTRY_ENVIRONMENT', modeEnv),

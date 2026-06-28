@@ -10,11 +10,11 @@ const socketMock = vi.hoisted(() => ({
 }))
 
 const contactStoreMock = vi.hoisted(() => ({
-  contactById: { value: new Map([['user-2', { nickname: 'Alice' }]]) }
+  contactById: { value: new Map([['user-2', { nickname: 'alice' }]]) }
 }))
 
 const knownUserStoreMock = vi.hoisted(() => ({
-  knownUserById: { value: new Map([['user-3', { nickname: 'Bob' }]]) }
+  knownUserById: { value: new Map([['user-3', { nickname: 'bob' }]]) }
 }))
 
 vi.mock('vue', async (importOriginal) => ({
@@ -61,7 +61,7 @@ describe('chat room typing status', () => {
     updateRoomTypingStatus({ roomId, contactId: 'user-2', isTyping: true })
     updateRoomTypingStatus({ roomId, contactId: 'user-3', isTyping: true })
 
-    expect(typingText.value).toBe('Alice, Bob typing')
+    expect(typingText.value).toBe('alice, bob typing')
 
     updateRoomTypingStatus({ roomId, contactId: 'user-2', isTyping: false })
     updateRoomTypingStatus({ roomId, contactId: 'user-3', isTyping: false })

@@ -50,13 +50,15 @@ export const useHttp = () => {
     } = opts
     const responseType = (opts.responseType ?? 'json') as ResponseType
 
+    const requestHeaders: AxiosRequestConfig['headers'] = {
+      ...(data instanceof FormData ? {} : { 'Content-Type': contentType }),
+      ...headers
+    }
+
     const requestConfig: AxiosRequestConfig<HttpRequestPayload> = {
       method: type,
       url: `${__CLIENT_ENV_DATA__.apiBaseUrl}${endpoint}`,
-      headers: {
-        'Content-Type': contentType,
-        ...headers
-      },
+      headers: requestHeaders,
       responseType,
       signal,
       ...(type === 'get' ? { params: data } : { data })

@@ -6,7 +6,12 @@ import { useDeviceWarning } from './use-device-settings.model'
 import { useMediaInputDevice } from './use-media-input-device.model'
 
 export const useVideoInputDevice = () => {
-  const { videoInputPermission, hasVideoInputPermissionWarning } = useMediaDevicePermission()
+  const {
+    hasVideoInputPermissionWarning,
+    markVideoInputPermissionDenied,
+    markVideoInputPermissionGranted,
+    videoInputPermission
+  } = useMediaDevicePermission()
   const { showDeviceWarning } = useDeviceWarning('Video input device request failed')
   const {
     inputCheckButtonLabel: videoInputCheckButtonLabel,
@@ -23,6 +28,8 @@ export const useVideoInputDevice = () => {
     settings
   } = useMediaInputDevice({
     kind: 'video',
+    onPermissionDenied: markVideoInputPermissionDenied,
+    onPermissionGranted: markVideoInputPermissionGranted,
     permission: videoInputPermission,
     settingKey: 'videoInputDeviceId',
     showDeviceWarning,

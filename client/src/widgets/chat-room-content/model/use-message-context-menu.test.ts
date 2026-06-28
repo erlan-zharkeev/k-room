@@ -85,7 +85,7 @@ const createMessage = (patch: Partial<Message> = {}): Message =>
   ({
     id: 'message-1',
     authorId: 'user-1',
-    authorNickname: 'Tester',
+    authorNickname: 'tester',
     body: 'hello',
     createdAt: 1,
     images: [],

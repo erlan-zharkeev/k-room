@@ -5,12 +5,20 @@ import type { MessageMediaGalleryProps } from '../config/types'
 import { useMessageMediaGallery } from '../model/use-message-media-gallery.model'
 
 const props = defineProps<MessageMediaGalleryProps>()
-const { activeGalleryIndex, galleryItems, hasGalleryItems, messageMediaGalleryStyle } = useMessageMediaGallery(props)
+const {
+  activeGalleryIndex,
+  galleryItems,
+  hasGalleryItems,
+  hasMediaItems,
+  messageMediaGalleryPlaceholderStyle,
+  messageMediaGalleryStyle
+} = useMessageMediaGallery(props)
 </script>
 
 <template>
-  <div v-if="hasGalleryItems" class="message-media-gallery" :style="messageMediaGalleryStyle">
+  <div v-if="hasMediaItems" class="message-media-gallery" :style="messageMediaGalleryStyle">
     <NmorphMediaGallery
+      v-if="hasGalleryItems"
       v-model:active-index="activeGalleryIndex"
       :items="galleryItems"
       design="plain"
@@ -29,11 +37,26 @@ const { activeGalleryIndex, galleryItems, hasGalleryItems, messageMediaGallerySt
       :show-file-size="true"
       :show-file-actions="true"
     />
+    <div
+      v-else
+      class="message-media-gallery__placeholder"
+      :style="messageMediaGalleryPlaceholderStyle"
+      aria-hidden="true"
+    />
   </div>
 </template>
 
 <style lang="scss">
 .message-media-gallery {
   width: 100%;
+}
+
+.message-media-gallery__placeholder {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  border: var(--nmorph-plain-border);
+  border-radius: var(--default-border-radius);
+
+  background: color-mix(in srgb, var(--nmorph-accent-color) 6%, transparent);
 }
 </style>

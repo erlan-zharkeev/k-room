@@ -1,5 +1,5 @@
 import { useMediaQuery, usePermission } from '@vueuse/core'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 export const useTouchInput = () => {
   const isCoarsePointer = useMediaQuery('(pointer: coarse)')
@@ -18,9 +18,38 @@ export const useTouchInput = () => {
 
 const isMediaDevicePermissionWarning = (permission: PermissionState | undefined) => permission !== 'granted'
 
+const resolveMediaDevicePermission = (
+  permission: PermissionState | undefined,
+  detectedPermission: PermissionState | undefined
+) => {
+  if (permission === 'denied') return permission
+
+  return detectedPermission ?? permission
+}
+
 const createMediaDevicePermission = () => {
-  const audioInputPermission = usePermission('microphone')
-  const videoInputPermission = usePermission('camera')
+  const browserAudioInputPermission = usePermission('microphone')
+  const browserVideoInputPermission = usePermission('camera')
+  const detectedAudioInputPermission = ref<PermissionState>()
+  const detectedVideoInputPermission = ref<PermissionState>()
+  const audioInputPermission = computed(() =>
+    resolveMediaDevicePermission(browserAudioInputPermission.value, detectedAudioInputPermission.value)
+  )
+  const videoInputPermission = computed(() =>
+    resolveMediaDevicePermission(browserVideoInputPermission.value, detectedVideoInputPermission.value)
+  )
+  const markAudioInputPermissionGranted = () => {
+    detectedAudioInputPermission.value = 'granted'
+  }
+  const markAudioInputPermissionDenied = () => {
+    detectedAudioInputPermission.value = 'denied'
+  }
+  const markVideoInputPermissionGranted = () => {
+    detectedVideoInputPermission.value = 'granted'
+  }
+  const markVideoInputPermissionDenied = () => {
+    detectedVideoInputPermission.value = 'denied'
+  }
 
   const hasAudioInputPermissionWarning = computed(() => isMediaDevicePermissionWarning(audioInputPermission.value))
   const hasVideoInputPermissionWarning = computed(() => isMediaDevicePermissionWarning(videoInputPermission.value))
@@ -33,7 +62,11 @@ const createMediaDevicePermission = () => {
     videoInputPermission,
     hasAudioInputPermissionWarning,
     hasVideoInputPermissionWarning,
-    hasMediaDevicePermissionWarning
+    hasMediaDevicePermissionWarning,
+    markAudioInputPermissionGranted,
+    markAudioInputPermissionDenied,
+    markVideoInputPermissionGranted,
+    markVideoInputPermissionDenied
   }
 }
 

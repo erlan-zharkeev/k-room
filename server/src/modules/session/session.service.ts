@@ -21,22 +21,42 @@ import type { TokenPayload } from './session.types'
 
 @Injectable()
 export class SessionService {
-  private getCookieOptions(maxAgeMs: number): CookieOptions {
+  private isNativeDesktopRequest(request: Request) {
+    const { origin, referer } = request.headers
+
+    if (
+      typeof origin === 'string' &&
+      SERVER_ENV.nativeDesktopOrigins.some((nativeDesktopOrigin) => origin === nativeDesktopOrigin)
+    ) {
+      return true
+    }
+
+    return (
+      typeof referer === 'string' &&
+      SERVER_ENV.nativeDesktopOrigins.some((nativeDesktopOrigin) => referer.startsWith(`${nativeDesktopOrigin}/`))
+    )
+  }
+
+  private getCookieSameSite(request: Request) {
+    return this.isNativeDesktopRequest(request) ? 'none' : 'strict'
+  }
+
+  private getCookieOptions(maxAgeMs: number, request: Request): CookieOptions {
     return {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: this.getCookieSameSite(request),
       path: '/',
       ...(SERVER_ENV.domain ? { domain: SERVER_ENV.domain } : {}),
       maxAge: maxAgeMs
     }
   }
 
-  private getClearCookieOptions(): CookieOptions {
+  private getClearCookieOptions(request: Request): CookieOptions {
     return {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite: this.getCookieSameSite(request),
       path: '/',
       ...(SERVER_ENV.domain ? { domain: SERVER_ENV.domain } : {})
     }
@@ -67,10 +87,11 @@ export class SessionService {
     tokenName: 'jwt' | 'refresh-jwt',
     userId: string,
     secret: string,
-    expiresIn: string | number
+    expiresIn: string | number,
+    request: Request
   ) {
     const token = this.signToken(userId, secret, expiresIn)
-    response.cookie(tokenName, token, this.getCookieOptions(parseTokenExpires(expiresIn)))
+    response.cookie(tokenName, token, this.getCookieOptions(parseTokenExpires(expiresIn), request))
 
     return token
   }
@@ -99,17 +120,18 @@ export class SessionService {
   }
 
   async updateTokens(userId: string, request: Request, response: Response) {
-    this.setToken(response, 'jwt', userId, SERVER_ENV.secret.accessTokenSecret, JWT_ACCESS_TOKEN_EXPIRES_IN)
+    this.setToken(response, 'jwt', userId, SERVER_ENV.secret.accessTokenSecret, JWT_ACCESS_TOKEN_EXPIRES_IN, request)
     const refreshToken = this.setToken(
       response,
       'refresh-jwt',
       userId,
       SERVER_ENV.secret.refreshTokenSecret,
-      REFRESH_TOKEN_EXPIRES_IN
+      REFRESH_TOKEN_EXPIRES_IN,
+      request
     )
     const deviceId = request.cookies['device-id'] ?? uuidv4()
 
-    response.cookie('device-id', deviceId, this.getCookieOptions(DEVICE_COOKIE_MAX_AGE_MS))
+    response.cookie('device-id', deviceId, this.getCookieOptions(DEVICE_COOKIE_MAX_AGE_MS, request))
 
     await setUserRefreshDevice(userId, deviceId, refreshToken)
   }
@@ -122,7 +144,7 @@ export class SessionService {
     }
 
     SESSION_COOKIE_NAMES.forEach((cookie) => {
-      response.clearCookie(cookie, this.getClearCookieOptions())
+      response.clearCookie(cookie, this.getClearCookieOptions(request))
     })
   }
 }

@@ -215,7 +215,7 @@ describe('fixtures.service', () => {
       expect.objectContaining({
         repliedMessage: expect.objectContaining({
           id: 'fixture-ethan-olivia-004',
-          authorNickname: 'Olivia',
+          authorNickname: 'olivia',
           body: expect.any(String)
         })
       }),
@@ -226,7 +226,7 @@ describe('fixtures.service', () => {
       expect.objectContaining({
         repliedMessage: expect.objectContaining({
           id: 'fixture-ethan-noah-003',
-          authorNickname: 'Noah',
+          authorNickname: 'noah',
           body: expect.any(String)
         })
       }),
@@ -237,7 +237,7 @@ describe('fixtures.service', () => {
       expect.objectContaining({
         repliedMessage: expect.objectContaining({
           id: 'fixture-ethan-lucas-003',
-          authorNickname: 'Lucas',
+          authorNickname: 'lucas',
           body: expect.any(String)
         })
       }),
@@ -246,7 +246,7 @@ describe('fixtures.service', () => {
     expect(messageModelMock.updateOne).toHaveBeenCalledWith(
       { _id: 'fixture-product-studio-004' },
       expect.objectContaining({
-        authorNickname: 'Ethan',
+        authorNickname: 'ethan',
         images: expect.arrayContaining([expect.objectContaining({ src: '68f000000000000000000004' })]),
         usersMetaData: expect.arrayContaining([expect.objectContaining({ status: 'delivered' })])
       }),

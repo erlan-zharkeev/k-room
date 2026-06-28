@@ -5,7 +5,7 @@ export const initFirebase = async () => {
 
   initializeApp({
     apiKey: __CLIENT_ENV_DATA__.firebaseApiKey,
-    authDomain: 'k-room-3a49a.firebaseapp.com',
+    authDomain: __CLIENT_ENV_DATA__.firebaseAuthDomain,
     projectId: 'k-room-3a49a',
     storageBucket: 'k-room-3a49a.appspot.com',
     messagingSenderId: '199419640502',

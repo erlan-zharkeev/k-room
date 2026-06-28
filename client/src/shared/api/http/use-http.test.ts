@@ -101,4 +101,34 @@ describe('useHttp', () => {
       content: 'Saved'
     })
   })
+
+  it('lets the browser set multipart form data headers', async () => {
+    const response = {
+      status: 200,
+      headers: {
+        'content-type': 'application/json'
+      },
+      data: {
+        payload: null,
+        message: {
+          text: '',
+          silent: true
+        }
+      }
+    }
+    const formData = new FormData()
+    const { doHttpRequest } = useHttp()
+
+    formData.append('file', new Blob(['avatar']), 'avatar.png')
+    httpClientMock.request.mockResolvedValue(response)
+
+    await expect(doHttpRequest('patch', MEDIA_ENDPOINTS.getMediaFile, formData)).resolves.toBe(response)
+
+    expect(httpClientMock.request).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: formData,
+        headers: {}
+      })
+    )
+  })
 })
