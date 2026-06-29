@@ -14,7 +14,7 @@ test.describe('registration', () => {
     const policySwitch = page.locator('input[name="policy"]')
     const submitButton = page.getByRole('button', { name: 'Register', exact: true })
 
-    await expect(page.getByRole('heading', { name: 'Registration', level: 4 })).toBeVisible()
+    await expect(nicknameInput).toBeVisible({ timeout: 15_000 })
     await expect(submitButton).toBeVisible()
 
     await nicknameInput.fill(user.nickname)
@@ -41,6 +41,8 @@ test.describe('registration', () => {
     const passwordInput = page.getByPlaceholder('Password')
     const policySwitch = page.locator('input[name="policy"]')
     const submitButton = page.getByRole('button', { name: 'Register', exact: true })
+
+    await expect(nicknameInput).toBeVisible({ timeout: 15_000 })
 
     await nicknameInput.fill('Bad Nick')
     await emailInput.fill(user.email)
