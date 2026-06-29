@@ -238,6 +238,11 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n('chatRoomContent', {
     ru: 'Отправить сообщение',
     zh: '发送消息'
   },
+  closeSupportChat: {
+    en: 'Close',
+    ru: 'Закрыть',
+    zh: 'Close'
+  },
   membersQuantity: {
     en: i18nFormatter(['quantity'], (quantity: number) =>
       formatPlural('en', quantity, { one: 'member', other: 'members' })

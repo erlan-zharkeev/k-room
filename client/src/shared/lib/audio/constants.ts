@@ -1,7 +1,6 @@
 import type { AppSoundKind } from './types'
 
 export const APP_SOUND_KIND_VALUES = [
-  'call-connection',
   'incoming-call',
   'incoming-message',
   'interlocutor-busy',
@@ -9,7 +8,6 @@ export const APP_SOUND_KIND_VALUES = [
 ] as const satisfies readonly AppSoundKind[]
 
 export const APP_SOUND_SRC_BY_KIND = {
-  'call-connection': '/sounds/call-connection.mp3',
   'incoming-call': '/sounds/incoming-call.mp3',
   'incoming-message': '/sounds/incoming-message.mp3',
   'interlocutor-busy': '/sounds/interlocutor-busy.mp3',

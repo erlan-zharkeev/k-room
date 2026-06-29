@@ -1,3 +1,5 @@
+import type { SupportChatStatus, UserRole } from 'global-shared'
+
 import { ChatRoomModel } from '../chat-rooms.model'
 import type {
   ChatRoomCallAccessProjection,
@@ -8,18 +10,41 @@ import type {
   ChatRoomUsersProjection
 } from '../chat-rooms.types'
 
-export const findRoomUsersByMessage = (roomId: string, userId: string, messageId: string) => {
-  return ChatRoomModel.findOne({ _id: roomId, users: userId, messages: messageId })
-    .select('users')
+const buildRoomAccessQuery = (roomId: string, userId: string, userRole: UserRole = 'user') => {
+  if (userRole === 'admin') {
+    return {
+      _id: roomId,
+      $or: [{ users: userId }, { chatKind: 'support' }]
+    }
+  }
+
+  return {
+    _id: roomId,
+    users: userId
+  }
+}
+
+export const findRoomUsersByMessage = (
+  roomId: string,
+  userId: string,
+  messageId: string,
+  userRole: UserRole = 'user'
+) => {
+  return ChatRoomModel.findOne({ ...buildRoomAccessQuery(roomId, userId, userRole), messages: messageId })
+    .select('chatKind supportOwnerId users')
     .lean<ChatRoomUsersProjection>()
 }
 
-export const findRoomMessagesByUser = (roomId: string, userId: string) => {
-  return ChatRoomModel.findOne({ _id: roomId, users: userId }).select('messages').lean<ChatRoomMessagesProjection>()
+export const findRoomMessagesByUser = (roomId: string, userId: string, userRole: UserRole = 'user') => {
+  return ChatRoomModel.findOne(buildRoomAccessQuery(roomId, userId, userRole))
+    .select('messages')
+    .lean<ChatRoomMessagesProjection>()
 }
 
-export const findRoomUsersByUser = (roomId: string, userId: string) => {
-  return ChatRoomModel.findOne({ _id: roomId, users: userId }).select('users -_id').lean<ChatRoomUsersProjection>()
+export const findRoomUsersByUser = (roomId: string, userId: string, userRole: UserRole = 'user') => {
+  return ChatRoomModel.findOne(buildRoomAccessQuery(roomId, userId, userRole))
+    .select('chatKind supportOwnerId users -_id')
+    .lean<ChatRoomUsersProjection>()
 }
 
 export const findRoomCallAccessByUser = (roomId: string, userId: string) => {
@@ -28,9 +53,9 @@ export const findRoomCallAccessByUser = (roomId: string, userId: string) => {
     .lean<ChatRoomCallAccessProjection>()
 }
 
-export const findRoomUsersAndMessagesByUser = (roomId: string, userId: string) => {
-  return ChatRoomModel.findOne({ _id: roomId, users: userId })
-    .select('users messages')
+export const findRoomUsersAndMessagesByUser = (roomId: string, userId: string, userRole: UserRole = 'user') => {
+  return ChatRoomModel.findOne(buildRoomAccessQuery(roomId, userId, userRole))
+    .select('adminId chatKind supportOwnerId supportStatus users messages')
     .lean<ChatRoomUsersMessagesProjection>()
 }
 
@@ -38,8 +63,8 @@ export const findSourceRoomByMessageForUser = (userId: string, messageId: string
   return ChatRoomModel.findOne({ users: userId, messages: messageId }).select('_id').lean<ChatRoomIdProjection>()
 }
 
-export const addMessageToRoom = (roomId: string, userId: string, messageId: string) => {
-  return ChatRoomModel.updateOne({ _id: roomId, users: userId }, { $push: { messages: messageId } })
+export const addMessageToRoom = (roomId: string, userId: string, messageId: string, userRole: UserRole = 'user') => {
+  return ChatRoomModel.updateOne(buildRoomAccessQuery(roomId, userId, userRole), { $push: { messages: messageId } })
 }
 
 export const removeMessageFromRoom = (roomId: string, messageId: string) => {
@@ -66,4 +91,18 @@ export const loadChatRoomUsersByUserId = (userId: string) => {
 
 export const loadChatRoomsByIds = (roomIds: string[]) => {
   return ChatRoomModel.find({ _id: { $in: roomIds } }).lean<ChatRoomDocument[]>()
+}
+
+export const loadSupportChatRooms = () => {
+  return ChatRoomModel.find({ chatKind: 'support' }).lean<ChatRoomDocument[]>()
+}
+
+export const updateSupportChatRoomStatus = (roomId: string, supportStatus: SupportChatStatus) => {
+  return ChatRoomModel.findOneAndUpdate(
+    { _id: roomId, chatKind: 'support' },
+    { $set: { supportStatus } },
+    { new: true }
+  )
+    .select('-__v')
+    .lean<ChatRoomDocument>()
 }

@@ -31,11 +31,6 @@ export const PASSWORD_RECOVERY_I18N = defineI18n('passwordRecovery', {
     ru: 'Отправить код',
     zh: '发送验证码'
   },
-  codePlaceholder: {
-    en: 'Enter code from email',
-    ru: 'Введите код из письма',
-    zh: '输入邮件中的验证码'
-  },
   validate: {
     en: 'Validate',
     ru: 'Проверить',

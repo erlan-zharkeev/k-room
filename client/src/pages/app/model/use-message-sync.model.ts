@@ -32,8 +32,7 @@ export const useMessageSync = () => {
   const { bulkUpdate, getById, messageById, mutate: mutateMessage, put, remove, update } = useMessage()
   const { startMessageRemovalMotion, stopMessageRemovalMotion } = useMessageRemovalMotion()
   const { user } = useUser()
-  const { playDeliveredMessageSound, showDeliveredMessageBrowserPush, showDeliveredMessageToast } =
-    useMessageNotification()
+  const { playDeliveredMessageSound, showDeliveredMessagePush, showDeliveredMessageToast } = useMessageNotification()
 
   const decreaseUnreadMessagesQuantity = async (roomId: string, quantity = 1) => {
     await mutateRoom(roomId, (room) => {
@@ -120,7 +119,7 @@ export const useMessageSync = () => {
       }
     })
     showDeliveredMessageToast({ roomId, message })
-    void showDeliveredMessageBrowserPush({ roomId, message })
+    void showDeliveredMessagePush({ roomId, message })
     void playDeliveredMessageSound({ roomId, message })
   }
 

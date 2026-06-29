@@ -1,5 +1,7 @@
 import { computed, ref, toRef } from 'vue'
 
+import { isRoomSupport } from 'src/entities/chat-room'
+import { useUser } from 'src/entities/user'
 import { useTouchInput } from 'src/shared/lib'
 
 import type { MessageContextMenuOption, MessageContextMenuProps } from '../config/types'
@@ -17,11 +19,15 @@ import { useMessageDeleteDialog } from './use-message-delete-dialog.model'
 export const useMessageContextMenu = (props: MessageContextMenuProps) => {
   const message = toRef(props, 'message')
   const room = toRef(props, 'room')
+  const { user } = useUser()
   const { isTouchInput } = useTouchInput()
   const { isDeleteMessageDialogOpen, openDeleteMessageDialog } = useMessageDeleteDialog()
   const isMessageForwardDialogOpen = ref(false)
   const isMessageContextMenuOpen = ref(false)
   const isMessagePinned = computed(() => room.value.pinnedMessageId === message.value.id)
+  const canUseRoomMemberMessageActions = computed(
+    () => !isRoomSupport(room.value) || room.value.supportOwnerId === user.value.id
+  )
   const messageContextMenuTrigger = computed(() => (isTouchInput.value ? 'longpress' : 'contextmenu'))
 
   const updateMessageContextMenuOpen = (value: boolean) => {
@@ -38,16 +44,6 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
 
   const messageContextMenuOptions = computed<MessageContextMenuOption[]>(() => {
     const options: MessageContextMenuOption[] = [
-      {
-        value: 'reaction-picker',
-        component: MessageReactionPicker,
-        componentProps: {
-          message: message.value,
-          room: room.value,
-          onSelect: closeMessageContextMenu
-        },
-        closeOnClick: false
-      },
       {
         value: 'copy-text',
         component: MessageCopyTextContextMenuItem,
@@ -81,7 +77,20 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
       }
     ]
 
-    if (canStartMessageEdit(message.value)) {
+    if (canUseRoomMemberMessageActions.value) {
+      options.unshift({
+        value: 'reaction-picker',
+        component: MessageReactionPicker,
+        componentProps: {
+          message: message.value,
+          room: room.value,
+          onSelect: closeMessageContextMenu
+        },
+        closeOnClick: false
+      })
+    }
+
+    if (canUseRoomMemberMessageActions.value && canStartMessageEdit(message.value)) {
       options.push({
         value: 'edit-message',
         component: MessageEditContextMenuItem,
@@ -94,28 +103,30 @@ export const useMessageContextMenu = (props: MessageContextMenuProps) => {
       })
     }
 
-    options.push({
-      value: isMessagePinned.value ? 'unpin-message' : 'pin-message',
-      component: MessagePinContextMenuItem,
-      componentProps: {
-        message: message.value,
-        room: room.value,
-        onSelect: closeMessageContextMenu
-      },
-      closeOnClick: false
-    })
+    if (canUseRoomMemberMessageActions.value) {
+      options.push({
+        value: isMessagePinned.value ? 'unpin-message' : 'pin-message',
+        component: MessagePinContextMenuItem,
+        componentProps: {
+          message: message.value,
+          room: room.value,
+          onSelect: closeMessageContextMenu
+        },
+        closeOnClick: false
+      })
 
-    options.push({
-      value: 'delete-message',
-      component: MessageDeleteContextMenuItem,
-      componentProps: {
-        message: message.value,
-        room: room.value,
-        openDialog: openDeleteMessageDialog,
-        onSelect: closeMessageContextMenu
-      },
-      closeOnClick: false
-    })
+      options.push({
+        value: 'delete-message',
+        component: MessageDeleteContextMenuItem,
+        componentProps: {
+          message: message.value,
+          room: room.value,
+          openDialog: openDeleteMessageDialog,
+          onSelect: closeMessageContextMenu
+        },
+        closeOnClick: false
+      })
+    }
 
     return options
   })

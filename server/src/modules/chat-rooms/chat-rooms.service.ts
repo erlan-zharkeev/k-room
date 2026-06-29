@@ -3,6 +3,7 @@ import { setTimeout as delay } from 'timers/promises'
 import {
   type CreateRoomAckPayload,
   type EventChatRoomDeleted,
+  type EventCloseSupportChat,
   type EventCreateRoom,
   type EventChatRoomLeft,
   type EventDeleteChatRoom,
@@ -32,8 +33,10 @@ import type { PresenceService } from '../presence/presence.service'
 import { emitToUsers } from '../presence/presence.utils'
 import {
   addChatRoomToUsers,
+  addChatRoomToUserById,
   addChatRoomToUsersByIds,
   checkUsersAcceptedContacts,
+  loadUserRoleById,
   loadUserMutedChatRoomsForRoom,
   loadUserPinnedChatRooms,
   loadUserPinnedChatRoomsForRoom,
@@ -51,6 +54,26 @@ import { assertCreateChatRoomLimits, assertUpdateChatRoomData } from './lib/asse
 import { emitNewRoomToUsers, emitRoomDataToUsers } from './lib/emit-room-data-to-users'
 import { resolveChatRoomMemberIds } from './lib/resolve-chat-room-member-ids'
 import { resolvePinnedChatRoomOrder, resolveToggledRoomIds } from './lib/resolve-toggled-room-ids'
+import { loadSupportChatRoomRecipientIds } from './lib/support-chat-room-recipients'
+
+const emitSupportRoomDataToRecipients = async (
+  room: ChatRoomDocument,
+  presenceService: PresenceService,
+  eventName: 'room-data-updated' | 'new-room-added'
+) => {
+  if (!room.supportOwnerId) {
+    return
+  }
+
+  const recipientIds = await loadSupportChatRoomRecipientIds(room.supportOwnerId)
+
+  if (eventName === 'new-room-added') {
+    await emitNewRoomToUsers(recipientIds, room, presenceService)
+    return
+  }
+
+  await emitRoomDataToUsers(recipientIds, room, presenceService)
+}
 
 export const createChatRoom = async (
   userId: string,
@@ -105,6 +128,88 @@ export const createChatRoom = async (
   await delay(ROOM_CREATED_EVENT_DELAY_MS)
 
   return { roomId }
+}
+
+export const openSupportChat = async (
+  userId: string,
+  presenceService: PresenceService
+): Promise<CreateRoomAckPayload> => {
+  const existingRoom = await ChatRoomModel.findOneAndUpdate(
+    {
+      chatKind: 'support',
+      supportOwnerId: userId
+    },
+    {
+      $set: {
+        supportStatus: 'open'
+      }
+    },
+    { new: true }
+  )
+    .select('-__v')
+    .lean<ChatRoomDocument>()
+
+  if (existingRoom) {
+    const roomId = stringifyMongoId(existingRoom._id)
+
+    await addChatRoomToUserById(roomId, userId)
+    await emitSupportRoomDataToRecipients(existingRoom, presenceService, 'room-data-updated')
+
+    return { roomId }
+  }
+
+  const room = new ChatRoomModel({
+    users: [userId],
+    adminId: userId,
+    createdAt: Date.now(),
+    chatKind: 'support',
+    supportOwnerId: userId,
+    supportStatus: 'open',
+    avatarId: null,
+    pinnedMessageId: null,
+    messages: []
+  } satisfies ChatRoomSchema)
+  const roomId = stringifyMongoId(room._id)
+
+  await room.save()
+  await addChatRoomToUserById(roomId, userId)
+  await emitSupportRoomDataToRecipients(room.toObject(), presenceService, 'new-room-added')
+  await delay(ROOM_CREATED_EVENT_DELAY_MS)
+
+  return { roomId }
+}
+
+export const closeSupportChat = async (
+  userId: string,
+  { roomId }: EventCloseSupportChat,
+  presenceService: PresenceService
+) => {
+  const user = await loadUserRoleById(userId)
+
+  if (user?.system.role !== 'admin') {
+    throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.closeSupportChatForbidden)
+  }
+
+  const room = await ChatRoomModel.findOneAndUpdate(
+    {
+      _id: roomId,
+      chatKind: 'support'
+    },
+    {
+      $set: {
+        supportStatus: 'closed'
+      }
+    },
+    { new: true }
+  )
+    .select('-__v')
+    .lean<ChatRoomDocument>()
+
+  if (!room) {
+    return
+  }
+
+  await emitSupportRoomDataToRecipients(room, presenceService, 'room-data-updated')
 }
 
 export const updatePinnedChatRoom = async (userId: string, { roomId, isPinned }: EventUpdatePinnedChatRoom) => {

@@ -6,7 +6,12 @@ import { getClientPlatform } from 'src/shared/lib/browser/browser'
 import { useI18n } from 'src/shared/lib/i18n/i18n'
 import { useAppToast } from 'src/shared/lib/toast/toast'
 
-import { CLIENT_UPDATE_RELOAD_DELAY_MS, CLIENT_UPDATE_TOAST_ID } from './constants'
+import {
+  CLIENT_UPDATE_RELOAD_DELAY_MS,
+  CLIENT_UPDATE_RELOAD_STORAGE_PREFIX,
+  CLIENT_UPDATE_SERVICE_WORKER_TIMEOUT_MS,
+  CLIENT_UPDATE_TOAST_ID
+} from './constants'
 import { getHeaderValue } from './http/get-header-value'
 import { API_I18N } from './i18n'
 
@@ -17,8 +22,158 @@ let isClientUpdateToastRemovingSilently = false
 let stopClientUpdateToastWatcher: (() => void) | null = null
 const clientUpdateReloadBlockers = new Set<string>()
 
-const reloadClient = () => {
-  window.location.reload()
+const buildClientUpdateReloadStorageKey = (clientVersion: string) =>
+  `${CLIENT_UPDATE_RELOAD_STORAGE_PREFIX}${clientVersion}`
+
+const getSessionStorageValue = (key: string) => {
+  try {
+    return window.sessionStorage.getItem(key)
+  } catch {
+    return null
+  }
+}
+
+const setSessionStorageValue = (key: string, value: string) => {
+  try {
+    window.sessionStorage.setItem(key, value)
+  } catch {
+    return
+  }
+}
+
+const hasClientUpdateReloadStarted = (clientVersion: string) =>
+  getSessionStorageValue(buildClientUpdateReloadStorageKey(clientVersion)) === 'true'
+
+const markClientUpdateReloadStarted = (clientVersion: string) => {
+  setSessionStorageValue(buildClientUpdateReloadStorageKey(clientVersion), 'true')
+}
+
+const waitForServiceWorkerControllerChange = () =>
+  new Promise<boolean>((resolve) => {
+    if (!('serviceWorker' in navigator)) {
+      resolve(false)
+      return
+    }
+
+    let isResolved = false
+    let timeoutId = 0
+    const resolveOnce = (value: boolean) => {
+      if (isResolved) return
+
+      isResolved = true
+      window.clearTimeout(timeoutId)
+      navigator.serviceWorker.removeEventListener('controllerchange', handleControllerChange)
+      resolve(value)
+    }
+    const handleControllerChange = () => {
+      resolveOnce(true)
+    }
+
+    timeoutId = window.setTimeout(() => {
+      resolveOnce(false)
+    }, CLIENT_UPDATE_SERVICE_WORKER_TIMEOUT_MS)
+    navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange)
+  })
+
+const waitForWaitingServiceWorker = (registration: ServiceWorkerRegistration) =>
+  new Promise<ServiceWorker | null>((resolve) => {
+    if (registration.waiting) {
+      resolve(registration.waiting)
+      return
+    }
+
+    let isResolved = false
+    let timeoutId = 0
+    const resolveOnce = (worker: ServiceWorker | null) => {
+      if (isResolved) return
+
+      isResolved = true
+      window.clearTimeout(timeoutId)
+      registration.removeEventListener('updatefound', handleUpdateFound)
+      resolve(worker)
+    }
+    const handleUpdateFound = () => {
+      const worker = registration.installing
+
+      if (!worker) return
+      if (worker.state === 'installed') {
+        resolveOnce(registration.waiting ?? worker)
+        return
+      }
+
+      worker.addEventListener('statechange', () => {
+        if (worker.state === 'installed') {
+          resolveOnce(registration.waiting ?? worker)
+        }
+      })
+    }
+
+    timeoutId = window.setTimeout(() => {
+      resolveOnce(registration.waiting)
+    }, CLIENT_UPDATE_SERVICE_WORKER_TIMEOUT_MS)
+    registration.addEventListener('updatefound', handleUpdateFound)
+    handleUpdateFound()
+  })
+
+const resolveWaitingServiceWorker = async (registration: ServiceWorkerRegistration) => {
+  if (registration.waiting) return registration.waiting
+
+  try {
+    await registration.update()
+  } catch {
+    return null
+  }
+
+  return waitForWaitingServiceWorker(registration)
+}
+
+const resolveClientUpdateServiceWorker = async () => {
+  if (!('serviceWorker' in navigator)) return null
+
+  const registrations = await navigator.serviceWorker.getRegistrations()
+
+  for (const registration of registrations) {
+    const worker = await resolveWaitingServiceWorker(registration)
+
+    if (worker) return worker
+  }
+
+  return null
+}
+
+const requestClientUpdateServiceWorker = async () => {
+  if (!('serviceWorker' in navigator)) return
+
+  const registrations = await navigator.serviceWorker.getRegistrations()
+
+  await Promise.allSettled(registrations.map((registration) => registration.update()))
+}
+
+const applyClientUpdateServiceWorker = async () => {
+  const worker = await resolveClientUpdateServiceWorker()
+
+  if (!worker) return false
+
+  const controllerChangePromise = waitForServiceWorkerControllerChange()
+
+  worker.postMessage({ type: 'SKIP_WAITING' })
+
+  return controllerChangePromise
+}
+
+const reloadClientWithUpdate = async (clientVersion: string) => {
+  if (hasClientUpdateReloadStarted(clientVersion)) {
+    await requestClientUpdateServiceWorker()
+    return
+  }
+
+  markClientUpdateReloadStarted(clientVersion)
+
+  try {
+    await applyClientUpdateServiceWorker()
+  } finally {
+    window.location.reload()
+  }
 }
 
 const showClientUpdateToast = () => {
@@ -62,8 +217,10 @@ const initializeClientUpdateToastWatcher = () => {
         return
       }
 
+      const clientVersion = activeClientUpdateVersion
+
       activeClientUpdateVersion = ''
-      reloadClient()
+      void reloadClientWithUpdate(clientVersion)
     },
     { flush: 'post' }
   )
@@ -91,6 +248,11 @@ const tryStartClientUpdateToast = (nextClientVersion: string) => {
   const isCurrentClientVersion = nextClientVersion === __CLIENT_ENV_DATA__.appVersion
 
   if (isCurrentClientVersion || isNativeDesktopClient || isClientUpdateToastActive) return
+
+  if (hasClientUpdateReloadStarted(nextClientVersion)) {
+    void requestClientUpdateServiceWorker()
+    return
+  }
 
   if (clientUpdateReloadBlockers.size) {
     pendingClientUpdateVersion = nextClientVersion

@@ -14,7 +14,7 @@ import { createUser, isUserExist } from 'src/modules/user/lib/user-existence'
 import { UserModel } from 'src/modules/user/user.model'
 import type { UserSchema } from 'src/modules/user/user.types'
 import { log } from 'src/shared/lib/log'
-import { stringifyMongoIds } from 'src/shared/lib/normalize-object-id'
+import { stringifyMongoId, stringifyMongoIds } from 'src/shared/lib/normalize-object-id'
 
 import {
   DIRECT_FIXTURE_CONTACT_NICKNAME,
@@ -270,7 +270,13 @@ const loadFixtureMessageImageObjectById = async () => {
     .find({ _id: { $in: imageIds } })
     .toArray()
 
-  return new Map(files.map((file) => [String(file._id), buildFixtureMessageImageObject(String(file._id), file)]))
+  return new Map(
+    files.map((file) => {
+      const fileId = stringifyMongoId(file._id)
+
+      return [fileId, buildFixtureMessageImageObject(fileId, file)]
+    })
+  )
 }
 
 const setFixtureContact = async (userId: string, contactId: string, interaction: FixtureContactData['interaction']) => {

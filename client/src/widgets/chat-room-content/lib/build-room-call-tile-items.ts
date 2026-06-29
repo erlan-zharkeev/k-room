@@ -3,14 +3,6 @@ import type { BuildRoomCallTileItemsParams, RoomCallTileItem } from '../config/t
 
 const buildRoomCallScreenTileId = (userId: string) => `${userId}:${ROOM_CALL_SCREEN_TILE_ID_SUFFIX}`
 
-const buildMediaStreamFromTracks = (tracks: MediaStreamTrack[]) => {
-  if (!tracks.length) {
-    return undefined
-  }
-
-  return new MediaStream(tracks)
-}
-
 const buildRoomCallParticipantTileMediaState = (mediaState: RoomCallTileItem['mediaState']) => ({
   ...mediaState,
   screen: false
@@ -27,8 +19,10 @@ const sortPrivateRoomCallTileItems = (items: RoomCallTileItem[]) => {
 }
 
 const resolveRemoteRoomCallParticipantStream = (
+  userId: string,
   stream: MediaStream | undefined,
-  mediaState: RoomCallTileItem['mediaState']
+  mediaState: RoomCallTileItem['mediaState'],
+  resolveMediaStreamFromTracks: BuildRoomCallTileItemsParams['resolveMediaStreamFromTracks']
 ) => {
   if (!stream) {
     return undefined
@@ -41,18 +35,23 @@ const resolveRemoteRoomCallParticipantStream = (
     tracks.push(cameraVideoTrack)
   }
 
-  return buildMediaStreamFromTracks(tracks)
+  return resolveMediaStreamFromTracks(userId, tracks)
 }
 
-const resolveRemoteRoomCallScreenStream = (stream: MediaStream | undefined) => {
+const resolveRemoteRoomCallScreenStream = (
+  userId: string,
+  stream: MediaStream | undefined,
+  resolveMediaStreamFromTracks: BuildRoomCallTileItemsParams['resolveMediaStreamFromTracks']
+) => {
   if (!stream) {
     return undefined
   }
 
   const videoTracks = stream.getVideoTracks()
   const screenVideoTrack = videoTracks.length > 1 ? videoTracks[videoTracks.length - 1] : videoTracks[0]
+  const tileId = buildRoomCallScreenTileId(userId)
 
-  return screenVideoTrack ? buildMediaStreamFromTracks([screenVideoTrack]) : undefined
+  return screenVideoTrack ? resolveMediaStreamFromTracks(tileId, [screenVideoTrack]) : undefined
 }
 
 export const buildRoomCallTileItems = ({
@@ -62,6 +61,7 @@ export const buildRoomCallTileItems = ({
   handRaisedByUserId,
   localMediaState,
   remoteStreamsByUserId,
+  resolveMediaStreamFromTracks,
   resolveParticipantAvatarId,
   resolveParticipantName,
   roomCall,
@@ -78,7 +78,12 @@ export const buildRoomCallTileItems = ({
       const connectionQuality = connectionQualityByUserId[participant.userId]
       const stream = isLocal
         ? videoStream || undefined
-        : resolveRemoteRoomCallParticipantStream(remoteStream, mediaState)
+        : resolveRemoteRoomCallParticipantStream(
+            participant.userId,
+            remoteStream,
+            mediaState,
+            resolveMediaStreamFromTracks
+          )
       const audioActivityStream = isLocal ? audioStream : remoteStream
       const participantTileMediaState = buildRoomCallParticipantTileMediaState(mediaState)
       const mirrored = isLocal && Boolean(videoStream)
@@ -122,7 +127,9 @@ export const buildRoomCallTileItems = ({
           mediaState: buildRoomCallScreenTileMediaState(mediaState),
           mirrored: false,
           name: resolveParticipantName(participant.userId),
-          stream: isLocal ? screenStream || undefined : resolveRemoteRoomCallScreenStream(remoteStream)
+          stream: isLocal
+            ? screenStream || undefined
+            : resolveRemoteRoomCallScreenStream(participant.userId, remoteStream, resolveMediaStreamFromTracks)
         }
       ]
     })

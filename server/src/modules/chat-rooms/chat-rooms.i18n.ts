@@ -41,6 +41,21 @@ export const CHAT_ROOMS_I18N = defineI18n({
     ru: 'Не удалось обновить чат',
     zh: '更新聊天失败'
   },
+  openSupportChatFailed: {
+    en: 'Failed to open support chat',
+    ru: 'Не удалось открыть чат поддержки',
+    zh: '无法打开支持聊天'
+  },
+  closeSupportChatFailed: {
+    en: 'Failed to close support chat',
+    ru: 'Не удалось закрыть чат поддержки',
+    zh: '无法关闭支持聊天'
+  },
+  closeSupportChatForbidden: {
+    en: 'Only administrators can close support chats',
+    ru: 'Закрыть чат поддержки может только администратор',
+    zh: '只有管理员可以关闭支持聊天'
+  },
   updatePinnedChatRoomFailed: {
     en: 'Failed to update pinned chat room',
     ru: 'Не удалось обновить закрепление чата',

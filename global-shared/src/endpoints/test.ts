@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { ROUTE_NAMES } from '../index'
+import { CLIENT_RUNTIME_ENDPOINTS, ROUTE_NAMES } from '../index'
 
 describe('endpoint contracts', () => {
   it('keeps auth routes and app routes stable', () => {
@@ -11,5 +11,6 @@ describe('endpoint contracts', () => {
     expect(ROUTE_NAMES.download).toBe('/download')
     expect(ROUTE_NAMES.notification).toBe('/notification')
     expect(ROUTE_NAMES.notFound).toBe('/not-found')
+    expect(CLIENT_RUNTIME_ENDPOINTS.getRuntimePolicy).toBe('/client/runtime-policy')
   })
 })

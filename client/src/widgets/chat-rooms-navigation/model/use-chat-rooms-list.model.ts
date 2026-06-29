@@ -2,7 +2,13 @@ import partition from 'lodash/partition'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { getRoomDisplayedLastMessageId, useChatRoom } from 'src/entities/chat-room'
+import {
+  CHAT_ROOM_I18N,
+  getRoomDisplayedLastMessageId,
+  isRoomFavorites,
+  isRoomSupport,
+  useChatRoom
+} from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { usePinChatRoomOrder } from 'src/features/pin-chat-room'
@@ -22,7 +28,7 @@ export const useChatRoomsList = () => {
   const { isPortraitTabletOrLess } = useScreen()
   const { t } = useI18n()
   const { chatRooms } = useChatRoom()
-  const { getChatRoomPrivateContact } = useChatRoomContactLookup()
+  const { getChatRoomPrivateContact, getChatRoomSupportContact } = useChatRoomContactLookup()
   const { getById } = useMessage()
   const { emitSocketAction } = useSocketAction()
   const { isSocketOnlineActionAvailable } = useSocketAvailability()
@@ -54,9 +60,16 @@ export const useChatRoomsList = () => {
         isMuted
       } = room
       const privateContact = getChatRoomPrivateContact(room)
+      const supportContact = getChatRoomSupportContact(room)
       const displayedLastMessageId = getRoomDisplayedLastMessageId(room)
       const lastMessage = displayedLastMessageId ? getById(displayedLastMessageId) : undefined
-      const title = chatName || privateContact?.nickname || ''
+      const isFavoritesRoom = isRoomFavorites(room)
+      const isSupportRoom = isRoomSupport(room)
+      const title = isSupportRoom
+        ? supportContact?.nickname || t(CHAT_ROOM_I18N.supportTitle)
+        : isFavoritesRoom
+        ? t(CHAT_ROOM_I18N.favoritesTitle)
+        : chatName || privateContact?.nickname || ''
       const description = resolveLastMessageDescription(lastMessage, t)
 
       return {
@@ -67,6 +80,8 @@ export const useChatRoomsList = () => {
         title,
         description,
         imageId: avatarId,
+        isFavoritesRoom,
+        isSupportRoom,
         online: Boolean(privateContact?.online),
         selected: route.params.chatRoomId === id,
         lastMessageCreatedAt: lastMessage?.createdAt ?? createdAt,

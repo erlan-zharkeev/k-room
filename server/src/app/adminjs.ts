@@ -4,9 +4,11 @@ import MongoStore from 'connect-mongo'
 import { WEEK_IN_MS } from 'global-shared'
 
 import { SERVER_ENV } from 'src/app/env'
+import { ADMIN_CHAT_ROOM_OPTIONS } from 'src/modules/chat-rooms/chat-rooms.admin'
 import { ADMIN_MEDIA_OPTIONS, ADMIN_MEDIA_PREVIEW_COMPONENT } from 'src/modules/media/media.admin'
 import { attachAdminMediaPreviewRoute } from 'src/modules/media/media.admin-preview'
 import { ADMIN_MESSAGE_OPTIONS } from 'src/modules/messages/messages.admin'
+import { ADMIN_ROOM_CALL_OPTIONS } from 'src/modules/room-calls/room-calls.admin'
 import { ADMIN_USER_OPTIONS } from 'src/modules/user/user.admin'
 
 const adminFaviconPath = path.resolve(__dirname, '..', '..', 'public', 'admin-favicon.svg')
@@ -42,7 +44,13 @@ const ADMIN_JS_CONFIG = {
     companyName: appName,
     favicon: '/admin-favicon.svg'
   },
-  resources: [ADMIN_USER_OPTIONS, ADMIN_MESSAGE_OPTIONS, ...ADMIN_MEDIA_OPTIONS]
+  resources: [
+    ADMIN_USER_OPTIONS,
+    ADMIN_CHAT_ROOM_OPTIONS,
+    ADMIN_MESSAGE_OPTIONS,
+    ADMIN_ROOM_CALL_OPTIONS,
+    ...ADMIN_MEDIA_OPTIONS
+  ]
 }
 
 const createAdmin = async () => {

@@ -17,6 +17,10 @@ const knownUserStoreMock = vi.hoisted(() => ({
   knownUserById: { value: new Map([['user-3', { nickname: 'bob' }]]) }
 }))
 
+const chatRoomStoreMock = vi.hoisted(() => ({
+  getById: vi.fn()
+}))
+
 vi.mock('vue', async (importOriginal) => ({
   ...(await importOriginal<typeof VueModule>()),
   onBeforeUnmount: vi.fn()
@@ -37,12 +41,20 @@ vi.mock('src/entities/known-user', () => ({
   useKnownUser: () => knownUserStoreMock
 }))
 
+vi.mock('src/entities/chat-room', () => ({
+  CHAT_ROOM_I18N: {
+    supportTitle: 'chatRoom.supportTitle'
+  },
+  isRoomSupport: (room?: ChatRoom) => room?.chatKind === 'support',
+  useChatRoom: () => chatRoomStoreMock
+}))
+
 vi.mock('src/shared/lib', () => ({
   defineI18n: (namespace: string, source: Record<string, unknown>) =>
     Object.fromEntries(Object.keys(source).map((key) => [key, `${namespace}.${key}`])),
   i18nFormatter: () => '',
   useI18n: () => ({
-    t: (_key: string, named?: { names?: string[] }) => `${named?.names?.join(', ')} typing`
+    t: (key: string, named?: { names?: string[] }) => (named?.names ? `${named.names.join(', ')} typing` : key)
   })
 }))
 
@@ -53,6 +65,10 @@ const { useChatRoomTypingStatus } = await import('./use-chat-room-typing.model')
 const createRoom = (id: string): ChatRoom => ({ id, messages: [], users: [] } as unknown as ChatRoom)
 
 describe('chat room typing status', () => {
+  beforeEach(() => {
+    chatRoomStoreMock.getById.mockReturnValue(undefined)
+  })
+
   it('deduplicates typing users and removes empty room state', () => {
     const roomId = 'typing-room-1'
     const { typingText } = useChatRoomTypingStatus({ roomId })
@@ -67,6 +83,26 @@ describe('chat room typing status', () => {
     updateRoomTypingStatus({ roomId, contactId: 'user-3', isTyping: false })
 
     expect(typingText.value).toBe('')
+  })
+
+  it('shows support name for typing support agents', () => {
+    const roomId = 'support-room-1'
+
+    chatRoomStoreMock.getById.mockReturnValue({
+      id: roomId,
+      chatKind: 'support',
+      supportOwnerId: 'user-1'
+    })
+
+    const { typingText } = useChatRoomTypingStatus({ roomId })
+
+    updateRoomTypingStatus({ roomId, contactId: 'admin-1', isTyping: true })
+    updateRoomTypingStatus({ roomId, contactId: 'admin-2', isTyping: true })
+
+    expect(typingText.value).toBe('chatRoom.supportTitle typing')
+
+    updateRoomTypingStatus({ roomId, contactId: 'admin-1', isTyping: false })
+    updateRoomTypingStatus({ roomId, contactId: 'admin-2', isTyping: false })
   })
 })
 

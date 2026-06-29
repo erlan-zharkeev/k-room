@@ -30,6 +30,10 @@ const messageSchema = new Schema<MessageSchema>(
       type: String,
       required: true
     },
+    authorKind: {
+      type: String,
+      required: false
+    },
     authorNickname: {
       type: String,
       required: true

@@ -15,6 +15,8 @@ export const resolveSelectedDeviceId = (devices: MediaDeviceInfo[], deviceId: st
 }
 
 export const resolveConnectedDeviceId = (devices: MediaDeviceInfo[], previousDevices: MediaDeviceInfo[]) => {
+  if (previousDevices.length === 0) return ''
+
   const previousDeviceIds = new Set(previousDevices.map(({ deviceId }) => deviceId))
 
   for (let index = devices.length - 1; index >= 0; index -= 1) {

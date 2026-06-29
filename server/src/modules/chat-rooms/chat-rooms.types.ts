@@ -1,4 +1,4 @@
-import type { ChatRoom } from 'global-shared'
+import type { ChatRoom, UnknownObject } from 'global-shared'
 import type { Types } from 'mongoose'
 
 export type ChatRoomSchema = Omit<
@@ -17,14 +17,28 @@ export interface TransformRoomForUserParams {
   mutedChatRoomIds: string[]
 }
 
-export type ChatRoomUsersProjection = Pick<ChatRoomSchema, 'users'>
+export type ChatRoomRecipientSource = Pick<ChatRoomSchema, 'chatKind' | 'supportOwnerId' | 'users'>
+
+export type ChatRoomUsersProjection = ChatRoomRecipientSource
 
 export type ChatRoomMessagesProjection = Pick<ChatRoomSchema, 'messages'>
 
-export type ChatRoomUsersMessagesProjection = Pick<ChatRoomSchema, 'users' | 'messages'>
+export type ChatRoomUsersMessagesProjection = Pick<
+  ChatRoomSchema,
+  'adminId' | 'chatKind' | 'messages' | 'supportOwnerId' | 'supportStatus' | 'users'
+>
 
 export type ChatRoomCallAccessProjection = Pick<ChatRoomSchema, 'users' | 'chatKind'>
 
 export type ChatRoomIdProjection = Pick<ChatRoomDocument, '_id'>
 
 export type ChatRoomDeleteProjection = Pick<ChatRoomSchema, 'adminId' | 'avatarId' | 'chatKind' | 'users' | 'messages'>
+
+export interface AdminChatRoomRecord {
+  params?: UnknownObject
+}
+
+export interface AdminChatRoomActionResponse {
+  record?: AdminChatRoomRecord
+  records?: AdminChatRoomRecord[]
+}

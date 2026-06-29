@@ -43,11 +43,14 @@ const presenceUtilsMock = vi.hoisted(() => ({
 const userPersistenceMock = vi.hoisted(() => ({
   addChatRoomToUsers: vi.fn(),
   addChatRoomToUsersByIds: vi.fn(),
+  addChatRoomToUserById: vi.fn(),
   checkUsersAcceptedContacts: vi.fn(),
+  loadAdminUserIds: vi.fn(),
   loadUserMutedChatRoomsForRoom: vi.fn(),
   loadUserPinnedChatRooms: vi.fn(),
   loadUserPinnedChatRoomsForRoom: vi.fn(),
   loadUserPublicById: vi.fn(),
+  loadUserRoleById: vi.fn(),
   loadUserRoomPreferences: vi.fn(),
   loadUsersChatRoomsByIds: vi.fn(),
   loadUsersPublicByIds: vi.fn(),
@@ -71,17 +74,22 @@ vi.mock('../messages/lib/transform-message-for-user', () => ({
 }))
 vi.mock('../presence/presence.utils', () => presenceUtilsMock)
 vi.mock('../user/lib/user-persistence', () => userPersistenceMock)
+vi.mock('src/modules/user/lib/user-persistence', () => userPersistenceMock)
 
 const serviceModule = await import('./chat-rooms.service')
+const favoritesChatRoomModule = await import('./lib/ensure-favorites-chat-room')
 const helperModule = await import('./lib/resolve-toggled-room-ids')
 const {
   createChatRoom,
+  closeSupportChat,
   deleteChatRoom,
+  openSupportChat,
   updateChatRoom,
   updateMutedChatRoom,
   updatePinnedChatRoom,
   updatePinnedChatRoomOrder
 } = serviceModule
+const { ensureFavoritesChatRoom } = favoritesChatRoomModule
 const { resolvePinnedChatRoomOrder, resolveToggledRoomIds } = helperModule
 
 const createLeanQuery = <T>(value: T) => ({
@@ -190,6 +198,88 @@ describe('chat-rooms.service', () => {
       })
     )
     expect(userPersistenceMock.addChatRoomToUsers).toHaveBeenCalledWith('room-created', ['user-1', 'user-2'])
+  })
+
+  it('ensures favorites room with deterministic user room id', async () => {
+    const userId = '507f1f77bcf86cd799439011'
+
+    chatRoomModelMock.findOneAndUpdate.mockResolvedValue(null)
+
+    await ensureFavoritesChatRoom(userId)
+
+    expect(chatRoomModelMock.findOneAndUpdate).toHaveBeenCalledWith(
+      { _id: userId },
+      {
+        $setOnInsert: expect.objectContaining({
+          adminId: userId,
+          avatarId: null,
+          chatKind: 'favorites',
+          chatName: '',
+          messages: [],
+          pinnedMessageId: null,
+          users: [userId]
+        })
+      },
+      {
+        new: true,
+        setDefaultsOnInsert: true,
+        upsert: true
+      }
+    )
+    expect(userPersistenceMock.addChatRoomToUserById).toHaveBeenCalledWith(userId, userId)
+  })
+
+  it('opens a new support chat for the current user', async () => {
+    userPersistenceMock.loadAdminUserIds.mockResolvedValue([{ _id: 'admin-1' }])
+    userPersistenceMock.loadUserRoomPreferences.mockResolvedValue(null)
+    chatRoomModelMock.findOneAndUpdate.mockReturnValueOnce(createLeanQuery(null))
+
+    const response = await openSupportChat('user-1', {} as never)
+
+    expect(chatRoomModelMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        adminId: 'user-1',
+        chatKind: 'support',
+        supportOwnerId: 'user-1',
+        supportStatus: 'open',
+        users: ['user-1']
+      })
+    )
+    expect(userPersistenceMock.addChatRoomToUserById).toHaveBeenCalledWith('room-created', 'user-1')
+    expect(response).toEqual({ roomId: 'room-created' })
+  })
+
+  it('closes a support chat only for admins', async () => {
+    const room = {
+      _id: 'support-room-1',
+      adminId: 'user-1',
+      avatarId: null,
+      chatKind: 'support',
+      supportOwnerId: 'user-1',
+      supportStatus: 'closed',
+      users: ['user-1'],
+      messages: []
+    }
+
+    userPersistenceMock.loadUserRoleById.mockResolvedValue({ system: { role: 'admin' } })
+    userPersistenceMock.loadAdminUserIds.mockResolvedValue([{ _id: 'admin-1' }])
+    userPersistenceMock.loadUserRoomPreferences.mockResolvedValue(null)
+    chatRoomModelMock.findOneAndUpdate.mockReturnValueOnce(createLeanQuery(room))
+
+    await closeSupportChat('admin-1', { roomId: 'support-room-1' }, {} as never)
+
+    expect(chatRoomModelMock.findOneAndUpdate).toHaveBeenCalledWith(
+      {
+        _id: 'support-room-1',
+        chatKind: 'support'
+      },
+      {
+        $set: {
+          supportStatus: 'closed'
+        }
+      },
+      { new: true }
+    )
   })
 
   it('updates room with authenticated admin preserved in members server-side', async () => {

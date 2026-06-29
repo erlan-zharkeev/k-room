@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NmorphText, NmorphCard, NmorphSelectButton, NmorphSelectButtonItem } from '@nmorph/nmorph-ui-kit'
+import { NmorphButton, NmorphText, NmorphCard, NmorphSelectButton, NmorphSelectButtonItem } from '@nmorph/nmorph-ui-kit'
 
 import { ChatRoomContextMenu } from 'src/features/chat-room-context-menu'
 import { ChatRoomTypingStatus } from 'src/features/chat-room-typing'
@@ -14,8 +14,22 @@ import { useChatRoomHeader } from '../model/use-chat-room-header.model'
 
 const props = defineProps<ChatRoomHeaderProps>()
 const emit = defineEmits<ChatRoomHeaderEmits>()
-const { interlocutor, isPortraitTabletOrLess, membersQuantityText, updateChatRoomContentView, title } =
-  useChatRoomHeader(props, emit)
+const {
+  avatarIcon,
+  avatarIconColor,
+  avatarIconSize,
+  canCloseSupportChat,
+  closeSupportChat,
+  interlocutor,
+  isClosingSupportChat,
+  isFavoritesRoom,
+  isSupportRoom,
+  isPortraitTabletOrLess,
+  membersQuantityText,
+  supportStatusText,
+  updateChatRoomContentView,
+  title
+} = useChatRoomHeader(props, emit)
 </script>
 <template>
   <div class="chat-room-header" :class="{ 'chat-room-header--with-back': isPortraitTabletOrLess }">
@@ -28,6 +42,9 @@ const { interlocutor, isPortraitTabletOrLess, membersQuantityText, updateChatRoo
     >
       <AppProfileBasicData
         :image-id="props.room.avatarId"
+        :avatar-icon="avatarIcon"
+        :avatar-icon-color="avatarIconColor"
+        :avatar-icon-size="avatarIconSize"
         :title="title"
         :name="title"
         :selectable="false"
@@ -47,15 +64,22 @@ const { interlocutor, isPortraitTabletOrLess, membersQuantityText, updateChatRoo
               :online="interlocutor.online"
               :last-seen="interlocutor.lastSeen"
             />
-            <NmorphText v-else-if="!props.isPrivateRoom" as="small" color="semi-contrast" variant="body-small">{{
-              membersQuantityText
+            <NmorphText v-else-if="isSupportRoom" as="small" color="semi-contrast" variant="body-small">{{
+              supportStatusText
             }}</NmorphText>
+            <NmorphText
+              v-else-if="!props.isPrivateRoom && !isFavoritesRoom"
+              as="small"
+              color="semi-contrast"
+              variant="body-small"
+              >{{ membersQuantityText }}</NmorphText
+            >
           </ChatRoomTypingStatus>
         </template>
       </AppProfileBasicData>
       <div class="chat-room-content-header__actions">
         <NmorphSelectButton
-          v-if="props.hasRoomCall"
+          v-if="props.hasRoomCall && props.isRoomCallAvailable"
           thickness="thick"
           :model-value="props.contentView"
           :aria-label="$t(CHAT_ROOM_CONTENT_I18N.selectChatRoomContentView)"
@@ -69,13 +93,19 @@ const { interlocutor, isPortraitTabletOrLess, membersQuantityText, updateChatRoo
           </NmorphSelectButtonItem>
         </NmorphSelectButton>
         <RoomCallMediaButtons
-          v-if="!props.hasRoomCall"
+          v-if="props.isRoomCallAvailable && !props.hasRoomCall"
           :disabled="props.isRoomCallStartDisabled"
           :loading="props.isRoomCallStarting"
           :loading-media-kind="props.roomCallLoadingMediaKind"
           @start="emit('start-room-call', $event)"
         />
-        <ChatRoomContextMenu :item="props.room" />
+        <NmorphButton
+          v-if="canCloseSupportChat"
+          :text="$t(CHAT_ROOM_CONTENT_I18N.closeSupportChat)"
+          :loading="isClosingSupportChat"
+          @click="closeSupportChat"
+        />
+        <ChatRoomContextMenu v-if="!isSupportRoom" :item="props.room" />
       </div>
     </NmorphCard>
   </div>

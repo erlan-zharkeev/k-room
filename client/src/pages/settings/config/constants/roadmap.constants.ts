@@ -45,12 +45,6 @@ export const ROADMAP_ITEMS: RoadmapItem[] = [
     description: SETTINGS_PAGE_ROADMAP_I18N.messageDraftsDescription
   },
   {
-    id: 'audio-activity',
-    status: 'planned',
-    title: SETTINGS_PAGE_ROADMAP_I18N.audioActivityTitle,
-    description: SETTINGS_PAGE_ROADMAP_I18N.audioActivityDescription
-  },
-  {
     id: 'call-chat-messages',
     status: 'planned',
     title: SETTINGS_PAGE_ROADMAP_I18N.callChatMessagesTitle,
@@ -67,11 +61,5 @@ export const ROADMAP_ITEMS: RoadmapItem[] = [
     status: 'research',
     title: SETTINGS_PAGE_ROADMAP_I18N.conferenceRecordingTitle,
     description: SETTINGS_PAGE_ROADMAP_I18N.conferenceRecordingDescription
-  },
-  {
-    id: 'support-chat',
-    status: 'planned',
-    title: SETTINGS_PAGE_ROADMAP_I18N.supportChatTitle,
-    description: SETTINGS_PAGE_ROADMAP_I18N.supportChatDescription
   }
 ]

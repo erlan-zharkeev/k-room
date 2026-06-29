@@ -1,6 +1,13 @@
 <script setup lang="ts">
-import { NmorphText, NmorphButton, NmorphForm, NmorphFormItem, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
-import { ROUTE_NAMES } from 'global-shared'
+import {
+  NmorphText,
+  NmorphButton,
+  NmorphForm,
+  NmorphFormItem,
+  NmorphOTPInput,
+  NmorphTextInput
+} from '@nmorph/nmorph-ui-kit'
+import { EMAIL_CODE_LENGTH, ROUTE_NAMES } from 'global-shared'
 import { RouterLink } from 'vue-router'
 
 import { AppCaptcha } from 'src/shared/ui'
@@ -91,11 +98,7 @@ const {
       @submit.prevent="validateCode"
     >
       <NmorphFormItem id="code" :show-validation-icon="false">
-        <NmorphTextInput
-          autocomplete="one-time-code"
-          :disabled="isValidatingCode"
-          :placeholder="$t(PASSWORD_RECOVERY_I18N.codePlaceholder)"
-        />
+        <NmorphOTPInput :length="EMAIL_CODE_LENGTH" :disabled="isValidatingCode" />
       </NmorphFormItem>
 
       <div class="password-recovery-page__action-btns">

@@ -41,7 +41,17 @@ export const useSocketAction = () => {
     const emitWithAckSocket = socket.timeout(SOCKET_ACTION_ACK_TIMEOUT_MS) as SocketWithAck
 
     try {
-      const response = await emitWithAckSocket.emitWithAck<TEvent, TReason>(event, payload)
+      let response: SocketAckResponse<ClientToServerSocketAckPayloadMap[TEvent], TReason>
+
+      if (payload === undefined) {
+        const emitWithAck = emitWithAckSocket.emitWithAck as (
+          event: TEvent
+        ) => Promise<SocketAckResponse<ClientToServerSocketAckPayloadMap[TEvent], TReason>>
+
+        response = await emitWithAck(event)
+      } else {
+        response = await emitWithAckSocket.emitWithAck<TEvent, TReason>(event, payload)
+      }
 
       handleTransportMeta(response.meta)
 

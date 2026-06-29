@@ -18,6 +18,7 @@ import MessageText from './MessageText.vue'
 const props = defineProps<MessageBodyProps>()
 const emit = defineEmits<MessageBodyEmits>()
 const {
+  authorNickname,
   showAuthorNickname,
   isMessageEditing,
   hasMessageBody,
@@ -47,7 +48,7 @@ const {
       ]"
     >
       <div class="message-body__content">
-        <NmorphText v-if="showAuthorNickname" color="accent">{{ props.message.authorNickname }}</NmorphText>
+        <NmorphText v-if="showAuthorNickname" color="accent">{{ authorNickname }}</NmorphText>
         <button
           v-if="messageReference && canSelectMessageReference"
           type="button"

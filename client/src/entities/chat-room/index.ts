@@ -1,3 +1,12 @@
 export { getRoomDisplayedLastMessageId } from './lib/get-room-displayed-last-message-id'
-export { getRoomInterlocutorId, getRoomOtherUserIds, isRoomAdmin, isRoomGroup, isRoomPrivate } from 'global-shared'
+export { CHAT_ROOM_I18N } from './config/i18n'
+export {
+  getRoomInterlocutorId,
+  getRoomOtherUserIds,
+  isRoomAdmin,
+  isRoomFavorites,
+  isRoomGroup,
+  isRoomPrivate,
+  isRoomSupport
+} from 'global-shared'
 export { useChatRoom } from './model/use-chat-room.model'

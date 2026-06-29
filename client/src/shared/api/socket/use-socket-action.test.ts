@@ -79,4 +79,15 @@ describe('useSocketAction', () => {
     expect(onSuccess).toHaveBeenCalledWith(successResponse)
     expect(onFailure).toHaveBeenCalledWith(failureResponse)
   })
+
+  it('does not send undefined payload for ack actions without payload', async () => {
+    const { emitSocketAction } = useSocketAction()
+    const response = { ok: true, payload: { roomId: 'support-room-1' } }
+
+    socketMock.emitWithAck.mockResolvedValue(response)
+
+    await expect(emitSocketAction('open-support-chat', undefined)).resolves.toBe(response)
+
+    expect(socketMock.emitWithAck).toHaveBeenCalledWith('open-support-chat')
+  })
 })

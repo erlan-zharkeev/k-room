@@ -25,10 +25,11 @@
     "tauri:build": "pnpm run check:version && tauri build"
   },
   "dependencies": {
-    "@nmorph/nmorph-ui-kit": "^3.0.20",
+    "@nmorph/nmorph-ui-kit": "^3.0.21",
     "@sentry/vue": "10.50.0",
     "@tanstack/vue-virtual": "^3.13.24",
     "@tauri-apps/api": "2.10.1",
+    "@tauri-apps/plugin-notification": "2.3.1",
     "@tauri-apps/plugin-process": "^2.3.1",
     "@tauri-apps/plugin-updater": "^2.10.1",
     "@vueuse/core": "^14.2.1",

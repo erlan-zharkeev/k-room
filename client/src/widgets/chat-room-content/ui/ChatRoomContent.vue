@@ -14,6 +14,7 @@ import RoomCallPanel from './RoomCallPanel.vue'
 
 const {
   selectedChatRoom,
+  isRoomCallAvailable,
   isSelectedChatRoomPrivate,
   selectedMessageId,
   chatRoomContentView,
@@ -58,6 +59,7 @@ const {
       :has-room-call="hasSelectedRoomCall"
       :content-view="chatRoomContentView"
       :joinable-room-call="joinableSelectedRoomCall"
+      :is-room-call-available="isRoomCallAvailable"
       :is-room-call-start-disabled="isRoomCallStartDisabled"
       :is-room-call-starting="isStartingRoomCall"
       :room-call-loading-media-kind="roomCallLoadingMediaKind"

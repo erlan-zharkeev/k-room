@@ -300,9 +300,9 @@ export const SETTINGS_PAGE_FAQ_I18N = defineI18n('settingsPageFaq', {
     zh: '如何联系支持？'
   },
   faqA25: {
-    en: 'Open Settings → FAQ and click "Contact support". The support email is shown next to the button, and the button opens it in your email app.',
-    ru: 'Откройте Настройки → FAQ и нажмите «Написать в поддержку». Email поддержки показан рядом с кнопкой, а кнопка открывает его в почтовом приложении.',
-    zh: '打开设置 → FAQ，然后点击"联系客服"。支持 email 会显示在按钮旁边，按钮会在你的邮件应用中打开它。'
+    en: 'Open Settings -> FAQ and click "Contact support". The button opens a support chat and keeps the conversation history in the app.',
+    ru: 'Откройте Настройки -> FAQ и нажмите "Написать в поддержку". Кнопка откроет чат поддержки и сохранит историю переписки в приложении.',
+    zh: '打开设置 -> FAQ，然后点击“联系支持”。按钮会打开支持聊天，并在应用中保留对话历史。'
   },
   faqQ26: {
     en: 'How do I change the date and time format?',

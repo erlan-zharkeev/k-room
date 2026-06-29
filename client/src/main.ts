@@ -1,11 +1,9 @@
-import { createApp } from 'vue'
+const startApp = async () => {
+  const canStart = await window.__K_ROOM_CLIENT_RECOVERY_READY__?.catch(() => true)
 
-import App from 'src/app/App.vue'
-import { initApp } from 'src/app/bootstrap/init-app'
-import 'src/app/styles/index.scss'
+  if (canStart === false) return
 
-const app = createApp(App)
+  await import('src/app/bootstrap/mount-app')
+}
 
-initApp(app).then(() => {
-  app.mount('#app')
-})
+void startApp()

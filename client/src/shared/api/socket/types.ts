@@ -27,7 +27,9 @@ export interface EmitSocketActionOptions<TResponsePayload = void, TReason extend
 
 export type EmitSocketActionWithAck = <TEvent extends ClientToServerSocketAckAction, TReason extends string = string>(
   event: TEvent,
-  payload: ClientToServerSocketPayloadMap[TEvent]
+  ...args: [ClientToServerSocketPayloadMap[TEvent]] extends [void]
+    ? [] | [payload: ClientToServerSocketPayloadMap[TEvent]]
+    : [payload: ClientToServerSocketPayloadMap[TEvent]]
 ) => Promise<SocketAckResponse<ClientToServerSocketAckPayloadMap[TEvent], TReason>>
 
 export type SocketWithAck = typeof socket & {

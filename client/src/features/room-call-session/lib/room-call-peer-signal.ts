@@ -10,9 +10,9 @@ export const isRoomCallSessionDescriptionSignal = (
     return false
   }
 
-  const signalType = signal.type
+  const { type: signalType, sdp: signalSdp } = signal
 
-  return isString(signalType) && signalType === signalKind
+  return isString(signalType) && signalType === signalKind && isString(signalSdp)
 }
 
 export const isRoomCallIceCandidateSignal = (signal: unknown): signal is RTCIceCandidateInit => {

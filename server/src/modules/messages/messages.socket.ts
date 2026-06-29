@@ -12,6 +12,7 @@ import type {
   EventUserTyping
 } from 'global-shared'
 
+import { PresenceService } from 'src/modules/presence/presence.service'
 import { socketAckMiddleware, socketErrorMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstance } from 'src/shared/types'
 
@@ -30,6 +31,8 @@ import {
 
 @Injectable()
 export class MessagesSocketService {
+  constructor(private readonly presenceService: PresenceService) {}
+
   register(socket: SocketInstance) {
     socket.on(
       'send-message',
@@ -39,7 +42,8 @@ export class MessagesSocketService {
           await sendMessage({
             roomId,
             userId: socket.data.userId,
-            message
+            message,
+            presenceService: this.presenceService
           })
         },
         { basicError: MESSAGES_I18N.sendMessageFailed }

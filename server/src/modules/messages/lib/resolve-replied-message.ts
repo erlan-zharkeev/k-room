@@ -43,20 +43,21 @@ export const resolveRepliedMessage = async ({
     _id: repliedMessage.id,
     deletedForUserIds: { $ne: userId }
   })
-    .select('_id authorId authorNickname body images documents audios videos')
+    .select('_id authorId authorKind authorNickname body images documents audios videos')
     .lean<RepliedMessageSourceProjection>()
 
   if (!sourceMessage) {
     return null
   }
 
-  const { _id, authorId, authorNickname, body, images, documents, audios, videos } = sourceMessage
+  const { _id, authorId, authorKind, authorNickname, body, images, documents, audios, videos } = sourceMessage
 
   return {
     id: stringifyMongoId(_id),
     roomId: sourceRoomId,
     authorId,
     authorNickname,
+    ...(authorKind && { authorKind }),
     body,
     images: normalizeMessageImages(images),
     ...(documents && { documents }),

@@ -54,16 +54,27 @@ export {
   CHAT_KIND_VALUES,
   CHAT_ROOM_NAME_MAX_LENGTH,
   PINNED_CHAT_ROOM_LIMIT,
+  SUPPORT_CHAT_STATUS_VALUES,
   USER_CHAT_ROOM_LIMIT
 } from './chat/constants'
-export { getRoomInterlocutorId, getRoomOtherUserIds, isRoomAdmin, isRoomGroup, isRoomPrivate } from './chat/lib'
+export {
+  getRoomInterlocutorId,
+  getRoomOtherUserIds,
+  isRoomAdmin,
+  isRoomFavorites,
+  isRoomGroup,
+  isRoomPrivate,
+  isRoomSupport
+} from './chat/lib'
 export type {
   ChatRoom,
   ChatRooms,
   ChatKind,
+  SupportChatStatus,
   EventGetRoom,
   EventGetRooms,
   EventCreateRoom,
+  EventCloseSupportChat,
   EventUpdateChatRoom,
   EventDeleteChatRoom,
   EventChatRoomDeleted,
@@ -121,10 +132,14 @@ export {
   USER_ENDPOINTS,
   MEDIA_ENDPOINTS,
   CODES_ENDPOINTS,
+  CLIENT_RUNTIME_ENDPOINTS,
   MONITORING_ENDPOINTS,
   ADMIN_ENDPOINTS
 } from './endpoints/constants'
 export type { RouteName, Endpoints } from './endpoints/types'
+
+export { CLIENT_RUNTIME_POLICY_ACTIONS } from './client-runtime/constants'
+export type { ClientRuntimePolicyAction, ClientRuntimePolicyResponse } from './client-runtime/types'
 
 export type {
   EnvKey,
@@ -194,6 +209,7 @@ export type {
   MessageStatus,
   MessageLoadDirection,
   MessageReactionUpdateAction,
+  MessageAuthorKind,
   MessageLinkPreviewStatus,
   MessageLinkPreview,
   MessageMetadata,
