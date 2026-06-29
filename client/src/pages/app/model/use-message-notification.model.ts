@@ -1,14 +1,14 @@
 import { type EventMessageDelivered, isMessageStatusDelivered } from 'global-shared'
 
-import { useChatRoom } from 'src/entities/chat-room'
+import { CHAT_ROOM_I18N, isRoomSupport, useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useKnownUser } from 'src/entities/known-user'
 import { useMedia } from 'src/entities/media-file'
 import { useAppSound, useSettings } from 'src/entities/setting'
 import { useSystem } from 'src/entities/system'
-import { useAppToast } from 'src/shared/lib'
+import { useAppToast, useI18n } from 'src/shared/lib'
 
-import { showBrowserPushWithImage } from '../lib/browser-push-image'
+import { isClientPushEnabled, showClientPushWithImage } from '../lib/client-push'
 
 export const useMessageNotification = () => {
   const { getById } = useChatRoom()
@@ -18,6 +18,7 @@ export const useMessageNotification = () => {
   const { settings } = useSettings()
   const { hasInteracted } = useSystem()
   const { playAppSound } = useAppSound()
+  const { t } = useI18n()
   const toast = useAppToast()
 
   const canNotifyDeliveredMessage = ({ roomId, message }: EventMessageDelivered) => {
@@ -35,8 +36,26 @@ export const useMessageNotification = () => {
     return true
   }
 
-  const resolveMessageAuthorAvatarId = (authorId: string) => {
-    return contactById.value.get(authorId)?.avatarId ?? knownUserById.value.get(authorId)?.avatarId ?? null
+  const resolveMessageAuthorAvatarId = ({ roomId, message }: EventMessageDelivered) => {
+    const room = getById(roomId)
+
+    if (message.authorKind === 'support' || (room && isRoomSupport(room) && message.authorId !== room.supportOwnerId)) {
+      return null
+    }
+
+    return (
+      contactById.value.get(message.authorId)?.avatarId ?? knownUserById.value.get(message.authorId)?.avatarId ?? null
+    )
+  }
+
+  const resolveMessageTitle = ({ roomId, message }: EventMessageDelivered) => {
+    const room = getById(roomId)
+
+    if (message.authorKind === 'support' || (room && isRoomSupport(room) && message.authorId !== room.supportOwnerId)) {
+      return t(CHAT_ROOM_I18N.supportTitle)
+    }
+
+    return message.authorNickname
   }
 
   const showDeliveredMessageToast = (payload: EventMessageDelivered) => {
@@ -48,7 +67,7 @@ export const useMessageNotification = () => {
 
     toast.add(
       {
-        title: payload.message.authorNickname,
+        title: resolveMessageTitle(payload),
         content: payload.message.body
       },
       'message'
@@ -70,27 +89,26 @@ export const useMessageNotification = () => {
     }
   }
 
-  const showDeliveredMessageBrowserPush = async ({ message, roomId }: EventMessageDelivered) => {
+  const showDeliveredMessagePush = async ({ message, roomId }: EventMessageDelivered) => {
     const { general, messages } = settings.value.notifications
 
     if (!canNotifyDeliveredMessage({ message, roomId })) return
-    if (!general.browserPush) return
-    if (!messages.browserPush) return
+    if (!isClientPushEnabled(general, messages)) return
 
-    await showBrowserPushWithImage(
-      message.authorNickname,
+    await showClientPushWithImage(
+      resolveMessageTitle({ message, roomId }),
       {
         body: message.body,
         tag: message.id
       },
-      resolveMessageAuthorAvatarId(message.authorId),
+      resolveMessageAuthorAvatarId({ message, roomId }),
       getMedia
     )
   }
 
   return {
     playDeliveredMessageSound,
-    showDeliveredMessageBrowserPush,
+    showDeliveredMessagePush,
     showDeliveredMessageToast
   }
 }

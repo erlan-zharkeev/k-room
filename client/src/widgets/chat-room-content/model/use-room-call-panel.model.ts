@@ -12,6 +12,7 @@ import {
   resolveRoomCallPanelGridColumnCount,
   resolveRoomCallPanelGridRowCount
 } from '../lib/resolve-room-call-panel-grid-counts'
+import { createRoomCallDerivedStreamCache } from '../lib/room-call-derived-stream-cache'
 
 import { useChatRoomUserLookup } from './use-chat-room-user-lookup.model'
 
@@ -19,6 +20,7 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
   const roomCallPanelRef = useTemplateRef<HTMLElement>('roomCallPanel')
   const { user } = useUser()
   const { getUserById } = useChatRoomUserLookup()
+  const derivedStreamCache = createRoomCallDerivedStreamCache()
   const {
     isRoomCallQuickCommandsExpanded,
     roomCallPanelDisplayMode,
@@ -48,6 +50,7 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
       handRaisedByUserId: props.handRaisedByUserId,
       localMediaState: props.localMediaState,
       remoteStreamsByUserId: props.remoteStreamsByUserId,
+      resolveMediaStreamFromTracks: derivedStreamCache.resolve,
       resolveParticipantAvatarId,
       resolveParticipantName,
       roomCall: props.roomCall,
@@ -168,7 +171,14 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
     setRoomCallPanelDisplayMode('focus')
   }
 
-  watch(() => props.roomCall.id, syncRoomCallRuntimeState, { immediate: true })
+  watch(
+    () => props.roomCall.id,
+    (roomCallId) => {
+      derivedStreamCache.clear()
+      syncRoomCallRuntimeState(roomCallId)
+    },
+    { immediate: true }
+  )
 
   return {
     focusRoomCallTile,

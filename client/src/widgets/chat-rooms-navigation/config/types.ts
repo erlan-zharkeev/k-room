@@ -9,6 +9,8 @@ export type ChatRoomNavigationItem = Pick<
   title: string
   description: string
   imageId: MediaId
+  isFavoritesRoom: boolean
+  isSupportRoom: boolean
   online: boolean
   selected: boolean
   lastMessageCreatedAt: number

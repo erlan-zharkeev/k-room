@@ -10,4 +10,8 @@ export const isRoomAdmin = (room: Pick<ChatRoom, 'adminId'>, userId: string) => 
 
 export const isRoomGroup = (room?: Pick<ChatRoom, 'chatKind'>) => room?.chatKind === 'group'
 
+export const isRoomFavorites = (room?: Pick<ChatRoom, 'chatKind'>) => room?.chatKind === 'favorites'
+
 export const isRoomPrivate = (room?: Pick<ChatRoom, 'chatKind'>) => room?.chatKind === 'direct'
+
+export const isRoomSupport = (room?: Pick<ChatRoom, 'chatKind'>) => room?.chatKind === 'support'

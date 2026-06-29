@@ -1,7 +1,9 @@
 import type { ImageObject, MediaId } from '../media/types'
 import type { Message } from '../message/types'
 
-export type ChatKind = 'direct' | 'group'
+export type ChatKind = 'direct' | 'favorites' | 'group' | 'support'
+
+export type SupportChatStatus = 'closed' | 'open'
 
 export interface ChatRoom {
   id: string
@@ -9,6 +11,8 @@ export interface ChatRoom {
   createdAt: number
   chatName?: string
   chatKind: ChatKind
+  supportOwnerId?: string
+  supportStatus?: SupportChatStatus
   avatarId: MediaId
   lastMessageId: string | null
   pinnedMessageId: string | null
@@ -43,6 +47,10 @@ export interface EventUpdateChatRoom {
 }
 
 export interface EventDeleteChatRoom {
+  roomId: string
+}
+
+export interface EventCloseSupportChat {
   roomId: string
 }
 

@@ -3,7 +3,8 @@ import type {
   RoomCallMediaKind,
   RoomCallParticipant,
   RoomCallParticipantQuickCommandState,
-  RoomCallStatus
+  RoomCallStatus,
+  UnknownObject
 } from 'global-shared'
 import type { Types } from 'mongoose'
 
@@ -33,4 +34,13 @@ export interface RoomCallActiveParticipant extends RoomCallParticipant {
 
 export interface RoomCallActiveState extends Omit<RoomCall, 'participants'> {
   participants: RoomCallActiveParticipant[]
+}
+
+export interface AdminRoomCallRecord {
+  params?: UnknownObject
+}
+
+export interface AdminRoomCallActionResponse {
+  record?: AdminRoomCallRecord
+  records?: AdminRoomCallRecord[]
 }

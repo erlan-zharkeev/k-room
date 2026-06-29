@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { SERVER_ENV } from 'src/app/env'
 import { AppError } from 'src/shared/lib/app-error'
 import { getRequestIp } from 'src/shared/lib/get-request-ip'
+import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 
 import { EmailService } from '../email/email.service'
 import { SecurityService } from '../security/security.service'
@@ -66,8 +67,10 @@ export class AuthService {
     }
 
     await this.securityService.clearLoginFailures(payload.login)
-    await this.sessionService.updateTokens(String(user._id), request, response)
-    await this.userService.updateUserLanguage(String(user._id), request.language)
+    const userId = stringifyMongoId(user._id)
+
+    await this.sessionService.updateTokens(userId, request, response)
+    await this.userService.updateUserLanguage(userId, request.language)
 
     return this.userService.mapUserToDto(user)
   }
@@ -88,8 +91,9 @@ export class AuthService {
         throw new AppError(REQ_STATUS.badRequest, AUTH_I18N.noConfirmationAttemptsLeft)
       }
 
+      const existingUserId = stringifyMongoId(existingUserByEmail._id)
       const confirmToken = this.sessionService.signToken(
-        String(existingUserByEmail._id),
+        existingUserId,
         SERVER_ENV.secret.emailConfirmSecret,
         EMAIL_CONFIRMATION_LINK_LIFE_SEC
       )
@@ -132,8 +136,9 @@ export class AuthService {
       throw new AppError(REQ_STATUS.server, AUTH_I18N.registrationFailed)
     }
 
+    const userId = stringifyMongoId(user._id)
     const confirmToken = this.sessionService.signToken(
-      String(user._id),
+      userId,
       SERVER_ENV.secret.emailConfirmSecret,
       EMAIL_CONFIRMATION_LINK_LIFE_SEC
     )
@@ -221,8 +226,9 @@ export class AuthService {
       throw new AppError(REQ_STATUS.badRequest, AUTH_I18N.noConfirmationAttemptsLeft)
     }
 
+    const userId = stringifyMongoId(user._id)
     const confirmToken = this.sessionService.signToken(
-      String(user._id),
+      userId,
       SERVER_ENV.secret.emailConfirmSecret,
       EMAIL_CONFIRMATION_LINK_LIFE_SEC
     )
@@ -274,8 +280,10 @@ export class AuthService {
       throw new AppError(REQ_STATUS.badRequest, AUTH_I18N.signInWithProviderFailed)
     }
 
-    await this.sessionService.updateTokens(String(user._id), request, response)
-    await this.userService.updateUserLanguage(String(user._id), request.language)
+    const userId = stringifyMongoId(user._id)
+
+    await this.sessionService.updateTokens(userId, request, response)
+    await this.userService.updateUserLanguage(userId, request.language)
 
     return this.userService.mapUserToDto(user)
   }

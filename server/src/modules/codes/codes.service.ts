@@ -16,6 +16,7 @@ import {
 import { SERVER_ENV } from 'src/app/env'
 import { AppError } from 'src/shared/lib/app-error'
 import { getRequestIp } from 'src/shared/lib/get-request-ip'
+import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 
 import { EmailService } from '../email/email.service'
 import { SecurityService } from '../security/security.service'
@@ -55,7 +56,7 @@ export class CodesService {
 
     this.userService.assertCredentialsManagedLocally(user)
 
-    const userId = String(user._id)
+    const userId = stringifyMongoId(user._id)
     const cooldownUntil = await this.securityService.getSendPasswordRecoveryCodeCooldown(userId)
 
     if (cooldownUntil && cooldownUntil > nowTimestampMs) {
@@ -113,7 +114,7 @@ export class CodesService {
 
     const userWithSameEmail = await this.userService.findByEmail(email)
 
-    if (userWithSameEmail && String(userWithSameEmail._id) !== userId) {
+    if (userWithSameEmail && stringifyMongoId(userWithSameEmail._id) !== userId) {
       throw new AppError(REQ_STATUS.badRequest, this.userService.getUserExistMessage('email'))
     }
 
@@ -210,7 +211,7 @@ export class CodesService {
 
     this.userService.assertCredentialsManagedLocally(user)
 
-    const userId = String(user._id)
+    const userId = stringifyMongoId(user._id)
     const currentCode = await this.securityService.getPasswordRecoveryCode(userId)
 
     if (!currentCode) {

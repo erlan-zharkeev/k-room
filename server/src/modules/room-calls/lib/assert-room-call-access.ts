@@ -1,20 +1,28 @@
-import { REQ_STATUS, ROOM_PARTICIPANT_LIMIT } from 'global-shared'
+import { type LocalizedText, REQ_STATUS, ROOM_PARTICIPANT_LIMIT, isRoomFavorites, isRoomSupport } from 'global-shared'
 
 import type { RedisService } from 'src/modules/security/redis.service'
 import { AppError } from 'src/shared/lib/app-error'
 
+import type { ChatRoomCallAccessProjection } from '../../chat-rooms/chat-rooms.types'
 import { findRoomCallAccessByUser } from '../../chat-rooms/lib/chat-room-persistence'
 import { ROOM_CALLS_I18N } from '../room-calls.i18n'
 
 import { readActiveRoomCall } from './room-call-active-state'
 import { resolveActiveRoomCallParticipants } from './room-call-participant'
 
+function assertRoomCallRoomAccess(
+  room: ChatRoomCallAccessProjection | null,
+  messageSource: string | LocalizedText<string>
+): asserts room is ChatRoomCallAccessProjection {
+  if (!room || isRoomFavorites(room) || isRoomSupport(room)) {
+    throw new AppError(REQ_STATUS.badRequest, messageSource, false, undefined, 'access-failed')
+  }
+}
+
 export const assertRoomCallStartAccess = async (userId: string, roomId: string) => {
   const room = await findRoomCallAccessByUser(roomId, userId)
 
-  if (!room) {
-    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallStartFailed, false, undefined, 'access-failed')
-  }
+  assertRoomCallRoomAccess(room, ROOM_CALLS_I18N.roomCallStartFailed)
 
   return room
 }
@@ -35,9 +43,7 @@ export const assertActiveRoomCallAccess = async (redisService: RedisService, use
 
   const room = await findRoomCallAccessByUser(roomCall.roomId, userId)
 
-  if (!room) {
-    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallAccessFailed, false, undefined, 'access-failed')
-  }
+  assertRoomCallRoomAccess(room, ROOM_CALLS_I18N.roomCallAccessFailed)
 
   return {
     room,

@@ -2,6 +2,7 @@ import type {
   ADMIN_ENDPOINTS,
   AUTH_ENDPOINTS,
   CODES_ENDPOINTS,
+  CLIENT_RUNTIME_ENDPOINTS,
   MONITORING_ENDPOINTS,
   MEDIA_ENDPOINTS,
   ROUTE_NAMES,
@@ -17,4 +18,5 @@ export type Endpoints =
   | ValueOf<typeof CODES_ENDPOINTS>
   | ValueOf<typeof ADMIN_ENDPOINTS>
   | ValueOf<typeof MONITORING_ENDPOINTS>
+  | ValueOf<typeof CLIENT_RUNTIME_ENDPOINTS>
   | ValueOf<typeof MEDIA_ENDPOINTS>

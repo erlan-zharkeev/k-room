@@ -16,6 +16,7 @@ export const useAppToast = () => {
         bordered: false,
         duration: message.duration ?? TOAST_LIFE_MS[type],
         placement: message.placement ?? TOAST_PLACEMENT[stackType],
+        showIcon: message.showIcon ?? stackType !== 'message',
         showDurationValue: false,
         type
       }

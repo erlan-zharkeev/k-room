@@ -15,7 +15,7 @@ const roomCallActiveStateMock = vi.hoisted(() => ({
 vi.mock('../../chat-rooms/lib/chat-room-persistence', () => chatRoomPersistenceMock)
 vi.mock('./room-call-active-state', () => roomCallActiveStateMock)
 
-import { assertRoomCallParticipantAccess } from './assert-room-call-access'
+import { assertRoomCallParticipantAccess, assertRoomCallStartAccess } from './assert-room-call-access'
 
 const createRoomCallParticipant = (): RoomCallActiveParticipant => ({
   joinedAt: 1,
@@ -64,5 +64,27 @@ describe('assert-room-call-access', () => {
     expect(chatRoomPersistenceMock.findRoomCallAccessByUser).toHaveBeenCalledWith(roomCall.roomId, 'user-a')
     expect(result.room).toBe(room)
     expect(result.room.chatKind).toBe('direct')
+  })
+
+  it('rejects starting room call in favorites room', async () => {
+    chatRoomPersistenceMock.findRoomCallAccessByUser.mockResolvedValue({
+      chatKind: 'favorites',
+      users: ['user-a']
+    })
+
+    await expect(assertRoomCallStartAccess('user-a', 'room-id')).rejects.toMatchObject({
+      payload: 'access-failed'
+    })
+  })
+
+  it('rejects starting room call in support room', async () => {
+    chatRoomPersistenceMock.findRoomCallAccessByUser.mockResolvedValue({
+      chatKind: 'support',
+      users: ['user-a']
+    })
+
+    await expect(assertRoomCallStartAccess('user-a', 'room-id')).rejects.toMatchObject({
+      payload: 'access-failed'
+    })
   })
 })

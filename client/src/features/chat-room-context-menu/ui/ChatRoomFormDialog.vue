@@ -49,7 +49,13 @@ const {
 </script>
 
 <template>
-  <NmorphDialog :model-value="isOpen" :title="$t(dialogTitleI18n)" @update:model-value="updateChatRoomFormDialogOpen">
+  <NmorphDialog
+    :model-value="isOpen"
+    :title="$t(dialogTitleI18n)"
+    width="560px"
+    max-width="calc(100vw - 32px)"
+    @update:model-value="updateChatRoomFormDialogOpen"
+  >
     <NmorphForm :value="chatRoomFormValidationData" class="chat-room-form-dialog" @submit.prevent="submitChatRoom">
       <NmorphFormItem id="chatName" :show-validation-icon="false">
         <NmorphTextInput
@@ -77,6 +83,7 @@ const {
       </NmorphFormItem>
       <NmorphFormItem v-if="contactPickerItems.length" id="contactSearch" :show-validation-icon="false">
         <NmorphTextInput
+          v-model="chatRoomFormValidationData.contactSearch.value"
           clearable
           :placeholder="$t(CHAT_ROOM_CONTEXT_MENU_I18N.contactSearch)"
           :input-attrs="{ 'aria-label': $t(CHAT_ROOM_CONTEXT_MENU_I18N.contactSearch) }"
@@ -100,6 +107,8 @@ const {
             :items="filteredContactPickerItems"
             :locked-ids="lockedMemberIds"
             :max-selected="maxSelectedMemberIds"
+            height="300px"
+            max-height="42vh"
             @update:model-value="updateSelectedMemberIds"
           />
         </NmorphCard>
@@ -133,6 +142,7 @@ const {
 .chat-room-form-dialog {
   display: grid;
   gap: 8px;
+  width: 100%;
   padding: 8px;
 }
 

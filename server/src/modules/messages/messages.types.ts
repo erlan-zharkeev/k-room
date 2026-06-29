@@ -7,6 +7,8 @@ import type {
   RepliedMessage
 } from 'global-shared'
 
+import type { PresenceService } from '../presence/presence.service'
+
 export interface MessageSchema extends Omit<Message, 'id' | 'tempId' | 'isSelf' | 'status' | 'images'> {
   _id?: string
   images?: Array<string | ImageObject>
@@ -23,6 +25,7 @@ export interface SendMessageParams {
   roomId: string
   userId: string
   message: Message
+  presenceService?: PresenceService
 }
 
 export interface ResolveRepliedMessageParams {
@@ -60,5 +63,5 @@ export type MessageIdProjection = Pick<MessageDocument, '_id'>
 
 export type RepliedMessageSourceProjection = Pick<
   MessageDocument,
-  '_id' | 'authorId' | 'authorNickname' | 'body' | 'images' | 'documents' | 'audios' | 'videos'
+  '_id' | 'authorId' | 'authorKind' | 'authorNickname' | 'body' | 'images' | 'documents' | 'audios' | 'videos'
 >

@@ -209,13 +209,6 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     }
   }
 
-  const finishOutgoingRoomCallSound = (kind: AppSoundKind) => {
-    if (!outgoingRoomCallSoundRoomCallId) return
-
-    stopOutgoingRoomCallSound()
-    void playRoomCallSound(kind)
-  }
-
   const clearActiveRoomCallSessionState = () => {
     activeRoomCallId.value = ''
     resetRoomCallPeers()
@@ -361,7 +354,6 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       syncInitialRoomCallParticipantQuickCommandStates(participantQuickCommandStateByUserId)
       await syncActiveRoomCallLocalState()
       await connectActiveRoomCallPeers(roomCall)
-      void playRoomCallSound('call-connection')
 
       return roomCall
     } catch (error) {
@@ -473,7 +465,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     const shouldFinishOutgoingRoomCallSound = isConnected && isInitiatedByCurrentUser && isOutgoingSoundRoomCall
 
     if (shouldFinishOutgoingRoomCallSound) {
-      finishOutgoingRoomCallSound('call-connection')
+      stopOutgoingRoomCallSound()
     }
   })
 

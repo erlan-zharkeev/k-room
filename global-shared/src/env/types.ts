@@ -19,6 +19,7 @@ export interface EnvVariables {
   REDIS_URL?: string
   TURNSTILE_SITE_KEY?: string
   TURNSTILE_SECRET_KEY?: string
+  CLIENT_BLOCKED_APP_VERSIONS?: string
 }
 
 export interface EnvSharedVariables {

@@ -2,6 +2,7 @@ import type {
   CreateRoomAckPayload,
   EventChatRoomDeleted,
   EventChatRoomLeft,
+  EventCloseSupportChat,
   EventCreateRoom,
   EventDeleteChatRoom,
   EventGetRoom,
@@ -137,6 +138,8 @@ export interface ClientToServerSocketPayloadMap {
   'delete-contact': EventDeleteContact
   'update-contact-interaction-type': EventUpdateInteraction
   'create-chat-room': EventCreateRoom
+  'open-support-chat': void
+  'close-support-chat': EventCloseSupportChat
   'update-chat-room': EventUpdateChatRoom
   'delete-chat-room': EventDeleteChatRoom
   'leave-chat-room': EventLeaveChatRoom
@@ -168,6 +171,8 @@ export interface ClientToServerSocketAckPayloadMap {
   'delete-contact': void
   'update-contact-interaction-type': void
   'create-chat-room': CreateRoomAckPayload
+  'open-support-chat': CreateRoomAckPayload
+  'close-support-chat': void
   'update-chat-room': void
   'delete-chat-room': void
   'leave-chat-room': void

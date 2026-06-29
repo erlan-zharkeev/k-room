@@ -10,8 +10,10 @@ import type {
   UserIdProjection,
   UserMutedChatRoomIdsProjection,
   UserPinnedChatRoomIdsProjection,
+  UserPublicNicknameRoleProjection,
   UserPublicNicknameProjection,
-  UserPublicProjection
+  UserPublicProjection,
+  UserRoleProjection
 } from '../user.types'
 
 export const findUserById = (userId: string) => {
@@ -44,6 +46,18 @@ export const loadUserPublicById = (userId: string) => {
 
 export const loadUserPublicNicknameById = (userId: string) => {
   return UserModel.findById(userId).select('public.nickname').lean<UserPublicNicknameProjection>()
+}
+
+export const loadUserPublicNicknameAndRoleById = (userId: string) => {
+  return UserModel.findById(userId).select('public.nickname system.role').lean<UserPublicNicknameRoleProjection>()
+}
+
+export const loadUserRoleById = (userId: string) => {
+  return UserModel.findById(userId).select('system.role').lean<UserRoleProjection>()
+}
+
+export const loadAdminUserIds = () => {
+  return UserModel.find({ 'system.role': 'admin' }, { _id: 1 }).lean<UserIdProjection[]>()
 }
 
 export const loadUsersPublicByIds = (userIds: string[]) => {
@@ -137,6 +151,10 @@ export const addChatRoomToUsers = async (roomId: string, userIds: string[]) => {
 
 export const addChatRoomToUsersByIds = (roomId: string, userIds: string[]) => {
   return UserModel.updateMany({ _id: { $in: userIds } }, { $push: { 'personal.chatRooms': roomId } })
+}
+
+export const addChatRoomToUserById = (roomId: string, userId: string) => {
+  return UserModel.updateOne({ _id: userId }, { $addToSet: { 'personal.chatRooms': roomId } })
 }
 
 export const removeChatRoomFromUsersByIds = (roomId: string, userIds: string[]) => {

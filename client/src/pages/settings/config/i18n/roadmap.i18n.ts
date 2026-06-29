@@ -91,16 +91,6 @@ export const SETTINGS_PAGE_ROADMAP_I18N = defineI18n('settingsPageRoadmap', {
     ru: 'У каждого чата будет свой черновик, а состояние черновиков сможет синхронизироваться между устройствами, чтобы незаконченные мысли не терялись.',
     zh: '每个聊天都会保留自己的草稿，并可在设备之间同步，让未完成的内容不会丢失。'
   },
-  audioActivityTitle: {
-    en: 'Audio activity indicator',
-    ru: 'Индикатор активности аудио',
-    zh: '音频活动指示器'
-  },
-  audioActivityDescription: {
-    en: 'Calls will show whether audio activity is present even when the microphone is muted, making device and connection issues easier to notice.',
-    ru: 'Во время звонков будет видно, есть ли аудиоактивность даже при выключенном микрофоне, чтобы проще замечать проблемы с устройством или соединением.',
-    zh: '通话中即使麦克风关闭，也会显示是否存在音频活动，帮助更快发现设备或连接问题。'
-  },
   callChatMessagesTitle: {
     en: 'Call messages in chat',
     ru: 'Сообщения о звонках в чате',
@@ -130,15 +120,5 @@ export const SETTINGS_PAGE_ROADMAP_I18N = defineI18n('settingsPageRoadmap', {
     en: 'Record important video meetings and save the result in a predictable place with clear participant awareness and access rules.',
     ru: 'Важные видеовстречи можно будет записывать и сохранять в понятном месте с прозрачным уведомлением участников и правилами доступа.',
     zh: '可以录制重要视频会议，并将结果保存在清晰的位置，同时明确告知参与者并遵守访问规则。'
-  },
-  supportChatTitle: {
-    en: 'Built-in support chat',
-    ru: 'Полноценный чат поддержки',
-    zh: '内置支持聊天'
-  },
-  supportChatDescription: {
-    en: 'Contact support from inside the app, keep the conversation history, and attach screenshots or files when a problem needs context.',
-    ru: 'В поддержку можно будет написать прямо из приложения, сохранить историю обращения и прикрепить скриншоты или файлы, если проблеме нужен контекст.',
-    zh: '可以直接在应用内联系支持，保留沟通历史，并在问题需要上下文时附加截图或文件。'
   }
 })

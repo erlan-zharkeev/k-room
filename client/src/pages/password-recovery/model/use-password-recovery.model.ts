@@ -1,6 +1,7 @@
 import type { INmorphFormDataExpose } from '@nmorph/nmorph-ui-kit'
 import {
   CODES_ENDPOINTS,
+  EMAIL_CODE_LENGTH,
   NON_EMPTY_PATTERN,
   ROUTE_NAMES,
   type CodeRequestResponse,
@@ -68,7 +69,7 @@ export const usePasswordRecovery = () => {
   const { counterValue, syncCounterValue } = useRequestCooldownCounter(PASSWORD_RECOVERY_COUNTER_TICK_MS)
   const hasPresetEmail = computed(() => Boolean(route.query['user-email']))
   const isEmailFormValid = computed(() => emailFormRef.value?.formData.isFormValid.value ?? false)
-  const isCodeFormValid = computed(() => NON_EMPTY_PATTERN.test(codeFormData.code.value))
+  const isCodeFormValid = computed(() => codeFormData.code.value.length === EMAIL_CODE_LENGTH)
   const isEmailInputDisabled = computed(() => isSendingEmailCode.value || hasPresetEmail.value)
   const isSendCodeCaptchaBlocked = computed(() => sendCaptchaRequired.value && !sendCaptchaToken.value)
   const isValidateCodeCaptchaBlocked = computed(() => validateCaptchaRequired.value && !validateCaptchaToken.value)

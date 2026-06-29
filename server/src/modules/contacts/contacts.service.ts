@@ -14,7 +14,7 @@ import {
 
 import { AppError } from 'src/shared/lib/app-error'
 import { getIO } from 'src/shared/lib/io'
-import { isValidMongoId } from 'src/shared/lib/normalize-object-id'
+import { isValidMongoId, stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 import { emitSocketEvent } from 'src/shared/lib/transport-meta'
 import type { EmitServerToClientSocketEvent } from 'src/shared/types'
 
@@ -89,14 +89,15 @@ export const searchContacts = async (
 
     const onlineMap = await presenceService.onlineMapByUserIds(users.map((user) => user._id))
 
-    searchedUsers = users.map((user) =>
-      transformUserToContact(
+    searchedUsers = users.map((user) => {
+      const userId = stringifyMongoId(user._id)
+
+      return transformUserToContact(
         user,
-        (contactMap instanceof Map ? contactMap.get(String(user._id)) : contactMap[String(user._id)])?.interaction ??
-          'default',
-        onlineMap.get(String(user._id)) ?? false
+        (contactMap instanceof Map ? contactMap.get(userId) : contactMap[userId])?.interaction ?? 'default',
+        onlineMap.get(userId) ?? false
       )
-    )
+    })
     searchedUsers = searchedUsers
       .filter((user) => user.id !== userId)
       .sort((a, b) => {
@@ -208,7 +209,7 @@ export const deleteContactById = async (userId: string, deletingUserId: string, 
   if (isAcceptedContactInteraction(deletingUserInteractionType)) {
     await setExistingUserContactInteraction(deletingUserId, userId, 'default')
 
-    emitContactInteractionUpdated(String(deletingContact._id), userId, 'default')
+    emitContactInteractionUpdated(stringifyMongoId(deletingContact._id), userId, 'default')
   }
 }
 
@@ -244,7 +245,7 @@ export const updateContactInteraction = async (
       return
     }
 
-    emitContactInteractionUpdated(String(updatedContact._id), userId, interaction)
+    emitContactInteractionUpdated(stringifyMongoId(updatedContact._id), userId, interaction)
   }
 
   switch (interaction) {

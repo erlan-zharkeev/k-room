@@ -7,7 +7,10 @@ import {
 } from 'global-shared'
 import uniq from 'lodash/uniq'
 
-import { loadChatRoomsByIds } from '../../chat-rooms/lib/chat-room-persistence'
+import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
+
+import { loadChatRoomsByIds, loadSupportChatRooms } from '../../chat-rooms/lib/chat-room-persistence'
+import { ensureFavoritesChatRoom } from '../../chat-rooms/lib/ensure-favorites-chat-room'
 import { resolveKnownUsers } from '../../chat-rooms/lib/resolve-known-users'
 import { transformRoomForUser } from '../../chat-rooms/lib/transform-room-for-user'
 import type { PresenceService } from '../../presence/presence.service'
@@ -29,9 +32,16 @@ export const resolveActualUserSocketData = async (
     return null
   }
 
-  const { contacts, chatRooms: roomIds, pinnedChatRoomIds, mutedChatRoomIds } = data.personal
+  const { contacts, chatRooms: personalRoomIds, pinnedChatRoomIds, mutedChatRoomIds } = data.personal
+  const favoritesChatRoomId = await ensureFavoritesChatRoom(userId)
+  const roomIds = personalRoomIds.includes(favoritesChatRoomId)
+    ? personalRoomIds
+    : [favoritesChatRoomId, ...personalRoomIds]
   const contactResultData: Contact[] = await transformUserToFrontendContact(contacts, presenceService)
-  const rooms = await loadChatRoomsByIds(roomIds)
+  const personalRooms = await loadChatRoomsByIds(roomIds)
+  const supportRooms = data.system.role === 'admin' ? await loadSupportChatRooms() : []
+  const personalRoomIdSet = new Set(roomIds)
+  const rooms = [...personalRooms, ...supportRooms.filter((room) => !personalRoomIdSet.has(stringifyMongoId(room._id)))]
   const knownUserIds = uniq(rooms.flatMap((room) => getRoomOtherUserIds(room, userId)))
   const knownUsers = await resolveKnownUsers(knownUserIds, presenceService)
   const contactsPayload: EventGetContacts = {

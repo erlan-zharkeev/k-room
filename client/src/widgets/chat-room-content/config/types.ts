@@ -52,6 +52,7 @@ export interface ChatRoomHeaderProps {
   hasRoomCall: boolean
   contentView: ChatRoomContentView
   joinableRoomCall?: RoomCall
+  isRoomCallAvailable: boolean
   isRoomCallStartDisabled: boolean
   isRoomCallStarting: boolean
   roomCallLoadingMediaKind: RoomCallMediaKind | null
@@ -157,6 +158,7 @@ export interface BuildRoomCallTileItemsParams {
   remoteStreamsByUserId: RoomCallRemoteStreamsByUserId
   handRaisedByUserId: RoomCallHandRaisedByUserId
   temporaryQuickCommandByUserId: RoomCallTemporaryQuickCommandByUserId
+  resolveMediaStreamFromTracks: (id: string, tracks: MediaStreamTrack[]) => MediaStream | undefined
   resolveParticipantAvatarId: (userId: string) => MediaId | null | undefined
   resolveParticipantName: (userId: string) => string
 }

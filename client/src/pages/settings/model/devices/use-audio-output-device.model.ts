@@ -63,12 +63,16 @@ export const useAudioOutputDevice = () => {
   }
 
   const syncSelectedAudioOutputDevice = async () => {
+    if (audioOutputDevices.value.length === 0) return
+
     await syncSelectedDeviceId(audioOutputDevices.value, settings.value.ioDevices.audioOutputDeviceId, '', (deviceId) =>
       setByPath('ioDevices.audioOutputDeviceId', deviceId)
     )
   }
 
   const syncChangedAudioOutputDevice = async (devices: MediaDeviceInfo[], previousDevices: MediaDeviceInfo[]) => {
+    if (devices.length === 0) return
+
     await syncSelectedDeviceIdOnDeviceChange(
       devices,
       previousDevices,

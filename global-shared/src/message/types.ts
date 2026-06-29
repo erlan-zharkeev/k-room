@@ -4,6 +4,7 @@ export type MessageStatus = 'sending' | 'undelivered' | 'delivered' | 'read' | '
 export type MessageLoadDirection = 'latest' | 'before' | 'after' | 'around'
 export type MessageReactionUpdateAction = 'add' | 'remove'
 export type MessageLinkPreviewStatus = 'pending' | 'loaded' | 'failed'
+export type MessageAuthorKind = 'support'
 
 export interface MessageMetadata {
   id: string
@@ -19,6 +20,7 @@ export interface MessageReaction {
 export interface RepliedMessage {
   id: string
   roomId?: string
+  authorKind?: MessageAuthorKind
   authorNickname: string
   authorId: string
   body: string
@@ -43,6 +45,7 @@ export interface Message {
   tempId?: string
   isSelf?: boolean
   status?: MessageStatus
+  authorKind?: MessageAuthorKind
   authorId: string
   authorNickname: string
   body: string

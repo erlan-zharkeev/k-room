@@ -44,6 +44,7 @@ const clientPackageData = JSON.parse(
 ) as PackageData
 const APP_NAME = getEnv('APP_NAME', sharedEnvs) || formatAppName(packageData.name)
 const CLIENT_APP_VERSION = getEnv('CLIENT_APP_VERSION', sharedEnvs) || clientPackageData.version
+const CLIENT_BLOCKED_APP_VERSIONS = getEnv('CLIENT_BLOCKED_APP_VERSIONS', envs)
 
 const isDev = stage !== 'production'
 const isE2E = process.env.SERVER_E2E === 'true'
@@ -54,6 +55,9 @@ const redisUrl = getEnv('REDIS_URL', envs) || (isDev ? 'redis://127.0.0.1:6380' 
 const turnstileSiteKey = getEnv('TURNSTILE_SITE_KEY', envs) || (isDev ? TURNSTILE_TEST_SITE_KEY : '')
 const turnstileSecretKey = getEnv('TURNSTILE_SECRET_KEY', envs) || (isDev ? TURNSTILE_TEST_SECRET_KEY : '')
 const clientUrl = isDev ? `${APP_HOST}:${CLIENT_PORT}` : APP_HOST
+const blockedAppVersions = CLIENT_BLOCKED_APP_VERSIONS.split(',')
+  .map((version) => version.trim())
+  .filter(Boolean)
 const devOrigins = [
   clientUrl,
   APP_HOST,
@@ -90,6 +94,9 @@ export const SERVER_ENV = {
     appName: APP_NAME,
     appVersion: packageData.version,
     clientAppVersion: CLIENT_APP_VERSION
+  },
+  client: {
+    blockedAppVersions
   },
   mongo: {
     mongoHost: MONGO_HOST,

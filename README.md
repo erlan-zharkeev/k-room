@@ -55,6 +55,22 @@ The admin panel is served by the server app at `ADMIN_ROOT_PATH`, which is `/adm
 
 Admin credentials are read from `ADMIN_USERNAME` and `ADMIN_PASSWORD` in the active environment files.
 
+### Client Runtime Recovery
+
+The web client has a small recovery script that runs before the Vue app bundle. It asks the server runtime policy endpoint whether the currently loaded client version is blocked. If the version is allowed, the normal app starts. If the version is blocked, the script clears browser `CacheStorage`, unregisters active service workers, clears client update reload markers, and reloads the page with a cache-busting query parameter.
+
+The policy endpoint is `GET /api/client/runtime-policy?version=<client-version>&platform=web`. It is public, does not require auth, does not read the database, and responds with the latest client version plus the action for the current version.
+
+To force web clients off a bad build, deploy a fixed build first, then set the blocked versions on the server:
+
+```env
+CLIENT_BLOCKED_APP_VERSIONS=0.1.17,0.1.18
+```
+
+The Tauri desktop client uses the same policy as a native startup recovery check. In production desktop builds, Rust checks the policy independently from the Vue app. If the current desktop version is blocked and an updater release is available, Tauri downloads and installs it through the native updater, then restarts the app. If the policy request or updater check fails, the app continues normal startup instead of blocking offline users.
+
+Recovery cleanup intentionally targets PWA/browser caches and service workers, not IndexedDB user data.
+
 ## Root Package Scripts
 
 These commands are defined in the root `package.json`.

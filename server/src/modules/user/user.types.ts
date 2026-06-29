@@ -121,6 +121,15 @@ export type UserPublicNicknameProjection = Pick<UserSchema, '_id'> & {
   public: Pick<UserPublicData, 'nickname'>
 }
 
+export type UserPublicNicknameRoleProjection = Pick<UserSchema, '_id'> & {
+  public: Pick<UserPublicData, 'nickname'>
+  system: Pick<UserSystemData, 'role'>
+}
+
+export type UserRoleProjection = Pick<UserSchema, '_id'> & {
+  system: Pick<UserSystemData, 'role'>
+}
+
 export type UserContactsProjection = Pick<UserSchema, '_id'> & {
   personal: Pick<UserPersonalData, 'contacts'>
 }

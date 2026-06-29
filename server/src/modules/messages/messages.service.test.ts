@@ -19,6 +19,7 @@ const messageModelMock = vi.hoisted(() =>
 )
 
 const userModelMock = vi.hoisted(() => ({
+  find: vi.fn(),
   findById: vi.fn()
 }))
 
@@ -133,6 +134,7 @@ describe('messages.service', () => {
 
   it('emits typing status only to other room users', async () => {
     chatRoomModelMock.findOne.mockReturnValue(createLeanQuery({ users: ['user-1', 'user-2', 'user-3'] }))
+    userModelMock.findById.mockReturnValue(createLeanQuery({ system: { role: 'user' } }))
 
     await emitRoomTypingStatus('user-1', { roomId: 'room-1', isTyping: true })
 
@@ -188,6 +190,154 @@ describe('messages.service', () => {
         id: 'message-1',
         authorId: 'user-1',
         authorNickname: 'tester',
+        isSelf: false
+      })
+    })
+  })
+
+  it('does not send message to favorites room for non-owner members', async () => {
+    const payload = {
+      roomId: 'room-1',
+      userId: 'user-2',
+      message: {
+        id: 'message-1',
+        authorId: 'user-2',
+        authorNickname: 'tester',
+        body: 'hello',
+        createdAt: 1,
+        images: [],
+        reactions: []
+      }
+    }
+
+    chatRoomModelMock.findOne.mockReturnValue(
+      createLeanQuery({
+        adminId: 'user-1',
+        chatKind: 'favorites',
+        users: ['user-1', 'user-2'],
+        messages: []
+      })
+    )
+    userModelMock.findById.mockReturnValue(createLeanQuery({ public: { nickname: 'tester' } }))
+
+    await sendMessage(payload)
+
+    expect(messageModelMock).not.toHaveBeenCalled()
+    expect(presenceMock.emitToUsers).not.toHaveBeenCalled()
+  })
+
+  it('sends message to own favorites room', async () => {
+    const payload = {
+      roomId: 'room-1',
+      userId: 'user-1',
+      message: {
+        id: 'message-1',
+        authorId: 'user-1',
+        authorNickname: 'tester',
+        body: 'note',
+        createdAt: 1,
+        images: [],
+        reactions: []
+      }
+    }
+
+    chatRoomModelMock.findOne.mockReturnValue(
+      createLeanQuery({
+        adminId: 'user-1',
+        chatKind: 'favorites',
+        users: ['user-1'],
+        messages: []
+      })
+    )
+    userModelMock.findById.mockReturnValue(createLeanQuery({ public: { nickname: 'tester' } }))
+    chatRoomModelMock.updateOne.mockResolvedValueOnce({ modifiedCount: 1 })
+    messageModelMock.updateOne.mockResolvedValue({ modifiedCount: 1 })
+
+    await sendMessage(payload)
+
+    expect(messageModelMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        _id: 'message-1',
+        authorId: 'user-1'
+      })
+    )
+    expect(presenceMock.emitToUsers).toHaveBeenCalledWith(['user-1'], 'message-delivered', {
+      roomId: 'room-1',
+      message: expect.objectContaining({
+        id: 'message-1',
+        isSelf: true
+      })
+    })
+  })
+
+  it('sends admin support message as support author to support recipients', async () => {
+    const payload = {
+      roomId: 'support-room-1',
+      userId: 'admin-1',
+      message: {
+        id: 'message-1',
+        authorId: 'admin-1',
+        authorNickname: 'admin',
+        body: 'hello from support',
+        createdAt: 1,
+        images: [],
+        reactions: []
+      }
+    }
+
+    chatRoomModelMock.findOne.mockReturnValue(
+      createLeanQuery({
+        adminId: 'user-1',
+        chatKind: 'support',
+        supportOwnerId: 'user-1',
+        supportStatus: 'open',
+        users: ['user-1'],
+        messages: []
+      })
+    )
+    userModelMock.findById.mockReturnValue(
+      createLeanQuery({
+        public: { nickname: 'real-admin-name' },
+        system: { role: 'admin' }
+      })
+    )
+    userModelMock.find.mockReturnValue({
+      lean: vi.fn().mockResolvedValue([{ _id: 'admin-1' }, { _id: 'admin-2' }])
+    })
+    chatRoomModelMock.updateOne.mockResolvedValueOnce({ modifiedCount: 1 })
+    messageModelMock.updateOne.mockResolvedValue({ modifiedCount: 1 })
+
+    await sendMessage(payload)
+
+    expect(messageModelMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        _id: 'message-1',
+        authorId: 'admin-1',
+        authorKind: 'support',
+        authorNickname: ''
+      })
+    )
+    expect(presenceMock.emitToUsers).toHaveBeenCalledWith(['user-1'], 'message-delivered', {
+      roomId: 'support-room-1',
+      message: expect.objectContaining({
+        authorKind: 'support',
+        authorNickname: '',
+        isSelf: false
+      })
+    })
+    expect(presenceMock.emitToUsers).toHaveBeenCalledWith(['admin-1'], 'message-delivered', {
+      roomId: 'support-room-1',
+      message: expect.objectContaining({
+        authorKind: 'support',
+        authorNickname: '',
+        isSelf: true
+      })
+    })
+    expect(presenceMock.emitToUsers).toHaveBeenCalledWith(['admin-2'], 'message-delivered', {
+      roomId: 'support-room-1',
+      message: expect.objectContaining({
+        authorKind: 'support',
+        authorNickname: '',
         isSelf: false
       })
     })

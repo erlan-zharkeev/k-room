@@ -40,7 +40,6 @@ const {
   roomCallConnectionQualityBarItems,
   roomCallConnectionQualityClass,
   roomCallTileAudioVolumeDb,
-  roomCallTileMediaFit,
   temporaryQuickCommandI18n,
   temporaryQuickCommandTextColor,
   toggleRemoteAudioMuted,
@@ -60,7 +59,7 @@ const {
       :video-off="isMediaTileVideoOff"
       :show-status="false"
       aspect="fill"
-      :fit="roomCallTileMediaFit"
+      fit="contain"
       :screen-sharing="isRoomCallScreenTile"
       design="plain"
     />

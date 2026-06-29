@@ -46,7 +46,6 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
     () => isRoomCallParticipantTile.value && Boolean(props.item.isHandRaised || props.item.temporaryQuickCommand)
   )
   const isRoomCallTileRemoteActionsVisible = computed(() => !props.self && isRoomCallParticipantTile.value)
-  const roomCallTileMediaFit = computed(() => (isRoomCallScreenTile.value ? 'contain' : 'cover'))
   const roomCallConnectionQualityClass = computed(() =>
     props.item.connectionQuality ? `room-call-tile__connection-quality--${props.item.connectionQuality}` : undefined
   )
@@ -187,7 +186,6 @@ export const useRoomCallTile = (props: RoomCallTileProps) => {
     roomCallTileAudioVolumeDb,
     roomCallConnectionQualityBarItems,
     roomCallConnectionQualityClass,
-    roomCallTileMediaFit,
     remoteHideButtonText,
     remoteMuteButtonText,
     temporaryQuickCommandI18n,

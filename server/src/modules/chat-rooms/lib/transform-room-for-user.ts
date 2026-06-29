@@ -24,6 +24,8 @@ export const transformRoomForUser = async ({
     createdAt,
     messages,
     pinnedMessageId: roomPinnedMessageId,
+    supportOwnerId,
+    supportStatus,
     users: roomUsers
   } = normalizedRoom
   const roomId = stringifyMongoId(_id)
@@ -50,6 +52,8 @@ export const transformRoomForUser = async ({
     createdAt,
     chatName,
     chatKind,
+    supportOwnerId,
+    supportStatus,
     avatarId,
     lastMessageId,
     pinnedMessageId,

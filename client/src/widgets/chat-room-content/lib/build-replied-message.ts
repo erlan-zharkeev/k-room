@@ -17,13 +17,14 @@ export const buildRepliedMessage = (
   kind: MessageDraftReferenceKind,
   roomId: string
 ): RepliedMessage => {
-  const { id, audios, authorId, authorNickname, body, documents, images, videos } = message
+  const { id, audios, authorId, authorKind, authorNickname, body, documents, images, videos } = message
 
   return {
     id,
     roomId,
     authorId,
     authorNickname,
+    ...(authorKind && { authorKind }),
     body,
     ...(images && { images: cloneMediaObjects(images) }),
     ...(documents && { documents: cloneMediaObjects(documents) }),

@@ -1,7 +1,11 @@
 import type { MediaId } from 'global-shared'
+import type { Component } from 'vue'
 
 export interface AppProfilePickerItem {
   id: string
+  avatarIcon?: string | Component
+  avatarIconColor?: string
+  avatarIconSize?: string
   imageId?: MediaId
   title: string
   description?: string

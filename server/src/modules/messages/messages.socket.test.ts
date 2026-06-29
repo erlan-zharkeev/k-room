@@ -20,8 +20,10 @@ vi.mock('./messages.service', () => messagesServiceMock)
 
 const { MessagesSocketService } = await import('./messages.socket')
 
+const presenceService = {}
+
 const registerMessagesSocketHandlers = (socket: never) => {
-  new MessagesSocketService().register(socket)
+  new MessagesSocketService(presenceService as never).register(socket)
 }
 
 describe('messages.socket', () => {
@@ -61,7 +63,8 @@ describe('messages.socket', () => {
     expect(messagesServiceMock.sendMessage).toHaveBeenCalledWith({
       roomId: 'room-1',
       userId: 'user-1',
-      message: expect.objectContaining({ id: 'message-1' })
+      message: expect.objectContaining({ id: 'message-1' }),
+      presenceService
     })
   })
 

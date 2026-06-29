@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import {
   type CreateRoomAckPayload,
+  type EventCloseSupportChat,
   type EventCreateRoom,
   type EventDeleteChatRoom,
   type EventLeaveChatRoom,
@@ -16,9 +17,11 @@ import type { SocketInstance } from 'src/shared/types'
 
 import { CHAT_ROOMS_I18N } from './chat-rooms.i18n'
 import {
+  closeSupportChat,
   createChatRoom,
   deleteChatRoom,
   leaveChatRoom,
+  openSupportChat,
   updateChatRoom,
   updateMutedChatRoom,
   updatePinnedChatRoom,
@@ -43,6 +46,32 @@ export class ChatRoomsSocketService {
           }
         },
         { basicError: CHAT_ROOMS_I18N.createChatRoomFailed }
+      )
+    )
+
+    const openSupportChatHandler = socketAckMiddleware<void, CreateRoomAckPayload>(
+      socket,
+      async () => {
+        const responsePayload = await openSupportChat(socket.data.userId, this.presenceService)
+
+        return {
+          ok: true,
+          payload: responsePayload
+        }
+      },
+      { basicError: CHAT_ROOMS_I18N.openSupportChatFailed }
+    )
+
+    socket.on('open-support-chat', (ack) => openSupportChatHandler(undefined, ack))
+
+    socket.on(
+      'close-support-chat',
+      socketAckMiddleware<EventCloseSupportChat>(
+        socket,
+        async (payload) => {
+          await closeSupportChat(socket.data.userId, payload, this.presenceService)
+        },
+        { basicError: CHAT_ROOMS_I18N.closeSupportChatFailed }
       )
     )
 

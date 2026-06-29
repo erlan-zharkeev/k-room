@@ -2,7 +2,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 export const generatePWAConfig = ({ appName, themeBg }: { appName: string; themeBg: string }) =>
   VitePWA({
-    registerType: 'autoUpdate',
+    registerType: 'prompt',
     devOptions: {
       enabled: true
     },
@@ -48,10 +48,11 @@ export const generatePWAConfig = ({ appName, themeBg }: { appName: string; theme
     workbox: {
       globPatterns: [
         'index.html',
+        'client-recovery.js',
         'registerSW.js',
         'manifest.webmanifest',
-        'assets/index-*.js',
-        'assets/index-*.css',
+        'assets/*.js',
+        'assets/*.css',
         'meta/*'
       ],
       runtimeCaching: [
@@ -86,7 +87,7 @@ export const generatePWAConfig = ({ appName, themeBg }: { appName: string; theme
               maxAgeSeconds: 60 * 60 * 24 * 30
             },
             cacheableResponse: {
-              statuses: [0, 200, 206]
+              statuses: [0, 200]
             }
           }
         },

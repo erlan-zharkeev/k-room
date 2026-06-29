@@ -1,6 +1,6 @@
 import { computed, toRef } from 'vue'
 
-import { useChatRoom } from 'src/entities/chat-room'
+import { CHAT_ROOM_I18N, isRoomSupport, useChatRoom } from 'src/entities/chat-room'
 import { useI18n } from 'src/shared/lib'
 
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
@@ -15,6 +15,21 @@ export const useMessageReferencePreview = (props: MessageBodyProps, onSelectMess
   const messageReference = computed(() => message.value.repliedMessage)
   const messageReferenceRoomId = computed(() => messageReference.value?.roomId ?? props.room.id)
   const messageReferenceRoom = computed(() => getById(messageReferenceRoomId.value))
+  const messageReferenceAuthorNickname = computed(() => {
+    const reference = messageReference.value
+    const room = messageReferenceRoom.value
+
+    if (!reference) return ''
+
+    if (
+      reference.authorKind === 'support' ||
+      (room && isRoomSupport(room) && reference.authorId !== room.supportOwnerId)
+    ) {
+      return t(CHAT_ROOM_I18N.supportTitle)
+    }
+
+    return reference.authorNickname
+  })
   const canSelectMessageReference = computed(() => {
     const reference = messageReference.value
     const room = messageReferenceRoom.value
@@ -31,7 +46,7 @@ export const useMessageReferencePreview = (props: MessageBodyProps, onSelectMess
     const titleSource = reference.forward ? CHAT_ROOM_CONTENT_I18N.forwardMessage : CHAT_ROOM_CONTENT_I18N.replyMessage
     const actionTitle = t(titleSource)
 
-    return `${actionTitle}: ${reference.authorNickname}`
+    return `${actionTitle}: ${messageReferenceAuthorNickname.value}`
   })
   const messageReferencePreviewText = computed(() =>
     messageReference.value ? resolveMessagePreviewText(messageReference.value) : ''

@@ -2,9 +2,11 @@ import fs from 'fs'
 import path from 'path'
 
 import vue from '@vitejs/plugin-vue'
+import { CLIENT_RUNTIME_ENDPOINTS } from 'global-shared'
 import { defineConfig } from 'vite'
 
 import { createClientEnvData } from './create-client-env-data'
+import { CLIENT_UPDATE_RELOAD_STORAGE_PREFIX } from './src/shared/api/constants'
 import { generatePWAConfig } from './vite.pwa.config'
 
 export default defineConfig(({ mode }) => {
@@ -12,6 +14,13 @@ export default defineConfig(({ mode }) => {
   const { TAURI_ENV_DEBUG, TAURI_ENV_PLATFORM } = process.env
   const clientEnvData = createClientEnvData(mode, envDir)
   const isTauriBuild = Boolean(TAURI_ENV_PLATFORM)
+  const clientRecoveryConfig = {
+    enabled: !clientEnvData.isDev && !isTauriBuild,
+    appVersion: clientEnvData.appVersion,
+    runtimePolicyUrl: `${clientEnvData.apiBaseUrl}${CLIENT_RUNTIME_ENDPOINTS.getRuntimePolicy}`,
+    requestTimeoutMs: 5_000,
+    updateReloadStoragePrefix: CLIENT_UPDATE_RELOAD_STORAGE_PREFIX
+  }
 
   const tauriBuildConfig = TAURI_ENV_PLATFORM
     ? ({
@@ -60,7 +69,10 @@ export default defineConfig(({ mode }) => {
       {
         name: 'inject-client-html-data',
         transformIndexHtml: (html) =>
-          html.replaceAll('__THEME_BG__', clientEnvData.themeBg).replaceAll('__APP_NAME__', clientEnvData.appName)
+          html
+            .replaceAll('__THEME_BG__', clientEnvData.themeBg)
+            .replaceAll('__APP_NAME__', clientEnvData.appName)
+            .replaceAll('__CLIENT_RECOVERY_CONFIG__', JSON.stringify(clientRecoveryConfig).replace(/</g, '\\u003c'))
       },
       vue({
         template: {

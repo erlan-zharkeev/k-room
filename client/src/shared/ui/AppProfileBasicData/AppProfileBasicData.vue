@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { NmorphText, NmorphAvatar, NmorphBadge } from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphAvatar, NmorphBadge, NmorphIcon } from '@nmorph/nmorph-ui-kit'
 
 import { APP_PROFILE_BASIC_DATA_DEFAULT_PROPS } from './constants'
 import type { AppProfileBasicDataProps } from './types'
 import { useAppProfileBasicData } from './use-app-profile-basic-data.model'
 
 const props = withDefaults(defineProps<AppProfileBasicDataProps>(), APP_PROFILE_BASIC_DATA_DEFAULT_PROPS)
-const { imageSrc } = useAppProfileBasicData(props)
+const { avatarIconStyle, imageSrc } = useAppProfileBasicData(props)
 </script>
 
 <template>
@@ -19,7 +19,13 @@ const { imageSrc } = useAppProfileBasicData(props)
       :offset-x="-1"
       :offset-y="-1"
     >
+      <div v-if="props.avatarIcon" class="app-profile-basic-data__avatar-icon" :style="avatarIconStyle">
+        <NmorphIcon :width="props.avatarIconSize" :height="props.avatarIconSize" :color="props.avatarIconColor">
+          <component :is="props.avatarIcon" />
+        </NmorphIcon>
+      </div>
       <NmorphAvatar
+        v-else
         :src="imageSrc"
         :alt="props.imageAlt"
         :size="props.avatarSize"
@@ -51,6 +57,12 @@ const { imageSrc } = useAppProfileBasicData(props)
   .nmorph-avatar {
     flex: 0 0 auto;
   }
+}
+
+.app-profile-basic-data__avatar-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .app-profile-basic-data__content {

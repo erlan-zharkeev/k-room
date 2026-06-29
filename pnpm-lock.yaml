@@ -70,8 +70,8 @@ importers:
   client:
     dependencies:
       '@nmorph/nmorph-ui-kit':
-        specifier: ^3.0.20
-        version: 3.0.20(vue-i18n@9.14.5(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
+        specifier: ^3.0.21
+        version: 3.0.21(vue-i18n@9.14.5(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
       '@sentry/vue':
         specifier: 10.50.0
         version: 10.50.0(pinia@3.0.4(typescript@5.9.3)(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))
@@ -81,6 +81,9 @@ importers:
       '@tauri-apps/api':
         specifier: 2.10.1
         version: 2.10.1
+      '@tauri-apps/plugin-notification':
+        specifier: 2.3.1
+        version: 2.3.1
       '@tauri-apps/plugin-process':
         specifier: ^2.3.1
         version: 2.3.1
@@ -2019,8 +2022,8 @@ packages:
   '@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3':
     resolution: {integrity: sha512-s88O1aVtXftvp5bCPB7WnmXc5IwOZZ7YPuwNPt+GtOOXpPvad1LfbmjYv+qII7zP6RU2QGnqve27dnLycEnyEQ==}
 
-  '@nmorph/nmorph-ui-kit@3.0.20':
-    resolution: {integrity: sha512-xehH/9rk653WTq3VsLG7oGyIDF02tqg8H1VzglPiDQoRDgOARKFxanXGmm2yLFQVi61VT5IMpO8EtZqujGQ4RQ==}
+  '@nmorph/nmorph-ui-kit@3.0.21':
+    resolution: {integrity: sha512-06pFdEGUJ4yxwkHgozsUu+vm0nJ6s5HiTiLORXSrGm8l4V3Hzixal6F186wkjRgGhIbQE1RQsDzOP9ggrvot9A==}
     engines: {node: '>=18.13.0'}
     peerDependencies:
       nuxt: '>=3.0.0'
@@ -3014,6 +3017,9 @@ packages:
     resolution: {integrity: sha512-jQNGF/5quwORdZSSLtTluyKQ+o6SMa/AUICfhf4egCGFdMHqWssApVgYSbg+jmrZoc8e1DscNvjTnXtlHLS11g==}
     engines: {node: '>= 10'}
     hasBin: true
+
+  '@tauri-apps/plugin-notification@2.3.1':
+    resolution: {integrity: sha512-7gqgfANSREKhh35fY1L4j3TUjUdePmU735FYDqRGeIf8nMXWpcx6j4FhN9/4nYz+m0mv79DCTPLqIPTySggGgg==}
 
   '@tauri-apps/plugin-process@2.3.1':
     resolution: {integrity: sha512-nCa4fGVaDL/B9ai03VyPOjfAHRHSBz5v6F/ObsB73r/dA3MHHhZtldaDMIc0V/pnUw9ehzr2iEG+XkSEyC0JJA==}
@@ -10120,7 +10126,7 @@ snapshots:
   '@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3':
     optional: true
 
-  '@nmorph/nmorph-ui-kit@3.0.20(vue-i18n@9.14.5(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))':
+  '@nmorph/nmorph-ui-kit@3.0.21(vue-i18n@9.14.5(vue@3.5.33(typescript@5.9.3)))(vue@3.5.33(typescript@5.9.3))':
     dependencies:
       vue: 3.5.33(typescript@5.9.3)
       vue-i18n: 9.14.5(vue@3.5.33(typescript@5.9.3))
@@ -11078,6 +11084,10 @@ snapshots:
       '@tauri-apps/cli-win32-arm64-msvc': 2.10.1
       '@tauri-apps/cli-win32-ia32-msvc': 2.10.1
       '@tauri-apps/cli-win32-x64-msvc': 2.10.1
+
+  '@tauri-apps/plugin-notification@2.3.1':
+    dependencies:
+      '@tauri-apps/api': 2.10.1
 
   '@tauri-apps/plugin-process@2.3.1':
     dependencies:

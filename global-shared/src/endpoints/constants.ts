@@ -79,3 +79,7 @@ export const ADMIN_ENDPOINTS = {
 export const MONITORING_ENDPOINTS = {
   sentryEnvelope: '/monitoring/envelope'
 } as const
+
+export const CLIENT_RUNTIME_ENDPOINTS = {
+  getRuntimePolicy: '/client/runtime-policy'
+} as const

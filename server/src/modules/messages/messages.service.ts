@@ -19,19 +19,24 @@ import {
   type Message,
   type MessageStatus,
   type VideoObject,
+  type UserRole,
   MESSAGE_LOAD_LIMIT_MAX,
   MESSAGE_REACTION_LIMIT_PER_USER,
   REQ_STATUS,
   buildPendingMessageLinkPreview,
   getRoomOtherUserIds,
   isMessageAuthor,
-  isMessageReadStatus
+  isMessageReadStatus,
+  isRoomFavorites,
+  isRoomSupport
 } from 'global-shared'
 
 import { SERVER_ENV } from 'src/app/env'
+import type { PresenceService } from 'src/modules/presence/presence.service'
 import { AppError } from 'src/shared/lib/app-error'
 import { stringifyMongoId, stringifyMongoIds } from 'src/shared/lib/normalize-object-id'
 
+import type { ChatRoomUsersMessagesProjection } from '../chat-rooms/chat-rooms.types'
 import {
   addMessageToRoom,
   clearPinnedMessageFromRoom,
@@ -40,10 +45,17 @@ import {
   findRoomUsersByMessage,
   findRoomUsersByUser,
   removeMessageFromRoom,
+  updateSupportChatRoomStatus,
   updateRoomPinnedMessage
 } from '../chat-rooms/lib/chat-room-persistence'
+import { emitRoomDataToUsers } from '../chat-rooms/lib/emit-room-data-to-users'
+import { loadRoomRecipientIds } from '../chat-rooms/lib/support-chat-room-recipients'
 import { emitToUsers } from '../presence/presence.utils'
-import { loadUserPublicNicknameById } from '../user/lib/user-persistence'
+import {
+  loadUserPublicNicknameAndRoleById,
+  loadUserPublicNicknameById,
+  loadUserRoleById
+} from '../user/lib/user-persistence'
 
 import { assertMessageContentLimits } from './lib/assert-message-content-limits'
 import { refreshMessageLinkPreview } from './lib/refresh-message-link-preview'
@@ -56,6 +68,48 @@ import { uploadMessageMediaObjects } from './lib/upload-message-media-objects'
 import { MESSAGES_I18N } from './messages.i18n'
 import { MessageModel } from './messages.model'
 import type { MessageDocument, MessageIdProjection, SendMessageParams } from './messages.types'
+
+const canSendMessageToRoom = (room: ChatRoomUsersMessagesProjection | null, userId: string, userRole: UserRole) => {
+  if (!room) {
+    return false
+  }
+
+  if (isRoomSupport(room)) {
+    return userRole === 'admin' || room.supportOwnerId === userId
+  }
+
+  if (!isRoomFavorites(room)) {
+    return true
+  }
+
+  const roomUserIds = stringifyMongoIds(room.users)
+  const [roomUserId] = roomUserIds
+
+  return room.adminId === userId && roomUserIds.length === 1 && roomUserId === userId
+}
+
+const isSupportAgentMessage = (room: ChatRoomUsersMessagesProjection, authorRole: UserRole) =>
+  isRoomSupport(room) && authorRole === 'admin'
+
+const reopenSupportChatIfNeeded = async (
+  roomId: string,
+  room: ChatRoomUsersMessagesProjection,
+  presenceService?: PresenceService
+) => {
+  if (!presenceService || !isRoomSupport(room) || room.supportStatus !== 'closed') {
+    return
+  }
+
+  const updatedRoom = await updateSupportChatRoomStatus(roomId, 'open')
+
+  if (!updatedRoom) {
+    return
+  }
+
+  const recipientIds = await loadRoomRecipientIds(updatedRoom)
+
+  await emitRoomDataToUsers(recipientIds, updatedRoom, presenceService)
+}
 
 export const editMessage = async (userId: string, { body, images, messageId, roomId }: EventEditMessage) => {
   const normalizedBody = body.trim()
@@ -127,7 +181,13 @@ export const loadRoomMessages = async (
     throw new AppError(REQ_STATUS.badRequest, MESSAGES_I18N.messageLoadLimitExceeded)
   }
 
-  const room = await findRoomMessagesByUser(payload.roomId, userId)
+  const user = await loadUserRoleById(userId)
+
+  if (!user) {
+    return null
+  }
+
+  const room = await findRoomMessagesByUser(payload.roomId, userId, user.system.role)
 
   if (!room) {
     return null
@@ -174,7 +234,13 @@ export const changeMessageStatus = async (messageId: string, status: MessageStat
     return
   }
 
-  const room = await findRoomUsersByMessage(roomId, userId, messageId)
+  const user = await loadUserRoleById(userId)
+
+  if (!user) {
+    return
+  }
+
+  const room = await findRoomUsersByMessage(roomId, userId, messageId, user.system.role)
 
   if (!room) {
     return
@@ -198,7 +264,7 @@ export const changeMessageStatus = async (messageId: string, status: MessageStat
     return
   }
 
-  const { users } = room
+  const recipientIds = await loadRoomRecipientIds(room)
   const payload: EventUpdateMessageStatus = {
     roomId,
     messageId,
@@ -206,17 +272,23 @@ export const changeMessageStatus = async (messageId: string, status: MessageStat
     userId
   }
 
-  emitToUsers(users, 'message-status-updated', payload)
+  emitToUsers(recipientIds, 'message-status-updated', payload)
 }
 
 export const markRoomAsRead = async (roomId: string, userId: string) => {
-  const room = await findRoomUsersAndMessagesByUser(roomId, userId)
+  const user = await loadUserRoleById(userId)
+
+  if (!user) {
+    return
+  }
+
+  const room = await findRoomUsersAndMessagesByUser(roomId, userId, user.system.role)
 
   if (!room) {
     return
   }
 
-  const { users, messages } = room
+  const { messages } = room
 
   if (!messages.length) {
     return
@@ -265,7 +337,9 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
     updatedMessagesQuantity: updateResult.modifiedCount
   }
 
-  emitToUsers(users, 'messages-status-updated', payload)
+  const recipientIds = await loadRoomRecipientIds(room)
+
+  emitToUsers(recipientIds, 'messages-status-updated', payload)
 }
 
 export const deleteMessage = async (userId: string, { deleteForEveryone, roomId, messageId }: EventDeleteMessage) => {
@@ -404,23 +478,29 @@ export const toggleMessageReaction = async (userId: string, { glyphKey, messageI
 }
 
 export const emitRoomTypingStatus = async (userId: string, { roomId, isTyping }: EventUserTyping) => {
-  const room = await findRoomUsersByUser(roomId, userId)
+  const user = await loadUserRoleById(userId)
+
+  if (!user) {
+    return
+  }
+
+  const room = await findRoomUsersByUser(roomId, userId, user.system.role)
 
   if (!room) {
     return
   }
 
-  const userIds = stringifyMongoIds(room.users)
+  const recipientIds = await loadRoomRecipientIds(room)
   const payload: EventRoomTypingStatus = {
     roomId,
     contactId: userId,
     isTyping
   }
 
-  emitToUsers(getRoomOtherUserIds({ users: userIds }, userId), 'room-typing-status', payload)
+  emitToUsers(getRoomOtherUserIds({ users: recipientIds }, userId), 'room-typing-status', payload)
 }
 
-export const sendMessage = async ({ roomId, userId, message }: SendMessageParams) => {
+export const sendMessage = async ({ roomId, userId, message, presenceService }: SendMessageParams) => {
   const messageImages = message.images ?? []
   const messageDocuments = message.documents ?? []
   const messageAudios = message.audios ?? []
@@ -428,12 +508,11 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
 
   assertMessageContentLimits(message.body, messageImages, messageDocuments, messageAudios, messageVideos)
 
-  const [room, author] = await Promise.all([
-    findRoomUsersAndMessagesByUser(roomId, userId),
-    loadUserPublicNicknameById(userId)
-  ])
+  const author = await loadUserPublicNicknameAndRoleById(userId)
+  const authorRole = author?.system?.role ?? 'user'
+  const room = await findRoomUsersAndMessagesByUser(roomId, userId, authorRole)
 
-  if (!room || !author) {
+  if (!room || !author || !canSendMessageToRoom(room, userId, authorRole)) {
     return
   }
 
@@ -470,10 +549,12 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
     return
   }
 
+  const supportAgentMessage = isSupportAgentMessage(room, authorRole)
   const trustedMessage: Message = {
     ...message,
     authorId: userId,
-    authorNickname: author.public.nickname
+    authorNickname: supportAgentMessage ? '' : author.public.nickname,
+    ...(supportAgentMessage && { authorKind: 'support' })
   }
   const newDbMessage = await new MessageModel({
     _id: message.id,
@@ -487,12 +568,13 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
     usersMetaData: [],
     repliedMessage
   }).save()
-  const { users } = room
+  const recipientIds = await loadRoomRecipientIds(room)
 
-  await addMessageToRoom(roomId, userId, newDbMessage.id)
+  await addMessageToRoom(roomId, userId, newDbMessage.id, authorRole)
+  await reopenSupportChatIfNeeded(roomId, room, presenceService)
 
   await Promise.all(
-    users.map(async (userId) => {
+    recipientIds.map(async (userId) => {
       await MessageModel.updateOne(
         { _id: newDbMessage.id },
         { $push: { usersMetaData: { id: userId, status: 'delivered' } } }
@@ -522,6 +604,6 @@ export const sendMessage = async ({ roomId, userId, message }: SendMessageParams
     linkPreview,
     messageId: newDbMessage.id,
     roomId,
-    userIds: stringifyMongoIds(users)
+    userIds: recipientIds
   })
 }

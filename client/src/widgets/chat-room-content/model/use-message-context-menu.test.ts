@@ -17,6 +17,10 @@ const contextMenuMocks = vi.hoisted(() => ({
   togglePinnedMessage: vi.fn()
 }))
 
+const userMock = vi.hoisted(() => ({
+  user: { value: { id: 'user-1' } }
+}))
+
 vi.mock('@nmorph/nmorph-ui-kit', () => ({
   NmorphIconCopy: {},
   NmorphIconDelete: {},
@@ -30,12 +34,44 @@ vi.mock('../ui/MessageReactionPicker.vue', () => ({
   default: {}
 }))
 
+vi.mock('../ui/MessageCopyTextContextMenuItem.vue', () => ({
+  default: {}
+}))
+
+vi.mock('../ui/MessageDeleteContextMenuItem.vue', () => ({
+  default: {}
+}))
+
+vi.mock('../ui/MessageEditContextMenuItem.vue', () => ({
+  default: {}
+}))
+
+vi.mock('../ui/MessageForwardContextMenuItem.vue', () => ({
+  default: {}
+}))
+
+vi.mock('../ui/MessagePinContextMenuItem.vue', () => ({
+  default: {}
+}))
+
+vi.mock('../ui/MessageReplyContextMenuItem.vue', () => ({
+  default: {}
+}))
+
 vi.mock('src/shared/lib', () => ({
   defineI18n: (namespace: string, source: Record<string, unknown>) =>
     Object.fromEntries(Object.keys(source).map((key) => [key, `${namespace}.${key}`])),
   i18nFormatter: () => '',
   useI18n: () => ({ t: () => 'label' }),
   useTouchInput: () => ({ isTouchInput: contextMenuMocks.isTouchInput })
+}))
+
+vi.mock('src/entities/chat-room', () => ({
+  isRoomSupport: (room?: ChatRoom) => room?.chatKind === 'support'
+}))
+
+vi.mock('src/entities/user', () => ({
+  useUser: () => userMock
 }))
 
 vi.mock('./use-message-copy-text.model', () => ({
@@ -112,6 +148,7 @@ describe('useMessageContextMenu', () => {
     contextMenuMocks.isDeleteMessageDialogOpen.value = false
     contextMenuMocks.isMessagePinned.value = false
     contextMenuMocks.isTouchInput.value = false
+    userMock.user.value = { id: 'user-1' }
   })
 
   it('builds all message context menu options for editable message', () => {
@@ -147,6 +184,24 @@ describe('useMessageContextMenu', () => {
     const model = useMessageContextMenu({ message: createMessage(), room: createRoom() })
 
     expect(model.messageContextMenuTrigger.value).toBe('longpress')
+  })
+
+  it('keeps only safe message actions for support admins', () => {
+    userMock.user.value = { id: 'admin-1' }
+
+    const model = useMessageContextMenu({
+      message: createMessage(),
+      room: createRoom({
+        chatKind: 'support',
+        supportOwnerId: 'user-1'
+      })
+    })
+
+    expect(model.messageContextMenuOptions.value.map(({ value }) => value)).toEqual([
+      'copy-text',
+      'reply-message',
+      'forward-message'
+    ])
   })
 
   it('routes selected context menu actions to item-specific models', async () => {

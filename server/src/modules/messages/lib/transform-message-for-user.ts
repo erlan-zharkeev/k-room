@@ -8,6 +8,7 @@ export const transformMessageForUser = (message: MessageDocument, userId: string
   const {
     _id,
     authorId,
+    authorKind,
     authorNickname,
     body,
     createdAt,
@@ -29,6 +30,7 @@ export const transformMessageForUser = (message: MessageDocument, userId: string
     id: stringifyMongoId(_id),
     authorId,
     authorNickname,
+    ...(authorKind && { authorKind }),
     body,
     createdAt,
     editedAt,

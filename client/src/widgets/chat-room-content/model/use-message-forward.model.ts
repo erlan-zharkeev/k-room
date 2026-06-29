@@ -1,11 +1,20 @@
+import { NmorphIconChatLineSquare, NmorphIconStarFilled } from '@nmorph/nmorph-ui-kit'
 import { type ChatRoom, type EventSendMessage, type Message } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 import { computed, onScopeDispose, type Ref, ref, toRef, watch } from 'vue'
 
-import { getRoomOtherUserIds, isRoomPrivate, useChatRoom } from 'src/entities/chat-room'
+import {
+  CHAT_ROOM_I18N,
+  getRoomOtherUserIds,
+  isRoomFavorites,
+  isRoomPrivate,
+  isRoomSupport,
+  useChatRoom
+} from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
 import { useUser } from 'src/entities/user'
 import { setClientUpdateReloadBlock, socket, useSocketAvailability, useSocketTransportErrorToast } from 'src/shared/api'
+import { useI18n } from 'src/shared/lib'
 import type { AppProfilePickerItem } from 'src/shared/ui'
 
 import type { MessageForwardDialogProps } from '../config/types'
@@ -24,6 +33,7 @@ export const useMessageForward = (props: MessageForwardDialogProps, isMessageFor
   const { user } = useUser()
   const { isSocketOnlineActionAvailable } = useSocketAvailability()
   const { showSocketTransportErrorToast } = useSocketTransportErrorToast()
+  const { t } = useI18n()
   const { getRoomInterlocutor, getUsersByIds } = useChatRoomUserLookup()
   const selectedMessageForwardRoomIds = ref<string[]>([])
   const messageForwardSearchQuery = ref('')
@@ -36,11 +46,26 @@ export const useMessageForward = (props: MessageForwardDialogProps, isMessageFor
     const otherUserIds = getRoomOtherUserIds(room, user.value.id)
     const users = getUsersByIds(otherUserIds)
     const interlocutor = getRoomInterlocutor(room, user.value.id)
+    const isFavoritesRoom = isRoomFavorites(room)
+    const isSupportRoom = isRoomSupport(room)
 
     return {
       id: room.id,
+      avatarIcon: isFavoritesRoom ? NmorphIconStarFilled : isSupportRoom ? NmorphIconChatLineSquare : undefined,
+      avatarIconColor: isFavoritesRoom
+        ? 'var(--nmorph-warn-text-color)'
+        : isSupportRoom
+        ? 'var(--nmorph-accent-color)'
+        : undefined,
+      avatarIconSize: isFavoritesRoom ? '72%' : isSupportRoom ? '72%' : undefined,
       imageId: isPrivateRoom ? interlocutor?.avatarId : room.avatarId,
-      title: buildChatRoomTitle(room, users, isPrivateRoom),
+      title: buildChatRoomTitle(
+        room,
+        users,
+        isPrivateRoom,
+        t(CHAT_ROOM_I18N.favoritesTitle),
+        t(CHAT_ROOM_I18N.supportTitle)
+      ),
       online: Boolean(isPrivateRoom && interlocutor?.online)
     }
   }

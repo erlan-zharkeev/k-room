@@ -1,6 +1,7 @@
 import { type RoomCallMediaKind } from 'global-shared'
 import { computed, ref } from 'vue'
 
+import { isRoomSupport } from 'src/entities/chat-room'
 import { useActiveRoomCallSession } from 'src/features/room-call-session'
 
 import { useChatRoomContentView } from './use-chat-room-content-view.model'
@@ -9,7 +10,8 @@ import { useSelectedChatRoom } from './use-selected-chat-room.model'
 
 export const useChatRoomContent = () => {
   const roomCallLoadingMediaKind = ref<RoomCallMediaKind | null>(null)
-  const { selectedChatRoomId, selectedChatRoom, isSelectedChatRoomPrivate } = useSelectedChatRoom()
+  const { selectedChatRoomId, selectedChatRoom, isSelectedChatRoomFavorites, isSelectedChatRoomPrivate } =
+    useSelectedChatRoom()
   const {
     activeRoomCall,
     audioStream,
@@ -41,7 +43,12 @@ export const useChatRoomContent = () => {
   const hasSelectedRoomCall = computed(() => Boolean(activeSelectedRoomCall.value))
   const { changeChatRoomContentView, chatRoomContentView, isChatRoomTextView } =
     useChatRoomContentView(hasSelectedRoomCall)
-  const isRoomCallStartDisabled = computed(() => !canStartActiveRoomCall(selectedChatRoomId.value))
+  const isRoomCallAvailable = computed(
+    () => !isSelectedChatRoomFavorites.value && !isRoomSupport(selectedChatRoom.value)
+  )
+  const isRoomCallStartDisabled = computed(
+    () => !isRoomCallAvailable.value || !canStartActiveRoomCall(selectedChatRoomId.value)
+  )
   const selectedActiveRoomCall = computed(() => {
     const belongsToSelectedRoom = activeRoomCall.value?.roomId === selectedChatRoomId.value
     const isActiveRoomCallInProgress = activeRoomCall.value?.status === 'in-progress'
@@ -75,6 +82,7 @@ export const useChatRoomContent = () => {
   return {
     selectedChatRoomId,
     selectedChatRoom,
+    isRoomCallAvailable,
     isSelectedChatRoomPrivate,
     selectedMessageId,
     chatRoomContentView,

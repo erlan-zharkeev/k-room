@@ -19,7 +19,7 @@ import { useChatRoomListItem } from '../model/use-chat-room-list-item.model'
 
 const props = defineProps<ChatRoomListItemProps>()
 const item = toRef(props, 'item')
-const { contextMenuActionOptions, isPressed } = useChatRoomListItem(item)
+const { avatarIcon, avatarIconColor, avatarIconSize, contextMenuActionOptions, isPressed } = useChatRoomListItem(item)
 </script>
 
 <template>
@@ -35,6 +35,9 @@ const { contextMenuActionOptions, isPressed } = useChatRoomListItem(item)
       :aria-current="props.item.selected ? 'page' : undefined"
     >
       <AppProfileBasicData
+        :avatar-icon="avatarIcon"
+        :avatar-icon-color="avatarIconColor"
+        :avatar-icon-size="avatarIconSize"
         :image-id="props.item.imageId"
         :title="props.item.title"
         :name="props.item.title"
@@ -80,7 +83,11 @@ const { contextMenuActionOptions, isPressed } = useChatRoomListItem(item)
         type="tag"
       />
     </div>
-    <ChatRoomContextMenu :item="props.item" :action-options="contextMenuActionOptions" />
+    <ChatRoomContextMenu
+      v-if="!props.item.isSupportRoom"
+      :item="props.item"
+      :action-options="contextMenuActionOptions"
+    />
     <NmorphBadge
       v-if="props.item.isPinned"
       class="chat-room-list-item__pin"
