@@ -14,7 +14,7 @@ test.describe('registration', () => {
     const policySwitch = page.locator('input[name="policy"]')
     const submitButton = page.getByRole('button', { name: 'Register', exact: true })
 
-    await expect(page.getByRole('link', { name: 'Registration' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Registration', level: 4 })).toBeVisible()
     await expect(submitButton).toBeVisible()
 
     await nicknameInput.fill(user.nickname)

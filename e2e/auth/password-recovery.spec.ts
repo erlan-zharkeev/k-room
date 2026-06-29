@@ -54,14 +54,17 @@ const recoverPassword = async ({
 
   expect(debugCode).toMatch(/^\d{6}$/)
 
-  const codeInput = page.getByPlaceholder('Enter code from email')
+  const code = String(debugCode)
+  const firstCodeInput = page.getByRole('textbox', { name: 'OTP 1' })
 
-  await expect(codeInput).toBeVisible()
-  await expect(codeInput).toBeEnabled()
-  await codeInput.click()
-  await codeInput.pressSequentially(String(debugCode), { delay: 20 })
-  await expect(codeInput).toHaveValue(String(debugCode))
-  await codeInput.blur()
+  await expect(firstCodeInput).toBeVisible()
+  await expect(firstCodeInput).toBeEnabled()
+  await firstCodeInput.click()
+  await firstCodeInput.pressSequentially(code, { delay: 20 })
+  await Promise.all(
+    [...code].map((digit, index) => expect(page.getByRole('textbox', { name: `OTP ${index + 1}` })).toHaveValue(digit))
+  )
+  await firstCodeInput.blur()
 
   const validateButton = page.getByRole('button', { name: 'Validate', exact: true })
 
