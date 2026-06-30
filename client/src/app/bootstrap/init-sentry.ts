@@ -10,6 +10,7 @@ import {
 
 import { router } from '../router'
 
+import { initClientFreezeMonitor } from './init-client-freeze-monitor'
 import type { VueApp } from './types'
 
 const shouldIgnoreClientSentryException = (originalException: unknown) => {
@@ -60,4 +61,5 @@ export const initSentry = (app: VueApp) => {
     },
     tracesSampleRate: isDev ? 1 : 0.1
   })
+  initClientFreezeMonitor()
 }

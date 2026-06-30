@@ -11,6 +11,7 @@ import { handleHttpTransportMeta } from '../transport-meta'
 
 import { createHttpError } from './create-http-error'
 import { extractErrorPayload } from './extract-error-payload'
+import { captureFailedToPerformOperationHttpError } from './http-diagnostics'
 import { isMediaRequestError } from './is-media-request-error'
 import type { HttpRequestOptions } from './types'
 
@@ -30,6 +31,8 @@ export const useHttpInterceptor = () => {
   const interceptError = async (error: unknown, options: Pick<HttpRequestOptions, 'showErrorToast'> = {}) => {
     const { showErrorToast = true } = options
     const fallbackMessage = t(API_I18N.operationFailed)
+
+    captureFailedToPerformOperationHttpError(error)
 
     if (error instanceof AxiosError) {
       const status = error.response?.status as ReqStatus | undefined

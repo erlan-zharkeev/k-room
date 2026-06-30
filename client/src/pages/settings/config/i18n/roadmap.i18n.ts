@@ -71,15 +71,15 @@ export const SETTINGS_PAGE_ROADMAP_I18N = defineI18n('settingsPageRoadmap', {
     ru: 'Появятся специальные чаты с ограниченным количеством, отдельными правилами создания и сквозным шифрованием для действительно приватных разговоров.',
     zh: '将推出数量受限的特殊聊天，带有独立创建规则，并为敏感对话提供端到端加密。'
   },
-  logoutAllDevicesTitle: {
-    en: 'Sign out on all devices',
-    ru: 'Выход на всех устройствах',
-    zh: '退出所有设备'
+  activeDeviceSessionsTitle: {
+    en: 'Active device sessions',
+    ru: 'Активные сессии устройств',
+    zh: '活跃设备会话'
   },
-  logoutAllDevicesDescription: {
-    en: 'End every active session for the account from settings, so lost or old devices stop keeping access.',
-    ru: 'Можно будет завершить все активные сессии аккаунта из настроек, чтобы потерянные или старые устройства больше не сохраняли доступ.',
-    zh: '可以在设置中结束账号的所有活动会话，让丢失或旧设备不再保留访问权限。'
+  activeDeviceSessionsDescription: {
+    en: 'View signed-in devices in settings and end every active session at once or sign out only a specific device.',
+    ru: 'Можно будет видеть устройства с активным входом в настройках и завершать все сессии сразу или выходить только на конкретном устройстве.',
+    zh: '可以在设置中查看已登录设备，并一次结束所有活动会话，或只退出某一台指定设备。'
   },
   messageDraftsTitle: {
     en: 'Full message drafts',

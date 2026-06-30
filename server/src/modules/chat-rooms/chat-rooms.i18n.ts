@@ -52,9 +52,9 @@ export const CHAT_ROOMS_I18N = defineI18n({
     zh: '无法关闭支持聊天'
   },
   closeSupportChatForbidden: {
-    en: 'Only administrators can close support chats',
-    ru: 'Закрыть чат поддержки может только администратор',
-    zh: '只有管理员可以关闭支持聊天'
+    en: 'Only the chat owner or an administrator can close support chats',
+    ru: 'Закрыть чат поддержки может только владелец чата или администратор',
+    zh: '只有聊天所有者或管理员可以关闭支持聊天'
   },
   updatePinnedChatRoomFailed: {
     en: 'Failed to update pinned chat room',

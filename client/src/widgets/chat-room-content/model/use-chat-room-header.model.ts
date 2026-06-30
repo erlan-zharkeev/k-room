@@ -49,9 +49,12 @@ export const useChatRoomHeader = (props: ChatRoomHeaderProps, emit: ChatRoomHead
   const supportStatusText = computed(() =>
     props.room.supportStatus === 'closed' ? t(CHAT_ROOM_I18N.supportClosedStatus) : t(CHAT_ROOM_I18N.supportOpenStatus)
   )
-  const canCloseSupportChat = computed(
-    () => user.value.role === 'admin' && isSupportRoom.value && props.room.supportStatus === 'open'
-  )
+  const canCloseSupportChat = computed(() => {
+    const isOpenSupportRoom = isSupportRoom.value && props.room.supportStatus === 'open'
+    const canManageSupportRoom = user.value.role === 'admin' || props.room.supportOwnerId === user.value.id
+
+    return isOpenSupportRoom && canManageSupportRoom
+  })
   const title = computed(() =>
     buildChatRoomTitle(
       props.room,
