@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 const envMock = vi.hoisted(() => ({
   SERVER_ENV: {
     domain: '',
-    nativeDesktopOrigins: ['http://tauri.localhost'],
+    nativeDesktopOrigins: ['http://tauri.localhost', 'https://tauri.localhost', 'tauri://localhost'],
     secret: {
       accessTokenSecret: 'access-secret',
       refreshTokenSecret: 'refresh-secret'
@@ -119,6 +119,38 @@ describe('SessionService', () => {
       {
         headers: {
           origin: 'http://tauri.localhost'
+        },
+        cookies: {}
+      } as never,
+      response as never
+    )
+
+    expect(response.cookie).toHaveBeenCalledWith(
+      'jwt',
+      expect.any(String),
+      expect.objectContaining({ secure: true, sameSite: 'none' })
+    )
+    expect(response.cookie).toHaveBeenCalledWith(
+      'refresh-jwt',
+      expect.any(String),
+      expect.objectContaining({ secure: true, sameSite: 'none' })
+    )
+    expect(response.cookie).toHaveBeenCalledWith(
+      'device-id',
+      expect.any(String),
+      expect.objectContaining({ secure: true, sameSite: 'none' })
+    )
+  })
+
+  it('uses cross-site cookies for macOS native desktop requests', async () => {
+    const response = createResponse()
+    const service = new SessionService()
+
+    await service.updateTokens(
+      'user-1',
+      {
+        headers: {
+          origin: 'tauri://localhost'
         },
         cookies: {}
       } as never,

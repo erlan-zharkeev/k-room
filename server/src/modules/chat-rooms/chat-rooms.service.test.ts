@@ -249,7 +249,7 @@ describe('chat-rooms.service', () => {
     expect(response).toEqual({ roomId: 'room-created' })
   })
 
-  it('closes a support chat only for admins', async () => {
+  it('closes a support chat for admins', async () => {
     const room = {
       _id: 'support-room-1',
       adminId: 'user-1',
@@ -272,6 +272,63 @@ describe('chat-rooms.service', () => {
       {
         _id: 'support-room-1',
         chatKind: 'support'
+      },
+      {
+        $set: {
+          supportStatus: 'closed'
+        }
+      },
+      { new: true }
+    )
+  })
+
+  it('closes a support chat for its owner', async () => {
+    const room = {
+      _id: 'support-room-1',
+      adminId: 'user-1',
+      avatarId: null,
+      chatKind: 'support',
+      supportOwnerId: 'user-1',
+      supportStatus: 'closed',
+      users: ['user-1'],
+      messages: []
+    }
+
+    userPersistenceMock.loadUserRoleById.mockResolvedValue({ system: { role: 'user' } })
+    userPersistenceMock.loadAdminUserIds.mockResolvedValue([{ _id: 'admin-1' }])
+    userPersistenceMock.loadUserRoomPreferences.mockResolvedValue(null)
+    chatRoomModelMock.findOneAndUpdate.mockReturnValueOnce(createLeanQuery(room))
+
+    await closeSupportChat('user-1', { roomId: 'support-room-1' }, {} as never)
+
+    expect(chatRoomModelMock.findOneAndUpdate).toHaveBeenCalledWith(
+      {
+        _id: 'support-room-1',
+        chatKind: 'support',
+        supportOwnerId: 'user-1'
+      },
+      {
+        $set: {
+          supportStatus: 'closed'
+        }
+      },
+      { new: true }
+    )
+  })
+
+  it('rejects closing another user support chat for regular users', async () => {
+    userPersistenceMock.loadUserRoleById.mockResolvedValue({ system: { role: 'user' } })
+    chatRoomModelMock.findOneAndUpdate.mockReturnValueOnce(createLeanQuery(null))
+
+    await expect(closeSupportChat('user-2', { roomId: 'support-room-1' }, {} as never)).rejects.toMatchObject({
+      status: REQ_STATUS.badRequest
+    })
+
+    expect(chatRoomModelMock.findOneAndUpdate).toHaveBeenCalledWith(
+      {
+        _id: 'support-room-1',
+        chatKind: 'support',
+        supportOwnerId: 'user-2'
       },
       {
         $set: {

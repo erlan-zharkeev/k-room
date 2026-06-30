@@ -33,10 +33,10 @@ export const ROADMAP_ITEMS: RoadmapItem[] = [
     description: SETTINGS_PAGE_ROADMAP_I18N.secureChatsDescription
   },
   {
-    id: 'logout-all-devices',
+    id: 'active-device-sessions',
     status: 'planned',
-    title: SETTINGS_PAGE_ROADMAP_I18N.logoutAllDevicesTitle,
-    description: SETTINGS_PAGE_ROADMAP_I18N.logoutAllDevicesDescription
+    title: SETTINGS_PAGE_ROADMAP_I18N.activeDeviceSessionsTitle,
+    description: SETTINGS_PAGE_ROADMAP_I18N.activeDeviceSessionsDescription
   },
   {
     id: 'message-drafts',

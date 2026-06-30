@@ -50,7 +50,7 @@ const isDev = stage !== 'production'
 const isE2E = process.env.SERVER_E2E === 'true'
 const TURNSTILE_TEST_SITE_KEY = '1x00000000000000000000AA'
 const TURNSTILE_TEST_SECRET_KEY = '1x0000000000000000000000000000000AA'
-const nativeDesktopOrigins = ['http://tauri.localhost'] as const
+const nativeDesktopOrigins = ['http://tauri.localhost', 'https://tauri.localhost', 'tauri://localhost'] as const
 const redisUrl = getEnv('REDIS_URL', envs) || (isDev ? 'redis://127.0.0.1:6380' : '')
 const turnstileSiteKey = getEnv('TURNSTILE_SITE_KEY', envs) || (isDev ? TURNSTILE_TEST_SITE_KEY : '')
 const turnstileSecretKey = getEnv('TURNSTILE_SECRET_KEY', envs) || (isDev ? TURNSTILE_TEST_SECRET_KEY : '')

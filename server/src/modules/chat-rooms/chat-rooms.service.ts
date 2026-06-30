@@ -185,16 +185,13 @@ export const closeSupportChat = async (
   presenceService: PresenceService
 ) => {
   const user = await loadUserRoleById(userId)
-
-  if (user?.system.role !== 'admin') {
-    throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.closeSupportChatForbidden)
-  }
+  const isAdmin = user?.system.role === 'admin'
+  const roomQuery = isAdmin
+    ? { _id: roomId, chatKind: 'support' }
+    : { _id: roomId, chatKind: 'support', supportOwnerId: userId }
 
   const room = await ChatRoomModel.findOneAndUpdate(
-    {
-      _id: roomId,
-      chatKind: 'support'
-    },
+    roomQuery,
     {
       $set: {
         supportStatus: 'closed'
@@ -206,6 +203,10 @@ export const closeSupportChat = async (
     .lean<ChatRoomDocument>()
 
   if (!room) {
+    if (!isAdmin) {
+      throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.closeSupportChatForbidden)
+    }
+
     return
   }
 
