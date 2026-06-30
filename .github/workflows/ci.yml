@@ -177,6 +177,7 @@ jobs:
         shell: bash
         env:
           APPLE_SIGNING_IDENTITY: ${{ matrix.platform == 'macos' && '-' || '' }}
+          DESKTOP_PLATFORM: ${{ matrix.platform }}
           TAURI_BUILD_ARGS: ${{ matrix.tauri_args }}
         run: |
           pnpm --dir client run check:version
@@ -186,19 +187,43 @@ jobs:
 
           build_log_path="${RUNNER_TEMP:-.}/tauri-build.log"
 
-          if [ -n "$TAURI_BUILD_ARGS" ]; then
-            pnpm --dir client exec tauri build $TAURI_BUILD_ARGS 2>&1 | tee "$build_log_path"
-            build_status="${PIPESTATUS[0]}"
-          else
+          run_tauri_build() {
+            if [ -n "$TAURI_BUILD_ARGS" ]; then
+              pnpm --dir client exec tauri build $TAURI_BUILD_ARGS 2>&1 | tee "$build_log_path"
+
+              return "${PIPESTATUS[0]}"
+            fi
+
             pnpm --dir client exec tauri build 2>&1 | tee "$build_log_path"
-            build_status="${PIPESTATUS[0]}"
+
+            return "${PIPESTATUS[0]}"
+          }
+
+          cleanup_macos_dmg_state() {
+            if command -v hdiutil >/dev/null 2>&1; then
+              hdiutil info | awk '/\/Volumes\/K-Room/ { print $1 }' | while read -r device; do
+                hdiutil detach "$device" -force || true
+              done
+            fi
+
+            rm -rf client/src-tauri/target/universal-apple-darwin/release/bundle/dmg
+          }
+
+          run_tauri_build
+          build_status="$?"
+
+          if [ "$build_status" -ne 0 ] && [ "$DESKTOP_PLATFORM" = "macos" ]; then
+            echo "macOS Tauri bundle failed; cleaning DMG state and retrying once."
+            cleanup_macos_dmg_state
+            run_tauri_build
+            build_status="$?"
           fi
 
           if [ "$build_status" -eq 0 ]; then
             exit 0
           fi
 
-          log_tail="$(tail -40 "$build_log_path" || true)"
+          log_tail="$(tail -120 "$build_log_path" || true)"
           log_tail="${log_tail//%/%25}"
           log_tail="${log_tail//$'\r'/%0D}"
           log_tail="${log_tail//$'\n'/%0A}"
