@@ -32,6 +32,7 @@ import {
 import { cleanupStaleRoomCall } from './lib/cleanup-stale-room-call-participants'
 import { finishRoomCall, leaveRoomCallParticipant } from './lib/leave-room-call-participant'
 import { loadAvailableUserRoomCallPage } from './lib/load-available-user-room-call-page'
+import { resolveRoomCallMediaKind } from './lib/resolve-room-call-media-kind'
 import {
   createActiveRoomCall,
   readActiveRoomCallByRoomId,
@@ -291,9 +292,11 @@ export const updateRoomCallMediaState = async (
           screen: false
         }
       : mediaState
+    const mediaKind = resolveRoomCallMediaKind(currentRoomCall.mediaKind, updatedParticipantMediaState)
 
     return {
       ...currentRoomCall,
+      mediaKind,
       participants: currentRoomCall.participants.map((participant) => {
         const isCurrentUser = participant.userId === userId
         const isCurrentSocket = participant.socketId === socketId
@@ -309,6 +312,7 @@ export const updateRoomCallMediaState = async (
   }
 
   emitToUsers(resolveActiveRoomCallUserIds(updatedRoomCall.participants), 'room-call-media-state-updated', {
+    mediaKind: updatedRoomCall.mediaKind,
     mediaState: updatedParticipantMediaState,
     roomCallId,
     userId

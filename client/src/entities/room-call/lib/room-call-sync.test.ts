@@ -30,6 +30,7 @@ describe('room call sync', () => {
     applyRoomCallMediaStateUpdated(roomCall, {
       roomCallId: 'call-1',
       userId: 'user-2',
+      mediaKind: 'screen',
       mediaState: {
         audio: false,
         video: false,
@@ -48,6 +49,7 @@ describe('room call sync', () => {
     })
 
     expect(roomCall.status).toBe('finished')
+    expect(roomCall.mediaKind).toBe('screen')
     expect(roomCall.startedAt).toBe(200)
     expect(roomCall.finishedAt).toBe(400)
     expect(roomCall.participants[1]).toMatchObject({

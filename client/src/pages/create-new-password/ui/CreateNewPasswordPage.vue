@@ -38,6 +38,9 @@ onMounted(initializeCreateNewPassword)
       <NmorphText as="p">{{ $t(CREATE_NEW_PASSWORD_I18N.repeatPasswordHint) }}</NmorphText>
 
       <NmorphForm ref="formRef" :value="formData" class="create-new-password-page__form" @submit.prevent="submit">
+        <!-- Fake username field for browser password manager autocomplete. -->
+        <input autocomplete="username" hidden readonly />
+
         <NmorphFormItem id="firstPassword" class="create-new-password-page__field" :show-validation-icon="false">
           <NmorphTextInput
             autocomplete="new-password"

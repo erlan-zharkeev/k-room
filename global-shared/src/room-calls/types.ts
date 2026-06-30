@@ -137,6 +137,7 @@ export interface EventRoomCallEnded {
 export interface EventRoomCallMediaStateUpdated {
   roomCallId: string
   userId: string
+  mediaKind: RoomCallMediaKind
   mediaState: RoomCallParticipantMediaState
 }
 

@@ -2,10 +2,6 @@
 
 ## Internal Backlog
 
-### AdminJS
-
-- [ ] Add quick diagnostic actions
-
 ### Infrastructure
 
 - [ ] Add a full testing/staging environment

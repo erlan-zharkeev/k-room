@@ -3,7 +3,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { ChatRoomCallAccessProjection } from '../chat-rooms/chat-rooms.types'
 
-import { joinRoomCall, leaveActiveRoomCallsBySocket, leaveRoomCall } from './room-calls.service'
+import {
+  joinRoomCall,
+  leaveActiveRoomCallsBySocket,
+  leaveRoomCall,
+  updateRoomCallMediaState
+} from './room-calls.service'
 import type { RoomCallActiveParticipant, RoomCallActiveState } from './room-calls.types'
 
 const roomCallAccessMock = vi.hoisted(() => ({
@@ -25,9 +30,14 @@ const roomCallActiveStateMock = vi.hoisted(() => ({
   updateActiveRoomCall: vi.fn()
 }))
 
+const presenceUtilsMock = vi.hoisted(() => ({
+  emitToUsers: vi.fn()
+}))
+
 vi.mock('./lib/assert-room-call-access', () => roomCallAccessMock)
 vi.mock('./lib/leave-room-call-participant', () => leaveRoomCallParticipantMock)
 vi.mock('./lib/room-call-active-state', () => roomCallActiveStateMock)
+vi.mock('../presence/presence.utils', () => presenceUtilsMock)
 
 const createRoom = (chatKind: ChatRoomCallAccessProjection['chatKind']): ChatRoomCallAccessProjection => ({
   chatKind,
@@ -162,5 +172,48 @@ describe('room-calls.service', () => {
     })
 
     expect(roomCallActiveStateMock.updateActiveRoomCall).not.toHaveBeenCalled()
+  })
+
+  it('promotes room call media kind when participant enables video', async () => {
+    const redisService = {}
+    const roomCall = createRoomCall()
+    let updatedRoomCall!: RoomCallActiveState
+
+    roomCallAccessMock.assertRoomCallParticipantAccess.mockResolvedValue({
+      room: createRoom('group'),
+      roomCall
+    })
+    roomCallActiveStateMock.updateActiveRoomCall.mockImplementation(async (_redisService, _roomCallId, resolve) => {
+      const nextRoomCall = resolve(roomCall)
+
+      if (!nextRoomCall) {
+        return null
+      }
+
+      updatedRoomCall = nextRoomCall
+
+      return updatedRoomCall
+    })
+
+    await updateRoomCallMediaState(redisService as never, 'user-a', 'socket-a', {
+      roomCallId: roomCall.id,
+      mediaState: {
+        audio: true,
+        screen: false,
+        video: true
+      }
+    })
+
+    expect(updatedRoomCall.mediaKind).toBe('video')
+    expect(presenceUtilsMock.emitToUsers).toHaveBeenCalledWith(['user-a', 'user-b'], 'room-call-media-state-updated', {
+      mediaKind: 'video',
+      mediaState: {
+        audio: true,
+        screen: false,
+        video: true
+      },
+      roomCallId: roomCall.id,
+      userId: 'user-a'
+    })
   })
 })

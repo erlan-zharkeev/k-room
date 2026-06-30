@@ -37,8 +37,10 @@ export const applyRoomCallEnded = (roomCall: RoomCall, { finishedAt }: EventRoom
 
 export const applyRoomCallMediaStateUpdated = (
   roomCall: RoomCall,
-  { mediaState, userId }: EventRoomCallMediaStateUpdated
+  { mediaKind, mediaState, userId }: EventRoomCallMediaStateUpdated
 ) => {
+  roomCall.mediaKind = mediaKind
+
   const participant = roomCall.participants.find((participant) => participant.userId === userId)
 
   if (!participant) {
