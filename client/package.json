@@ -6,7 +6,7 @@
   "scripts": {
     "serve": "vite --host",
     "serve:tauri": "vite --host ${TAURI_DEV_HOST:-127.0.0.1} --strictPort",
-    "build": "vue-tsc -b && vite build",
+    "build": "vue-tsc -b && vite build && node scripts/assert-service-worker-cache-policy.mjs",
     "preview": "vite preview --host",
     "test": "vitest run --config vitest.config.mts",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",

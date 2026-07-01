@@ -21,6 +21,8 @@ export default defineConfig(({ mode }) => {
     requestTimeoutMs: 5_000,
     updateReloadStoragePrefix: CLIENT_UPDATE_RELOAD_STORAGE_PREFIX
   }
+  const serviceWorkerRegisterScript =
+    !clientEnvData.isDev && !isTauriBuild ? '<script src="/service-worker-register.js"></script>' : ''
 
   const tauriBuildConfig = TAURI_ENV_PLATFORM
     ? ({
@@ -73,6 +75,7 @@ export default defineConfig(({ mode }) => {
             .replaceAll('__THEME_BG__', clientEnvData.themeBg)
             .replaceAll('__APP_NAME__', clientEnvData.appName)
             .replaceAll('__CLIENT_RECOVERY_CONFIG__', JSON.stringify(clientRecoveryConfig).replace(/</g, '\\u003c'))
+            .replaceAll('__SERVICE_WORKER_REGISTER_SCRIPT__', serviceWorkerRegisterScript)
       },
       vue({
         template: {

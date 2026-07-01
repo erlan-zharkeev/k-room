@@ -2,11 +2,11 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 export const generatePWAConfig = ({ appName, themeBg }: { appName: string; themeBg: string }) =>
   VitePWA({
-    registerType: 'prompt',
+    registerType: 'autoUpdate',
     devOptions: {
       enabled: true
     },
-    injectRegister: 'auto',
+    injectRegister: false,
     manifest: {
       name: appName,
       short_name: appName,
@@ -47,38 +47,11 @@ export const generatePWAConfig = ({ appName, themeBg }: { appName: string; theme
     },
     workbox: {
       importScripts: ['web-push-sw.js'],
-      globPatterns: [
-        'index.html',
-        'client-recovery.js',
-        'registerSW.js',
-        'manifest.webmanifest',
-        'web-push-sw.js',
-        'assets/*.js',
-        'assets/*.css',
-        'meta/*'
-      ],
+      skipWaiting: true,
+      clientsClaim: true,
+      navigateFallback: undefined,
+      globPatterns: ['web-push-sw.js', 'meta/*'],
       runtimeCaching: [
-        {
-          urlPattern: ({ request }) => request.destination === 'document',
-          handler: 'NetworkFirst',
-          options: {
-            cacheName: 'html-cache'
-          }
-        },
-        {
-          urlPattern: ({ request }) => request.destination === 'style',
-          handler: 'StaleWhileRevalidate',
-          options: {
-            cacheName: 'style-cache'
-          }
-        },
-        {
-          urlPattern: ({ request }) => request.destination === 'script',
-          handler: 'NetworkFirst',
-          options: {
-            cacheName: 'script-cache'
-          }
-        },
         {
           urlPattern: /.*\.mp3$/,
           handler: 'CacheFirst',
