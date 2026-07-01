@@ -8,7 +8,7 @@ export const NOTIFICATION_GROUP_IDS: NotificationSettingGroup[] = ['general', 'm
 export const NOTIFICATION_CHANNEL_IDS: NotificationSettingKey[] = [
   'toast',
   'sound',
-  'vibration',
+  // 'vibration',
   'browserPush',
   'nativePush'
 ]
@@ -45,12 +45,12 @@ export const SETTINGS_NOTIFICATION_OPTIONS: Record<string, SettingsNotificationO
       label: SETTINGS_PAGE_NOTIFICATIONS_I18N.allSounds,
       description: SETTINGS_PAGE_NOTIFICATIONS_I18N.allSoundsDescription
     },
-    {
-      id: 'vibration',
-      label: SETTINGS_PAGE_NOTIFICATIONS_I18N.allVibration,
-      description: SETTINGS_PAGE_NOTIFICATIONS_I18N.allVibrationDescription,
-      mobileOnly: true
-    },
+    // {
+    //   id: 'vibration',
+    //   label: SETTINGS_PAGE_NOTIFICATIONS_I18N.allVibration,
+    //   description: SETTINGS_PAGE_NOTIFICATIONS_I18N.allVibrationDescription,
+    //   mobileOnly: true
+    // },
     {
       id: 'browserPush',
       label: SETTINGS_PAGE_NOTIFICATIONS_I18N.allBrowserPush,
@@ -75,12 +75,12 @@ export const SETTINGS_NOTIFICATION_OPTIONS: Record<string, SettingsNotificationO
       label: SETTINGS_PAGE_NOTIFICATIONS_I18N.messageSound,
       description: SETTINGS_PAGE_NOTIFICATIONS_I18N.messageSoundDescription
     },
-    {
-      id: 'vibration',
-      label: SETTINGS_PAGE_NOTIFICATIONS_I18N.messageVibration,
-      description: SETTINGS_PAGE_NOTIFICATIONS_I18N.messageVibrationDescription,
-      mobileOnly: true
-    },
+    // {
+    //   id: 'vibration',
+    //   label: SETTINGS_PAGE_NOTIFICATIONS_I18N.messageVibration,
+    //   description: SETTINGS_PAGE_NOTIFICATIONS_I18N.messageVibrationDescription,
+    //   mobileOnly: true
+    // },
     {
       id: 'browserPush',
       label: SETTINGS_PAGE_NOTIFICATIONS_I18N.messageBrowserPush,
@@ -100,12 +100,12 @@ export const SETTINGS_NOTIFICATION_OPTIONS: Record<string, SettingsNotificationO
       label: SETTINGS_PAGE_NOTIFICATIONS_I18N.callSound,
       description: SETTINGS_PAGE_NOTIFICATIONS_I18N.callSoundDescription
     },
-    {
-      id: 'vibration',
-      label: SETTINGS_PAGE_NOTIFICATIONS_I18N.callVibration,
-      description: SETTINGS_PAGE_NOTIFICATIONS_I18N.callVibrationDescription,
-      mobileOnly: true
-    },
+    // {
+    //   id: 'vibration',
+    //   label: SETTINGS_PAGE_NOTIFICATIONS_I18N.callVibration,
+    //   description: SETTINGS_PAGE_NOTIFICATIONS_I18N.callVibrationDescription,
+    //   mobileOnly: true
+    // },
     {
       id: 'browserPush',
       label: SETTINGS_PAGE_NOTIFICATIONS_I18N.callBrowserPush,

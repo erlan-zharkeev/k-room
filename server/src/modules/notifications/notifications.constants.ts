@@ -1,0 +1,1 @@
+export const WEB_PUSH_EXPIRED_STATUS_CODES = [404, 410]

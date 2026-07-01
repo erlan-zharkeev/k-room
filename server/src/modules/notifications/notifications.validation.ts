@@ -1,0 +1,4 @@
+import { createDeleteWebPushSubscriptionSchema, createWebPushSubscriptionSchema } from 'global-shared'
+
+export const WEB_PUSH_SUBSCRIPTION_VALIDATION = createWebPushSubscriptionSchema
+export const DELETE_WEB_PUSH_SUBSCRIPTION_VALIDATION = createDeleteWebPushSubscriptionSchema

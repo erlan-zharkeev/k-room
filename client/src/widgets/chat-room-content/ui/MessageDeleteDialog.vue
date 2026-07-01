@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { NmorphText, NmorphButton, NmorphDialog } from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphButton } from '@nmorph/nmorph-ui-kit'
+
+import { AppDialog } from 'src/shared/ui'
 
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { MessageDeleteDialogProps } from '../config/types'
@@ -18,7 +20,7 @@ const {
 </script>
 
 <template>
-  <NmorphDialog v-model="model" :title="$t(CHAT_ROOM_CONTENT_I18N.deleteMessageTitle)">
+  <AppDialog v-model="model" :title="$t(CHAT_ROOM_CONTENT_I18N.deleteMessageTitle)">
     <div class="app-dialog-stack">
       <NmorphText>{{ $t(CHAT_ROOM_CONTENT_I18N.deleteMessageConfirm) }}</NmorphText>
       <div class="app-dialog-actions">
@@ -50,5 +52,5 @@ const {
         />
       </div>
     </div>
-  </NmorphDialog>
+  </AppDialog>
 </template>

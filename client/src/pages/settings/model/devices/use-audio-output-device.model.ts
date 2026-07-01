@@ -7,6 +7,7 @@ import { useI18n } from 'src/shared/lib'
 
 import { DEFAULT_AUDIO_OUTPUT_SELECT_VALUE } from '../../config/constants/devices.constants'
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
+import { canPlayAudioOutput, canSelectAudioOutputDevice } from '../../lib/audio-output-device'
 import {
   resolveSingleSelectValue,
   syncSelectedDeviceId,
@@ -24,6 +25,8 @@ export const useAudioOutputDevice = () => {
 
   const audioOutputLoading = ref(true)
   const audioOutputTestLoading = ref(false)
+  const isAudioOutputPlaybackSupported = computed(canPlayAudioOutput)
+  const isAudioOutputSelectionSupported = computed(() => isAudioOutputSupported.value && canSelectAudioOutputDevice())
 
   const audioOutputOptions = computed(() =>
     audioOutputDevices.value.map(({ deviceId, label }) => ({
@@ -39,22 +42,31 @@ export const useAudioOutputDevice = () => {
 
     return audioOutputOptions.value[0]?.value ?? ''
   })
+  const hasAudioOutputOptions = computed(() => audioOutputOptions.value.length > 0)
+  const isAudioOutputSelectDisabled = computed(
+    () => audioOutputLoading.value || !isAudioOutputSelectionSupported.value || !hasAudioOutputOptions.value
+  )
+  const isAudioOutputTestDisabled = computed(
+    () => audioOutputTestLoading.value || !isAudioOutputPlaybackSupported.value
+  )
   const audioOutputPermissionStatus = computed(() =>
     t(SETTINGS_PAGE_DEVICES_I18N.permissionStatus, {
       status: t(
-        isAudioOutputSupported.value
+        isAudioOutputPlaybackSupported.value
           ? SETTINGS_PAGE_DEVICES_I18N.permissionBrowserControlled
           : SETTINGS_PAGE_DEVICES_I18N.permissionUnsupported
       )
     })
   )
-  const audioOutputPermissionCalloutType = computed(() => (isAudioOutputSupported.value ? 'info' : 'warning'))
+  const audioOutputPermissionCalloutType = computed(() => (isAudioOutputPlaybackSupported.value ? 'info' : 'warning'))
 
   const stopAudioOutput = () => {
     stopAppSound('incoming-message')
   }
 
   const setSelectedAudioOutputDevice = async (value: NmorphSelectModelValueType = '') => {
+    if (!isAudioOutputSelectionSupported.value) return
+
     stopAudioOutput()
 
     const deviceId = resolveSingleSelectValue(value, DEFAULT_AUDIO_OUTPUT_SELECT_VALUE)
@@ -85,7 +97,9 @@ export const useAudioOutputDevice = () => {
   const requestAudioOutputDevices = async () => {
     try {
       audioOutputLoading.value = true
-      await syncSelectedAudioOutputDevice()
+      if (isAudioOutputSelectionSupported.value) {
+        await syncSelectedAudioOutputDevice()
+      }
     } catch (error) {
       await setByPath('ioDevices.audioOutputDeviceId', '')
       stopAudioOutput()
@@ -96,6 +110,8 @@ export const useAudioOutputDevice = () => {
   }
 
   const testAudioOutput = async () => {
+    if (isAudioOutputTestDisabled.value) return
+
     try {
       audioOutputTestLoading.value = true
       stopAudioOutput()
@@ -118,6 +134,8 @@ export const useAudioOutputDevice = () => {
   })
 
   watch(audioOutputDevices, (devices, previousDevices) => {
+    if (!isAudioOutputSelectionSupported.value) return
+
     void syncChangedAudioOutputDevice(devices, previousDevices)
   })
 
@@ -127,6 +145,8 @@ export const useAudioOutputDevice = () => {
     audioOutputSelectValue,
     audioOutputLoading,
     audioOutputTestLoading,
+    isAudioOutputSelectDisabled,
+    isAudioOutputTestDisabled,
     audioOutputPermissionCalloutType,
     audioOutputPermissionStatus,
     setSelectedAudioOutputDevice,

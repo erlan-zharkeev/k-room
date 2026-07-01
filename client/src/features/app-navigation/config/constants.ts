@@ -4,16 +4,16 @@ import {
   NmorphIconSetting,
   NmorphIconUsers
 } from '@nmorph/nmorph-ui-kit'
-import { ROUTE_NAMES } from 'global-shared'
+import { APP_ROUTE_PATHS } from 'global-shared'
 
 import { APP_NAVIGATION_I18N } from './i18n'
 
 export const APP_PAGE_ROUTES = {
-  chatRooms: `${ROUTE_NAMES.app}/chat-rooms`,
-  calls: `${ROUTE_NAMES.app}/calls`,
-  contacts: `${ROUTE_NAMES.app}/contacts`,
-  settings: `${ROUTE_NAMES.app}/settings`,
-  settingsItem: `${ROUTE_NAMES.app}/settings/:settingsId`
+  chatRooms: APP_ROUTE_PATHS.chatRooms,
+  calls: APP_ROUTE_PATHS.calls,
+  contacts: APP_ROUTE_PATHS.contacts,
+  settings: APP_ROUTE_PATHS.settings,
+  settingsItem: `${APP_ROUTE_PATHS.settings}/:settingsId`
 } as const
 
 export const APP_PAGE_NAV_ITEMS = [

@@ -1,3 +1,4 @@
+import { getAppChatRoomPath } from 'global-shared'
 import partition from 'lodash/partition'
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -10,7 +11,6 @@ import {
   useChatRoom
 } from 'src/entities/chat-room'
 import { useMessage } from 'src/entities/message'
-import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { usePinChatRoomOrder } from 'src/features/pin-chat-room'
 import { socket, useSocketAction, useSocketAvailability } from 'src/shared/api'
 import { useI18n, useScreen } from 'src/shared/lib'
@@ -40,7 +40,7 @@ export const useChatRoomsList = () => {
     const query = isPortraitTabletOrLess.value ? { ...route.query, view: 'content' } : route.query
 
     return {
-      path: `${APP_PAGE_ROUTES.chatRooms}/${roomId}`,
+      path: getAppChatRoomPath(roomId),
       query
     }
   }

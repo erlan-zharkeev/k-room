@@ -1,8 +1,4 @@
-export {
-  DEFAULT_SETTINGS_CONTENT_ID,
-  SETTINGS_CONTENT_TITLE,
-  getSettingsPath
-} from './config/constants/content.constants'
+export { DEFAULT_SETTINGS_CONTENT_ID, SETTINGS_CONTENT_TITLE } from './config/constants/content.constants'
 export { getSettingsContentId } from './lib/get-settings-content-id'
 export { default as SettingsContentPage } from './ui/SettingsContentPage.vue'
 export { default as SettingsNavigationPage } from './ui/SettingsNavigationPage.vue'

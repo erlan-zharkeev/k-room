@@ -123,6 +123,8 @@ export {
 } from './contact/lib'
 
 export {
+  APP_ROUTE_NAMES,
+  APP_ROUTE_PATHS,
   AUTH_ROUTE_NAMES,
   LAYOUT_ROUTE_NAMES,
   PAGE_ROUTE_NAMES,
@@ -131,12 +133,14 @@ export {
   AUTH_ENDPOINTS,
   USER_ENDPOINTS,
   MEDIA_ENDPOINTS,
+  NOTIFICATION_ENDPOINTS,
   CODES_ENDPOINTS,
   CLIENT_RUNTIME_ENDPOINTS,
   MONITORING_ENDPOINTS,
   ADMIN_ENDPOINTS
 } from './endpoints/constants'
-export type { RouteName, Endpoints } from './endpoints/types'
+export { getAppCallPath, getAppChatRoomPath, getAppContactPath, getAppSettingsPath } from './endpoints/lib'
+export type { AppRoutePath, RouteName, Endpoints } from './endpoints/types'
 
 export { CLIENT_RUNTIME_POLICY_ACTIONS } from './client-runtime/constants'
 export type { ClientRuntimePolicyAction, ClientRuntimePolicyResponse } from './client-runtime/types'
@@ -187,6 +191,15 @@ export type {
 } from './media/types'
 
 export type { PackageData } from './package/types'
+
+export type {
+  DeleteWebPushSubscriptionPayload,
+  WebPushConfigResponse,
+  WebPushNotificationPayload,
+  WebPushSubscriptionEnabledGroups,
+  WebPushSubscriptionKeysPayload,
+  WebPushSubscriptionPayload
+} from './notification/types'
 
 export {
   MESSAGE_ATTACHMENT_LIMIT,
@@ -366,6 +379,8 @@ export {
   createValidateChangeEmailCodeSchema,
   createUpdateUserDataSchema,
   createUpdateUserOnboardingSchema,
+  createWebPushSubscriptionSchema,
+  createDeleteWebPushSubscriptionSchema,
   createValidatePasswordRecoveryCodeSchema
 } from './validation/schemas'
 export type { ValidationI18n, ValidationMessages } from './validation/types'

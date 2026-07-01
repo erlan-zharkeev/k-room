@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { NmorphText, NmorphButton, NmorphDialog } from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphButton } from '@nmorph/nmorph-ui-kit'
+
+import { AppDialog } from 'src/shared/ui'
 
 import welcomeImageSrc from '../assets/welcome.webp'
 import { APP_WELCOME_I18N } from '../config/i18n'
@@ -17,11 +19,10 @@ const { completeAppWelcome, dialogContentStyle, isAppWelcomeVisible, updateAppWe
 </script>
 
 <template>
-  <NmorphDialog
+  <AppDialog
     :model-value="isAppWelcomeVisible"
-    max-width="calc(100vw - 32px)"
     :show-close="false"
-    width="420px"
+    variant="default"
     close-on-overlay
     @update:model-value="updateAppWelcomeVisible"
   >
@@ -35,7 +36,7 @@ const { completeAppWelcome, dialogContentStyle, isAppWelcomeVisible, updateAppWe
         </div>
       </div>
     </div>
-  </NmorphDialog>
+  </AppDialog>
 </template>
 
 <style lang="scss">

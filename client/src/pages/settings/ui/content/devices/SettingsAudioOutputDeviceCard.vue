@@ -10,6 +10,8 @@ const {
   audioOutputSelectValue,
   audioOutputLoading,
   audioOutputTestLoading,
+  isAudioOutputSelectDisabled,
+  isAudioOutputTestDisabled,
   audioOutputPermissionCalloutType,
   audioOutputPermissionStatus,
   setSelectedAudioOutputDevice,
@@ -32,7 +34,7 @@ const {
           :model-value="audioOutputSelectValue"
           :options="audioOutputOptions"
           :loading="audioOutputLoading"
-          :disabled="audioOutputLoading || audioOutputOptions.length === 0"
+          :disabled="isAudioOutputSelectDisabled"
           value-required
           fill
           @update:model-value="setSelectedAudioOutputDevice"
@@ -43,7 +45,7 @@ const {
           :text="$t(SETTINGS_PAGE_DEVICES_I18N.testDeviceCheck)"
           :aria-label="$t(SETTINGS_PAGE_DEVICES_I18N.testAudioOutput)"
           :loading="audioOutputTestLoading"
-          :disabled="audioOutputLoading || audioOutputOptions.length === 0"
+          :disabled="isAudioOutputTestDisabled"
           @click="testAudioOutput"
         />
       </div>

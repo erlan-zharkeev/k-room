@@ -1,6 +1,10 @@
 import { SETTINGS_PAGE_FAQ_I18N } from '../i18n/faq.i18n'
 import type { FaqItem } from '../types/faq.types'
 
+export const FAQ_INITIAL_VISIBLE_ITEMS_COUNT = 8
+export const FAQ_VISIBLE_ITEMS_CHUNK_SIZE = 7
+export const FAQ_VISIBLE_ITEMS_CHUNK_DELAY_MS = 80
+
 export const FAQ_ITEMS: FaqItem[] = [
   { id: 1, question: SETTINGS_PAGE_FAQ_I18N.faqQ1, answer: SETTINGS_PAGE_FAQ_I18N.faqA1 },
   { id: 2, question: SETTINGS_PAGE_FAQ_I18N.faqQ2, answer: SETTINGS_PAGE_FAQ_I18N.faqA2 },

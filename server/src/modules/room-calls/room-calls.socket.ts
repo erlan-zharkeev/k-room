@@ -19,6 +19,7 @@ import {
 import { socketAckMiddleware, socketErrorMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstance } from 'src/shared/types'
 
+import { NotificationsService } from '../notifications/notifications.service'
 import { RedisService } from '../security/redis.service'
 
 import { cleanupStaleRoomCallParticipants } from './lib/cleanup-stale-room-call-participants'
@@ -47,7 +48,10 @@ export class RoomCallsSocketService implements OnModuleInit, OnModuleDestroy {
   private heartbeatTimer: NodeJS.Timeout | null = null
   private staleParticipantCleanupTimer: NodeJS.Timeout | null = null
 
-  constructor(private readonly redisService: RedisService) {}
+  constructor(
+    private readonly notificationsService: NotificationsService,
+    private readonly redisService: RedisService
+  ) {}
 
   async onModuleInit() {
     await saveRoomCallServerInstanceHeartbeat(this.redisService, this.serverInstanceId)
@@ -79,7 +83,14 @@ export class RoomCallsSocketService implements OnModuleInit, OnModuleDestroy {
         socket,
         async (payload) => ({
           ok: true,
-          payload: await startRoomCall(this.redisService, socket.data.userId, socket.id, this.serverInstanceId, payload)
+          payload: await startRoomCall(
+            this.redisService,
+            socket.data.userId,
+            socket.id,
+            this.serverInstanceId,
+            this.notificationsService,
+            payload
+          )
         }),
         { basicError: ROOM_CALLS_I18N.roomCallStartFailed }
       )

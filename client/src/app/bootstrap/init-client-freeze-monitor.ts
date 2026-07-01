@@ -92,6 +92,8 @@ const captureClientFreeze = (kind: ClientFreezeKind, context: ClientFreezeContex
     message: kind
   })
 
+  if (kind === 'long-task' && document.hidden) return
+
   if (isCaptureCooldownActive) return
 
   lastCapturedAtByKind[kind] = now

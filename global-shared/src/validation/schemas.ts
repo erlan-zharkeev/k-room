@@ -116,6 +116,26 @@ export const createUpdateUserOnboardingSchema = () =>
     guideCompleted: v.optional(v.boolean())
   })
 
+export const createWebPushSubscriptionSchema = (messages: ValidationMessages) =>
+  v.object({
+    endpoint: requiredStringSchema(messages.fieldIsRequired),
+    expirationTime: v.nullish(v.number()),
+    keys: v.object({
+      auth: requiredStringSchema(messages.fieldIsRequired),
+      p256dh: requiredStringSchema(messages.fieldIsRequired)
+    }),
+    enabledGroups: v.object({
+      calls: v.boolean(),
+      messages: v.boolean()
+    }),
+    userAgent: v.optional(v.string())
+  })
+
+export const createDeleteWebPushSubscriptionSchema = (messages: ValidationMessages) =>
+  v.object({
+    endpoint: requiredStringSchema(messages.fieldIsRequired)
+  })
+
 export const createCreateNewPasswordFormSchema = (messages: ValidationMessages) =>
   v.object({
     firstPassword: createPasswordSchema(messages),

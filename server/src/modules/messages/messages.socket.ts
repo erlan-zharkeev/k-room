@@ -16,6 +16,8 @@ import { PresenceService } from 'src/modules/presence/presence.service'
 import { socketAckMiddleware, socketErrorMiddleware } from 'src/shared/lib/socket-error'
 import type { SocketInstance } from 'src/shared/types'
 
+import { NotificationsService } from '../notifications/notifications.service'
+
 import { MESSAGES_I18N } from './messages.i18n'
 import {
   changeMessageStatus,
@@ -31,7 +33,10 @@ import {
 
 @Injectable()
 export class MessagesSocketService {
-  constructor(private readonly presenceService: PresenceService) {}
+  constructor(
+    private readonly notificationsService: NotificationsService,
+    private readonly presenceService: PresenceService
+  ) {}
 
   register(socket: SocketInstance) {
     socket.on(
@@ -43,6 +48,7 @@ export class MessagesSocketService {
             roomId,
             userId: socket.data.userId,
             message,
+            notificationsService: this.notificationsService,
             presenceService: this.presenceService
           })
         },

@@ -268,6 +268,7 @@ describe('chat-rooms.service', () => {
 
     await closeSupportChat('admin-1', { roomId: 'support-room-1' }, {} as never)
 
+    expect(userPersistenceMock.removeChatRoomFromUser).not.toHaveBeenCalled()
     expect(chatRoomModelMock.findOneAndUpdate).toHaveBeenCalledWith(
       {
         _id: 'support-room-1',
@@ -301,6 +302,10 @@ describe('chat-rooms.service', () => {
 
     await closeSupportChat('user-1', { roomId: 'support-room-1' }, {} as never)
 
+    expect(userPersistenceMock.removeChatRoomFromUser).toHaveBeenCalledWith('support-room-1', 'user-1')
+    expect(presenceUtilsMock.emitToUsers).toHaveBeenCalledWith(['user-1'], 'chat-room-left', {
+      roomId: 'support-room-1'
+    })
     expect(chatRoomModelMock.findOneAndUpdate).toHaveBeenCalledWith(
       {
         _id: 'support-room-1',

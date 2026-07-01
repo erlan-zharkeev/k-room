@@ -1,12 +1,14 @@
+import { getAppSettingsPath } from 'global-shared'
+
 import { CONTENT_TAB_IDS, type ContentTab, type DeviceSetting } from 'src/entities/setting'
 import { getChatRoomContentRoutePath } from 'src/features/app-navigation'
-import { getSettingsContentId, getSettingsPath } from 'src/pages/settings'
+import { getSettingsContentId } from 'src/pages/settings'
 
 export const getAppPathFromSettings = ({ contentTab, chatRoomId, settingsContentId }: DeviceSetting) => {
   const chatRoomContentPath = getChatRoomContentRoutePath(contentTab, chatRoomId)
 
   if (chatRoomContentPath) return chatRoomContentPath
-  return getSettingsPath(getSettingsContentId(settingsContentId))
+  return getAppSettingsPath(getSettingsContentId(settingsContentId))
 }
 
 export const getContentTabFromPath = (path: string) => {

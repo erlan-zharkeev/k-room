@@ -20,6 +20,7 @@ import { Types } from 'mongoose'
 
 import { AppError } from 'src/shared/lib/app-error'
 
+import type { NotificationsService } from '../notifications/notifications.service'
 import { emitToUsers } from '../presence/presence.utils'
 import type { RedisService } from '../security/redis.service'
 
@@ -61,6 +62,7 @@ export const startRoomCall = async (
   userId: string,
   socketId: string,
   serverInstanceId: string,
+  notificationsService: Pick<NotificationsService, 'sendRoomCallPushNotifications'> | undefined,
   { roomId, mediaKind }: EventStartRoomCall
 ): Promise<StartRoomCallAckPayload> => {
   const room = await assertRoomCallStartAccess(userId, roomId)
@@ -93,6 +95,12 @@ export const startRoomCall = async (
 
   emitToUsers(room.users, 'room-call-started', {
     roomCall: transformActiveRoomCallToRoomCall(roomCall)
+  })
+  void notificationsService?.sendRoomCallPushNotifications({
+    roomId,
+    roomCallId: roomCall.id,
+    initiatorId: userId,
+    recipientIds: room.users
   })
 
   return {

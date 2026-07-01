@@ -5,7 +5,7 @@ import { SETTINGS_PAGE_FAQ_I18N } from '../../config/i18n/faq.i18n'
 import { useFaq } from '../../model/faq/use-faq.model'
 import SettingsCard from '../SettingsCard.vue'
 
-const { appVersion, contactSupport, filteredItems, openGuide, searchQuery } = useFaq()
+const { appVersion, contactSupport, filteredItems, openGuide, searchQuery, visibleItems } = useFaq()
 </script>
 
 <template>
@@ -14,7 +14,7 @@ const { appVersion, contactSupport, filteredItems, openGuide, searchQuery } = us
       <NmorphTextInput v-model.trim="searchQuery" clearable :placeholder="$t(SETTINGS_PAGE_FAQ_I18N.faqSearch)" />
 
       <div v-if="filteredItems.length">
-        <div v-for="item in filteredItems" :key="item.id" class="settings-faq-content__item">
+        <div v-for="item in visibleItems" :key="item.id" class="settings-faq-content__item">
           <NmorphText class="settings-faq-content__question" as="p" color="var(--nmorph-contrast-text-color)">{{
             item.question
           }}</NmorphText>
@@ -36,6 +36,9 @@ const { appVersion, contactSupport, filteredItems, openGuide, searchQuery } = us
 
 <style lang="scss">
 .settings-faq-content__item {
+  content-visibility: auto;
+  contain-intrinsic-size: 112px;
+
   display: grid;
   gap: 4px;
 

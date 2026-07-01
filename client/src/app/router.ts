@@ -1,11 +1,19 @@
-import { AUTH_ROUTE_NAMES, LAYOUT_ROUTE_NAMES, PAGE_ROUTE_NAMES, ROUTE_NAMES, isString } from 'global-shared'
+import {
+  APP_ROUTE_NAMES,
+  AUTH_ROUTE_NAMES,
+  getAppSettingsPath,
+  LAYOUT_ROUTE_NAMES,
+  PAGE_ROUTE_NAMES,
+  ROUTE_NAMES,
+  isString
+} from 'global-shared'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 import { useSettings, type DeviceSetting } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { getChatRoomContentRoutePath } from 'src/features/app-navigation'
 import { initClientData, useLogoutNavigation } from 'src/features/client-session'
-import { getSettingsContentId, getSettingsPath } from 'src/pages/settings'
+import { getSettingsContentId } from 'src/pages/settings'
 
 import { isDynamicImportFetchError, recoverNativeDesktopChunkLoad } from './lib/native-desktop-cache'
 import { getAppPathFromSettings, getContentTabFromPath } from './lib/router'
@@ -118,28 +126,28 @@ const routes: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: 'chat-rooms/:chatRoomId?',
+        path: `${APP_ROUTE_NAMES.chatRooms}/:chatRoomId?`,
         components: {
           'content-navigation': loadChatRoomsNavigation,
           content: loadChatRoomContent
         }
       },
       {
-        path: 'calls/:chatRoomId?',
+        path: `${APP_ROUTE_NAMES.calls}/:chatRoomId?`,
         components: {
           'content-navigation': loadCallsPage,
           content: loadChatRoomContent
         }
       },
       {
-        path: 'contacts/:chatRoomId?',
+        path: `${APP_ROUTE_NAMES.contacts}/:chatRoomId?`,
         components: {
           'content-navigation': loadContactsPage,
           content: loadChatRoomContent
         }
       },
       {
-        path: 'settings/:settingsId?',
+        path: `${APP_ROUTE_NAMES.settings}/:settingsId?`,
         components: {
           'content-navigation': loadSettingsNavigationPage,
           content: loadSettingsContentPage
@@ -218,7 +226,7 @@ router.beforeEach(async (to) => {
 
     if (!settingsId) {
       return {
-        path: getSettingsPath(getSettingsContentId(settings.value.settingsContentId)),
+        path: getAppSettingsPath(getSettingsContentId(settings.value.settingsContentId)),
         query: to.query,
         hash: to.hash
       }
@@ -226,7 +234,7 @@ router.beforeEach(async (to) => {
 
     if (settingsId !== settingsContentId) {
       return {
-        path: getSettingsPath(settingsContentId),
+        path: getAppSettingsPath(settingsContentId),
         query: to.query,
         hash: to.hash
       }

@@ -1,13 +1,3 @@
-import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
-
-import SettingsAccountContent from '../../ui/content/account/SettingsAccountContent.vue'
-import SettingsAppearanceContent from '../../ui/content/appearance/SettingsAppearanceContent.vue'
-import SettingsDevicesContent from '../../ui/content/devices/SettingsDevicesContent.vue'
-import SettingsLanguageContent from '../../ui/content/localization/SettingsLocalizationContent.vue'
-import SettingsFaqContent from '../../ui/content/SettingsFaqContent.vue'
-import SettingsNotificationsContent from '../../ui/content/SettingsNotificationsContent.vue'
-import SettingsRoadmapContent from '../../ui/content/SettingsRoadmapContent.vue'
-import SettingsStorageContent from '../../ui/content/storage/SettingsStorageContent.vue'
 import { SETTINGS_PAGE_ACCOUNT_I18N } from '../i18n/account.i18n'
 import { SETTINGS_PAGE_APPEARANCE_I18N } from '../i18n/appearance.i18n'
 import { SETTINGS_PAGE_FAQ_I18N } from '../i18n/faq.i18n'
@@ -27,8 +17,6 @@ export const SETTINGS_CONTENT_IDS = [
 ] as const
 
 export const DEFAULT_SETTINGS_CONTENT_ID = SETTINGS_CONTENT_IDS[0]
-
-export const getSettingsPath = (settingsId: string) => `${APP_PAGE_ROUTES.settings}/${settingsId}`
 
 export const SETTINGS_NAVIGATION_ITEMS = [
   {
@@ -82,15 +70,4 @@ export const SETTINGS_CONTENT_TITLE = {
   storage: SETTINGS_PAGE_STORAGE_I18N.storage,
   faq: SETTINGS_PAGE_FAQ_I18N.faq,
   roadmap: SETTINGS_PAGE_ROADMAP_I18N.roadmap
-} as const
-
-export const SETTINGS_CONTENT_COMPONENTS = {
-  account: SettingsAccountContent,
-  appearance: SettingsAppearanceContent,
-  language: SettingsLanguageContent,
-  notifications: SettingsNotificationsContent,
-  devices: SettingsDevicesContent,
-  storage: SettingsStorageContent,
-  faq: SettingsFaqContent,
-  roadmap: SettingsRoadmapContent
 } as const

@@ -3,7 +3,6 @@ import {
   NmorphText,
   NmorphButton,
   NmorphCard,
-  NmorphDialog,
   NmorphFileUpload,
   NmorphForm,
   NmorphFormItem,
@@ -12,7 +11,7 @@ import {
 } from '@nmorph/nmorph-ui-kit'
 import { CHAT_ROOM_NAME_MAX_LENGTH } from 'global-shared'
 
-import { AppProfilePicker } from 'src/shared/ui'
+import { AppDialog, AppProfilePicker } from 'src/shared/ui'
 
 import { CREATE_CHAT_ROOM_AVATAR_ALLOWED_TYPES } from '../config/constants'
 import { CHAT_ROOM_CONTEXT_MENU_I18N } from '../config/i18n'
@@ -49,11 +48,10 @@ const {
 </script>
 
 <template>
-  <NmorphDialog
+  <AppDialog
     :model-value="isOpen"
     :title="$t(dialogTitleI18n)"
-    width="560px"
-    max-width="calc(100vw - 32px)"
+    variant="wide"
     @update:model-value="updateChatRoomFormDialogOpen"
   >
     <NmorphForm :value="chatRoomFormValidationData" class="chat-room-form-dialog" @submit.prevent="submitChatRoom">
@@ -135,7 +133,7 @@ const {
         />
       </div>
     </NmorphForm>
-  </NmorphDialog>
+  </AppDialog>
 </template>
 
 <style lang="scss">

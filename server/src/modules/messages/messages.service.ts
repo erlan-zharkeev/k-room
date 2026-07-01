@@ -500,7 +500,13 @@ export const emitRoomTypingStatus = async (userId: string, { roomId, isTyping }:
   emitToUsers(getRoomOtherUserIds({ users: recipientIds }, userId), 'room-typing-status', payload)
 }
 
-export const sendMessage = async ({ roomId, userId, message, presenceService }: SendMessageParams) => {
+export const sendMessage = async ({
+  roomId,
+  userId,
+  message,
+  notificationsService,
+  presenceService
+}: SendMessageParams) => {
   const messageImages = message.images ?? []
   const messageDocuments = message.documents ?? []
   const messageAudios = message.audios ?? []
@@ -574,10 +580,10 @@ export const sendMessage = async ({ roomId, userId, message, presenceService }: 
   await reopenSupportChatIfNeeded(roomId, room, presenceService)
 
   await Promise.all(
-    recipientIds.map(async (userId) => {
+    recipientIds.map(async (recipientId) => {
       await MessageModel.updateOne(
         { _id: newDbMessage.id },
-        { $push: { usersMetaData: { id: userId, status: 'delivered' } } }
+        { $push: { usersMetaData: { id: recipientId, status: 'delivered' } } }
       )
 
       const payload: EventMessageDelivered = {
@@ -591,14 +597,23 @@ export const sendMessage = async ({ roomId, userId, message, presenceService }: 
           videos,
           linkPreview,
           repliedMessage,
-          isSelf: isMessageAuthor(trustedMessage, userId),
+          isSelf: isMessageAuthor(trustedMessage, recipientId),
           status: 'delivered'
         }
       }
 
-      emitToUsers([userId], 'message-delivered', payload)
+      emitToUsers([recipientId], 'message-delivered', payload)
     })
   )
+  void notificationsService?.sendMessagePushNotifications({
+    roomId,
+    authorId: trustedMessage.authorId,
+    authorKind: trustedMessage.authorKind,
+    authorNickname: trustedMessage.authorNickname,
+    body: trustedMessage.body,
+    messageId: newDbMessage.id,
+    recipientIds
+  })
   refreshMessageLinkPreview({
     appName: SERVER_ENV.info.appName,
     linkPreview,

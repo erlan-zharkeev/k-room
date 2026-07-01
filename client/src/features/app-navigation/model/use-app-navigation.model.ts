@@ -1,4 +1,4 @@
-import { isString } from 'global-shared'
+import { getAppSettingsPath, isString } from 'global-shared'
 import sumBy from 'lodash/sumBy'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
@@ -8,7 +8,6 @@ import { useContact } from 'src/entities/contact'
 import { useSettings, type ContentTab } from 'src/entities/setting'
 import { useMediaDevicePermission, useStorageEstimate } from 'src/shared/lib'
 
-import { APP_PAGE_ROUTES } from '../config/constants'
 import { getChatRoomContentRoutePath } from '../lib/routes'
 
 export const useAppNavigation = () => {
@@ -28,10 +27,7 @@ export const useAppNavigation = () => {
   const hasSettingsWarning = computed(() => isStorageUsageWarning.value || hasMediaDevicePermissionWarning.value)
   const buildNavigationRoute = (itemId: ContentTab, itemPath: string, footer?: boolean) => {
     const chatRoomContentPath = getChatRoomContentRoutePath(itemId, settings.value.chatRoomId)
-    const path =
-      itemId === 'settings'
-        ? `${APP_PAGE_ROUTES.settings}/${selectedSettingsId.value}`
-        : chatRoomContentPath ?? itemPath
+    const path = itemId === 'settings' ? getAppSettingsPath(selectedSettingsId.value) : chatRoomContentPath ?? itemPath
 
     if (!footer) return path
 

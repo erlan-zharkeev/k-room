@@ -52,28 +52,9 @@ import { ChatRoomModel } from './chat-rooms.model'
 import type { ChatRoomDeleteProjection, ChatRoomDocument, ChatRoomSchema } from './chat-rooms.types'
 import { assertCreateChatRoomLimits, assertUpdateChatRoomData } from './lib/assert-chat-room-limits'
 import { emitNewRoomToUsers, emitRoomDataToUsers } from './lib/emit-room-data-to-users'
+import { emitSupportRoomDataToRecipients } from './lib/emit-support-room-data-to-recipients'
 import { resolveChatRoomMemberIds } from './lib/resolve-chat-room-member-ids'
 import { resolvePinnedChatRoomOrder, resolveToggledRoomIds } from './lib/resolve-toggled-room-ids'
-import { loadSupportChatRoomRecipientIds } from './lib/support-chat-room-recipients'
-
-const emitSupportRoomDataToRecipients = async (
-  room: ChatRoomDocument,
-  presenceService: PresenceService,
-  eventName: 'room-data-updated' | 'new-room-added'
-) => {
-  if (!room.supportOwnerId) {
-    return
-  }
-
-  const recipientIds = await loadSupportChatRoomRecipientIds(room.supportOwnerId)
-
-  if (eventName === 'new-room-added') {
-    await emitNewRoomToUsers(recipientIds, room, presenceService)
-    return
-  }
-
-  await emitRoomDataToUsers(recipientIds, room, presenceService)
-}
 
 export const createChatRoom = async (
   userId: string,
@@ -206,6 +187,18 @@ export const closeSupportChat = async (
     if (!isAdmin) {
       throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.closeSupportChatForbidden)
     }
+
+    return
+  }
+
+  const shouldRemoveClosedSupportRoomFromOwner = !isAdmin && room.supportOwnerId === userId
+
+  if (shouldRemoveClosedSupportRoomFromOwner) {
+    await Promise.all([
+      removeChatRoomFromUser(roomId, userId),
+      emitSupportRoomDataToRecipients(room, presenceService, 'room-data-updated', [userId])
+    ])
+    emitToUsers([userId], 'chat-room-left', { roomId })
 
     return
   }

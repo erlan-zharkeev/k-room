@@ -6,7 +6,7 @@ import { SOCKET_MAX_RECONNECTION_DELAY_MS, SOCKET_RECONNECTION_DELAY_MS } from '
 export const socket: Socket<ServerToClientSocketEvents, ClientToServerSocketEvents> = io(
   `${__CLIENT_ENV_DATA__.socketBaseUrl}/`,
   {
-    transports: ['websocket'],
+    transports: ['polling', 'websocket'],
     secure: true,
     forceNew: false,
     autoConnect: false,

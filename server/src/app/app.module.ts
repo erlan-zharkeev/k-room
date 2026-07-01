@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common'
 import { AuthModule } from '../modules/auth/auth.module'
 import { CodesModule } from '../modules/codes/codes.module'
 import { MediaModule } from '../modules/media/media.module'
+import { NotificationsModule } from '../modules/notifications/notifications.module'
 import { UserModule } from '../modules/user/user.module'
 
 import { ClientRuntimePolicyController } from './client-runtime-policy.controller'
@@ -11,7 +12,7 @@ import { SentryTunnelController } from './sentry-tunnel.controller'
 import { SocketModule } from './socket.module'
 
 @Module({
-  imports: [AuthModule, CodesModule, MediaModule, SocketModule, UserModule],
+  imports: [AuthModule, CodesModule, MediaModule, NotificationsModule, SocketModule, UserModule],
   controllers: [HealthController, ClientRuntimePolicyController, SentryTunnelController]
 })
 export class AppModule {}

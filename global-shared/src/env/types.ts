@@ -11,6 +11,8 @@ export interface EnvVariables {
   SENTRY_ENABLED: string
   FIREBASE_API_KEY: string
   RESEND_API_KEY: string
+  VAPID_PRIVATE_KEY?: string
+  VAPID_SUBJECT?: string
   ADMIN_USERNAME: string
   ADMIN_PASSWORD: string
   ACCESS_TOKEN_SECRET: string
@@ -31,6 +33,7 @@ export interface EnvSharedVariables {
   ADMIN_ROOT_PATH: string
   ADMIN_COOKIE: string
   SUPPORT_EMAIL: string
+  VAPID_PUBLIC_KEY?: string
   CLIENT_APP_VERSION?: string
 }
 

@@ -1,14 +1,7 @@
 <script setup lang="ts">
-import {
-  NmorphText,
-  NmorphButton,
-  NmorphCard,
-  NmorphDialog,
-  NmorphIconSearch,
-  NmorphTextInput
-} from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphButton, NmorphCard, NmorphIconSearch, NmorphTextInput } from '@nmorph/nmorph-ui-kit'
 
-import { AppProfilePicker } from 'src/shared/ui'
+import { AppDialog, AppProfilePicker } from 'src/shared/ui'
 
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { MessageForwardDialogProps } from '../config/types'
@@ -32,9 +25,10 @@ const {
 </script>
 
 <template>
-  <NmorphDialog
+  <AppDialog
     :model-value="isOpen"
     :title="$t(CHAT_ROOM_CONTENT_I18N.forwardMessage)"
+    variant="wide"
     @update:model-value="updateMessageForwardDialogOpen"
   >
     <div class="message-forward-dialog">
@@ -58,6 +52,8 @@ const {
           :model-value="selectedMessageForwardRoomIds"
           :items="filteredMessageForwardChatRoomItems"
           :multiple="false"
+          height="300px"
+          max-height="42vh"
           @update:model-value="updateSelectedMessageForwardRoomIds"
         />
       </NmorphCard>
@@ -83,7 +79,7 @@ const {
         />
       </div>
     </div>
-  </NmorphDialog>
+  </AppDialog>
 </template>
 
 <style lang="scss">
@@ -96,5 +92,9 @@ const {
 .message-forward-dialog__actions {
   display: flex;
   gap: 8px;
+}
+
+.message-forward-dialog__rooms-card {
+  min-width: 0;
 }
 </style>

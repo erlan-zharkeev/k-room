@@ -1,6 +1,5 @@
+import { getAppChatRoomPath } from 'global-shared'
 import { useRoute, useRouter } from 'vue-router'
-
-import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 
 export const useRoomCallActivityNavigation = () => {
   const route = useRoute()
@@ -8,7 +7,7 @@ export const useRoomCallActivityNavigation = () => {
 
   const openRoomCall = (roomId: string) =>
     router.push({
-      path: `${APP_PAGE_ROUTES.chatRooms}/${roomId}`,
+      path: getAppChatRoomPath(roomId),
       query: {
         ...route.query,
         view: 'content'

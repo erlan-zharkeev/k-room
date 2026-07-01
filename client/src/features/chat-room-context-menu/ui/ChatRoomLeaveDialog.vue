@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { NmorphText, NmorphButton, NmorphDialog } from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphButton } from '@nmorph/nmorph-ui-kit'
 
-import { AppProfilePicker } from 'src/shared/ui'
+import { AppDialog, AppProfilePicker } from 'src/shared/ui'
 
 import { CHAT_ROOM_CONTEXT_MENU_I18N } from '../config/i18n'
 import type { ChatRoomLeaveDialogProps } from '../config/types'
@@ -21,7 +21,7 @@ const {
 </script>
 
 <template>
-  <NmorphDialog v-model="model" :title="$t(CHAT_ROOM_CONTEXT_MENU_I18N.leaveGroupTitle)">
+  <AppDialog v-model="model" :title="$t(CHAT_ROOM_CONTEXT_MENU_I18N.leaveGroupTitle)">
     <div class="app-dialog-stack">
       <NmorphText>{{
         $t(
@@ -61,5 +61,5 @@ const {
         />
       </div>
     </div>
-  </NmorphDialog>
+  </AppDialog>
 </template>

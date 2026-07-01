@@ -1,8 +1,8 @@
+import { getAppChatRoomPath } from 'global-shared'
 import { computed, type ComputedRef, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 
 import type { ChatRoomMessageSelection } from '../config/types'
 
@@ -30,7 +30,7 @@ export const useChatRoomMessageSelection = (selectedChatRoomId: ComputedRef<stri
 
     if (!isCurrentRoom) {
       await router.push({
-        path: `${APP_PAGE_ROUTES.chatRooms}/${roomId}`,
+        path: getAppChatRoomPath(roomId),
         query: route.query
       })
     }

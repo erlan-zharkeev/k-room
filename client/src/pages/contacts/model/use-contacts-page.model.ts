@@ -4,25 +4,27 @@ import {
   type EventSaveContact,
   type EventUpdateInteraction,
   type Interaction,
+  getAppChatRoomPath,
   isAcceptedContactInteraction,
   isBlockedContactInteraction,
   isInvitedContactInteraction,
   isInviteReceivedContactInteraction
 } from 'global-shared'
 import { reactive, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
-import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { useSocketAction } from 'src/shared/api'
-import { useI18n, type ContactRecord } from 'src/shared/lib'
+import { useI18n, useScreen, type ContactRecord } from 'src/shared/lib'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
 
 export const useContactsPage = () => {
+  const route = useRoute()
   const router = useRouter()
   const { getPersonalByContactId } = useChatRoom()
   const { t } = useI18n()
+  const { isPortraitTabletOrLess } = useScreen()
   const { emitSocketAction } = useSocketAction()
 
   const contactToDeleteId = ref('')
@@ -71,7 +73,10 @@ export const useContactsPage = () => {
   const goToChatRoom = (roomId?: string) => {
     if (!roomId) return
 
-    router.push(`${APP_PAGE_ROUTES.chatRooms}/${roomId}`)
+    router.push({
+      path: getAppChatRoomPath(roomId),
+      query: isPortraitTabletOrLess.value ? { ...route.query, view: 'content' } : route.query
+    })
   }
 
   const createPrivateChat = (contactId: string) => {

@@ -1,0 +1,135 @@
+import {
+  NOTIFICATION_ENDPOINTS,
+  type WebPushConfigResponse,
+  type WebPushSubscriptionEnabledGroups
+} from 'global-shared'
+import { computed, onBeforeUnmount, onMounted, watch, type WatchStopHandle } from 'vue'
+
+import { useSettings } from 'src/entities/setting'
+import { useHttp } from 'src/shared/api'
+
+import {
+  buildWebPushSubscriptionPayload,
+  deleteCurrentWebPushSubscription,
+  hasEnabledWebPushGroups,
+  isWebPushSupported,
+  subscribeToWebPush
+} from '../lib/web-push'
+
+export const useWebPushSubscription = () => {
+  const { settings } = useSettings()
+  const { doHttpRequest } = useHttp()
+  let stopSettingsWatch: WatchStopHandle | null = null
+  let isSyncing = false
+  let hasPendingSync = false
+
+  const enabledGroups = computed<WebPushSubscriptionEnabledGroups>(() => {
+    const { calls, enabled, general, messages } = settings.value.notifications
+    const generalBrowserPushEnabled = enabled && general.browserPush
+
+    return {
+      calls: generalBrowserPushEnabled && calls.browserPush,
+      messages: generalBrowserPushEnabled && messages.browserPush
+    }
+  })
+
+  const deleteServerWebPushSubscription = async (endpoint: string) => {
+    await doHttpRequest<null>(
+      'delete',
+      NOTIFICATION_ENDPOINTS.deleteWebPushSubscription,
+      { endpoint },
+      {
+        showErrorToast: false,
+        showSuccessToast: false
+      }
+    )
+  }
+
+  const deleteWebPushSubscription = async () => {
+    const deletedSubscription = await deleteCurrentWebPushSubscription()
+
+    if (!deletedSubscription?.endpoint) return
+
+    await deleteServerWebPushSubscription(deletedSubscription.endpoint)
+  }
+
+  const upsertWebPushSubscription = async (publicKey: string, groups: WebPushSubscriptionEnabledGroups) => {
+    const subscription = await subscribeToWebPush(publicKey)
+
+    if (!subscription) return
+
+    const payload = buildWebPushSubscriptionPayload(subscription, groups)
+
+    if (!payload) return
+
+    await doHttpRequest<null>('post', NOTIFICATION_ENDPOINTS.upsertWebPushSubscription, payload, {
+      showErrorToast: false,
+      showSuccessToast: false
+    })
+  }
+
+  const syncWebPushSubscriptionNow = async () => {
+    if (!isWebPushSupported()) return
+
+    const groups = enabledGroups.value
+    const shouldDisableWebPush = !hasEnabledWebPushGroups(groups) || Notification.permission !== 'granted'
+
+    if (shouldDisableWebPush) {
+      await deleteWebPushSubscription()
+      return
+    }
+
+    const response = await doHttpRequest<WebPushConfigResponse>(
+      'get',
+      NOTIFICATION_ENDPOINTS.getWebPushConfig,
+      undefined,
+      {
+        showErrorToast: false,
+        showSuccessToast: false
+      }
+    )
+    const { enabled, publicKey } = response.data.payload
+
+    if (!enabled || !publicKey) {
+      await deleteWebPushSubscription()
+      return
+    }
+
+    await upsertWebPushSubscription(publicKey, groups)
+  }
+
+  const syncWebPushSubscription = async () => {
+    if (isSyncing) {
+      hasPendingSync = true
+      return
+    }
+
+    isSyncing = true
+
+    try {
+      do {
+        hasPendingSync = false
+        await syncWebPushSubscriptionNow()
+      } while (hasPendingSync)
+    } catch (error) {
+      void error
+    } finally {
+      isSyncing = false
+    }
+  }
+
+  onMounted(() => {
+    stopSettingsWatch = watch(
+      enabledGroups,
+      () => {
+        void syncWebPushSubscription()
+      },
+      { immediate: true }
+    )
+  })
+
+  onBeforeUnmount(() => {
+    stopSettingsWatch?.()
+    stopSettingsWatch = null
+  })
+}

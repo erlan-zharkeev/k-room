@@ -24,6 +24,13 @@ export const PAGE_ROUTE_NAMES = {
   privacyPolicy: 'privacy-policy'
 } as const
 
+export const APP_ROUTE_NAMES = {
+  chatRooms: 'chat-rooms',
+  calls: 'calls',
+  contacts: 'contacts',
+  settings: 'settings'
+} as const
+
 export const ROUTE_NAMES = {
   authLogin: `${LAYOUT_ROUTE_NAMES.auth}/${AUTH_ROUTE_NAMES.login}`,
   authRegistration: `${LAYOUT_ROUTE_NAMES.auth}/${AUTH_ROUTE_NAMES.registration}`,
@@ -36,6 +43,13 @@ export const ROUTE_NAMES = {
   notification: ROOT_ROUTE_NAMES.notification,
   privacyPolicy: `${LAYOUT_ROUTE_NAMES.docs}/${PAGE_ROUTE_NAMES.privacyPolicy}`,
   notFound: ROOT_ROUTE_NAMES.notFound
+} as const
+
+export const APP_ROUTE_PATHS = {
+  chatRooms: `${ROUTE_NAMES.app}/${APP_ROUTE_NAMES.chatRooms}`,
+  calls: `${ROUTE_NAMES.app}/${APP_ROUTE_NAMES.calls}`,
+  contacts: `${ROUTE_NAMES.app}/${APP_ROUTE_NAMES.contacts}`,
+  settings: `${ROUTE_NAMES.app}/${APP_ROUTE_NAMES.settings}`
 } as const
 
 export const AUTH_ENDPOINTS = {
@@ -59,6 +73,12 @@ export const USER_ENDPOINTS = {
 
 export const MEDIA_ENDPOINTS = {
   getMediaFile: '/media'
+} as const
+
+export const NOTIFICATION_ENDPOINTS = {
+  getWebPushConfig: '/notifications/web-push/config',
+  upsertWebPushSubscription: '/notifications/web-push/subscription',
+  deleteWebPushSubscription: '/notifications/web-push/subscription'
 } as const
 
 export const CODES_ENDPOINTS = {

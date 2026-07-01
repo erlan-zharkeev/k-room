@@ -7,6 +7,7 @@ import type {
   RepliedMessage
 } from 'global-shared'
 
+import type { NotificationsService } from '../notifications/notifications.service'
 import type { PresenceService } from '../presence/presence.service'
 
 export interface MessageSchema extends Omit<Message, 'id' | 'tempId' | 'isSelf' | 'status' | 'images'> {
@@ -26,6 +27,7 @@ export interface SendMessageParams {
   userId: string
   message: Message
   presenceService?: PresenceService
+  notificationsService?: Pick<NotificationsService, 'sendMessagePushNotifications'>
 }
 
 export interface ResolveRepliedMessageParams {

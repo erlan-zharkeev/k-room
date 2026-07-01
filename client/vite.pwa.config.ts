@@ -46,11 +46,13 @@ export const generatePWAConfig = ({ appName, themeBg }: { appName: string; theme
       ]
     },
     workbox: {
+      importScripts: ['web-push-sw.js'],
       globPatterns: [
         'index.html',
         'client-recovery.js',
         'registerSW.js',
         'manifest.webmanifest',
+        'web-push-sw.js',
         'assets/*.js',
         'assets/*.css',
         'meta/*'

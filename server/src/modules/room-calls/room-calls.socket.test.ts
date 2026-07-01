@@ -42,12 +42,14 @@ const registerRoomCallHandlers = () => {
       handlers[event] = handler
     })
   }
+  const notificationsService = {}
   const redisService = {}
 
-  new RoomCallsSocketService(redisService as never).register(socket as never)
+  new RoomCallsSocketService(notificationsService as never, redisService as never).register(socket as never)
 
   return {
     handlers,
+    notificationsService,
     redisService
   }
 }
@@ -61,7 +63,7 @@ describe('room-calls.socket', () => {
     vi.useFakeTimers()
 
     const redisService = {}
-    const service = new RoomCallsSocketService(redisService as never)
+    const service = new RoomCallsSocketService({} as never, redisService as never)
 
     await service.onModuleInit()
 
@@ -73,7 +75,7 @@ describe('room-calls.socket', () => {
   })
 
   it('acks started room call payload', async () => {
-    const { handlers, redisService } = registerRoomCallHandlers()
+    const { handlers, notificationsService, redisService } = registerRoomCallHandlers()
     const result = { roomCallId: 'call-1' }
 
     roomCallsServiceMock.startRoomCall.mockResolvedValue(result)
@@ -85,6 +87,7 @@ describe('room-calls.socket', () => {
       'user-1',
       'socket-1',
       expect.any(String),
+      notificationsService,
       { roomId: 'room-1', mediaKind: 'video' }
     )
     expect(response).toEqual({

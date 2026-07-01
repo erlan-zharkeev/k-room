@@ -5,7 +5,6 @@ import type { MediaId } from 'global-shared'
 import type { NotificationGroupSettings } from 'src/entities/setting'
 import { getClientPlatform } from 'src/shared/lib'
 
-import { showBrowserPushWithImage } from './browser-push-image'
 import type { BrowserPushMediaGetter } from './types'
 
 let nativeNotificationPermissionRequest: Promise<boolean> | null = null
@@ -82,21 +81,18 @@ export const isClientPushEnabled = (
   generalSettings: NotificationGroupSettings,
   groupSettings: NotificationGroupSettings
 ) => {
-  const pushSettingKey = getClientPlatform() === 'native' ? 'nativePush' : 'browserPush'
+  if (getClientPlatform() !== 'native') return false
 
-  return generalSettings[pushSettingKey] && groupSettings[pushSettingKey]
+  return generalSettings.nativePush && groupSettings.nativePush
 }
 
 export const showClientPushWithImage = async (
   title: string,
   options: NotificationOptions,
-  imageId: MediaId,
-  getMedia: BrowserPushMediaGetter
+  _imageId: MediaId,
+  _getMedia: BrowserPushMediaGetter
 ) => {
   if (getClientPlatform() === 'native') {
     await showNativePush(title, options)
-    return
   }
-
-  await showBrowserPushWithImage(title, options, imageId, getMedia)
 }

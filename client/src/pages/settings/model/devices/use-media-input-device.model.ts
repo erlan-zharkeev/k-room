@@ -1,8 +1,8 @@
 import type { NmorphSelectModelValueType } from '@nmorph/nmorph-ui-kit'
 import { useDevicesList, useUserMedia } from '@vueuse/core'
-import { computed, onBeforeUnmount, ref, type Ref, watch } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
-import { useSettings, type IoDevicesSettings } from 'src/entities/setting'
+import { useSettings } from 'src/entities/setting'
 import { useI18n } from 'src/shared/lib'
 
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
@@ -12,35 +12,15 @@ import {
   syncSelectedDeviceId,
   syncSelectedDeviceIdOnDeviceChange
 } from '../../lib/device-selection'
+import {
+  buildInputDeviceConstraints,
+  canEnumerateMediaDevices,
+  canRequestMediaInput,
+  isPermissionDeniedError
+} from '../../lib/media-input-device'
 
+import type { UseMediaInputDeviceOptions } from './devices.types'
 import { useDevicePermissionStatus } from './use-device-settings.model'
-
-type MediaInputDeviceKind = 'audio' | 'video'
-type MediaInputDeviceSettingKey = Extract<keyof IoDevicesSettings, 'audioInputDeviceId' | 'videoInputDeviceId'>
-
-interface UseMediaInputDeviceOptions {
-  kind: MediaInputDeviceKind
-  settingKey: MediaInputDeviceSettingKey
-  permission: Readonly<Ref<DevicePermissionStatus>>
-  startCheckLabel: string
-  stopCheckLabel: string
-  showDeviceWarning: (error: unknown) => void
-  onPermissionDenied?: () => void
-  onPermissionGranted?: () => void
-  onStopCheck?: () => void
-  onStreamStarted?: (stream: MediaStream) => void
-}
-
-const isPermissionDeniedError = (error: unknown) =>
-  error instanceof DOMException && (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError')
-
-const buildInputDeviceConstraints = (devices: MediaDeviceInfo[], deviceId: string) => {
-  if (deviceId && devices.some((device) => device.deviceId === deviceId)) {
-    return { deviceId: { exact: deviceId } }
-  }
-
-  return true
-}
 
 export const useMediaInputDevice = ({
   kind,
@@ -71,7 +51,12 @@ export const useMediaInputDevice = ({
   const inputCheckLoading = ref(false)
   const inputStream = userMedia.stream
   const selectedDeviceId = computed(() => settings.value.ioDevices[settingKey])
-  const { permissionCalloutType, permissionStatus } = useDevicePermissionStatus(isSupported, permission)
+  const isInputSupported = computed(() => isSupported.value || canRequestMediaInput())
+  const isInputDeviceEnumerationSupported = computed(() => isSupported.value || canEnumerateMediaDevices())
+  const inputPermission = computed<DevicePermissionStatus>(() =>
+    isInputSupported.value ? permission.value ?? 'prompt' : permission.value
+  )
+  const { permissionCalloutType, permissionStatus } = useDevicePermissionStatus(isInputSupported, inputPermission)
   const inputOptions = computed(() =>
     inputDevices.value.map(({ deviceId, label }) => ({
       value: deviceId,
@@ -83,11 +68,12 @@ export const useMediaInputDevice = ({
   const inputCheckButtonLabel = computed(() =>
     isInputChecking.value ? SETTINGS_PAGE_DEVICES_I18N.stopDeviceCheck : SETTINGS_PAGE_DEVICES_I18N.testDeviceCheck
   )
+  const isInputDeviceUnavailable = computed(
+    () => permission.value === 'granted' && isInputDeviceEnumerationSupported.value && inputDevices.value.length === 0
+  )
   const isInputCheckDisabled = computed(
     () =>
-      inputCheckLoading.value ||
-      !isSupported.value ||
-      (permission.value === 'granted' && inputDevices.value.length === 0)
+      inputCheckLoading.value || (!isInputChecking.value && (!isInputSupported.value || isInputDeviceUnavailable.value))
   )
 
   const updateSelectedDeviceId = (deviceId: string) => setByPath(`ioDevices.${settingKey}`, deviceId)
@@ -109,7 +95,7 @@ export const useMediaInputDevice = ({
   const refreshInputDevices = async (clearMissing = false) => {
     try {
       inputLoading.value = true
-      if (isSupported.value) {
+      if (isInputDeviceEnumerationSupported.value) {
         devices.value = await navigator.mediaDevices.enumerateDevices()
       }
 
@@ -168,6 +154,8 @@ export const useMediaInputDevice = ({
   }
 
   const setInputChecking = async (value: boolean) => {
+    if (isInputCheckDisabled.value) return
+
     if (!value) {
       stopInputCheck()
       return

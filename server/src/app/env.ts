@@ -30,6 +30,8 @@ const REFRESH_TOKEN_SECRET = getEnv('REFRESH_TOKEN_SECRET', envs)
 const RESEND_API_KEY = getEnv('RESEND_API_KEY', envs)
 const SENTRY_ENABLED = getEnv('SENTRY_ENABLED', envs)
 const SENTRY_ENVIRONMENT = getEnv('SENTRY_ENVIRONMENT', envs)
+const vapidPrivateKey = getEnv('VAPID_PRIVATE_KEY', envs)
+const vapidSubject = getEnv('VAPID_SUBJECT', envs)
 
 const ADMIN_COOKIE = getEnv('ADMIN_COOKIE', sharedEnvs)
 const ADMIN_ROOT_PATH = getEnv('ADMIN_ROOT_PATH', sharedEnvs)
@@ -37,6 +39,7 @@ const API_PATH = getEnv('API_PATH', sharedEnvs)
 const CLIENT_PORT = getEnv('CLIENT_PORT', sharedEnvs)
 const SERVER_PORT = getEnv('SERVER_PORT', sharedEnvs)
 const SOCKET_PATH = getEnv('SOCKET_PATH', sharedEnvs)
+const vapidPublicKey = getEnv('VAPID_PUBLIC_KEY', sharedEnvs)
 
 const packageData = JSON.parse(fs.readFileSync(path.resolve(envDir, 'package.json'), 'utf-8')) as PackageData
 const clientPackageData = JSON.parse(
@@ -121,5 +124,13 @@ export const SERVER_ENV = {
     redisUrl,
     turnstileSiteKey,
     turnstileSecretKey
+  },
+  notifications: {
+    webPush: {
+      enabled: Boolean(vapidPublicKey && vapidPrivateKey),
+      publicKey: vapidPublicKey,
+      privateKey: vapidPrivateKey,
+      subject: vapidSubject || APP_HOST
+    }
   }
 } as const
