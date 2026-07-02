@@ -67,6 +67,7 @@ require_env ACCESS_TOKEN_SECRET
 require_env REFRESH_TOKEN_SECRET
 require_env EMAIL_CONFIRM_SECRET
 require_env TURNSTILE_SECRET_KEY
+require_env VAPID_PRIVATE_KEY
 
 if [ ! -f "$COMPOSE_FILE" ]; then
   echo "[deploy] Compose file not found: $COMPOSE_FILE" >&2
@@ -87,7 +88,7 @@ mkdir -p "$ROOT_DIR/scripts/deploy/certs"
 
 cat "$SHARED_ENV_FILE" "$ENV_FILE" > "$MERGED_ENV_FILE"
 printf '\n' >> "$MERGED_ENV_FILE"
-for env_name in MONGO_ADMIN_PASSWORD RESEND_API_KEY ADMIN_PASSWORD ACCESS_TOKEN_SECRET REFRESH_TOKEN_SECRET EMAIL_CONFIRM_SECRET TURNSTILE_SECRET_KEY REDIS_URL; do
+for env_name in MONGO_ADMIN_PASSWORD RESEND_API_KEY ADMIN_PASSWORD ACCESS_TOKEN_SECRET REFRESH_TOKEN_SECRET EMAIL_CONFIRM_SECRET TURNSTILE_SECRET_KEY VAPID_PRIVATE_KEY REDIS_URL; do
   eval "env_value=\${$env_name:-}"
   if [ -n "$env_value" ]; then
     printf '%s=%s\n' "$env_name" "$env_value" >> "$MERGED_ENV_FILE"
@@ -134,3 +135,6 @@ if ! docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" up -d --rem
 
   exit 1
 fi
+
+echo "[deploy] Restarting webserver to refresh upstream DNS"
+docker compose --env-file "$MERGED_ENV_FILE" -f "$COMPOSE_FILE" restart webserver
