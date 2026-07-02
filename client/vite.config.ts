@@ -1,13 +1,41 @@
+import crypto from 'crypto'
 import fs from 'fs'
 import path from 'path'
 
 import vue from '@vitejs/plugin-vue'
 import { CLIENT_RUNTIME_ENDPOINTS } from 'global-shared'
 import { defineConfig } from 'vite'
+import type { Plugin } from 'vite'
 
 import { createClientEnvData } from './create-client-env-data'
 import { CLIENT_UPDATE_RELOAD_STORAGE_PREFIX } from './src/shared/api/constants'
 import { generatePWAConfig } from './vite.pwa.config'
+
+const createBuildOverwriteCssPlugin = (): Plugin => ({
+  name: 'inject-build-overwrite-css',
+  apply: 'build',
+  transformIndexHtml: {
+    order: 'post',
+    handler: (html) => {
+      const source = fs.readFileSync(path.resolve(__dirname, './src/app/styles/overwrite.scss'), 'utf8')
+      const hash = crypto.createHash('sha256').update(source).digest('hex').slice(0, 8)
+
+      return html.replace(
+        '</head>',
+        `    <link rel="stylesheet" crossorigin href="/assets/overwrite.css?v=${hash}">\n  </head>`
+      )
+    }
+  },
+  generateBundle() {
+    const source = fs.readFileSync(path.resolve(__dirname, './src/app/styles/overwrite.scss'), 'utf8')
+
+    this.emitFile({
+      type: 'asset',
+      fileName: 'assets/overwrite.css',
+      source
+    })
+  }
+})
 
 export default defineConfig(({ mode }) => {
   const envDir = path.resolve(__dirname, '..')
@@ -86,7 +114,8 @@ export default defineConfig(({ mode }) => {
       }),
       !clientEnvData.isDev &&
         !isTauriBuild &&
-        generatePWAConfig({ appName: clientEnvData.appName, themeBg: clientEnvData.themeBg })
+        generatePWAConfig({ appName: clientEnvData.appName, themeBg: clientEnvData.themeBg }),
+      createBuildOverwriteCssPlugin()
     ],
     resolve: {
       alias: [
@@ -119,6 +148,13 @@ export default defineConfig(({ mode }) => {
       watch: {
         ignored: ['**/src-tauri/**']
       },
+      ...httpsConfig
+    },
+    preview: {
+      host: new URL(clientEnvData.appHost).hostname,
+      port: clientEnvData.clientPort,
+      strictPort: true,
+      open: false,
       ...httpsConfig
     }
   }
