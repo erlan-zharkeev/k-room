@@ -41,6 +41,7 @@ import {
   addMessageToRoom,
   clearPinnedMessageFromRoom,
   findRoomMessagesByUser,
+  findRoomUsersAndMessagesByMessage,
   findRoomUsersAndMessagesByUser,
   findRoomUsersByMessage,
   findRoomUsersByUser,
@@ -54,10 +55,12 @@ import { emitToUsers } from '../presence/presence.utils'
 import {
   loadUserPublicNicknameAndRoleById,
   loadUserPublicNicknameById,
-  loadUserRoleById
+  loadUserRoleById,
+  removeChatRoomFromUser
 } from '../user/lib/user-persistence'
 
 import { assertMessageContentLimits } from './lib/assert-message-content-limits'
+import { countUnreadMessagesByIds } from './lib/message-persistence'
 import { refreshMessageLinkPreview } from './lib/refresh-message-link-preview'
 import { resolveRoomMessageWindowIds } from './lib/resolve-message-window-ids'
 import { resolvePinnedMessageUpdatedPayload } from './lib/resolve-pinned-message-updated-payload'
@@ -109,6 +112,28 @@ const reopenSupportChatIfNeeded = async (
   const recipientIds = await loadRoomRecipientIds(updatedRoom)
 
   await emitRoomDataToUsers(recipientIds, updatedRoom, presenceService)
+}
+
+const hideClosedReadSupportChatForOwner = async (
+  roomId: string,
+  userId: string,
+  room: ChatRoomUsersMessagesProjection
+) => {
+  const isClosedSupportOwnerRoom =
+    isRoomSupport(room) && room.supportStatus === 'closed' && room.supportOwnerId === userId
+
+  if (!isClosedSupportOwnerRoom) {
+    return
+  }
+
+  const unreadMessagesQuantity = await countUnreadMessagesByIds(userId, stringifyMongoIds(room.messages))
+
+  if (unreadMessagesQuantity > 0) {
+    return
+  }
+
+  await removeChatRoomFromUser(roomId, userId)
+  emitToUsers([userId], 'chat-room-left', { roomId })
 }
 
 export const editMessage = async (userId: string, { body, images, messageId, roomId }: EventEditMessage) => {
@@ -240,7 +265,7 @@ export const changeMessageStatus = async (messageId: string, status: MessageStat
     return
   }
 
-  const room = await findRoomUsersByMessage(roomId, userId, messageId, user.system.role)
+  const room = await findRoomUsersAndMessagesByMessage(roomId, userId, messageId, user.system.role)
 
   if (!room) {
     return
@@ -273,6 +298,7 @@ export const changeMessageStatus = async (messageId: string, status: MessageStat
   }
 
   emitToUsers(recipientIds, 'message-status-updated', payload)
+  await hideClosedReadSupportChatForOwner(roomId, userId, room)
 }
 
 export const markRoomAsRead = async (roomId: string, userId: string) => {
@@ -291,6 +317,8 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
   const { messages } = room
 
   if (!messages.length) {
+    await hideClosedReadSupportChatForOwner(roomId, userId, room)
+
     return
   }
 
@@ -310,6 +338,8 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
   const messageIds = unreadMessages.map(({ _id }) => stringifyMongoId(_id))
 
   if (!messageIds.length) {
+    await hideClosedReadSupportChatForOwner(roomId, userId, room)
+
     return
   }
 
@@ -340,6 +370,7 @@ export const markRoomAsRead = async (roomId: string, userId: string) => {
   const recipientIds = await loadRoomRecipientIds(room)
 
   emitToUsers(recipientIds, 'messages-status-updated', payload)
+  await hideClosedReadSupportChatForOwner(roomId, userId, room)
 }
 
 export const deleteMessage = async (userId: string, { deleteForEveryone, roomId, messageId }: EventDeleteMessage) => {

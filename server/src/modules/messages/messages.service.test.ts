@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const chatRoomModelMock = vi.hoisted(() => ({
   findOne: vi.fn(),
+  findOneAndUpdate: vi.fn(),
   updateOne: vi.fn()
 }))
 
@@ -13,6 +14,10 @@ const messageModelMock = vi.hoisted(() =>
       save: vi.fn().mockResolvedValue({ id: data._id })
     })),
     {
+      countDocuments: vi.fn(),
+      find: vi.fn(),
+      findOneAndUpdate: vi.fn(),
+      updateMany: vi.fn(),
       updateOne: vi.fn()
     }
   )
@@ -20,7 +25,8 @@ const messageModelMock = vi.hoisted(() =>
 
 const userModelMock = vi.hoisted(() => ({
   find: vi.fn(),
-  findById: vi.fn()
+  findById: vi.fn(),
+  updateOne: vi.fn()
 }))
 
 const mediaMock = vi.hoisted(() => ({
@@ -43,7 +49,8 @@ vi.mock('../media/media.service', () => mediaMock)
 vi.mock('../presence/presence.utils', () => presenceMock)
 vi.mock('./lib/refresh-message-link-preview', () => refreshLinkPreviewMock)
 
-const { editMessage, emitRoomTypingStatus, sendMessage, toggleMessageReaction } = await import('./messages.service')
+const { changeMessageStatus, editMessage, emitRoomTypingStatus, markRoomAsRead, sendMessage, toggleMessageReaction } =
+  await import('./messages.service')
 
 const createLeanQuery = (value: unknown) => ({
   select: vi.fn().mockReturnThis(),
@@ -340,6 +347,117 @@ describe('messages.service', () => {
         authorNickname: '',
         isSelf: false
       })
+    })
+  })
+
+  it('hides closed support chat after owner reads its last unread message', async () => {
+    chatRoomModelMock.findOne.mockReturnValue(
+      createLeanQuery({
+        adminId: 'user-1',
+        chatKind: 'support',
+        supportOwnerId: 'user-1',
+        supportStatus: 'closed',
+        users: ['user-1'],
+        messages: ['message-1']
+      })
+    )
+    userModelMock.findById.mockReturnValue(createLeanQuery({ system: { role: 'user' } }))
+    userModelMock.find.mockReturnValue({
+      lean: vi.fn().mockResolvedValue([{ _id: 'admin-1' }])
+    })
+    messageModelMock.findOneAndUpdate.mockResolvedValue({ _id: 'message-1' })
+    messageModelMock.countDocuments.mockResolvedValue(0)
+    userModelMock.updateOne.mockResolvedValue({ modifiedCount: 1 })
+
+    await changeMessageStatus('message-1', 'read', 'user-1', 'support-room-1')
+
+    expect(messageModelMock.countDocuments).toHaveBeenCalledWith({
+      _id: { $in: ['message-1'] },
+      authorId: { $ne: 'user-1' },
+      deletedForUserIds: { $ne: 'user-1' },
+      usersMetaData: {
+        $elemMatch: {
+          id: 'user-1',
+          status: 'delivered'
+        }
+      }
+    })
+    expect(userModelMock.updateOne).toHaveBeenCalledWith(
+      { _id: 'user-1' },
+      {
+        $pull: {
+          'personal.chatRooms': 'support-room-1',
+          'personal.pinnedChatRoomIds': 'support-room-1',
+          'personal.mutedChatRoomIds': 'support-room-1'
+        }
+      }
+    )
+    expect(presenceMock.emitToUsers).toHaveBeenCalledWith(['user-1'], 'chat-room-left', {
+      roomId: 'support-room-1'
+    })
+  })
+
+  it('keeps closed support chat while owner still has unread messages', async () => {
+    chatRoomModelMock.findOne.mockReturnValue(
+      createLeanQuery({
+        adminId: 'user-1',
+        chatKind: 'support',
+        supportOwnerId: 'user-1',
+        supportStatus: 'closed',
+        users: ['user-1'],
+        messages: ['message-1', 'message-2']
+      })
+    )
+    userModelMock.findById.mockReturnValue(createLeanQuery({ system: { role: 'user' } }))
+    userModelMock.find.mockReturnValue({
+      lean: vi.fn().mockResolvedValue([{ _id: 'admin-1' }])
+    })
+    messageModelMock.findOneAndUpdate.mockResolvedValue({ _id: 'message-1' })
+    messageModelMock.countDocuments.mockResolvedValue(1)
+
+    await changeMessageStatus('message-1', 'read', 'user-1', 'support-room-1')
+
+    expect(userModelMock.updateOne).not.toHaveBeenCalled()
+    expect(presenceMock.emitToUsers).not.toHaveBeenCalledWith(['user-1'], 'chat-room-left', {
+      roomId: 'support-room-1'
+    })
+  })
+
+  it('hides closed support chat after owner marks it as read', async () => {
+    chatRoomModelMock.findOne.mockReturnValue(
+      createLeanQuery({
+        adminId: 'user-1',
+        chatKind: 'support',
+        supportOwnerId: 'user-1',
+        supportStatus: 'closed',
+        users: ['user-1'],
+        messages: ['message-1']
+      })
+    )
+    userModelMock.findById.mockReturnValue(createLeanQuery({ system: { role: 'user' } }))
+    userModelMock.find.mockReturnValue({
+      lean: vi.fn().mockResolvedValue([{ _id: 'admin-1' }])
+    })
+    messageModelMock.find.mockReturnValue(createLeanQuery([{ _id: 'message-1' }]))
+    messageModelMock.updateMany.mockResolvedValue({ modifiedCount: 1 })
+    messageModelMock.countDocuments.mockResolvedValue(0)
+    userModelMock.updateOne.mockResolvedValue({ modifiedCount: 1 })
+
+    await markRoomAsRead('support-room-1', 'user-1')
+
+    expect(messageModelMock.updateMany).toHaveBeenCalledWith(
+      {
+        _id: { $in: ['message-1'] },
+        'usersMetaData.id': 'user-1'
+      },
+      {
+        $set: {
+          'usersMetaData.$.status': 'read'
+        }
+      }
+    )
+    expect(presenceMock.emitToUsers).toHaveBeenCalledWith(['user-1'], 'chat-room-left', {
+      roomId: 'support-room-1'
     })
   })
 

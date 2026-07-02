@@ -8,10 +8,11 @@ import {
 import compact from 'lodash/compact'
 import { useRoute, useRouter } from 'vue-router'
 
-import { useChatRoom } from 'src/entities/chat-room'
+import { isRoomVisibleForUser, useChatRoom } from 'src/entities/chat-room'
 import { useSyncMedia } from 'src/entities/media-file'
 import { useMessage } from 'src/entities/message'
 import { useSettings } from 'src/entities/setting'
+import { useUser } from 'src/entities/user'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { usePinChatRoomOrder } from 'src/features/pin-chat-room'
 
@@ -24,18 +25,27 @@ export const useChatRoomSync = () => {
   const { syncWithOptions } = useSyncMedia()
   const { bulkDelete, bulkPut } = useMessage()
   const { settings, shallowUpdate } = useSettings()
+  const { user } = useUser()
   const { updatePinnedChatRoomOrder } = usePinChatRoomOrder()
+
+  const isChatRoomVisible = (room: EventGetRooms[number]) => isRoomVisibleForUser(room, user.value.id, user.value.role)
 
   const saveRoomPayloadMessages = async (rooms: EventGetRooms) => {
     await bulkPut(compact(rooms.flatMap((room) => [room.previewMessage, room.pinnedMessage])))
   }
 
   const actualizeChatRooms = async (rooms: EventGetRooms) => {
-    await saveRoomPayloadMessages(rooms)
-    await merge(rooms.map(filterRoomPayloadMessages))
+    const visibleRooms = rooms.filter(isChatRoomVisible)
+
+    await saveRoomPayloadMessages(visibleRooms)
+    await merge(visibleRooms.map(filterRoomPayloadMessages))
   }
 
   const addChatRoom = async (room: EventGetRooms[number]) => {
+    if (!isChatRoomVisible(room)) {
+      return
+    }
+
     await saveRoomPayloadMessages([room])
     await put(filterRoomPayloadMessages(room))
   }
@@ -83,6 +93,12 @@ export const useChatRoomSync = () => {
   }
 
   const updateChatRoomData = async (room: EventGetRooms[number]) => {
+    if (!isChatRoomVisible(room)) {
+      await removeChatRoom({ roomId: room.id })
+
+      return
+    }
+
     await saveRoomPayloadMessages([room])
 
     if (room.avatarId) {

@@ -64,7 +64,8 @@ export {
   isRoomFavorites,
   isRoomGroup,
   isRoomPrivate,
-  isRoomSupport
+  isRoomSupport,
+  isRoomVisibleForUser
 } from './chat/lib'
 export type {
   ChatRoom,

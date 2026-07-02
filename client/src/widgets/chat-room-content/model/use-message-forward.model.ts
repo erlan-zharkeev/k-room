@@ -1,4 +1,4 @@
-import { NmorphIconChatLineSquare, NmorphIconStarFilled } from '@nmorph/nmorph-ui-kit'
+import { NmorphIconHeadset, NmorphIconStarFilled } from '@nmorph/nmorph-ui-kit'
 import { type ChatRoom, type EventSendMessage, type Message } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 import { computed, onScopeDispose, type Ref, ref, toRef, watch } from 'vue'
@@ -51,7 +51,7 @@ export const useMessageForward = (props: MessageForwardDialogProps, isMessageFor
 
     return {
       id: room.id,
-      avatarIcon: isFavoritesRoom ? NmorphIconStarFilled : isSupportRoom ? NmorphIconChatLineSquare : undefined,
+      avatarIcon: isFavoritesRoom ? NmorphIconStarFilled : isSupportRoom ? NmorphIconHeadset : undefined,
       avatarIconColor: isFavoritesRoom
         ? 'var(--nmorph-warn-text-color)'
         : isSupportRoom

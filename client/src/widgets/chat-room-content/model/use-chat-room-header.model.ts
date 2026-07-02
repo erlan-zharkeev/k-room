@@ -1,4 +1,4 @@
-import { NmorphIconChatLineSquare, NmorphIconStarFilled } from '@nmorph/nmorph-ui-kit'
+import { NmorphIconHeadset, NmorphIconStarFilled } from '@nmorph/nmorph-ui-kit'
 import { computed, ref } from 'vue'
 
 import { CHAT_ROOM_I18N, getRoomOtherUserIds, isRoomFavorites, isRoomSupport } from 'src/entities/chat-room'
@@ -30,7 +30,7 @@ export const useChatRoomHeader = (props: ChatRoomHeaderProps, emit: ChatRoomHead
   )
   const avatarIcon = computed(() => {
     if (isFavoritesRoom.value) return NmorphIconStarFilled
-    if (isSupportRoom.value) return NmorphIconChatLineSquare
+    if (isSupportRoom.value) return NmorphIconHeadset
 
     return undefined
   })

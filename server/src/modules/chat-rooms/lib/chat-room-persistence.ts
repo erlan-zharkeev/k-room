@@ -59,6 +59,17 @@ export const findRoomUsersAndMessagesByUser = (roomId: string, userId: string, u
     .lean<ChatRoomUsersMessagesProjection>()
 }
 
+export const findRoomUsersAndMessagesByMessage = (
+  roomId: string,
+  userId: string,
+  messageId: string,
+  userRole: UserRole = 'user'
+) => {
+  return ChatRoomModel.findOne({ ...buildRoomAccessQuery(roomId, userId, userRole), messages: messageId })
+    .select('adminId chatKind supportOwnerId supportStatus users messages')
+    .lean<ChatRoomUsersMessagesProjection>()
+}
+
 export const findSourceRoomByMessageForUser = (userId: string, messageId: string) => {
   return ChatRoomModel.findOne({ users: userId, messages: messageId }).select('_id').lean<ChatRoomIdProjection>()
 }

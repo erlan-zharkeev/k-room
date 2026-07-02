@@ -7,6 +7,7 @@ export {
   isRoomFavorites,
   isRoomGroup,
   isRoomPrivate,
-  isRoomSupport
+  isRoomSupport,
+  isRoomVisibleForUser
 } from 'global-shared'
 export { useChatRoom } from './model/use-chat-room.model'

@@ -1,5 +1,6 @@
 import {
   getRoomOtherUserIds,
+  isRoomVisibleForUser,
   type Contact,
   type EventGetContacts,
   type EventGetRooms,
@@ -51,12 +52,13 @@ export const resolveActualUserSocketData = async (
   const roomsPayload: EventGetRooms = await Promise.all(
     rooms.map((room) => transformRoomForUser({ userId, room, pinnedChatRoomIds, mutedChatRoomIds }))
   )
+  const visibleRoomsPayload = roomsPayload.filter((room) => isRoomVisibleForUser(room, userId, data.system.role))
   const roomCalls = await loadUserRoomCalls(redisService, roomIds)
   const roomCallsPayload: EventRoomCallsUpdated = await filterAvailableRoomCallsForUser(redisService, roomCalls, userId)
 
   return {
     contactsPayload,
     roomCallsPayload,
-    roomsPayload
+    roomsPayload: visibleRoomsPayload
   }
 }

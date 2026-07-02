@@ -25,6 +25,7 @@ COPY client/vite.config.ts ./client/vite.config.ts
 COPY client/vite.pwa.config.ts ./client/vite.pwa.config.ts
 COPY client/index.html ./client/index.html
 COPY client/public ./client/public
+COPY client/scripts ./client/scripts
 COPY client/src ./client/src
 
 RUN pnpm install --frozen-lockfile --filter ./global-shared --filter ./client...

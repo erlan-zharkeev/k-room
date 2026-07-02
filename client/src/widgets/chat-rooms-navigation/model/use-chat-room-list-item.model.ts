@@ -1,4 +1,4 @@
-import { NmorphIconChatLineSquare, NmorphIconStarFilled } from '@nmorph/nmorph-ui-kit'
+import { NmorphIconHeadset, NmorphIconStarFilled } from '@nmorph/nmorph-ui-kit'
 import { computed, type Ref } from 'vue'
 
 import type { ChatRoomContextMenuOption } from 'src/features/chat-room-context-menu'
@@ -12,7 +12,7 @@ export const useChatRoomListItem = (item: Readonly<Ref<ChatRoomNavigationItem>>)
   const isPressed = computed(() => item.value.selected && !isPortraitTabletOrLess.value)
   const avatarIcon = computed(() => {
     if (item.value.isFavoritesRoom) return NmorphIconStarFilled
-    if (item.value.isSupportRoom) return NmorphIconChatLineSquare
+    if (item.value.isSupportRoom) return NmorphIconHeadset
 
     return undefined
   })
