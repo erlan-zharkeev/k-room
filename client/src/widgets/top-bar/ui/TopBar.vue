@@ -59,9 +59,25 @@ const { socketTag } = useTopBarSocketStatus()
   display: flex;
   gap: 16px;
 }
+</style>
 
+<style lang="scss" scoped>
 .top-bar__socket-badge--blinking.nmorph-badge {
   animation: top-bar-socket-badge-blink 1.8s ease-in-out infinite;
+}
+
+.top-bar__profile-guide-target.nmorph-guide-step,
+.top-bar__profile-guide-target.nmorph-tooltip {
+  min-width: 0;
+}
+
+.top-bar__profile-guide-target > :deep(.nmorph-tooltip),
+.top-bar__profile-guide-target > :deep(.nmorph-tooltip__content),
+.top-bar__profile-guide-target > :deep(.nmorph-tooltip__content > .nmorph-tooltip__trigger),
+.top-bar__profile-guide-target > :deep(.nmorph-tooltip > .nmorph-tooltip__content),
+.top-bar__profile-guide-target > :deep(.nmorph-tooltip > .nmorph-tooltip__content > .nmorph-tooltip__trigger) {
+  display: flex;
+  min-width: 0;
 }
 
 @keyframes top-bar-socket-badge-blink {

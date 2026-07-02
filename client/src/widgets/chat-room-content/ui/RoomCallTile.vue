@@ -192,7 +192,7 @@ const {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .room-call-tile {
   cursor: pointer;
 
@@ -211,10 +211,8 @@ const {
   box-shadow: none;
 }
 
-.room-call-tile {
-  .nmorph-media-tile__name {
-    display: none;
-  }
+.room-call-tile :deep(.nmorph-media-tile__name) {
+  display: none;
 }
 
 .room-call-tile__media.nmorph-media-tile--plain {

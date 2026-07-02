@@ -44,7 +44,7 @@ const { hasFooter } = useSettingsCard(props)
   </NmorphBadge>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .settings-card-badge.nmorph-badge {
   --nmorph-badge-ribbon-corner-size: 30px;
 

@@ -19,3 +19,14 @@ import { OnboardingGuideTarget } from 'src/features/onboarding-guide'
   justify-content: center;
 }
 </style>
+
+<style lang="scss" scoped>
+.mobile-nav-footer__navigation-guide-target > :deep(.nmorph-tooltip),
+.mobile-nav-footer__navigation-guide-target > :deep(.nmorph-tooltip__content),
+.mobile-nav-footer__navigation-guide-target > :deep(.nmorph-tooltip__content > .nmorph-tooltip__trigger),
+.mobile-nav-footer__navigation-guide-target > :deep(.nmorph-tooltip > .nmorph-tooltip__content),
+.mobile-nav-footer__navigation-guide-target
+  > :deep(.nmorph-tooltip > .nmorph-tooltip__content > .nmorph-tooltip__trigger) {
+  display: flex;
+}
+</style>

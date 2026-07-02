@@ -46,20 +46,18 @@ const { buttonClass, showIcon } = useSettingsNavigationItem(props)
   </NmorphBadge>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .settings-navigation-item-badge.nmorph-badge {
   --nmorph-badge-ribbon-corner-size: 30px;
 }
 
-.settings-navigation-item {
-  .settings-navigation-item-btn {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    justify-content: space-between;
+.settings-navigation-item .settings-navigation-item-btn {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
 
-    padding: 12px;
-  }
+  padding: 12px;
 }
 
 .settings-navigation-item__text {

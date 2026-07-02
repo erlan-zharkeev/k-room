@@ -140,7 +140,7 @@ const {
   </SettingsCard>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .settings-personal-data-card__profile,
 .settings-personal-data-card__actions {
   display: flex;
@@ -181,7 +181,7 @@ const {
   margin-left: auto;
 }
 
-.settings-personal-data-card__reset-button .nmorph-button__content {
+.settings-personal-data-card__reset-button :deep(.nmorph-button__content) {
   padding: 0;
 }
 </style>

@@ -157,3 +157,31 @@ const {
   display: block;
 }
 </style>
+
+<style lang="scss" scoped>
+.app-layout__guide-target.nmorph-guide-step,
+.app-layout__guide-target.nmorph-tooltip {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+}
+
+.app-layout__guide-target > :deep(.nmorph-tooltip),
+.app-layout__guide-target > :deep(.nmorph-tooltip__content),
+.app-layout__guide-target > :deep(.nmorph-tooltip__content > .nmorph-tooltip__trigger),
+.app-layout__guide-target > :deep(.nmorph-tooltip > .nmorph-tooltip__content),
+.app-layout__guide-target > :deep(.nmorph-tooltip > .nmorph-tooltip__content > .nmorph-tooltip__trigger) {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: stretch;
+
+  min-width: 0;
+  min-height: 0;
+}
+
+.app-layout__guide-target.nmorph-guide-step > :deep(.nmorph-tooltip__content > .nmorph-tooltip__trigger)::after,
+.app-layout__guide-target.nmorph-guide-step
+  > :deep(.nmorph-tooltip > .nmorph-tooltip__content > .nmorph-tooltip__trigger)::after {
+  inset: 0;
+}
+</style>

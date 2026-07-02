@@ -50,8 +50,10 @@ const {
 /* stylelint-disable property-no-vendor-prefix */
 .message-context-menu,
 .message-context-menu *,
-.nmorph-context-menu__dropdown,
-.nmorph-context-menu__dropdown * {
+.nmorph-context-menu__dropdown:has(.message-context-menu-action-button),
+.nmorph-context-menu__dropdown:has(.message-context-menu-action-button) *,
+.nmorph-context-menu__dropdown:has(.message-reaction-picker),
+.nmorph-context-menu__dropdown:has(.message-reaction-picker) * {
   -webkit-user-select: none;
   user-select: none;
 

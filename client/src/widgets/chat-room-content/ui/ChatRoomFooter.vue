@@ -260,12 +260,12 @@ const {
   text-align: left;
 }
 
-.chat-room-content-footer__attach-upload {
+.chat-room-content-footer__controls .chat-room-content-footer__attach-upload {
   flex: 0 0 auto;
   width: auto;
 }
 
-.chat-room-content-footer__attach-upload .nmorph-file-upload__list {
+.chat-room-content-footer__controls .chat-room-content-footer__attach-upload .nmorph-file-upload__list {
   display: none;
 }
 

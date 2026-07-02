@@ -54,7 +54,7 @@ const { profileItems, selectProfiles } = useAppProfilePicker(props, selectedProf
   </NmorphScroll>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .app-profile-picker {
   width: 100%;
   min-width: 0;
@@ -65,18 +65,18 @@ const { profileItems, selectProfiles } = useAppProfilePicker(props, selectedProf
   width: 100%;
 }
 
-.app-profile-picker__group .nmorph-checkbox-group__wrapper,
-.app-profile-picker__group .nmorph-checkbox-group__content,
+.app-profile-picker__group :deep(.nmorph-checkbox-group__wrapper),
+.app-profile-picker__group :deep(.nmorph-checkbox-group__content),
 .app-profile-picker__checkbox,
-.app-profile-picker__checkbox .nmorph-checkbox__content {
+.app-profile-picker__checkbox :deep(.nmorph-checkbox__content) {
   width: 100%;
 }
 
-.app-profile-picker__checkbox .nmorph-checkbox__content {
+.app-profile-picker__checkbox :deep(.nmorph-checkbox__content) {
   justify-content: flex-start;
 }
 
-.app-profile-picker__checkbox .nmorph-checkbox__label {
+.app-profile-picker__checkbox :deep(.nmorph-checkbox__label) {
   flex: 1 1 auto;
   min-width: 0;
 }

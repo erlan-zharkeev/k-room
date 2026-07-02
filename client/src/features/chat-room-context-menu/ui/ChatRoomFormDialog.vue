@@ -136,7 +136,7 @@ const {
   </AppDialog>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .chat-room-form-dialog {
   display: grid;
   gap: 8px;
@@ -146,10 +146,10 @@ const {
 
 .chat-room-form-dialog__contacts-card {
   min-width: 0;
+}
 
-  .nmorph-checkbox-group__content {
-    padding: 1px 0;
-  }
+.chat-room-form-dialog__contacts-card :deep(.nmorph-checkbox-group__content) {
+  padding: 1px 0;
 }
 
 .chat-room-form-dialog__actions {

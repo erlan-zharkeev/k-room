@@ -49,7 +49,7 @@ const {
   </aside>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .update-native-desktop-banner {
   position: fixed;
   z-index: 20;
@@ -88,7 +88,7 @@ const {
   min-width: 96px;
 }
 
-.update-native-desktop-banner__action .nmorph-button__label {
+.update-native-desktop-banner__action :deep(.nmorph-button__label) {
   overflow-wrap: normal;
   white-space: nowrap;
 }

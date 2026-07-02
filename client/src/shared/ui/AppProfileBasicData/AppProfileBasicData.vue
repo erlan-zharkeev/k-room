@@ -45,7 +45,7 @@ const { avatarIconStyle, imageSrc } = useAppProfileBasicData(props)
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .app-profile-basic-data {
   display: flex;
   gap: 10px;
@@ -53,10 +53,8 @@ const { avatarIconStyle, imageSrc } = useAppProfileBasicData(props)
   min-width: 0;
 }
 
-.app-profile-basic-data {
-  .nmorph-avatar {
-    flex: 0 0 auto;
-  }
+.app-profile-basic-data :deep(.nmorph-avatar) {
+  flex: 0 0 auto;
 }
 
 .app-profile-basic-data__avatar-icon {

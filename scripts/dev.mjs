@@ -12,8 +12,12 @@ const isWindows = process.platform === 'win32'
 const pnpmCommand = isWindows ? 'pnpm.cmd' : 'pnpm'
 const LAN_FLAG = '--lan'
 const LAN_IP_FLAG = '--lan-ip'
+const SERVER_ONLY_FLAG = '--server-only'
+const PREVIEW_FLAG = '--preview'
 const DEFAULT_LAN_IP = '192.168.8.7'
 const isLan = hasArgumentFlag(LAN_FLAG)
+const isPreview = hasArgumentFlag(PREVIEW_FLAG)
+const isServerOnly = hasArgumentFlag(SERVER_ONLY_FLAG) || isPreview
 const lanIp = isLan ? resolveLanIp() : ''
 const DOCKER_START_TIMEOUT_MS = 120_000
 const DOCKER_POLL_INTERVAL_MS = 2_000
@@ -102,7 +106,10 @@ async function runDev() {
   console.log(`Readiness: ${serverReadinessUrl}`)
 
   await timeStep('global-shared build', () => run(pnpmCommand, ['--dir', 'global-shared', 'run', 'build']))
-  await runDevServices(serverReadinessUrl, startupStartedAt)
+  await runDevServices(serverReadinessUrl, startupStartedAt, {
+    shouldStartClient: !isServerOnly,
+    shouldStartPreview: isPreview
+  })
 }
 
 function commandExists(command) {
@@ -475,7 +482,7 @@ function run(command, args) {
   }
 }
 
-async function runDevServices(serverHealthUrl, startupStartedAt) {
+async function runDevServices(serverHealthUrl, startupStartedAt, { shouldStartClient, shouldStartPreview }) {
   const services = []
   let isShuttingDown = false
 
@@ -493,7 +500,11 @@ async function runDevServices(serverHealthUrl, startupStartedAt) {
   const servicesStartedAt = Date.now()
 
   services.push(startDevService('global-shared', pnpmCommand, ['--dir', 'global-shared', 'run', 'serve']))
-  services.push(startDevService('client', pnpmCommand, ['--dir', 'client', 'run', 'serve']))
+
+  if (shouldStartClient) {
+    services.push(startDevService('client', pnpmCommand, ['--dir', 'client', 'run', 'serve']))
+  }
+
   services.push(
     startDevService('server', pnpmCommand, ['--dir', 'server', 'run', 'serve'], {
       restartOnExit: true
@@ -522,6 +533,10 @@ async function runDevServices(serverHealthUrl, startupStartedAt) {
   }
 
   reportTiming('dev startup total', startupStartedAt)
+
+  if (shouldStartPreview) {
+    services.push(startDevService('client-preview', pnpmCommand, ['--dir', 'client', 'run', 'preview:dev']))
+  }
 
   const exit = await waitForDevServiceExit(services)
   reportDevServiceExit(exit)

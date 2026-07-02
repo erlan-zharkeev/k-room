@@ -147,7 +147,7 @@ const { avatarIcon, avatarIconColor, avatarIconSize, contextMenuActionOptions, i
   justify-content: center;
 }
 
-.chat-room-list-item__pin.nmorph-badge.nmorph-badge--tag {
+.chat-room-list-item .chat-room-list-item__pin.nmorph-badge.nmorph-badge--tag {
   cursor: grab;
   position: absolute;
   bottom: 0;

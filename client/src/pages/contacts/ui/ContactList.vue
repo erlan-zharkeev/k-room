@@ -17,6 +17,7 @@ const emit = defineEmits<ContactListEmits>()
   <TransitionGroup class="contact-list app-list-motion-container" name="app-list-motion" tag="div">
     <div v-for="contact in props.contactList" :key="contact.id" class="app-list-motion-item">
       <NmorphBadge
+        class="contact-list__status-badge"
         :value="props.getContactStatus(contact)"
         hide-on-falsy-value
         type="ribbon"
@@ -102,7 +103,7 @@ const emit = defineEmits<ContactListEmits>()
   align-items: center;
 }
 
-.nmorph-badge .nmorph-badge__ribbon-corner--flat .nmorph-badge__container--ribbon {
+.contact-list__status-badge .nmorph-badge__ribbon-corner--flat .nmorph-badge__container--ribbon {
   border-top-right-radius: 8px;
 }
 </style>

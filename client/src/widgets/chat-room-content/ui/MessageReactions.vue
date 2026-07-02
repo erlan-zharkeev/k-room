@@ -85,7 +85,7 @@ const {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .message-reactions {
   overflow: hidden;
   display: inline-flex;
@@ -110,7 +110,7 @@ const {
   height: 28px;
 }
 
-.message-reactions__list .nmorph-tag-item {
+.message-reactions__list :deep(.nmorph-tag-item) {
   cursor: pointer;
 
   flex: 0 0 auto;
@@ -121,7 +121,7 @@ const {
   border-radius: 999px;
 }
 
-.message-reactions__list .nmorph-tag-item:hover {
+.message-reactions__list :deep(.nmorph-tag-item:hover) {
   filter: brightness(1.12);
 }
 
@@ -135,7 +135,7 @@ const {
   min-height: 28px;
 }
 
-.message-reactions__more .nmorph-button__content {
+.message-reactions__more :deep(.nmorph-button__content) {
   padding: 0 4px;
 }
 
@@ -154,17 +154,17 @@ const {
   flex: 0 0 16px;
 
   min-width: 0;
+}
 
-  .nmorph-image {
-    padding: 0;
-  }
+.message-reactions__avatar :deep(.nmorph-image) {
+  padding: 0;
 }
 
 .message-reactions__avatar:last-child {
   flex-basis: 22px;
 }
 
-.message-reactions__avatar .nmorph-avatar__initials {
+.message-reactions__avatar :deep(.nmorph-avatar__initials) {
   transform: none;
 }
 

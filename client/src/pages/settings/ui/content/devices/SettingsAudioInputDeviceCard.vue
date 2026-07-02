@@ -65,7 +65,7 @@ const {
   </SettingsCard>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .settings-audio-input-device-card {
   display: grid;
   gap: 8px;
@@ -94,7 +94,7 @@ const {
   margin-top: 4px;
 }
 
-.settings-audio-input-device-card__level-meter.nmorph-audio-meter .nmorph-audio-meter__bar {
+.settings-audio-input-device-card__level-meter.nmorph-audio-meter :deep(.nmorph-audio-meter__bar) {
   flex: 1 1 0;
 }
 </style>

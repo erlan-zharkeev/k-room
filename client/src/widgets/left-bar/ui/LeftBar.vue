@@ -21,3 +21,19 @@ import { AppLogo } from 'src/shared/ui'
   flex-direction: column;
 }
 </style>
+
+<style lang="scss" scoped>
+.left-bar__navigation-guide-target.nmorph-guide-step,
+.left-bar__navigation-guide-target.nmorph-tooltip {
+  display: block;
+  margin-block: auto;
+}
+
+.left-bar__navigation-guide-target > :deep(.nmorph-tooltip),
+.left-bar__navigation-guide-target > :deep(.nmorph-tooltip__content),
+.left-bar__navigation-guide-target > :deep(.nmorph-tooltip__content > .nmorph-tooltip__trigger),
+.left-bar__navigation-guide-target > :deep(.nmorph-tooltip > .nmorph-tooltip__content),
+.left-bar__navigation-guide-target > :deep(.nmorph-tooltip > .nmorph-tooltip__content > .nmorph-tooltip__trigger) {
+  display: flex;
+}
+</style>

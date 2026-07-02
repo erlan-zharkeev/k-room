@@ -283,7 +283,7 @@ const {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .room-call-panel {
   position: relative;
 
@@ -348,7 +348,7 @@ const {
   background: var(--app-shadow-dark);
 }
 
-.room-call-panel__filmstrip-tile .room-call-tile__media.nmorph-media-tile--plain {
+.room-call-panel__filmstrip-tile :deep(.room-call-tile__media.nmorph-media-tile--plain) {
   background: var(--app-shadow-dark);
 }
 
