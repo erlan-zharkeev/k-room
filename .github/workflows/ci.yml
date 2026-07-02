@@ -419,6 +419,7 @@ jobs:
             .env.production
             scripts/deploy/deploy.sh
             scripts/deploy/sync-certs.sh
+            nginx/50x.html
             nginx/webserver.conf
           )
 

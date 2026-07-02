@@ -99,6 +99,7 @@ export default defineConfig(({ mode }) => {
       outDir: './build',
       minify: 'esbuild',
       cssMinify: 'esbuild',
+      cssCodeSplit: false,
       ...tauriBuildConfig
     },
     css: {
