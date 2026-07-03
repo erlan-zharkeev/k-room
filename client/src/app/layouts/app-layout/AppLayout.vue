@@ -70,7 +70,7 @@ const {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .app-layout-root {
   height: 100%;
   min-height: 0;

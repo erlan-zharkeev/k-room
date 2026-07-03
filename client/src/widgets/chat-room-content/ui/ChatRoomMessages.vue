@@ -125,7 +125,7 @@ const {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .chat-room-messages {
   position: relative;
   height: 100%;

@@ -13,8 +13,8 @@ import { OnboardingGuideTarget } from 'src/features/onboarding-guide'
   </NmorphCard>
 </template>
 
-<style lang="scss">
-.mobile-nav-footer__content {
+<style lang="scss" scoped>
+.mobile-nav-footer :deep(.mobile-nav-footer__content) {
   display: flex;
   justify-content: center;
 }

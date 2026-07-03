@@ -117,7 +117,7 @@ const {
   </section>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .chat-room-page {
   display: flex;
   flex-direction: column;
@@ -135,7 +135,7 @@ const {
   overflow: hidden;
 }
 
-.chat-room-page__call-content {
+.chat-room-page__call :deep(.chat-room-page__call-content) {
   height: 100%;
   min-height: 0;
 }

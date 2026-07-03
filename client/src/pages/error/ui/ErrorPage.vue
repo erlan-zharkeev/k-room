@@ -17,7 +17,7 @@ import { ERROR_PAGE_I18N } from '../config/i18n'
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .error-page {
   display: grid;
   gap: 8px;

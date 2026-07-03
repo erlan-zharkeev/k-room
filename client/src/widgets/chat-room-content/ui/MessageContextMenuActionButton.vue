@@ -21,7 +21,7 @@ const emit = defineEmits<MessageContextMenuActionButtonEmits>()
   </button>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .message-context-menu-action-button {
   display: flex;
   gap: 10px;

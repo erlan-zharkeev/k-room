@@ -42,7 +42,7 @@ const emit = defineEmits<RoomCallMediaButtonsEmits>()
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .room-call-media-buttons {
   display: flex;
   gap: 8px;

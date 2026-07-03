@@ -67,7 +67,7 @@ const { openAttachmentPreview, resolveAttachmentPreviewSrc } = useMessageAttachm
   </NmorphScroll>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .message-attachment-draft-list {
   display: flex;
   flex-wrap: nowrap;

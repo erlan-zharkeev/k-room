@@ -62,7 +62,7 @@ const { saveScrollContentNavigationState } = useScrollContentNavigation('chat-ro
   </section>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .chat-rooms-navigation {
   display: flex;
   flex-direction: column;

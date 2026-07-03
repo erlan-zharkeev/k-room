@@ -111,7 +111,7 @@ const {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .chat-room-header {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -129,7 +129,7 @@ const {
   min-width: 0;
 }
 
-.chat-room-content-header__content {
+.chat-room-content-header :deep(.chat-room-content-header__content) {
   display: grid;
   grid-template-columns: minmax(0, 1fr) max-content;
   gap: 8px;

@@ -52,7 +52,7 @@ onMounted(initializeWaitEmailConfirm)
   </div>
 </template>
 
-<style>
+<style scoped>
 .wait-email-confirm-page {
   display: grid;
   gap: 12px;

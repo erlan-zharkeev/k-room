@@ -232,8 +232,8 @@ const {
   </NmorphCard>
 </template>
 
-<style lang="scss">
-.chat-room-content-footer__content {
+<style lang="scss" scoped>
+.chat-room-content-footer :deep(.chat-room-content-footer__content) {
   display: grid;
   gap: 4px;
 }
@@ -265,7 +265,7 @@ const {
   width: auto;
 }
 
-.chat-room-content-footer__controls .chat-room-content-footer__attach-upload .nmorph-file-upload__list {
+.chat-room-content-footer__controls .chat-room-content-footer__attach-upload :deep(.nmorph-file-upload__list) {
   display: none;
 }
 

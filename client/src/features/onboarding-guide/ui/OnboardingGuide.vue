@@ -31,7 +31,7 @@ initializeGuide()
   </NmorphGuide>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .onboarding-guide {
   height: 100%;
   min-height: 0;

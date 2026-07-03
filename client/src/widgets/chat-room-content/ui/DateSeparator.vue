@@ -11,7 +11,7 @@ const props = defineProps<DateSeparatorProps>()
   }}</NmorphText>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .date-separator {
   display: block;
 }

@@ -13,7 +13,7 @@ const props = defineProps<MessagePreviewProps>()
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .message-preview {
   display: grid;
   padding-left: 8px;

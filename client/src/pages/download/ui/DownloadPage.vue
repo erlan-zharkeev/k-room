@@ -140,7 +140,7 @@ const {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .download-page {
   display: grid;
   place-items: center;
@@ -153,7 +153,7 @@ const {
   max-width: var(--app-card-basic-width);
 }
 
-.download-page__card-content,
+.download-page :deep(.download-page__card-content),
 .download-page__header,
 .download-page__download-area,
 .download-page__state {

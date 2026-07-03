@@ -72,7 +72,7 @@ const route = useRoute()
   </section>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .auth-layout {
   isolation: isolate;
   position: relative;
@@ -106,7 +106,7 @@ const route = useRoute()
   width: fit-content;
 }
 
-.auth-layout__logo-card-content {
+.auth-layout__logo-card :deep(.auth-layout__logo-card-content) {
   display: flex;
 }
 

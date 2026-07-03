@@ -67,13 +67,13 @@ const emit = defineEmits<ContactListEmits>()
   </TransitionGroup>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .contact-list {
   display: grid;
   gap: 8px;
 }
 
-.contact-list__item-content {
+.contact-list :deep(.contact-list__item-content) {
   display: grid;
   grid-template-columns: minmax(0, 1fr) max-content;
   gap: 8px;
@@ -103,7 +103,7 @@ const emit = defineEmits<ContactListEmits>()
   align-items: center;
 }
 
-.contact-list__status-badge .nmorph-badge__ribbon-corner--flat .nmorph-badge__container--ribbon {
+.contact-list__status-badge :deep(.nmorph-badge__ribbon-corner--flat .nmorph-badge__container--ribbon) {
   border-top-right-radius: 8px;
 }
 </style>

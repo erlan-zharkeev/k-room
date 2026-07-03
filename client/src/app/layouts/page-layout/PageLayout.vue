@@ -32,7 +32,7 @@ import { AppLogo } from 'src/shared/ui'
   </section>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .page-layout {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);

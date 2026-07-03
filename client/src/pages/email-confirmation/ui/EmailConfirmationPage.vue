@@ -38,7 +38,7 @@ onMounted(confirmEmail)
   </div>
 </template>
 
-<style>
+<style scoped>
 .email-confirmation-page {
   display: flex;
   flex-direction: column;

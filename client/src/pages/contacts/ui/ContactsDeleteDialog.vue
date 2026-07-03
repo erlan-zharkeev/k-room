@@ -28,7 +28,7 @@ const emit = defineEmits<ContactsDeleteDialogEmits>()
   </AppDialog>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .contacts-delete-dialog {
   gap: 16px;
 }

@@ -27,7 +27,7 @@ const { isPortraitTabletOrLess, showHeader } = useContentLayout(props)
   </section>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .content-layout {
   display: flex;
   flex-direction: column;

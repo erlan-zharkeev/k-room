@@ -31,7 +31,7 @@ const { availableFormatted, isStorageUsageWarning, quotaFormatted, usageFormatte
   </SettingsCard>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .settings-storage-usage-card__progress {
   padding-right: 12px;
   padding-left: 12px;

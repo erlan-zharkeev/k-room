@@ -20,7 +20,7 @@ const { isUnsupportedResolution } = useUnsupportedResolutionGuard()
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .unsupported-resolution-guard {
   position: fixed;
   z-index: 100000;

@@ -34,7 +34,7 @@ const { appVersion, contactSupport, filteredItems, openGuide, searchQuery, visib
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .settings-faq-content__item {
   content-visibility: auto;
   contain-intrinsic-size: 112px;

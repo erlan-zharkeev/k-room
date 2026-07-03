@@ -76,7 +76,7 @@ onMounted(initializeCreateNewPassword)
   </div>
 </template>
 
-<style>
+<style scoped>
 .create-new-password-page,
 .create-new-password-page__form {
   display: grid;

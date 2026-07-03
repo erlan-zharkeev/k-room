@@ -19,7 +19,7 @@ const props = defineProps<ContentNavigationLayoutProps>()
   </section>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .content-navigation-layout {
   display: flex;
   flex-direction: column;

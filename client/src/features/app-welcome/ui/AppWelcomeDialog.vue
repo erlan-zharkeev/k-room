@@ -39,7 +39,7 @@ const { completeAppWelcome, dialogContentStyle, isAppWelcomeVisible, updateAppWe
   </AppDialog>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .app-welcome-dialog {
   display: grid;
   gap: 12px;

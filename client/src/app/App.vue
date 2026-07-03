@@ -42,7 +42,7 @@ const { appRootWallpaperBackgroundStyle, showAppRootWallpaperBackground } = useA
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .app-root-route {
   isolation: isolate;
   position: relative;

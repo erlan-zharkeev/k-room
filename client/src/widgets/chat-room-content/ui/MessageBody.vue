@@ -78,7 +78,7 @@ const {
   </MessageContextMenu>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .message-body {
   position: relative;
 

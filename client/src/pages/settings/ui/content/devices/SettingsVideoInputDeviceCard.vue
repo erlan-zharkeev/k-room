@@ -63,7 +63,7 @@ const {
   </SettingsCard>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .settings-video-input-device-card {
   display: grid;
   gap: 8px;

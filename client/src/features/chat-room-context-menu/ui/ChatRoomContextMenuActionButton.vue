@@ -18,7 +18,7 @@ const emit = defineEmits<ChatRoomContextMenuActionButtonEmits>()
   </button>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .chat-room-context-menu-action-button {
   padding: 0;
   font: inherit;

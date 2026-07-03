@@ -16,7 +16,7 @@ const { defaultSrc, to } = useAppLogo()
   </RouterLink>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .app-logo {
   img {
     width: 100%;

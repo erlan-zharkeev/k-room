@@ -57,7 +57,7 @@ const {
   </section>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .calls-page {
   display: flex;
   flex-direction: column;

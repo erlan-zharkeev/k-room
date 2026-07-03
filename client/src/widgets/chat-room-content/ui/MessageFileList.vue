@@ -26,7 +26,7 @@ const { fileItems, hasFileItems } = useMessageFileList(props)
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .message-file-list {
   display: grid;
   gap: 4px;

@@ -21,7 +21,7 @@ const { handleBack } = usePageBackButton()
   </NmorphButton>
 </template>
 
-<style>
+<style scoped>
 .page-back-button {
   justify-self: start;
 }

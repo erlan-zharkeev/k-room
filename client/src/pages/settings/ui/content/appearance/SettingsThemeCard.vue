@@ -87,7 +87,7 @@ const { resetThemeMode, changeResetThemeMode, resetCustomTheme } = useCustomThem
   </SettingsCard>
 </template>
 
-<style>
+<style scoped>
 .settings-theme-card {
   display: grid;
   gap: 12px;

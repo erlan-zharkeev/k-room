@@ -47,8 +47,8 @@ const { socketTag } = useTopBarSocketStatus()
   </NmorphCard>
 </template>
 
-<style lang="scss">
-.top-bar__content {
+<style lang="scss" scoped>
+.top-bar :deep(.top-bar__content) {
   display: flex;
   gap: 12px;
   align-items: center;

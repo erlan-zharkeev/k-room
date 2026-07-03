@@ -83,7 +83,7 @@ const {
   </NmorphForm>
 </template>
 
-<style>
+<style scoped>
 .login-page {
   display: grid;
   gap: 12px;

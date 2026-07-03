@@ -8,7 +8,7 @@ const { selectedSettingsComponent } = useSettingsContentPage()
   <component :is="selectedSettingsComponent" />
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .settings-content-grid {
   display: grid;
   grid-template-columns: 1fr;

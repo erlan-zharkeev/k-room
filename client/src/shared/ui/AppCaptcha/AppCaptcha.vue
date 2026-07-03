@@ -26,7 +26,7 @@ const { showUnavailable } = useAppCaptcha({
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .app-captcha {
   display: grid;
   gap: 8px;

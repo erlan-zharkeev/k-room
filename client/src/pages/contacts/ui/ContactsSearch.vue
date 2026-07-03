@@ -104,7 +104,7 @@ const {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .contacts-search__scroll-container {
   display: grid;
   gap: 8px;
@@ -120,7 +120,7 @@ const {
   gap: 8px;
 }
 
-.contacts-search__item {
+.contacts-search :deep(.contacts-search__item) {
   display: grid;
   grid-template-columns: minmax(0, 1fr) max-content;
   gap: 8px;

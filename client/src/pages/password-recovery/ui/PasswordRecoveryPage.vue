@@ -126,7 +126,7 @@ const {
   </div>
 </template>
 
-<style>
+<style scoped>
 .password-recovery-page {
   display: grid;
   gap: 12px;

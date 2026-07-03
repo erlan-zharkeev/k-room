@@ -25,7 +25,7 @@ const { isPersistenceSupported, isPersistent, isPersistenceLoading, requestPersi
   </SettingsCard>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .settings-storage-persistent-card__description {
   min-width: 0;
   overflow-wrap: anywhere;

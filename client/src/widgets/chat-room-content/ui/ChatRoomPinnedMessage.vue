@@ -45,8 +45,8 @@ const { canUpdatePinnedMessage, isUpdatingPinnedMessage, pinnedMessage, pinnedMe
   </NmorphCard>
 </template>
 
-<style lang="scss">
-.chat-room-pinned-message {
+<style lang="scss" scoped>
+:deep(.chat-room-pinned-message) {
   cursor: pointer;
 
   display: grid;

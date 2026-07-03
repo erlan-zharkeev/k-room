@@ -40,7 +40,7 @@ const { roadmapItems } = useRoadmap()
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .settings-roadmap-content__list {
   display: grid;
   gap: 10px;

@@ -41,7 +41,7 @@ const { settings, changeTheme, isPortraitTabletOrLess, themeIconWidth } = useSel
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .select-theme__option {
   @include flex-column-center;
 }

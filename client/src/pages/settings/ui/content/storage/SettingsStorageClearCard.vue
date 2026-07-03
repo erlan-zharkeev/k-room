@@ -24,7 +24,7 @@ const { isClearingMedia, clearMedia } = useStorageClear()
   </SettingsCard>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .settings-storage-clear-card {
   display: grid;
   gap: 2px;

@@ -57,7 +57,7 @@ const { chatRoomListGroups, canReorderPinnedChatRooms, reorderPinnedChatRooms } 
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .chat-room-list,
 .chat-room-list__pinned,
 .chat-room-list__regular {

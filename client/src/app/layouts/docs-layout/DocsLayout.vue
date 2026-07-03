@@ -24,7 +24,7 @@ import { PageBackButton } from 'src/features/page-back-button'
   </section>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .docs-layout {
   display: flex;
   flex-direction: column;

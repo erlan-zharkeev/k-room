@@ -53,7 +53,7 @@ const {
   </SettingsCard>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .settings-audio-output-device-card {
   display: grid;
   gap: 8px;

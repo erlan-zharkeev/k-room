@@ -163,7 +163,7 @@ const {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .call-activity-panel--openable {
   cursor: pointer;
 }
@@ -189,7 +189,7 @@ const {
   height: 100%;
 }
 
-.call-activity-panel__content {
+.call-activity-panel :deep(.call-activity-panel__content) {
   --nmorph-card-content-padding: 0;
 
   position: relative;

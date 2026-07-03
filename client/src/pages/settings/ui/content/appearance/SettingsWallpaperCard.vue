@@ -106,7 +106,7 @@ const {
     </div>
   </SettingsCard>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
 .settings-wallpaper-card {
   display: grid;
 }

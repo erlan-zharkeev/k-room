@@ -112,7 +112,7 @@ const {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .call-activity-panel-item {
   display: grid;
   gap: 16px;

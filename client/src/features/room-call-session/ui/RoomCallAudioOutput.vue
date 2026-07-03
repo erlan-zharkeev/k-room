@@ -12,7 +12,7 @@ const { roomCallAudioOutputItems } = useRoomCallAudioOutput()
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .room-call-audio-output {
   display: contents;
 }

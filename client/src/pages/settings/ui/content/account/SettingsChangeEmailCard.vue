@@ -77,7 +77,7 @@ const {
   </SettingsCard>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .settings-change-email-card__field {
   display: grid;
   gap: 8px;

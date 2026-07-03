@@ -19,7 +19,7 @@ const { dotCount, isBlinking, isVisible, tone } = useMessageStatusDots(message)
   </span>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .message-status-dots {
   display: inline-flex;
   gap: 2px;

@@ -21,7 +21,7 @@ const { isRoomCallAudioContextMenuItemDisabled, startAudioRoomCall } = useRoomCa
   </button>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .room-call-audio-context-menu-item {
   padding: 0;
   font: inherit;

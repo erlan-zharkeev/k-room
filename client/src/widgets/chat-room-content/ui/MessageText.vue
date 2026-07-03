@@ -27,7 +27,7 @@ const { segments } = useMessageText(props)
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .message-text {
   min-width: 0;
   overflow-wrap: anywhere;

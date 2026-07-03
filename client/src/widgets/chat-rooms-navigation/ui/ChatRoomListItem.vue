@@ -106,8 +106,8 @@ const { avatarIcon, avatarIconColor, avatarIconSize, contextMenuActionOptions, i
   </NmorphCard>
 </template>
 
-<style lang="scss">
-.chat-room-list-item__content {
+<style lang="scss" scoped>
+.chat-room-list-item :deep(.chat-room-list-item__content) {
   position: relative;
 
   display: grid;

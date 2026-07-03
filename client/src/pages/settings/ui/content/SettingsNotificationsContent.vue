@@ -33,7 +33,7 @@ const { sections, optionsBySection, getValue, isDisabled, setValue } = useNotifi
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .settings-notifications-content__group {
   display: grid;
   gap: 8px;

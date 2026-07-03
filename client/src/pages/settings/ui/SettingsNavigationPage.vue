@@ -28,7 +28,7 @@ const { selectedSettingsId, hasContentWarning, buildItemRoute } = useSettingsNav
   </nav>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .settings-navigation-page {
   overflow-x: hidden;
   height: 100%;

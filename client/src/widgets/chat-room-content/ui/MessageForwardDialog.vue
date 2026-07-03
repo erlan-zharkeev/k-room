@@ -82,7 +82,7 @@ const {
   </AppDialog>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .message-forward-dialog {
   display: grid;
   gap: 8px;

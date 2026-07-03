@@ -13,7 +13,7 @@ import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .chat-room-stub {
   @include flex-column-center;
   @include absolute-center;

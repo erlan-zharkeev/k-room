@@ -64,17 +64,17 @@ const {
   </NmorphCard>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .app-navigation {
   margin-block: auto;
 }
 
-.app-navigation__content {
+.app-navigation :deep(.app-navigation__content) {
   display: grid;
   gap: 16px;
 }
 
-.app-navigation--footer .app-navigation__content {
+.app-navigation--footer :deep(.app-navigation__content) {
   display: inline-flex;
 }
 </style>

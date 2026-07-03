@@ -29,7 +29,7 @@ const { emojiPickerLocale, emojiPickerQuickList, selectMessageReaction } = useMe
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .message-reaction-picker {
   width: 100%;
 }

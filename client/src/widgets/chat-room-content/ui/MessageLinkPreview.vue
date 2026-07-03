@@ -44,7 +44,7 @@ const { canShowPreview, previewImage, previewTitle } = useMessageLinkPreview(pro
   </NmorphCallout>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .message-link-preview__layout {
   display: grid;
   gap: 8px;

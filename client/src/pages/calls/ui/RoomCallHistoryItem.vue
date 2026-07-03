@@ -66,12 +66,12 @@ const {
   </NmorphCard>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .room-call-history-item--interactive {
   cursor: pointer;
 }
 
-.room-call-history-item__content {
+.room-call-history-item :deep(.room-call-history-item__content) {
   display: grid;
   grid-template-columns: minmax(0, 1fr) max-content;
   gap: 8px;

@@ -46,7 +46,7 @@ const {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .message-media-gallery {
   width: 100%;
 }

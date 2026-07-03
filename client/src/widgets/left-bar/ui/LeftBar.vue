@@ -15,8 +15,8 @@ import { AppLogo } from 'src/shared/ui'
   </NmorphCard>
 </template>
 
-<style lang="scss">
-.left-bar__content {
+<style lang="scss" scoped>
+.left-bar :deep(.left-bar__content) {
   display: flex;
   flex-direction: column;
 }

@@ -20,7 +20,7 @@ const { selectContactContextMenuAction } = useContactContextMenuActionItem(props
   </button>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .contact-context-menu-action-item {
   width: 100%;
   padding: 0;
