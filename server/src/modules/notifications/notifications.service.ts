@@ -13,6 +13,8 @@ import webPush, { type PushSubscription } from 'web-push'
 
 import { SERVER_ENV } from 'src/app/env'
 import { countUnreadMessagesByIds } from 'src/modules/messages/lib/message-persistence'
+import { PresenceService } from 'src/modules/presence/presence.service'
+import { countUnseenMissedRoomCalls } from 'src/modules/room-calls/lib/missed-room-calls'
 import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 
 import { ChatRoomModel } from '../chat-rooms/chat-rooms.model'
@@ -30,7 +32,7 @@ import type {
 
 @Injectable()
 export class NotificationsService {
-  constructor() {
+  constructor(private readonly presenceService: PresenceService) {
     const { enabled, privateKey, publicKey, subject } = SERVER_ENV.notifications.webPush
 
     if (!enabled) return
@@ -154,7 +156,12 @@ export class NotificationsService {
       }).lean<WebPushSubscriptionDocument[]>(),
       UserModel.find(
         { _id: { $in: userIds } },
-        { 'personal.chatRooms': 1, 'personal.mutedChatRoomIds': 1, 'system.role': 1 }
+        {
+          'personal.chatRooms': 1,
+          'personal.lastSeenMissedRoomCallCalledAt': 1,
+          'personal.mutedChatRoomIds': 1,
+          'system.role': 1
+        }
       ).lean<WebPushTargetUserProjection[]>()
     ])
     const userById = new Map(users.map((user) => [stringifyMongoId(user._id), user]))
@@ -164,13 +171,25 @@ export class NotificationsService {
       return !mutedRoomIds.includes(roomId)
     })
     const activeUserIds = Array.from(new Set(activeSubscriptions.map(({ userId }) => userId)))
-    const badgeCountByUserId = await this.loadWebPushBadgeCountByUserId(activeUserIds, userById)
+    const notificationForegroundByUserId = await this.presenceService.notificationForegroundMapByUserIds(activeUserIds)
+    const targetSubscriptions = activeSubscriptions.filter(
+      (subscription) => !notificationForegroundByUserId.get(subscription.userId)
+    )
+    const targetUserIds = Array.from(new Set(targetSubscriptions.map(({ userId }) => userId)))
+    const badgeCountByUserId = await this.loadWebPushBadgeCountByUserId(targetUserIds, userById)
 
     await Promise.all(
-      activeSubscriptions.map((subscription) =>
+      targetSubscriptions.map((subscription) =>
         this.sendWebPush(subscription, {
           ...payload,
-          badgeCount: badgeCountByUserId.get(subscription.userId) ?? 0
+          badgeCount: (badgeCountByUserId.get(subscription.userId) ?? 0) + (group === 'calls' ? 1 : 0),
+          options: {
+            ...payload.options,
+            data: {
+              ...payload.options.data,
+              group
+            }
+          }
         })
       )
     )
@@ -212,8 +231,13 @@ export class NotificationsService {
           })
         }
 
+        const roomIds = Array.from(roomById.keys())
         const messageIds = Array.from(roomById.values()).flatMap((room) => room.messages)
-        const badgeCount = await countUnreadMessagesByIds(userId, messageIds)
+        const [unreadMessagesCount, unseenMissedRoomCallsCount] = await Promise.all([
+          countUnreadMessagesByIds(userId, messageIds),
+          countUnseenMissedRoomCalls(userId, roomIds, user.personal.lastSeenMissedRoomCallCalledAt ?? 0)
+        ])
+        const badgeCount = unreadMessagesCount + unseenMissedRoomCallsCount
 
         return [userId, badgeCount] as const
       })

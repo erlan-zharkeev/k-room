@@ -25,7 +25,8 @@ const registerUserHandlers = async () => {
     })
   }
   const presenceService = {
-    markSocketDisconnected: vi.fn()
+    markSocketDisconnected: vi.fn(),
+    updateSocketNotificationForeground: vi.fn()
   }
   const redisService = {}
   const userService = {
@@ -71,6 +72,14 @@ describe('user.socket', () => {
     const { userService } = await registerUserHandlers()
 
     expect(userService.updateUserLanguage).toHaveBeenCalledWith('user-1', 'en')
+  })
+
+  it('updates socket notification foreground state', async () => {
+    const { handlers, presenceService, socket } = await registerUserHandlers()
+
+    await handlers['update-notification-foreground']({ foreground: true } as never)
+
+    expect(presenceService.updateSocketNotificationForeground).toHaveBeenCalledWith(socket, true)
   })
 
   it('actualizes contacts, rooms, and room calls when user data is available', async () => {

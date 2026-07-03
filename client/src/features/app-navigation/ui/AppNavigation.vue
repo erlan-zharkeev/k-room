@@ -8,8 +8,14 @@ import { useAppNavigation } from '../model/use-app-navigation.model'
 import type { AppNavigationProps } from './types'
 
 const props = defineProps<AppNavigationProps>()
-const { routePath, buildNavigationRoute, unreadMessagesQuantity, invitationsQuantity, hasSettingsWarning } =
-  useAppNavigation()
+const {
+  routePath,
+  buildNavigationRoute,
+  unreadMessagesQuantity,
+  unseenMissedRoomCallQuantity,
+  invitationsQuantity,
+  hasSettingsWarning
+} = useAppNavigation()
 </script>
 
 <template>
@@ -29,7 +35,15 @@ const { routePath, buildNavigationRoute, unreadMessagesQuantity, invitationsQuan
       v-slot="{ navigate, isExactActive }"
     >
       <NmorphBadge
-        :value="getBadgeValue(item.id, unreadMessagesQuantity, invitationsQuantity, hasSettingsWarning)"
+        :value="
+          getBadgeValue(
+            item.id,
+            unreadMessagesQuantity,
+            unseenMissedRoomCallQuantity,
+            invitationsQuantity,
+            hasSettingsWarning
+          )
+        "
         color="var(--nmorph-warn-text-color)"
         :offset-y="4"
         size="tiny"

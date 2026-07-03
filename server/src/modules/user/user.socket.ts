@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import type { EventUpdateLanguage } from 'global-shared'
+import type { EventUpdateLanguage, EventUpdateNotificationForeground } from 'global-shared'
 
 import { PresenceService } from 'src/modules/presence/presence.service'
 import { RedisService } from 'src/modules/security/redis.service'
@@ -43,6 +43,17 @@ export class UserSocketService {
           await this.userService.updateUserLanguage(socket.data.userId, language)
         },
         { basicError: USER_SOCKET_I18N.updateLanguageFailed }
+      )
+    )
+
+    socket.on(
+      'update-notification-foreground',
+      socketErrorMiddleware<EventUpdateNotificationForeground>(
+        socket,
+        async ({ foreground }) => {
+          await this.presenceService.updateSocketNotificationForeground(socket, foreground)
+        },
+        { basicError: USER_SOCKET_I18N.updateNotificationForegroundFailed }
       )
     )
 

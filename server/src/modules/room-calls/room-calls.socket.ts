@@ -6,6 +6,7 @@ import {
   type EventJoinRoomCall,
   type EventLeaveRoomCall,
   type EventLoadRoomCalls,
+  type EventMarkRoomCallsAsSeen,
   type EventRoomCallsLoaded,
   type EventSendRoomCallQuickCommand,
   type EventSendRoomCallSignal,
@@ -35,6 +36,7 @@ import {
   leaveActiveRoomCallsBySocket,
   leaveRoomCall,
   loadRoomCalls,
+  markRoomCallsAsSeen,
   sendRoomCallQuickCommand,
   sendRoomCallSignal,
   setRoomCallHandRaised,
@@ -161,6 +163,17 @@ export class RoomCallsSocketService implements OnModuleInit, OnModuleDestroy {
           await declineRoomCall(this.redisService, socket.data.userId, payload)
         },
         { basicError: ROOM_CALLS_I18N.roomCallLeaveFailed }
+      )
+    )
+
+    socket.on(
+      'mark-room-calls-as-seen',
+      socketAckMiddleware<EventMarkRoomCallsAsSeen>(
+        socket,
+        async (payload) => {
+          await markRoomCallsAsSeen(socket.data.userId, payload)
+        },
+        { basicError: ROOM_CALLS_I18N.roomCallMarkSeenFailed }
       )
     )
 

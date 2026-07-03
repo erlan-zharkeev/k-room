@@ -209,6 +209,10 @@ export const setUserMutedChatRoomIds = (userId: string, mutedChatRoomIds: string
   return UserModel.updateOne({ _id: userId }, { $set: { 'personal.mutedChatRoomIds': mutedChatRoomIds } })
 }
 
+export const setUserLastSeenMissedRoomCallCalledAt = (userId: string, calledAt: number) => {
+  return UserModel.updateOne({ _id: userId }, { $max: { 'personal.lastSeenMissedRoomCallCalledAt': calledAt } })
+}
+
 export const loadUserRoomPreferences = (userId: string) => {
   return UserModel.findById(userId).lean()
 }

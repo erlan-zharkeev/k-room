@@ -36,6 +36,11 @@ export const ROOM_CALLS_I18N = defineI18n({
     ru: 'Превышен лимит загрузки звонков',
     zh: '超出通话加载上限'
   },
+  roomCallMarkSeenFailed: {
+    en: 'Failed to mark calls as seen',
+    ru: 'Failed to mark calls as seen',
+    zh: 'Failed to mark calls as seen'
+  },
   roomCallQuickCommandFailed: {
     en: 'Failed to update call quick command',
     ru: 'Не удалось обновить реакцию звонка',

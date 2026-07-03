@@ -149,4 +149,37 @@ describe('PresenceService', () => {
 
     service.onModuleDestroy()
   })
+
+  it('tracks notification foreground sockets separately from online status', async () => {
+    const redisService = createRedisService()
+    const service = new PresenceService(redisService as never)
+    const socket = createSocket('socket-1', 'user-1')
+
+    await service.markSocketConnected(socket as never)
+    await service.updateSocketNotificationForeground(socket as never, true)
+
+    expect(await service.isUserNotificationForeground('user-1')).toBe(true)
+    expect(await service.isUserOnline('user-1')).toBe(true)
+
+    await service.updateSocketNotificationForeground(socket as never, false)
+
+    expect(await service.isUserNotificationForeground('user-1')).toBe(false)
+    expect(await service.isUserOnline('user-1')).toBe(true)
+
+    service.onModuleDestroy()
+  })
+
+  it('clears notification foreground state when socket disconnects', async () => {
+    const redisService = createRedisService()
+    const service = new PresenceService(redisService as never)
+    const socket = createSocket('socket-1', 'user-1')
+
+    await service.markSocketConnected(socket as never)
+    await service.updateSocketNotificationForeground(socket as never, true)
+    await service.markSocketDisconnected(socket as never)
+
+    expect(await service.isUserNotificationForeground('user-1')).toBe(false)
+
+    service.onModuleDestroy()
+  })
 })

@@ -64,7 +64,7 @@ const { searchQuery, contactList, contactListEmptyText } = useContactListSearch(
   </section>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .contacts-page {
   display: flex;
   flex-direction: column;

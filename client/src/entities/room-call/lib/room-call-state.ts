@@ -1,4 +1,4 @@
-import { type RoomCall } from 'global-shared'
+import type { RoomCall } from 'global-shared'
 
 export const isRoomCallActive = ({ finishedAt, status }: RoomCall) => {
   const hasFinishedAt = Boolean(finishedAt)
@@ -12,4 +12,11 @@ export const isRoomCallMissed = (roomCall: RoomCall) => {
   const hasStartedAt = Boolean(roomCall.startedAt)
 
   return !isActive && !hasStartedAt
+}
+
+export const isIncomingMissedRoomCall = (roomCall: RoomCall, userId: string) => {
+  const isInitiator = roomCall.initiatorId === userId
+  const hasJoinedCall = roomCall.participants.some((participant) => participant.userId === userId)
+
+  return isRoomCallMissed(roomCall) && !isInitiator && !hasJoinedCall
 }

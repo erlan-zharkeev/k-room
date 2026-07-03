@@ -53,11 +53,13 @@ import type {
   EventUpdateMessageStatus,
   EventUpdatePinnedMessage
 } from '../message/types'
+import type { EventUpdateNotificationForeground } from '../notification/types'
 import type {
   EventDeclineRoomCall,
   EventJoinRoomCall,
   EventLeaveRoomCall,
   EventLoadRoomCalls,
+  EventMarkRoomCallsAsSeen,
   EventRoomCallDeclined,
   EventRoomCallEnded,
   EventRoomCallHandRaisedUpdated,
@@ -133,6 +135,7 @@ export interface ClientToServerSocketPayloadMap {
   initialize: void
   'actualize-user-data': void
   'update-language': EventUpdateLanguage
+  'update-notification-foreground': EventUpdateNotificationForeground
   'search-contact': EventSearchContact
   'save-contact': EventSaveContact
   'delete-contact': EventDeleteContact
@@ -159,6 +162,7 @@ export interface ClientToServerSocketPayloadMap {
   'start-room-call': EventStartRoomCall
   'join-room-call': EventJoinRoomCall
   'decline-room-call': EventDeclineRoomCall
+  'mark-room-calls-as-seen': EventMarkRoomCallsAsSeen
   'leave-room-call': EventLeaveRoomCall
   'update-room-call-media-state': EventUpdateRoomCallMediaState
   'send-room-call-signal': EventSendRoomCallSignal
@@ -189,6 +193,7 @@ export interface ClientToServerSocketAckPayloadMap {
   'start-room-call': StartRoomCallAckPayload
   'join-room-call': JoinRoomCallAckPayload
   'decline-room-call': void
+  'mark-room-calls-as-seen': void
   'leave-room-call': void
   'update-room-call-media-state': void
   'send-room-call-quick-command': void

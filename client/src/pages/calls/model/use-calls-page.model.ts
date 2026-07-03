@@ -1,11 +1,11 @@
 import { getRoomOtherUserIds, isRoomPrivate, type ChatRoom, type RoomCall } from 'global-shared'
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useKnownUser } from 'src/entities/known-user'
-import { useRoomCall } from 'src/entities/room-call'
-import { useLocalizedDateTime } from 'src/entities/setting'
+import { isRoomCallActive, useMissedRoomCall, useRoomCall } from 'src/entities/room-call'
+import { useLocalizedDateTime, useSettings } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { useActiveRoomCallSession } from 'src/features/room-call-session'
 import { useI18n } from 'src/shared/lib'
@@ -13,7 +13,6 @@ import { useI18n } from 'src/shared/lib'
 import { ROOM_CALL_HISTORY_MEDIA_ICON_BY_KIND, ROOM_CALL_HISTORY_STATUS_COLOR_BY_KIND } from '../config/constants'
 import { CALLS_PAGE_I18N } from '../config/i18n'
 import type { RoomCallHistoryItem } from '../config/types'
-import { isRoomCallActive } from '../lib/resolve-room-call-state'
 import {
   resolveRoomCallHistoryMediaI18n,
   resolveRoomCallHistoryStatusI18n,
@@ -30,6 +29,11 @@ export const useCallsPage = () => {
   const { contactById } = useContact()
   const { knownUserById } = useKnownUser()
   const { user } = useUser()
+  const { settings, setByPath } = useSettings()
+  const { missedRoomCalls, lastMissedRoomCallCalledAt } = useMissedRoomCall(
+    () => user.value.id,
+    () => settings.value.roomCalls.lastSeenMissedRoomCallCalledAt
+  )
   const { formatDate, formatTime } = useLocalizedDateTime()
   const { canStartActiveRoomCall, startActiveRoomCall } = useActiveRoomCallSession()
   const {
@@ -92,6 +96,11 @@ export const useCallsPage = () => {
 
   const startRoomCallHistoryItem = async ({ mediaKind, roomId }: RoomCallHistoryItem) =>
     startActiveRoomCall(roomId, mediaKind)
+  const markMissedRoomCallsAsSeen = async () => {
+    if (lastMissedRoomCallCalledAt.value <= settings.value.roomCalls.lastSeenMissedRoomCallCalledAt) return
+
+    await setByPath('roomCalls.lastSeenMissedRoomCallCalledAt', lastMissedRoomCallCalledAt.value)
+  }
 
   const sourceRoomCalls = computed(() => (normalizedSearchQuery.value ? searchedRoomCalls.value : roomCalls.value))
   const roomCallHistoryItems = computed<RoomCallHistoryItem[]>(() => buildRoomCallHistoryItems(sourceRoomCalls.value))
@@ -99,6 +108,14 @@ export const useCallsPage = () => {
     () => Boolean(normalizedSearchQuery.value) && !isSearchLoading.value && roomCallHistoryItems.value.length === 0
   )
   const showNoCalls = computed(() => !normalizedSearchQuery.value && roomCallHistoryItems.value.length === 0)
+
+  watch(
+    missedRoomCalls,
+    () => {
+      void markMissedRoomCallsAsSeen()
+    },
+    { immediate: true }
+  )
 
   return {
     searchQuery,

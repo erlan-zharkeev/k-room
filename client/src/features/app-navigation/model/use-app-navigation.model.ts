@@ -5,7 +5,9 @@ import { useRoute } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
+import { useMissedRoomCall } from 'src/entities/room-call'
 import { useSettings, type ContentTab } from 'src/entities/setting'
+import { useUser } from 'src/entities/user'
 import { useMediaDevicePermission, useStorageEstimate } from 'src/shared/lib'
 
 import { getChatRoomContentRoutePath } from '../lib/routes'
@@ -15,6 +17,11 @@ export const useAppNavigation = () => {
   const { chatRooms } = useChatRoom()
   const { invitationsQuantity } = useContact()
   const { settings } = useSettings()
+  const { user } = useUser()
+  const { unseenMissedRoomCallQuantity } = useMissedRoomCall(
+    () => user.value.id,
+    () => settings.value.roomCalls.lastSeenMissedRoomCallCalledAt
+  )
   const { isStorageUsageWarning } = useStorageEstimate()
   const { hasMediaDevicePermissionWarning } = useMediaDevicePermission()
 
@@ -38,6 +45,7 @@ export const useAppNavigation = () => {
     routePath,
     buildNavigationRoute,
     unreadMessagesQuantity,
+    unseenMissedRoomCallQuantity,
     invitationsQuantity,
     hasSettingsWarning
   }

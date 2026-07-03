@@ -53,6 +53,7 @@ export interface DexieCacheTrimmer {
 export interface DexieErrorLike extends UnknownObject {
   failures?: unknown
   inner?: unknown
+  message?: unknown
   name?: unknown
 }
 

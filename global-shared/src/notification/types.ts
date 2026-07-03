@@ -25,6 +25,12 @@ export interface WebPushConfigResponse {
   publicKey: string
 }
 
+export interface EventUpdateNotificationForeground {
+  foreground: boolean
+}
+
+export type WebPushNotificationGroup = 'calls' | 'messages'
+
 export interface WebPushNotificationPayload {
   title: string
   badgeCount?: number
@@ -32,6 +38,7 @@ export interface WebPushNotificationPayload {
     body?: string
     tag?: string
     data?: {
+      group?: WebPushNotificationGroup
       url?: string
     }
   }

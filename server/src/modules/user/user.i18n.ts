@@ -111,6 +111,11 @@ export const USER_SOCKET_I18N = defineI18n({
     ru: 'Не удалось обновить язык',
     zh: '更新语言失败'
   },
+  updateNotificationForegroundFailed: {
+    en: 'Failed to update notification activity',
+    ru: 'Не удалось обновить активность уведомлений',
+    zh: '更新通知活动失败'
+  },
   userConnectFailed: {
     en: 'Failed to update online status on connect',
     ru: 'Не удалось обновить онлайн-статус при подключении',

@@ -55,5 +55,25 @@ export const DOWNLOAD_PAGE_I18N = defineI18n('downloadPage', {
     en: 'On Mac, click Mac, open K-Room.dmg, then drag K-Room to Applications. If macOS says the app cannot be opened because the developer cannot be verified, open System Settings > Privacy & Security, click Open Anyway, then Open.',
     ru: 'На Mac нажмите Mac, откройте K-Room.dmg и перетащите K-Room в Applications. Если macOS скажет, что приложение нельзя открыть, потому что разработчик не проверен, откройте System Settings > Privacy & Security, нажмите Open Anyway, затем Open.',
     zh: '在 Mac 上，点击 Mac，打开 K-Room.dmg，然后把 K-Room 拖到 Applications。如果 macOS 提示无法打开，因为无法验证开发者，请打开 System Settings > Privacy & Security，点击 Open Anyway，然后点击 Open。'
+  },
+  pwaInstallTitle: {
+    en: i18nFormatter(['appName'], (appName: string) => `Install ${appName} on a phone`),
+    ru: i18nFormatter(['appName'], (appName: string) => `Установить ${appName} на телефон`),
+    zh: i18nFormatter(['appName'], (appName: string) => `在手机上安装 ${appName}`)
+  },
+  pwaAndroidInstallHelp: {
+    en: 'Open this site in Chrome, tap the menu, choose Install app or Add to Home screen, then confirm.',
+    ru: 'Откройте этот сайт в Chrome, нажмите меню, выберите «Установить приложение» или «Добавить на главный экран», затем подтвердите.',
+    zh: '在 Chrome 中打开此网站，点按菜单，选择“安装应用”或“添加到主屏幕”，然后确认。'
+  },
+  pwaIosInstallHelp: {
+    en: 'Open this site in Safari, tap Share, choose Add to Home Screen, then tap Add.',
+    ru: 'Откройте этот сайт в Safari, нажмите «Поделиться», выберите «На экран “Домой”», затем нажмите «Добавить».',
+    zh: '在 Safari 中打开此网站，点按“分享”，选择“添加到主屏幕”，然后点按“添加”。'
+  },
+  pwaAutoInstallNote: {
+    en: 'A mobile PWA cannot be installed automatically from a link. Browsers require a user action and confirmation.',
+    ru: 'Мобильную PWA нельзя установить автоматически по ссылке. Браузеры требуют действие пользователя и подтверждение.',
+    zh: '移动端 PWA 不能通过链接自动安装。浏览器需要用户操作和确认。'
   }
 })

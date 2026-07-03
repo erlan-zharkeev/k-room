@@ -2,7 +2,7 @@
 name = "k-room-client"
 version = "0.1.32"
 description = "K-Room desktop client"
-authors = ["<erlan.zharkeev@gmail.com>"]
+authors = ["<aurora.nex.axis@gmail.com>"]
 license = "MIT"
 repository = "git@gitlab.com:k-room/k-room.git"
 edition = "2021"

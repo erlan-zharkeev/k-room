@@ -14,6 +14,7 @@ const roomCallsServiceMock = vi.hoisted(() => ({
   leaveActiveRoomCallsBySocket: vi.fn(),
   leaveRoomCall: vi.fn(),
   loadRoomCalls: vi.fn(),
+  markRoomCallsAsSeen: vi.fn(),
   sendRoomCallQuickCommand: vi.fn(),
   sendRoomCallSignal: vi.fn(),
   setRoomCallHandRaised: vi.fn(),
@@ -115,6 +116,7 @@ describe('room-calls.socket', () => {
     await handlers['leave-room-call']({ roomCallId: 'call-1' } as never)
     await handlers['load-room-calls']({ roomIds: ['room-1'] } as never)
     await handlers['decline-room-call']({ roomCallId: 'call-1' } as never)
+    await handlers['mark-room-calls-as-seen']({ lastSeenMissedRoomCallCalledAt: 100 } as never)
     await handlers['update-room-call-media-state']({ roomCallId: 'call-1' } as never)
     await handlers['send-room-call-quick-command']({ roomCallId: 'call-1' } as never)
     await handlers['set-room-call-hand-raised']({ roomCallId: 'call-1' } as never)
@@ -126,6 +128,9 @@ describe('room-calls.socket', () => {
     })
     expect(roomCallsServiceMock.loadRoomCalls).toHaveBeenCalledWith(redisService, 'user-1', { roomIds: ['room-1'] })
     expect(roomCallsServiceMock.declineRoomCall).toHaveBeenCalledWith(redisService, 'user-1', { roomCallId: 'call-1' })
+    expect(roomCallsServiceMock.markRoomCallsAsSeen).toHaveBeenCalledWith('user-1', {
+      lastSeenMissedRoomCallCalledAt: 100
+    })
     expect(roomCallsServiceMock.updateRoomCallMediaState).toHaveBeenCalledWith(redisService, 'user-1', 'socket-1', {
       roomCallId: 'call-1'
     })

@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "repository": "git@github.com:erlan-zharkeev/k-room.git",
-  "author": "<erlan.zharkeev@gmail.com>",
+  "author": "<aurora.nex.axis@gmail.com>",
   "license": "MIT",
   "packageManager": "pnpm@10.33.0",
   "workspaces": [

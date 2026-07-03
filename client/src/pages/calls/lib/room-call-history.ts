@@ -1,9 +1,9 @@
 import { type RoomCall, type RoomCallMediaKind } from 'global-shared'
 
+import { isRoomCallActive, isRoomCallMissed } from 'src/entities/room-call'
+
 import { CALLS_PAGE_I18N } from '../config/i18n'
 import type { RoomCallHistoryItem, RoomCallHistoryStatusKind } from '../config/types'
-
-import { isRoomCallActive, isRoomCallMissed } from './resolve-room-call-state'
 
 export const resolveRoomCallHistoryStatusKind = (roomCall: RoomCall): RoomCallHistoryStatusKind => {
   if (isRoomCallActive(roomCall)) return 'active'

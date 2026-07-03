@@ -118,6 +118,24 @@ const {
           $t(DOWNLOAD_PAGE_I18N.downloadUnavailable)
         }}</NmorphText>
       </div>
+
+      <section class="download-page__mobile-install">
+        <NmorphText as="h2" align="center" variant="title" weight="bold">{{
+          $t(DOWNLOAD_PAGE_I18N.pwaInstallTitle, { appName: appName })
+        }}</NmorphText>
+
+        <div class="download-page__mobile-install-group">
+          <NmorphText as="h3" weight="bold">Android</NmorphText>
+          <NmorphText as="p" color="semi-contrast">{{ $t(DOWNLOAD_PAGE_I18N.pwaAndroidInstallHelp) }}</NmorphText>
+        </div>
+
+        <div class="download-page__mobile-install-group">
+          <NmorphText as="h3" weight="bold">iOS</NmorphText>
+          <NmorphText as="p" color="semi-contrast">{{ $t(DOWNLOAD_PAGE_I18N.pwaIosInstallHelp) }}</NmorphText>
+        </div>
+
+        <NmorphText as="p" color="semi-contrast">{{ $t(DOWNLOAD_PAGE_I18N.pwaAutoInstallNote) }}</NmorphText>
+      </section>
     </NmorphCard>
   </div>
 </template>
@@ -160,6 +178,17 @@ const {
 .download-page__install-help {
   display: grid;
   gap: 8px;
+}
+
+.download-page__mobile-install,
+.download-page__mobile-install-group {
+  display: grid;
+  gap: 8px;
+}
+
+.download-page__mobile-install {
+  padding-top: 12px;
+  border-top: 1px solid color-mix(in srgb, var(--nmorph-contrast-text-color), transparent 88%);
 }
 
 .download-page__download-button-content {

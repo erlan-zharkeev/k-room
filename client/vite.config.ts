@@ -8,8 +8,60 @@ import { defineConfig } from 'vite'
 import type { Plugin } from 'vite'
 
 import { createClientEnvData } from './create-client-env-data'
+import {
+  APP_BADGE_SERVICE_WORKER_SYNC_MESSAGE_TYPE,
+  NOTIFICATION_FOREGROUND_SERVICE_WORKER_SYNC_MESSAGE_TYPE
+} from './src/pages/app/config/service-worker-message.constants'
 import { CLIENT_UPDATE_RELOAD_STORAGE_PREFIX } from './src/shared/api/constants'
 import { generatePWAConfig } from './vite.pwa.config'
+
+const WEB_PUSH_SERVICE_WORKER_FILE_NAME = 'web-push-sw.js'
+const SERVICE_WORKER_MESSAGE_TYPE_PLACEHOLDERS = {
+  __APP_BADGE_SERVICE_WORKER_SYNC_MESSAGE_TYPE__: APP_BADGE_SERVICE_WORKER_SYNC_MESSAGE_TYPE,
+  __NOTIFICATION_FOREGROUND_SERVICE_WORKER_SYNC_MESSAGE_TYPE__: NOTIFICATION_FOREGROUND_SERVICE_WORKER_SYNC_MESSAGE_TYPE
+}
+
+const injectServiceWorkerMessageTypes = (source: string) =>
+  Object.entries(SERVICE_WORKER_MESSAGE_TYPE_PLACEHOLDERS).reduce(
+    (content, [placeholder, value]) => content.replaceAll(placeholder, value),
+    source
+  )
+
+const createWebPushServiceWorkerMessageTypesPlugin = (): Plugin => {
+  let buildOutDir = ''
+
+  return {
+    name: 'inject-web-push-service-worker-message-types',
+    configResolved(config) {
+      buildOutDir = path.isAbsolute(config.build.outDir)
+        ? config.build.outDir
+        : path.resolve(config.root, config.build.outDir)
+    },
+    configureServer(server) {
+      server.middlewares.use((request, response, next) => {
+        if (request.url?.split('?')[0] !== `/${WEB_PUSH_SERVICE_WORKER_FILE_NAME}`) {
+          next()
+          return
+        }
+
+        const source = fs.readFileSync(path.resolve(__dirname, './public/web-push-sw.js'), 'utf8')
+
+        response.statusCode = 200
+        response.setHeader('Content-Type', 'application/javascript; charset=utf-8')
+        response.end(injectServiceWorkerMessageTypes(source))
+      })
+    },
+    closeBundle() {
+      const serviceWorkerPath = path.resolve(buildOutDir, WEB_PUSH_SERVICE_WORKER_FILE_NAME)
+
+      if (!fs.existsSync(serviceWorkerPath)) return
+
+      const source = fs.readFileSync(serviceWorkerPath, 'utf8')
+
+      fs.writeFileSync(serviceWorkerPath, injectServiceWorkerMessageTypes(source), 'utf8')
+    }
+  }
+}
 
 const createBuildOverwriteCssPlugin = (): Plugin => ({
   name: 'inject-build-overwrite-css',
@@ -105,6 +157,7 @@ export default defineConfig(({ mode }) => {
             .replaceAll('__CLIENT_RECOVERY_CONFIG__', JSON.stringify(clientRecoveryConfig).replace(/</g, '\\u003c'))
             .replaceAll('__SERVICE_WORKER_REGISTER_SCRIPT__', serviceWorkerRegisterScript)
       },
+      createWebPushServiceWorkerMessageTypesPlugin(),
       vue({
         template: {
           compilerOptions: {

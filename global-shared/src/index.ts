@@ -27,6 +27,7 @@ export type {
   EventJoinRoomCall,
   JoinRoomCallAckPayload,
   EventDeclineRoomCall,
+  EventMarkRoomCallsAsSeen,
   EventLeaveRoomCall,
   EventUpdateRoomCallMediaState,
   EventSendRoomCallSignal,
@@ -195,7 +196,9 @@ export type { PackageData } from './package/types'
 
 export type {
   DeleteWebPushSubscriptionPayload,
+  EventUpdateNotificationForeground,
   WebPushConfigResponse,
+  WebPushNotificationGroup,
   WebPushNotificationPayload,
   WebPushSubscriptionEnabledGroups,
   WebPushSubscriptionKeysPayload,

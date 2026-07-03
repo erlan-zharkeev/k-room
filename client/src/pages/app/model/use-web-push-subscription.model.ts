@@ -32,6 +32,11 @@ export const useWebPushSubscription = () => {
       messages: generalBrowserPushEnabled && messages.browserPush
     }
   })
+  const enabledGroupsKey = computed(() => {
+    const { calls, messages } = enabledGroups.value
+
+    return `${Number(calls)}:${Number(messages)}`
+  })
 
   const deleteServerWebPushSubscription = async (endpoint: string) => {
     await doHttpRequest<null>(
@@ -120,7 +125,7 @@ export const useWebPushSubscription = () => {
 
   onMounted(() => {
     stopSettingsWatch = watch(
-      enabledGroups,
+      enabledGroupsKey,
       () => {
         void syncWebPushSubscription()
       },

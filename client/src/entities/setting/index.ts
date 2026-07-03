@@ -21,6 +21,7 @@ export { DEFAULT_SETTINGS } from './config/constants'
 export { DEFAULT_IO_DEVICES_SETTINGS } from './config/io-devices.constants'
 export { DEFAULT_LOCALIZATION_SETTINGS } from './config/localization.constants'
 export { DEFAULT_NOTIFICATION_GROUP_SETTINGS, DEFAULT_NOTIFICATION_SETTINGS } from './config/notification.constants'
+export { DEFAULT_ROOM_CALL_SETTINGS } from './config/room-call.constants'
 export type {
   EffectiveTheme,
   AppearanceSettings,
@@ -52,3 +53,4 @@ export type {
   NotificationSettingGroup,
   NotificationSettingKey
 } from './config/notification.types'
+export type { RoomCallSettings } from './config/room-call.types'

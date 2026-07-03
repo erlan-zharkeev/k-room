@@ -48,6 +48,14 @@ export class PresenceService implements OnModuleDestroy {
     return [PRESENCE_REDIS_KEY_PREFIX, 'socket', socketId].join(':')
   }
 
+  private buildNotificationForegroundUserSocketsKey(userId: MongoId | string) {
+    return [PRESENCE_REDIS_KEY_PREFIX, 'notification-foreground', 'user', String(userId), 'sockets'].join(':')
+  }
+
+  private buildNotificationForegroundSocketUserKey(socketId: string) {
+    return [PRESENCE_REDIS_KEY_PREFIX, 'notification-foreground', 'socket', socketId].join(':')
+  }
+
   private buildOfflineLockKey(userId: MongoId | string) {
     return [PRESENCE_REDIS_KEY_PREFIX, 'offline-lock', String(userId)].join(':')
   }
@@ -79,9 +87,22 @@ export class PresenceService implements OnModuleDestroy {
   }
 
   private async refreshSocketPresence(socketId: string, userId: string) {
+    const notificationForegroundSocketUserKey = this.buildNotificationForegroundSocketUserKey(socketId)
+    const isNotificationForegroundSocket =
+      (await this.redisService.read(notificationForegroundSocketUserKey)) === userId
+
     await Promise.all([
       this.redisService.write(this.buildSocketUserKey(socketId), userId, PRESENCE_SOCKET_TTL_MS),
-      this.redisService.refreshTtl(this.buildUserSocketsKey(userId), PRESENCE_USER_SET_TTL_MS)
+      this.redisService.refreshTtl(this.buildUserSocketsKey(userId), PRESENCE_USER_SET_TTL_MS),
+      ...(isNotificationForegroundSocket
+        ? [
+            this.redisService.refreshTtl(notificationForegroundSocketUserKey, PRESENCE_SOCKET_TTL_MS),
+            this.redisService.refreshTtl(
+              this.buildNotificationForegroundUserSocketsKey(userId),
+              PRESENCE_USER_SET_TTL_MS
+            )
+          ]
+        : [])
     ])
   }
 
@@ -140,6 +161,44 @@ export class PresenceService implements OnModuleDestroy {
     await Promise.all(
       uniqueUserIds.map(async (userId) => {
         result.set(userId, await this.isUserOnline(userId))
+      })
+    )
+
+    return result
+  }
+
+  private async activeNotificationForegroundSocketIdsByUser(userId: string) {
+    const userSocketsKey = this.buildNotificationForegroundUserSocketsKey(userId)
+    const socketIds = await this.redisService.readSetValues(userSocketsKey)
+    const aliveSocketIds: string[] = []
+
+    await Promise.all(
+      socketIds.map(async (socketId) => {
+        const socketUserId = await this.redisService.read(this.buildNotificationForegroundSocketUserKey(socketId))
+
+        if (socketUserId === userId) {
+          aliveSocketIds.push(socketId)
+          return
+        }
+
+        await this.redisService.removeSetValue(userSocketsKey, socketId)
+      })
+    )
+
+    return aliveSocketIds
+  }
+
+  async isUserNotificationForeground(userId: MongoId | string) {
+    return (await this.activeNotificationForegroundSocketIdsByUser(stringifyMongoId(userId))).length > 0
+  }
+
+  async notificationForegroundMapByUserIds(userIds: Array<MongoId | string>) {
+    const uniqueUserIds = uniq(stringifyMongoIds(userIds))
+    const result = new Map<string, boolean>()
+
+    await Promise.all(
+      uniqueUserIds.map(async (userId) => {
+        result.set(userId, await this.isUserNotificationForeground(userId))
       })
     )
 
@@ -219,7 +278,9 @@ export class PresenceService implements OnModuleDestroy {
     this.stopPresenceRefresh(socket.id)
     await Promise.all([
       this.redisService.removeSetValue(this.buildUserSocketsKey(userId), socket.id),
-      this.redisService.remove(this.buildSocketUserKey(socket.id))
+      this.redisService.remove(this.buildSocketUserKey(socket.id)),
+      this.redisService.removeSetValue(this.buildNotificationForegroundUserSocketsKey(userId), socket.id),
+      this.redisService.remove(this.buildNotificationForegroundSocketUserKey(socket.id))
     ])
 
     if (await this.isUserOnline(userId)) {
@@ -227,5 +288,25 @@ export class PresenceService implements OnModuleDestroy {
     }
 
     await this.markUserOffline(userId)
+  }
+
+  async updateSocketNotificationForeground(socket: SocketInstance, foreground: boolean) {
+    const { userId } = socket.data
+    const userSocketsKey = this.buildNotificationForegroundUserSocketsKey(userId)
+    const socketUserKey = this.buildNotificationForegroundSocketUserKey(socket.id)
+
+    if (!foreground) {
+      await Promise.all([
+        this.redisService.removeSetValue(userSocketsKey, socket.id),
+        this.redisService.remove(socketUserKey)
+      ])
+      return
+    }
+
+    await Promise.all([
+      this.redisService.addSetValue(userSocketsKey, socket.id),
+      this.redisService.write(socketUserKey, userId, PRESENCE_SOCKET_TTL_MS),
+      this.redisService.refreshTtl(userSocketsKey, PRESENCE_USER_SET_TTL_MS)
+    ])
   }
 }

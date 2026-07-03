@@ -85,6 +85,10 @@ export interface EventDeclineRoomCall {
   roomCallId: string
 }
 
+export interface EventMarkRoomCallsAsSeen {
+  lastSeenMissedRoomCallCalledAt: number
+}
+
 export interface EventUpdateRoomCallMediaState {
   roomCallId: string
   mediaState: RoomCallParticipantMediaState

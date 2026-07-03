@@ -9,6 +9,8 @@ import { useChatRoomUpdateMonitor } from './use-chat-room-update-monitor.model'
 import { useContactUpdateMonitor } from './use-contact-update-monitor.model'
 import { useMediaUpdateMonitor } from './use-media-update-monitor.model'
 import { useMessageMonitor } from './use-message-monitor.model'
+import { useMissedRoomCallSeenSync } from './use-missed-room-call-seen-sync.model'
+import { useNotificationForegroundSync } from './use-notification-foreground-sync.model'
 import { useRoomCallNotificationMonitor } from './use-room-call-notification-monitor.model'
 import { useSyncAvatars } from './use-sync-avatars.model'
 import { useWebPushSubscription } from './use-web-push-subscription.model'
@@ -22,6 +24,8 @@ export const useAppMonitors = () => {
   const { disposeRoomCallDataUpdateMonitor, initializeRoomCallDataUpdateMonitor } = useRoomCallDataUpdateMonitor()
   const { disposeRoomCallNotificationMonitor, initializeRoomCallNotificationMonitor } = useRoomCallNotificationMonitor()
   useAppBadge()
+  useNotificationForegroundSync()
+  useMissedRoomCallSeenSync()
   useActiveRoomCallSession()
   useSyncAvatars()
   useWebPushSubscription()

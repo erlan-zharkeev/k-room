@@ -38,6 +38,6 @@ export interface SendRoomCallPushNotificationsParams {
 export type WebPushBadgeRoomProjection = Pick<ChatRoomDocument, '_id'> & Pick<ChatRoomSchema, 'messages'>
 
 export type WebPushTargetUserProjection = Pick<UserSchema, '_id'> & {
-  personal: Pick<UserPersonalData, 'chatRooms' | 'mutedChatRoomIds'>
+  personal: Pick<UserPersonalData, 'chatRooms' | 'lastSeenMissedRoomCallCalledAt' | 'mutedChatRoomIds'>
   system: Pick<UserSystemData, 'role'>
 }

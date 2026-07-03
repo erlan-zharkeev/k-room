@@ -2,18 +2,28 @@ import sumBy from 'lodash/sumBy'
 import { computed, onBeforeUnmount, onMounted, watch, type WatchStopHandle } from 'vue'
 
 import { useChatRoom } from 'src/entities/chat-room'
+import { useMissedRoomCall } from 'src/entities/room-call'
+import { useSettings } from 'src/entities/setting'
+import { useUser } from 'src/entities/user'
 
 import { syncAppBadge } from '../lib/app-badge'
 
 export const useAppBadge = () => {
   const { chatRooms } = useChatRoom()
-  let stopUnreadMessagesQuantityWatch: WatchStopHandle | null = null
+  const { settings } = useSettings()
+  const { user } = useUser()
+  const { unseenMissedRoomCallQuantity } = useMissedRoomCall(
+    () => user.value.id,
+    () => settings.value.roomCalls.lastSeenMissedRoomCallCalledAt
+  )
+  let stopAppBadgeQuantityWatch: WatchStopHandle | null = null
 
   const unreadMessagesQuantity = computed(() => sumBy(chatRooms.value, 'unreadMessagesQuantity'))
+  const appBadgeQuantity = computed(() => unreadMessagesQuantity.value + unseenMissedRoomCallQuantity.value)
 
   onMounted(() => {
-    stopUnreadMessagesQuantityWatch = watch(
-      unreadMessagesQuantity,
+    stopAppBadgeQuantityWatch = watch(
+      appBadgeQuantity,
       (value) => {
         void syncAppBadge(value)
       },
@@ -22,7 +32,7 @@ export const useAppBadge = () => {
   })
 
   onBeforeUnmount(() => {
-    stopUnreadMessagesQuantityWatch?.()
-    stopUnreadMessagesQuantityWatch = null
+    stopAppBadgeQuantityWatch?.()
+    stopAppBadgeQuantityWatch = null
   })
 }

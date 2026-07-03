@@ -1,3 +1,5 @@
 export { useRoomCall } from './model/use-room-call.model'
 export { useRoomCallDataUpdateMonitor } from './model/use-room-call-data-update-monitor.model'
+export { useMissedRoomCall } from './model/use-missed-room-call.model'
+export { isIncomingMissedRoomCall, isRoomCallActive, isRoomCallMissed } from './lib/room-call-state'
 export { createRoomCallTestFixture } from './lib/room-call-test-fixtures'

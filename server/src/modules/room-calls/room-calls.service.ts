@@ -2,6 +2,7 @@ import {
   REQ_STATUS,
   ROOM_CALL_LOAD_LIMIT_MAX,
   ROOM_PARTICIPANT_LIMIT,
+  type EventMarkRoomCallsAsSeen,
   isRoomPrivate,
   type EventDeclineRoomCall,
   type EventJoinRoomCall,
@@ -23,6 +24,7 @@ import { AppError } from 'src/shared/lib/app-error'
 import type { NotificationsService } from '../notifications/notifications.service'
 import { emitToUsers } from '../presence/presence.utils'
 import type { RedisService } from '../security/redis.service'
+import { setUserLastSeenMissedRoomCallCalledAt } from '../user/lib/user-persistence'
 
 import {
   assertActiveRoomCallAccess,
@@ -275,6 +277,19 @@ export const loadRoomCalls = async (
   }
 
   return loadAvailableUserRoomCallPage(redisService, userId, payload)
+}
+
+export const markRoomCallsAsSeen = async (
+  userId: string,
+  { lastSeenMissedRoomCallCalledAt }: EventMarkRoomCallsAsSeen
+) => {
+  const hasInvalidCalledAt = !Number.isFinite(lastSeenMissedRoomCallCalledAt) || lastSeenMissedRoomCallCalledAt < 0
+
+  if (hasInvalidCalledAt) {
+    throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallMarkSeenFailed)
+  }
+
+  await setUserLastSeenMissedRoomCallCalledAt(userId, Math.min(lastSeenMissedRoomCallCalledAt, Date.now()))
 }
 
 export const updateRoomCallMediaState = async (

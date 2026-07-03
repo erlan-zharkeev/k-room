@@ -62,6 +62,12 @@ const requestDexieCacheTrim = () => {
   return trimPromise
 }
 
+const isSafariStorageWriteError = (data: DexieErrorLike) => {
+  const { message, name } = data
+
+  return name === 'UnknownError' && isString(message) && message.includes('Unable to store record in object store')
+}
+
 export const isDexieQuotaError = (error: unknown): boolean => {
   const data = readErrorData(error)
 
@@ -70,11 +76,12 @@ export const isDexieQuotaError = (error: unknown): boolean => {
   const { name: errorName, failures: errorFailures } = data
   const isErrorNameString = isString(errorName)
   const isKnownQuotaErrorName = isErrorNameString && DEXIE_QUOTA_ERROR_NAME_SET.has(errorName)
+  const isKnownSafariStorageWriteError = isSafariStorageWriteError(data)
   const hasQuotaErrorInner = isDexieQuotaError(data.inner)
   const hasErrorFailures = Array.isArray(errorFailures)
   const hasQuotaErrorFailure = hasErrorFailures && errorFailures.some(isDexieQuotaError)
 
-  if (isKnownQuotaErrorName) {
+  if (isKnownQuotaErrorName || isKnownSafariStorageWriteError) {
     return true
   }
 

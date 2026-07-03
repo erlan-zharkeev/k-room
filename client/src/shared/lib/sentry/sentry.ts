@@ -7,3 +7,6 @@ export const withClientSentryScope = <T>(callback: ClientSentryScopeCallback<T>)
 
 export const captureClientSentryMessage = (...args: Parameters<typeof Sentry.captureMessage>) =>
   Sentry.captureMessage(...args)
+
+export const captureClientSentryException = (...args: Parameters<typeof Sentry.captureException>) =>
+  Sentry.captureException(...args)

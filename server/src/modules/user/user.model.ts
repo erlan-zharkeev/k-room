@@ -93,6 +93,11 @@ const personalSchema = new Schema<UserPersonalData>(
       required: true,
       default: []
     },
+    lastSeenMissedRoomCallCalledAt: {
+      type: Number,
+      required: true,
+      default: 0
+    },
     onboarding: {
       type: onboardingSchema,
       required: true,

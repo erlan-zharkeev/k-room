@@ -23,7 +23,17 @@ vi.mock('src/shared/lib', () => ({
 }))
 
 vi.mock('src/shared/api', () => ({
-  registerSocketEventListeners: () => vi.fn()
+  registerSocketEventListeners: () => vi.fn(),
+  useSocketAction: () => ({ emitSocketAction: vi.fn() }),
+  useSocketAvailability: () => ({ isSocketOnlineActionAvailable: { value: false } })
+}))
+
+vi.mock('src/entities/setting', () => ({
+  useSettings: vi.fn()
+}))
+
+vi.mock('src/entities/user', () => ({
+  useUser: vi.fn()
 }))
 
 vi.mock('@nmorph/nmorph-ui-kit', () => ({

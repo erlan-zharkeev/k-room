@@ -35,6 +35,7 @@ export interface UserPersonalData extends Pick<UserData, 'email'> {
   chatRooms: string[]
   pinnedChatRoomIds: string[]
   mutedChatRoomIds: string[]
+  lastSeenMissedRoomCallCalledAt?: number
   onboarding?: UserOnboardingData
 }
 
