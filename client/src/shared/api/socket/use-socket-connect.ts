@@ -1,5 +1,5 @@
 import { socket } from './socket'
-import { setSocketConnected, setSocketReconnecting } from './socket-status'
+import { setSocketConnected, setSocketReconnectFailed, setSocketReconnecting } from './socket-status'
 
 export const useSocketConnect = () => {
   const actualizeSocketData = () => {
@@ -11,6 +11,7 @@ export const useSocketConnect = () => {
 
   const socketConnect = () => {
     if (!socket.connected) {
+      setSocketReconnectFailed(false)
       socket.connect()
     }
 

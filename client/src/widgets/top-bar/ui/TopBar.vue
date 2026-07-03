@@ -1,11 +1,19 @@
 <script setup lang="ts">
-import { NmorphBadge, NmorphCard, NmorphButton, NmorphIconExit, NmorphIcon } from '@nmorph/nmorph-ui-kit'
+import {
+  NmorphBadge,
+  NmorphButton,
+  NmorphCard,
+  NmorphIcon,
+  NmorphIconExit,
+  NmorphIconRefresh
+} from '@nmorph/nmorph-ui-kit'
 
 import { useUser } from 'src/entities/user'
 import { OnboardingGuideTarget } from 'src/features/onboarding-guide'
 import { CallActivityPanel } from 'src/features/room-call-session'
 import { AppProfileBasicData } from 'src/shared/ui'
 
+import { TOP_BAR_I18N } from '../config/i18n'
 import { useLogout } from '../model/use-logout.model'
 import { useRoomCallActivityNavigation } from '../model/use-room-call-activity-navigation.model'
 import { useTopBarGuide } from '../model/use-top-bar-guide.model'
@@ -15,7 +23,7 @@ const { user, avatarId } = useUser()
 const { isLogoutLoading, logout } = useLogout()
 const { openRoomCall } = useRoomCallActivityNavigation()
 const { topBarGuidePosition } = useTopBarGuide()
-const { socketTag } = useTopBarSocketStatus()
+const { isSocketReconnectLoading, reconnectSocket, showSocketReconnectAction, socketTag } = useTopBarSocketStatus()
 </script>
 
 <template>
@@ -36,8 +44,20 @@ const { socketTag } = useTopBarSocketStatus()
     </OnboardingGuideTarget>
     <div class="top-bar__content-right-side">
       <CallActivityPanel @open-room-call="openRoomCall" />
+      <NmorphCard v-if="showSocketReconnectAction" shadow-type="inset" :fill="false">
+        <NmorphButton
+          :aria-label="$t(TOP_BAR_I18N.reconnect)"
+          :loading="isSocketReconnectLoading"
+          shape="square"
+          @click="reconnectSocket"
+        >
+          <NmorphIcon width="16px" height="16px">
+            <NmorphIconRefresh />
+          </NmorphIcon>
+        </NmorphButton>
+      </NmorphCard>
       <NmorphCard shadow-type="inset" :fill="false">
-        <NmorphButton @click="logout" :loading="isLogoutLoading" shape="square">
+        <NmorphButton :aria-label="$t(TOP_BAR_I18N.logout)" :loading="isLogoutLoading" shape="square" @click="logout">
           <NmorphIcon width="16px" height="16px">
             <NmorphIconExit />
           </NmorphIcon>
@@ -58,6 +78,7 @@ const { socketTag } = useTopBarSocketStatus()
 .top-bar__content-right-side {
   display: flex;
   gap: 16px;
+  align-items: center;
 }
 </style>
 

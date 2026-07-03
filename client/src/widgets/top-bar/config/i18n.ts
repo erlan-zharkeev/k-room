@@ -20,5 +20,10 @@ export const TOP_BAR_I18N = defineI18n('topBar', {
     en: 'Reconnecting',
     ru: 'Переподключение',
     zh: '正在重连'
+  },
+  reconnect: {
+    en: 'Reconnect',
+    ru: 'Переподключиться',
+    zh: '重新连接'
   }
 })

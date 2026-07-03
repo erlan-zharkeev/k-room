@@ -3,7 +3,7 @@ import type { EventAuthError, EventErrorMessage } from 'global-shared'
 import { TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
 import { socket } from './socket'
-import { setSocketConnected, setSocketReconnecting } from './socket-status'
+import { setSocketConnected, setSocketReconnectFailed, setSocketReconnecting } from './socket-status'
 import { useSocketConnect } from './use-socket-connect'
 import { useSocketReconnect } from './use-socket-reconnect'
 import { useSocketTransportErrorToast } from './use-socket-transport-error-toast'
@@ -17,6 +17,7 @@ export const useSocketConnectionSync = () => {
 
   const syncSocketConnected = () => {
     setSocketConnected(true)
+    setSocketReconnectFailed(false)
     setSocketReconnecting(false)
     hideSocketTransportErrorToast()
     actualizeSocketData()
@@ -45,10 +46,12 @@ export const useSocketConnectionSync = () => {
   }
 
   const syncSocketReconnectAttempt = () => {
+    setSocketReconnectFailed(false)
     setSocketReconnecting(true)
   }
 
   const syncSocketReconnectFailed = () => {
+    setSocketReconnectFailed(true)
     setSocketReconnecting(false)
   }
 
