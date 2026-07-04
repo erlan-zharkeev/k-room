@@ -35,9 +35,19 @@ export interface SendRoomCallPushNotificationsParams {
   recipientIds: string[]
 }
 
+export interface SendInvitePushNotificationsParams {
+  inviterId: string
+  inviterNickname: string
+  recipientId: string
+}
+
 export type WebPushBadgeRoomProjection = Pick<ChatRoomDocument, '_id'> & Pick<ChatRoomSchema, 'messages'>
 
 export type WebPushTargetUserProjection = Pick<UserSchema, '_id'> & {
-  personal: Pick<UserPersonalData, 'chatRooms' | 'lastSeenMissedRoomCallCalledAt' | 'mutedChatRoomIds'>
+  personal: Pick<UserPersonalData, 'chatRooms' | 'contacts' | 'lastSeenMissedRoomCallCalledAt' | 'mutedChatRoomIds'>
   system: Pick<UserSystemData, 'role'>
+}
+
+export type WebPushUserLanguageProjection = Pick<UserSchema, '_id'> & {
+  personal: Pick<UserPersonalData, 'language'>
 }

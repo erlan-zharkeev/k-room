@@ -32,7 +32,8 @@ import type {
   RoomCallConnectionQualityByUserId,
   RoomCallRemoteStreamsByUserId,
   RoomCallTemporaryQuickCommandByUserId,
-  RoomCallTemporaryQuickCommandState
+  RoomCallTemporaryQuickCommandState,
+  RoomCallVideoFacingMode
 } from 'src/features/room-call-session'
 import type { AudioMeterAnalyser } from 'src/shared/lib'
 
@@ -82,6 +83,7 @@ export interface RoomCallPanelProps {
   handRaisedByUserId: RoomCallHandRaisedByUserId
   temporaryQuickCommandByUserId: RoomCallTemporaryQuickCommandByUserId
   localMediaState: RoomCallParticipantMediaState
+  videoFacingMode?: RoomCallVideoFacingMode | null
   isBusy: boolean
   isLeaving: boolean
 }
@@ -154,6 +156,7 @@ export interface BuildRoomCallTileItemsParams {
   connectionQualityByUserId: RoomCallConnectionQualityByUserId
   audioStream?: MediaStream | null
   videoStream?: MediaStream | null
+  videoFacingMode?: RoomCallVideoFacingMode | null
   screenStream?: MediaStream | null
   remoteStreamsByUserId: RoomCallRemoteStreamsByUserId
   handRaisedByUserId: RoomCallHandRaisedByUserId

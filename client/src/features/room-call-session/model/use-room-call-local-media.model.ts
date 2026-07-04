@@ -4,9 +4,12 @@ import { onBeforeUnmount, ref, shallowRef } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
 
+import type { RoomCallVideoFacingMode, StartRoomCallAudioOptions, StartRoomCallVideoOptions } from '../config/types'
 import {
   buildRoomCallMediaDeviceConstraints,
+  buildRoomCallVideoDeviceConstraints,
   hasEnabledRoomCallMediaTrack,
+  resolveRoomCallVideoStreamFacingMode,
   setRoomCallMediaStreamTracksEnabled,
   stopRoomCallMediaStream
 } from '../lib/room-call-media'
@@ -27,11 +30,22 @@ export const useRoomCallLocalMedia = () => {
   const isScreenLoading = ref(false)
   const audioStream = audioUserMedia.stream
   const videoStream = videoUserMedia.stream
+  const videoFacingMode = ref<RoomCallVideoFacingMode | null>(null)
   const localMediaState = ref<RoomCallParticipantMediaState>({
     audio: false,
     video: false,
     screen: false
   })
+
+  const resolveVideoFacingMode = async (stream: MediaStream | null) => {
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices()
+
+      return resolveRoomCallVideoStreamFacingMode(stream, devices)
+    } catch {
+      return resolveRoomCallVideoStreamFacingMode(stream)
+    }
+  }
 
   const refreshLocalMediaState = () => {
     localMediaState.value = {
@@ -41,14 +55,21 @@ export const useRoomCallLocalMedia = () => {
     }
   }
 
-  const stopAudio = () => {
+  const stopAudio = (syncState = true) => {
     audioUserMedia.stop()
-    refreshLocalMediaState()
+
+    if (syncState) {
+      refreshLocalMediaState()
+    }
   }
 
-  const stopVideo = () => {
+  const stopVideo = (syncState = true) => {
     videoUserMedia.stop()
-    refreshLocalMediaState()
+    videoFacingMode.value = null
+
+    if (syncState) {
+      refreshLocalMediaState()
+    }
   }
 
   const stopScreen = () => {
@@ -57,39 +78,56 @@ export const useRoomCallLocalMedia = () => {
     refreshLocalMediaState()
   }
 
-  const startAudio = async () => {
-    stopAudio()
+  const startAudio = async ({
+    deviceId = settings.value.ioDevices.audioInputDeviceId,
+    enabled = true
+  }: StartRoomCallAudioOptions = {}) => {
+    stopAudio(false)
     isAudioLoading.value = true
     audioUserMedia.constraints.value = {
-      audio: buildRoomCallMediaDeviceConstraints(settings.value.ioDevices.audioInputDeviceId),
+      audio: buildRoomCallMediaDeviceConstraints(deviceId),
       video: false
     }
 
     try {
       const stream = (await audioUserMedia.start()) ?? null
 
+      setRoomCallMediaStreamTracksEnabled(stream, 'audio', enabled)
       refreshLocalMediaState()
 
       return stream
+    } catch (error) {
+      refreshLocalMediaState()
+      throw error
     } finally {
       isAudioLoading.value = false
     }
   }
 
-  const startVideo = async () => {
-    stopVideo()
+  const startVideo = async ({
+    deviceId = settings.value.ioDevices.videoInputDeviceId,
+    enabled = true,
+    facingMode
+  }: StartRoomCallVideoOptions = {}) => {
+    stopVideo(false)
     isVideoLoading.value = true
     videoUserMedia.constraints.value = {
       audio: false,
-      video: buildRoomCallMediaDeviceConstraints(settings.value.ioDevices.videoInputDeviceId)
+      video: buildRoomCallVideoDeviceConstraints(deviceId, facingMode)
     }
 
     try {
       const stream = (await videoUserMedia.start()) ?? null
 
+      setRoomCallMediaStreamTracksEnabled(stream, 'video', enabled)
+      videoFacingMode.value = await resolveVideoFacingMode(stream)
       refreshLocalMediaState()
 
       return stream
+    } catch (error) {
+      videoFacingMode.value = await resolveVideoFacingMode(videoStream.value ?? null)
+      refreshLocalMediaState()
+      throw error
     } finally {
       isVideoLoading.value = false
     }
@@ -151,6 +189,7 @@ export const useRoomCallLocalMedia = () => {
     audioStream,
     videoStream,
     screenStream,
+    videoFacingMode,
     localMediaState,
     isAudioLoading,
     isVideoLoading,

@@ -1,3 +1,1 @@
 export const SETTINGS_AUDIO_INPUT_LEVEL_METER_SECTIONS = 21
-
-export const DEFAULT_AUDIO_OUTPUT_SELECT_VALUE = '__default-audio-output-device__'

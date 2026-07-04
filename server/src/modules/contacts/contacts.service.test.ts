@@ -51,6 +51,10 @@ const presenceService = {
   onlineMapByUserIds: vi.fn()
 }
 
+const notificationsService = {
+  sendInvitePushNotifications: vi.fn()
+}
+
 describe('contacts.service', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -166,7 +170,13 @@ describe('contacts.service', () => {
     persistenceMock.setExistingUserContactInteraction.mockResolvedValue(author)
     presenceService.isUserOnline.mockResolvedValue(true)
 
-    await updateContactInteractionType('user-1', 'user-2', 'invited', presenceService as never)
+    await updateContactInteractionType(
+      'user-1',
+      'user-2',
+      'invited',
+      presenceService as never,
+      notificationsService as never
+    )
 
     expect(presenceUtilsMock.emitToUsers).toHaveBeenCalledWith(
       ['user-2'],
@@ -180,6 +190,11 @@ describe('contacts.service', () => {
     expect(presenceUtilsMock.emitToUsers).toHaveBeenCalledWith(['user-1'], 'contact-interaction-updated', {
       contactId: 'user-2',
       interaction: 'invited'
+    })
+    expect(notificationsService.sendInvitePushNotifications).toHaveBeenCalledWith({
+      inviterId: 'user-1',
+      inviterNickname: 'author',
+      recipientId: 'user-2'
     })
   })
 

@@ -15,31 +15,61 @@ export const collectRoomCallLocalTrackEntries = (streams: RoomCallLocalMediaStre
   })
 }
 
-export const syncRoomCallPeerLocalTracks = (
+export const syncRoomCallPeerLocalTracks = async (
   peerConnection: RTCPeerConnection,
   streams: RoomCallLocalMediaStreamList
 ) => {
-  let hasTrackChanges = false
+  let hasRenegotiationChanges = false
   const trackEntries = collectRoomCallLocalTrackEntries(streams)
   const localTrackIds = new Set(trackEntries.map(({ track }) => track.id))
-
-  peerConnection.getSenders().forEach((sender) => {
-    if (sender.track && !localTrackIds.has(sender.track.id)) {
-      peerConnection.removeTrack(sender)
-      hasTrackChanges = true
-    }
-  })
-
+  const syncedTrackIds = new Set<string>()
   const senderTrackIds = new Set(peerConnection.getSenders().flatMap(({ track }) => (track ? [track.id] : [])))
 
-  trackEntries.forEach(({ stream, track }) => {
-    if (!senderTrackIds.has(track.id)) {
-      peerConnection.addTrack(track, stream)
-      hasTrackChanges = true
+  const replaceTrackTasks = peerConnection.getSenders().flatMap((sender) => {
+    const currentTrack = sender.track
+
+    if (!currentTrack) return []
+
+    if (localTrackIds.has(currentTrack.id)) {
+      syncedTrackIds.add(currentTrack.id)
+      return []
     }
+
+    const replacement = trackEntries.find(({ track }) => {
+      const isSameKind = track.kind === currentTrack.kind
+      const isNewTrack = !senderTrackIds.has(track.id)
+      const isAvailable = !syncedTrackIds.has(track.id)
+
+      return isSameKind && isNewTrack && isAvailable
+    })
+
+    if (replacement) {
+      syncedTrackIds.add(replacement.track.id)
+      return [sender.replaceTrack(replacement.track)]
+    }
+
+    if (!localTrackIds.has(currentTrack.id)) {
+      peerConnection.removeTrack(sender)
+      hasRenegotiationChanges = true
+    }
+
+    return []
   })
 
-  return hasTrackChanges
+  await Promise.all(replaceTrackTasks)
+
+  const nextSenderTrackIds = new Set(peerConnection.getSenders().flatMap(({ track }) => (track ? [track.id] : [])))
+
+  trackEntries.forEach(({ stream, track }) => {
+    if (nextSenderTrackIds.has(track.id) || syncedTrackIds.has(track.id)) {
+      return
+    }
+
+    peerConnection.addTrack(track, stream)
+    hasRenegotiationChanges = true
+  })
+
+  return hasRenegotiationChanges
 }
 
 export const appendRoomCallRemoteTrack = (stream: MediaStream, track: MediaStreamTrack) => {

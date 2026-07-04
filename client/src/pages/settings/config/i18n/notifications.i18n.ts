@@ -15,6 +15,11 @@ export const SETTINGS_PAGE_NOTIFICATIONS_I18N = defineI18n('settingsPageNotifica
     ru: 'Звонки',
     zh: '通话'
   },
+  invites: {
+    en: 'Invites',
+    ru: 'Приглашения',
+    zh: '邀请'
+  },
   allNotifications: {
     en: 'All notifications',
     ru: 'Все уведомления',
@@ -31,9 +36,9 @@ export const SETTINGS_PAGE_NOTIFICATIONS_I18N = defineI18n('settingsPageNotifica
     zh: '所有应用内提示'
   },
   allToastsDescription: {
-    en: 'In-app popups for messages and calls',
-    ru: 'Всплывающие уведомления для сообщений и звонков',
-    zh: '消息和通话的应用内弹窗'
+    en: 'In-app popups for messages, calls and contact invites',
+    ru: 'Всплывающие уведомления для сообщений, звонков и приглашений в контакты',
+    zh: '消息、通话和联系人邀请的应用内弹窗'
   },
   allSounds: {
     en: 'All sounds',
@@ -41,9 +46,9 @@ export const SETTINGS_PAGE_NOTIFICATIONS_I18N = defineI18n('settingsPageNotifica
     zh: '所有声音'
   },
   allSoundsDescription: {
-    en: 'Sound alerts for messages and calls',
-    ru: 'Звуковые сигналы для сообщений и звонков',
-    zh: '消息和通话声音提醒'
+    en: 'Sound alerts for messages, calls and contact invites',
+    ru: 'Звуковые сигналы для сообщений, звонков и приглашений в контакты',
+    zh: '消息、通话和联系人邀请声音提醒'
   },
   allVibration: {
     en: 'All vibration',
@@ -164,5 +169,45 @@ export const SETTINGS_PAGE_NOTIFICATIONS_I18N = defineI18n('settingsPageNotifica
     en: 'Native app push notifications for calls',
     ru: 'Push-уведомления приложения для звонков',
     zh: '通话原生应用推送通知'
+  },
+  inviteToasts: {
+    en: 'Toasts',
+    ru: 'Тосты',
+    zh: '应用内提示'
+  },
+  inviteToastsDescription: {
+    en: 'In-app popups for contact invites',
+    ru: 'Всплывающие уведомления для приглашений в контакты',
+    zh: '联系人邀请的应用内弹窗'
+  },
+  inviteSound: {
+    en: 'Sound',
+    ru: 'Звук',
+    zh: '声音'
+  },
+  inviteSoundDescription: {
+    en: 'Sound alerts for contact invites',
+    ru: 'Звуковые сигналы для приглашений в контакты',
+    zh: '联系人邀请声音提醒'
+  },
+  inviteBrowserPush: {
+    en: 'Browser push',
+    ru: 'Браузерные пуши',
+    zh: '浏览器推送'
+  },
+  inviteBrowserPushDescription: {
+    en: 'Web push notifications for contact invites',
+    ru: 'Web push-уведомления для приглашений в контакты',
+    zh: '联系人邀请 Web 推送通知'
+  },
+  inviteNativePush: {
+    en: 'Native push',
+    ru: 'Нативные пуши',
+    zh: '原生推送'
+  },
+  inviteNativePushDescription: {
+    en: 'Native app push notifications for contact invites',
+    ru: 'Push-уведомления приложения для приглашений в контакты',
+    zh: '联系人邀请原生应用推送通知'
   }
 })

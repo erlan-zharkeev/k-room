@@ -17,7 +17,7 @@ import {
   NmorphIconVideoCameraOff
 } from '@nmorph/nmorph-ui-kit'
 
-import { ROOM_CALL_SESSION_I18N } from 'src/features/room-call-session'
+import { ROOM_CALL_SESSION_I18N, RoomCallAudioOutput, RoomCallDeviceMenu } from 'src/features/room-call-session'
 
 import {
   ROOM_CALL_QUICK_COMMANDS,
@@ -58,6 +58,7 @@ const {
 
 <template>
   <div ref="roomCallPanel" class="room-call-panel">
+    <RoomCallAudioOutput />
     <div
       class="room-call-panel__tiles"
       :style="roomCallPanelTilesStyle"
@@ -202,6 +203,7 @@ const {
               </NmorphIcon>
             </template>
           </NmorphButton>
+          <RoomCallDeviceMenu :disabled="props.isBusy" />
           <NmorphButton
             v-if="isScreenSharingControlVisible"
             design="plain"
@@ -348,14 +350,17 @@ const {
   background: var(--app-shadow-dark);
 }
 
-.room-call-panel__filmstrip-tile :deep(.room-call-tile__media.nmorph-media-tile--plain) {
+.room-call-panel__filmstrip-tile :deep(.room-call-tile__media.app-media-tile) {
   background: var(--app-shadow-dark);
 }
 
 .room-call-panel__bottom {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   align-items: stretch;
+
+  max-width: 100%;
 }
 
 .room-call-panel__quick-commands-bar,
@@ -378,20 +383,21 @@ const {
 
   overflow: hidden;
   display: flex;
-  flex: 0 0 var(--room-call-panel-quick-commands-toggle-width);
+  flex: 0 1 var(--room-call-panel-quick-commands-toggle-width);
   align-items: center;
   justify-content: flex-start;
 
   box-sizing: border-box;
   width: var(--room-call-panel-quick-commands-toggle-width);
   min-width: var(--room-call-panel-quick-commands-toggle-width);
+  max-width: 100%;
 
   transition: flex-basis 0.18s ease, width 0.18s ease;
 }
 
 .room-call-panel__quick-commands-bar--expanded {
-  flex-basis: var(--room-call-panel-quick-commands-expanded-width);
-  width: var(--room-call-panel-quick-commands-expanded-width);
+  flex-basis: min(100%, var(--room-call-panel-quick-commands-expanded-width));
+  width: min(100%, var(--room-call-panel-quick-commands-expanded-width));
 }
 
 .room-call-panel__quick-commands-toggle {
@@ -431,10 +437,11 @@ const {
 .room-call-panel__self {
   display: grid;
   grid-template-columns: 1fr max-content 1fr;
-  flex: 1;
+  flex: 1 1 180px;
   align-items: center;
 
   min-width: 0;
+  max-width: 100%;
   padding: 8px 10px;
 }
 

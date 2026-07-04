@@ -33,6 +33,7 @@ export const useChatRoomContent = () => {
     startActiveRoomCallScreen,
     stopActiveRoomCallScreen,
     temporaryQuickCommandByUserId,
+    videoFacingMode,
     videoStream,
     leaveActiveRoomCall
   } = useActiveRoomCallSession()
@@ -92,6 +93,7 @@ export const useChatRoomContent = () => {
     joinableSelectedRoomCall,
     audioStream,
     videoStream,
+    videoFacingMode,
     screenStream,
     connectionQualityByUserId,
     remoteStreamsByUserId: activeRoomCallRemoteStreamsByUserId,

@@ -1,9 +1,7 @@
 import { onBeforeUnmount, onMounted } from 'vue'
 
 import { socket } from 'src/shared/api'
-import { getClientPlatform } from 'src/shared/lib'
-
-import { NOTIFICATION_FOREGROUND_SERVICE_WORKER_SYNC_MESSAGE_TYPE } from '../config/service-worker-message.constants'
+import { getClientPlatform, NOTIFICATION_FOREGROUND_SERVICE_WORKER_SYNC_MESSAGE_TYPE } from 'src/shared/lib'
 
 const isBrowserNotificationForeground = () => {
   return getClientPlatform() === 'browser' && document.visibilityState === 'visible' && document.hasFocus()

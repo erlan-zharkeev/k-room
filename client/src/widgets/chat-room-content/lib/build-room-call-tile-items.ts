@@ -1,3 +1,5 @@
+import { isRoomCallVideoFacingModeMirrored } from 'src/features/room-call-session'
+
 import { ROOM_CALL_SCREEN_TILE_ID_SUFFIX } from '../config/constants'
 import type { BuildRoomCallTileItemsParams, RoomCallTileItem } from '../config/types'
 
@@ -67,6 +69,7 @@ export const buildRoomCallTileItems = ({
   roomCall,
   screenStream,
   temporaryQuickCommandByUserId,
+  videoFacingMode,
   videoStream
 }: BuildRoomCallTileItemsParams): RoomCallTileItem[] => {
   const items = roomCall.participants
@@ -86,7 +89,7 @@ export const buildRoomCallTileItems = ({
           )
       const audioActivityStream = isLocal ? audioStream : remoteStream
       const participantTileMediaState = buildRoomCallParticipantTileMediaState(mediaState)
-      const mirrored = isLocal && Boolean(videoStream)
+      const mirrored = isLocal && Boolean(videoStream) && isRoomCallVideoFacingModeMirrored(videoFacingMode)
 
       return {
         audioActivityStream,

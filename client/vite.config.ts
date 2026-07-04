@@ -8,11 +8,11 @@ import { defineConfig } from 'vite'
 import type { Plugin } from 'vite'
 
 import { createClientEnvData } from './create-client-env-data'
+import { CLIENT_UPDATE_RELOAD_STORAGE_PREFIX } from './src/shared/api/constants'
 import {
   APP_BADGE_SERVICE_WORKER_SYNC_MESSAGE_TYPE,
   NOTIFICATION_FOREGROUND_SERVICE_WORKER_SYNC_MESSAGE_TYPE
-} from './src/pages/app/config/service-worker-message.constants'
-import { CLIENT_UPDATE_RELOAD_STORAGE_PREFIX } from './src/shared/api/constants'
+} from './src/shared/lib/browser/service-worker-message.constants'
 import { generatePWAConfig } from './vite.pwa.config'
 
 const WEB_PUSH_SERVICE_WORKER_FILE_NAME = 'web-push-sw.js'

@@ -3,21 +3,23 @@ import { useDevicesList } from '@vueuse/core'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 import { useAppSound, useSettings } from 'src/entities/setting'
-import { useI18n } from 'src/shared/lib'
+import {
+  DEFAULT_MEDIA_DEVICE_SELECT_VALUE,
+  resolveMediaDeviceSelectValue,
+  syncSelectedDeviceId,
+  syncSelectedDeviceIdOnDeviceChange,
+  useMediaDeviceSelectOptions,
+  useI18n
+} from 'src/shared/lib'
 
-import { DEFAULT_AUDIO_OUTPUT_SELECT_VALUE } from '../../config/constants/devices.constants'
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
 import { canPlayAudioOutput, canSelectAudioOutputDevice } from '../../lib/audio-output-device'
-import {
-  resolveSingleSelectValue,
-  syncSelectedDeviceId,
-  syncSelectedDeviceIdOnDeviceChange
-} from '../../lib/device-selection'
 
 import { useDeviceWarning } from './use-device-settings.model'
 
 export const useAudioOutputDevice = () => {
   const { t } = useI18n()
+  const { buildMediaDeviceSelectOptions } = useMediaDeviceSelectOptions()
   const { settings, setByPath } = useSettings()
   const { playAppSound, stopAppSound } = useAppSound()
   const { showDeviceWarning } = useDeviceWarning('Audio output device request failed')
@@ -29,10 +31,10 @@ export const useAudioOutputDevice = () => {
   const isAudioOutputSelectionSupported = computed(() => isAudioOutputSupported.value && canSelectAudioOutputDevice())
 
   const audioOutputOptions = computed(() =>
-    audioOutputDevices.value.map(({ deviceId, label }) => ({
-      value: deviceId || DEFAULT_AUDIO_OUTPUT_SELECT_VALUE,
-      label: label || t(SETTINGS_PAGE_DEVICES_I18N.unknownDevice)
-    }))
+    buildMediaDeviceSelectOptions({
+      devices: audioOutputDevices.value,
+      emptyValue: DEFAULT_MEDIA_DEVICE_SELECT_VALUE
+    })
   )
   const audioOutputSelectValue = computed(() => {
     const deviceId = settings.value.ioDevices.audioOutputDeviceId
@@ -69,7 +71,7 @@ export const useAudioOutputDevice = () => {
 
     stopAudioOutput()
 
-    const deviceId = resolveSingleSelectValue(value, DEFAULT_AUDIO_OUTPUT_SELECT_VALUE)
+    const deviceId = resolveMediaDeviceSelectValue(value, DEFAULT_MEDIA_DEVICE_SELECT_VALUE)
 
     await setByPath('ioDevices.audioOutputDeviceId', deviceId)
   }

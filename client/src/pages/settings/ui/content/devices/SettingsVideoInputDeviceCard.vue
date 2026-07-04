@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { NmorphText, NmorphButton, NmorphCallout, NmorphSelect, NmorphMediaTile } from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphButton, NmorphCallout, NmorphSelect } from '@nmorph/nmorph-ui-kit'
+
+import { MEDIA_DEVICE_I18N } from 'src/shared/lib'
+import { AppMediaTile } from 'src/shared/ui'
 
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../../config/i18n/devices.i18n'
 import { useVideoInputDevice } from '../../../model/devices/use-video-input-device.model'
@@ -23,7 +26,7 @@ const {
 </script>
 
 <template>
-  <SettingsCard :title="$t(SETTINGS_PAGE_DEVICES_I18N.videoInputDevice)" :has-warning="hasVideoInputPermissionWarning">
+  <SettingsCard :title="$t(MEDIA_DEVICE_I18N.videoInputDevice)" :has-warning="hasVideoInputPermissionWarning">
     <div class="settings-video-input-device-card">
       <NmorphText variant="body-small">{{ $t(SETTINGS_PAGE_DEVICES_I18N.videoInputDeviceDescription) }}</NmorphText>
 
@@ -33,7 +36,7 @@ const {
         <NmorphSelect
           :key="settings.ioDevices.videoInputDeviceId"
           class="settings-video-input-device-card__select"
-          :aria-label="$t(SETTINGS_PAGE_DEVICES_I18N.videoInputDevice)"
+          :aria-label="$t(MEDIA_DEVICE_I18N.videoInputDevice)"
           :model-value="settings.ioDevices.videoInputDeviceId"
           :options="videoInputOptions"
           :loading="videoInputLoading"
@@ -52,10 +55,10 @@ const {
         />
       </div>
 
-      <NmorphMediaTile
+      <AppMediaTile
         v-if="isVideoInputChecking"
         class="settings-video-input-device-card__preview"
-        :src-object="videoInputStream"
+        :stream="videoInputStream"
         :name="$t(SETTINGS_PAGE_DEVICES_I18N.videoPreview)"
         mirrored
       />

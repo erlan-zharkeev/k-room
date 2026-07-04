@@ -2,9 +2,7 @@ import { AxiosError } from 'axios'
 import { REQ_STATUS, ROUTE_NAMES, type BackendResponse, type ReqStatus } from 'global-shared'
 import { useRouter } from 'vue-router'
 
-import { TOAST_I18N } from 'src/shared/lib'
-import { log, useI18n } from 'src/shared/lib'
-import { useAppToast } from 'src/shared/lib'
+import { log, syncAppBadge, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
 import { API_I18N } from '../i18n'
 import { handleHttpTransportMeta } from '../transport-meta'
@@ -57,6 +55,7 @@ export const useHttpInterceptor = () => {
 
       if (status === REQ_STATUS.notAuth) {
         silent = true
+        await syncAppBadge(0)
 
         if (router.currentRoute.value.path.startsWith(ROUTE_NAMES.app)) {
           await router.push(ROUTE_NAMES.authLogin)

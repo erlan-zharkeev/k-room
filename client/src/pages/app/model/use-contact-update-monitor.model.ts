@@ -1,13 +1,14 @@
+import { useContactInvitationReceiver } from 'src/features/contact-invitation-notification'
 import { registerSocketEventListeners } from 'src/shared/api'
 
 import { useContactSync } from './use-contact-sync.model'
 
 export const useContactUpdateMonitor = () => {
+  const { processInviteReceived } = useContactInvitationReceiver()
   const {
     actualizeContacts,
     addContact,
     deleteContact,
-    processInvitation,
     syncKnownUsers,
     updateContactData,
     updateContactInteractionType,
@@ -25,7 +26,7 @@ export const useContactUpdateMonitor = () => {
       ['contact-status-updated', updateStatus],
       ['contact-data-changed', updateContactData],
       ['contact-interaction-updated', updateContactInteractionType],
-      ['invite-received', processInvitation],
+      ['invite-received', processInviteReceived],
       ['get-contact-typing-status', updateContactTypingStatus]
     ])
   }

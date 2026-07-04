@@ -2,14 +2,15 @@ import sumBy from 'lodash/sumBy'
 import { computed, onBeforeUnmount, onMounted, watch, type WatchStopHandle } from 'vue'
 
 import { useChatRoom } from 'src/entities/chat-room'
+import { useContact } from 'src/entities/contact'
 import { useMissedRoomCall } from 'src/entities/room-call'
 import { useSettings } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
-
-import { syncAppBadge } from '../lib/app-badge'
+import { syncAppBadge } from 'src/shared/lib'
 
 export const useAppBadge = () => {
   const { chatRooms } = useChatRoom()
+  const { invitationsQuantity } = useContact()
   const { settings } = useSettings()
   const { user } = useUser()
   const { unseenMissedRoomCallQuantity } = useMissedRoomCall(
@@ -19,7 +20,9 @@ export const useAppBadge = () => {
   let stopAppBadgeQuantityWatch: WatchStopHandle | null = null
 
   const unreadMessagesQuantity = computed(() => sumBy(chatRooms.value, 'unreadMessagesQuantity'))
-  const appBadgeQuantity = computed(() => unreadMessagesQuantity.value + unseenMissedRoomCallQuantity.value)
+  const appBadgeQuantity = computed(
+    () => unreadMessagesQuantity.value + unseenMissedRoomCallQuantity.value + invitationsQuantity.value
+  )
 
   onMounted(() => {
     stopAppBadgeQuantityWatch = watch(

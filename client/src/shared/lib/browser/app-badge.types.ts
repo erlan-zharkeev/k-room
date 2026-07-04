@@ -1,4 +1,4 @@
-import type { APP_BADGE_SERVICE_WORKER_SYNC_MESSAGE_TYPE } from '../config/service-worker-message.constants'
+import type { APP_BADGE_SERVICE_WORKER_SYNC_MESSAGE_TYPE } from './service-worker-message.constants'
 
 export type AppBadgeNavigator = Navigator & {
   clearAppBadge?: () => Promise<void>

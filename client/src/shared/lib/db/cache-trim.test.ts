@@ -13,6 +13,18 @@ const createSafariStorageWriteError = () => ({
   name: 'UnknownError'
 })
 
+const createSafariStorageDeleteError = () => ({
+  message: 'Failed to delete record from object store',
+  name: 'UnknownError'
+})
+
+const createSafariStorageBulkError = () => ({
+  failures: [createSafariStorageDeleteError()],
+  message:
+    'known-users.bulkPut(): 1 of 1 operations failed. Errors: UnknownError: Failed to delete record from object store',
+  name: 'BulkError'
+})
+
 describe('cache-trim', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -21,6 +33,10 @@ describe('cache-trim', () => {
 
   it('treats Safari IndexedDB object store write failures as recoverable storage errors', () => {
     expect(isDexieQuotaError(createSafariStorageWriteError())).toBe(true)
+  })
+
+  it('treats Safari IndexedDB object store delete failures as recoverable storage errors', () => {
+    expect(isDexieQuotaError(createSafariStorageBulkError())).toBe(true)
   })
 
   it('retries operation after trimming cache for Safari IndexedDB write failures', async () => {

@@ -320,9 +320,9 @@ export const SETTINGS_PAGE_FAQ_I18N = defineI18n('settingsPageFaq', {
     zh: '通知渠道是什么意思？'
   },
   faqA27: {
-    en: 'In Settings → Notifications, you can turn all notifications on or off, or configure separate channels: toasts, sound, browser push and native push for messages and calls.',
-    ru: 'В Настройках → Уведомления можно включить или отключить все уведомления сразу либо настроить отдельные каналы: тосты, звук, браузерные push и нативные push для сообщений и звонков.',
-    zh: '在设置 → 通知中，可以开启或关闭所有通知，也可以分别配置消息和通话的应用内提示、声音、浏览器推送和原生推送。'
+    en: 'In Settings → Notifications, you can turn all notifications on or off, or configure separate channels: toasts, sound, browser push and native push for messages, calls and contact invites.',
+    ru: 'В Настройках → Уведомления можно включить или отключить все уведомления сразу либо настроить отдельные каналы: тосты, звук, браузерные push и нативные push для сообщений, звонков и приглашений в контакты.',
+    zh: '在设置 → 通知中，可以开启或关闭所有通知，也可以分别配置消息、通话和联系人邀请的应用内提示、声音、浏览器推送和原生推送。'
   },
   faqQ28: {
     en: 'Can I change email or set a password for a Google account?',

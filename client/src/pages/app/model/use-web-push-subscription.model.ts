@@ -24,18 +24,19 @@ export const useWebPushSubscription = () => {
   let hasPendingSync = false
 
   const enabledGroups = computed<WebPushSubscriptionEnabledGroups>(() => {
-    const { calls, enabled, general, messages } = settings.value.notifications
+    const { calls, enabled, general, invites, messages } = settings.value.notifications
     const generalBrowserPushEnabled = enabled && general.browserPush
 
     return {
       calls: generalBrowserPushEnabled && calls.browserPush,
+      invites: generalBrowserPushEnabled && invites.browserPush,
       messages: generalBrowserPushEnabled && messages.browserPush
     }
   })
   const enabledGroupsKey = computed(() => {
-    const { calls, messages } = enabledGroups.value
+    const { calls, invites, messages } = enabledGroups.value
 
-    return `${Number(calls)}:${Number(messages)}`
+    return `${Number(calls)}:${Number(invites)}:${Number(messages)}`
   })
 
   const deleteServerWebPushSubscription = async (endpoint: string) => {

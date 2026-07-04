@@ -56,6 +56,7 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
       roomCall: props.roomCall,
       screenStream: props.screenStream,
       temporaryQuickCommandByUserId: props.temporaryQuickCommandByUserId,
+      videoFacingMode: props.videoFacingMode,
       videoStream: props.videoStream
     })
   )

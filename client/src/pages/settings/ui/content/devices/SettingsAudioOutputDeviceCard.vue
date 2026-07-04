@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { NmorphText, NmorphButton, NmorphCallout, NmorphSelect } from '@nmorph/nmorph-ui-kit'
 
+import { MEDIA_DEVICE_I18N } from 'src/shared/lib'
+
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../../config/i18n/devices.i18n'
 import { useAudioOutputDevice } from '../../../model/devices/use-audio-output-device.model'
 import SettingsCard from '../../SettingsCard.vue'
@@ -20,7 +22,7 @@ const {
 </script>
 
 <template>
-  <SettingsCard :title="$t(SETTINGS_PAGE_DEVICES_I18N.audioOutputDevice)">
+  <SettingsCard :title="$t(MEDIA_DEVICE_I18N.audioOutputDevice)">
     <div class="settings-audio-output-device-card">
       <NmorphText variant="body-small">{{ $t(SETTINGS_PAGE_DEVICES_I18N.audioOutputDeviceDescription) }}</NmorphText>
 
@@ -30,7 +32,7 @@ const {
         <NmorphSelect
           :key="audioOutputSelectValue"
           class="settings-audio-output-device-card__select"
-          :aria-label="$t(SETTINGS_PAGE_DEVICES_I18N.audioOutputDevice)"
+          :aria-label="$t(MEDIA_DEVICE_I18N.audioOutputDevice)"
           :model-value="audioOutputSelectValue"
           :options="audioOutputOptions"
           :loading="audioOutputLoading"

@@ -109,8 +109,11 @@ export const useNotificationSettings = () => {
 
       if (groupId !== 'general') return
 
-      data.notifications.messages[channelId] = value
-      data.notifications.calls[channelId] = value
+      NOTIFICATION_GROUP_IDS.filter((notificationGroupId) => notificationGroupId !== 'general').forEach(
+        (notificationGroupId) => {
+          data.notifications[notificationGroupId][channelId] = value
+        }
+      )
     })
   }
 

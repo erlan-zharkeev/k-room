@@ -7,6 +7,7 @@ import { APP_NAVIGATION_I18N } from 'src/features/app-navigation'
 import { APP_WELCOME_I18N } from 'src/features/app-welcome'
 import { CHAT_ROOM_CONTEXT_MENU_I18N } from 'src/features/chat-room-context-menu'
 import { CHAT_ROOM_TYPING_I18N } from 'src/features/chat-room-typing'
+import { CONTACT_INVITATION_NOTIFICATION_I18N } from 'src/features/contact-invitation-notification'
 import { CONTENT_NAVIGATION_BACK_BUTTON_I18N } from 'src/features/content-navigation-back-button'
 import { ONBOARDING_GUIDE_I18N } from 'src/features/onboarding-guide'
 import { PAGE_BACK_BUTTON_I18N } from 'src/features/page-back-button'
@@ -40,7 +41,7 @@ import {
 } from 'src/pages/settings'
 import { WAIT_EMAIL_CONFIRM_I18N } from 'src/pages/wait-email-confirm'
 import { API_I18N, SOCKET_I18N } from 'src/shared/api'
-import { BROWSER_I18N, buildI18nMessages, DB_QUOTA_I18N, TOAST_I18N } from 'src/shared/lib'
+import { BROWSER_I18N, buildI18nMessages, DB_QUOTA_I18N, MEDIA_DEVICE_I18N, TOAST_I18N } from 'src/shared/lib'
 import { APP_CAPTCHA_I18N } from 'src/shared/ui'
 import { CHAT_ROOM_CONTENT_I18N } from 'src/widgets/chat-room-content'
 import { CHAT_ROOMS_NAVIGATION_I18N } from 'src/widgets/chat-rooms-navigation'
@@ -54,6 +55,7 @@ const appI18nMessages = buildI18nMessages([
   APP_WELCOME_I18N,
   CHAT_ROOM_CONTEXT_MENU_I18N,
   CHAT_ROOM_TYPING_I18N,
+  CONTACT_INVITATION_NOTIFICATION_I18N,
   CONTENT_NAVIGATION_BACK_BUTTON_I18N,
   SELECT_LANGUAGE_I18N,
   UPDATE_NATIVE_DESKTOP_I18N,
@@ -88,6 +90,7 @@ const appI18nMessages = buildI18nMessages([
   SOCKET_I18N,
   BROWSER_I18N,
   DB_QUOTA_I18N,
+  MEDIA_DEVICE_I18N,
   TOAST_I18N,
   APP_CAPTCHA_I18N,
   CHAT_ROOM_CONTENT_I18N,

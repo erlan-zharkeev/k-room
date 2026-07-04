@@ -11,54 +11,27 @@ import { Types, type FilterQuery, type SortOrder } from 'mongoose'
 
 import { localizedText } from 'src/shared/lib/localized-text'
 
-import { LAST_SEEN_PATH } from './user.constants'
+import {
+  ADMIN_USER_DEFAULT_PAGE,
+  ADMIN_USER_DEFAULT_PER_PAGE,
+  ADMIN_USER_DEFAULT_SORT_BY,
+  ADMIN_USER_LIST_PER_PAGE_LIMIT,
+  ADMIN_USER_SORT_PATHS,
+  LAST_SEEN_PATH,
+  USER_PASSWORD_PATH
+} from './user.constants'
 import { USER_ADMIN_I18N } from './user.i18n'
 import { UserModel } from './user.model'
-import type { AdminUserActionRequest, AdminUserActionResponse, AdminUserRecord, UserSchema } from './user.types'
-
-const ADMIN_USER_LIST_PER_PAGE_LIMIT = 500
-const ADMIN_USER_DEFAULT_PER_PAGE = 10
-const ADMIN_USER_DEFAULT_PAGE = 1
-const ADMIN_USER_DEFAULT_SORT_BY = '_id'
-const ADMIN_USER_SORT_PATHS = [
-  '_id',
-  'public.nickname',
-  'personal.email',
-  'system.role',
-  LAST_SEEN_PATH,
-  'createdAt',
-  'updatedAt'
-] as const
-
-interface AdminUserListActionRequest {
-  query?: UnknownObject
-}
-
-interface AdminUserListActionContext {
-  currentAdmin?: unknown
-  resource: {
-    build: (params: UnknownObject) => {
-      toJSON: (currentAdmin?: unknown) => AdminUserRecord
-    }
-  }
-}
-
-interface AdminUserListActionResponse extends AdminUserActionResponse {
-  meta: {
-    total: number
-    perPage: number
-    page: number
-    direction: 'asc' | 'desc'
-    sortBy: string
-  }
-}
-
-interface AdminUserListQueryParams {
-  direction: 'asc' | 'desc'
-  page: number
-  perPage: number
-  sortBy: string
-}
+import type {
+  AdminUserActionRequest,
+  AdminUserActionResponse,
+  AdminUserListActionContext,
+  AdminUserListActionRequest,
+  AdminUserListActionResponse,
+  AdminUserListQueryParams,
+  AdminUserRecord,
+  UserSchema
+} from './user.types'
 
 const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
@@ -164,9 +137,31 @@ const formatLastSeenParam = (params?: AdminUserRecord['params']) => {
   params[LAST_SEEN_PATH] = formatHumanDateTime(value)
 }
 
+const clearPasswordParam = (params?: AdminUserRecord['params']) => {
+  if (!params) {
+    return
+  }
+
+  params[USER_PASSWORD_PATH] = ''
+}
+
+const withHiddenPassword = (response: AdminUserActionResponse) => {
+  clearPasswordParam(response.record?.params)
+  response.records?.forEach((record) => clearPasswordParam(record.params))
+
+  return response
+}
+
 const withFormattedLastSeen = (response: AdminUserActionResponse) => {
   formatLastSeenParam(response.record?.params)
   response.records?.forEach((record) => formatLastSeenParam(record.params))
+
+  return response
+}
+
+const withSafeUserAdminResponse = (response: AdminUserActionResponse) => {
+  withFormattedLastSeen(response)
+  withHiddenPassword(response)
 
   return response
 }
@@ -176,12 +171,12 @@ const normalizePassword = async (request: AdminUserActionRequest, isRequired: bo
     return request
   }
 
-  const password = request.payload?.['system.password']
+  const password = request.payload?.[USER_PASSWORD_PATH]
 
   if (isString(password) && password.trim()) {
     request.payload = {
       ...request.payload,
-      'system.password': await bcrypt.hash(password, 6)
+      [USER_PASSWORD_PATH]: await bcrypt.hash(password, 6)
     }
 
     return request
@@ -192,7 +187,7 @@ const normalizePassword = async (request: AdminUserActionRequest, isRequired: bo
   }
 
   if (!isRequired) {
-    delete request.payload['system.password']
+    delete request.payload[USER_PASSWORD_PATH]
     return request
   }
 
@@ -200,7 +195,7 @@ const normalizePassword = async (request: AdminUserActionRequest, isRequired: bo
 
   throw new ValidationError(
     {
-      'system.password': {
+      [USER_PASSWORD_PATH]: {
         message: localizedText(USER_ADMIN_I18N.passwordRequired, DEFAULT_APP_LANGUAGE),
         type: 'required'
       }
@@ -269,7 +264,7 @@ export const ADMIN_USER_OPTIONS = {
     newProperties: [
       'public.nickname',
       'personal.email',
-      'system.password',
+      USER_PASSWORD_PATH,
       'system.role',
       'system.provider',
       'system.confirmed'
@@ -277,7 +272,7 @@ export const ADMIN_USER_OPTIONS = {
     editProperties: [
       'public.nickname',
       'personal.email',
-      'system.password',
+      USER_PASSWORD_PATH,
       'system.role',
       'system.provider',
       'system.confirmed'
@@ -285,24 +280,27 @@ export const ADMIN_USER_OPTIONS = {
     filterProperties: ['_id', 'public.nickname', 'personal.email', 'system.role', 'system.provider'],
     actions: {
       new: {
-        before: async (request: AdminUserActionRequest) => normalizePassword(request, true)
+        before: async (request: AdminUserActionRequest) => normalizePassword(request, true),
+        after: async (response: AdminUserActionResponse) => withHiddenPassword(response)
       },
       edit: {
-        before: async (request: AdminUserActionRequest) => normalizePassword(request, false)
+        before: async (request: AdminUserActionRequest) => normalizePassword(request, false),
+        after: async (response: AdminUserActionResponse) => withHiddenPassword(response)
       },
       list: {
         handler: listUsers,
-        after: async (response: AdminUserActionResponse) => withFormattedLastSeen(response)
+        after: async (response: AdminUserActionResponse) => withSafeUserAdminResponse(response)
       },
       show: {
-        after: async (response: AdminUserActionResponse) => withFormattedLastSeen(response)
+        after: async (response: AdminUserActionResponse) => withSafeUserAdminResponse(response)
       }
     },
     properties: {
-      'system.password': {
-        type: 'password',
+      [USER_PASSWORD_PATH]: {
         isRequired: true,
-        isVisible: true
+        isVisible: true,
+        label: 'Password',
+        type: 'password'
       },
       'system.device': {
         isVisible: false

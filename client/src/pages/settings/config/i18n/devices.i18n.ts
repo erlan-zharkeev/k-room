@@ -1,10 +1,5 @@
 import { defineI18n, i18nFormatter } from 'src/shared/lib'
 export const SETTINGS_PAGE_DEVICES_I18N = defineI18n('settingsPageDevices', {
-  audioInputDevice: {
-    en: 'Audio input device',
-    ru: 'Устройство ввода звука',
-    zh: '音频输入设备'
-  },
   audioInputDeviceDescription: {
     en: 'Microphone used for calls',
     ru: 'Микрофон для звонков',
@@ -70,11 +65,6 @@ export const SETTINGS_PAGE_DEVICES_I18N = defineI18n('settingsPageDevices', {
     ru: 'Уровень входа микрофона',
     zh: '麦克风输入音量'
   },
-  videoInputDevice: {
-    en: 'Video input device',
-    ru: 'Устройство ввода видео',
-    zh: '视频输入设备'
-  },
   videoInputDeviceDescription: {
     en: 'Camera used for video calls',
     ru: 'Камера для видеозвонков',
@@ -89,11 +79,6 @@ export const SETTINGS_PAGE_DEVICES_I18N = defineI18n('settingsPageDevices', {
     en: 'Stop camera check',
     ru: 'Остановить проверку камеры',
     zh: '停止摄像头测试'
-  },
-  audioOutputDevice: {
-    en: 'Audio output device',
-    ru: 'Устройство вывода звука',
-    zh: '音频输出设备'
   },
   audioOutputDeviceDescription: {
     en: 'Speaker used for notifications and calls',
@@ -119,11 +104,6 @@ export const SETTINGS_PAGE_DEVICES_I18N = defineI18n('settingsPageDevices', {
     en: 'Media devices are not supported in this environment',
     ru: 'Медиаустройства не поддерживаются в этом окружении',
     zh: '当前环境不支持媒体设备'
-  },
-  unknownDevice: {
-    en: 'Unknown device',
-    ru: 'Неизвестное устройство',
-    zh: '未知设备'
   },
   videoPreview: {
     en: 'Camera preview',

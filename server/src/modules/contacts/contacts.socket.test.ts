@@ -33,11 +33,13 @@ const registerContactsHandlers = () => {
     })
   }
   const presenceService = {}
+  const notificationsService = {}
 
-  new ContactsSocketService(presenceService as never).register(socket as never)
+  new ContactsSocketService(presenceService as never, notificationsService as never).register(socket as never)
 
   return {
     handlers,
+    notificationsService,
     presenceService
   }
 }
@@ -72,7 +74,7 @@ describe('contacts.socket', () => {
   })
 
   it('wires delete and interaction updates to service layer', async () => {
-    const { handlers, presenceService } = registerContactsHandlers()
+    const { handlers, notificationsService, presenceService } = registerContactsHandlers()
 
     await handlers['delete-contact']({ deletingUserId: 'user-2' } as never)
     await handlers['update-contact-interaction-type']({ contactId: 'user-2', interaction: 'blocked' } as never)
@@ -82,7 +84,8 @@ describe('contacts.socket', () => {
       'user-1',
       'user-2',
       'blocked',
-      presenceService
+      presenceService,
+      notificationsService
     )
   })
 })

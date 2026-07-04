@@ -2,10 +2,13 @@ import { Injectable } from '@nestjs/common'
 import {
   type DeleteWebPushSubscriptionPayload,
   type WebPushConfigResponse,
+  type WebPushNotificationGroup,
   type WebPushNotificationPayload,
   type WebPushSubscriptionPayload,
   getAppCallPath,
   getAppChatRoomPath,
+  getAppContactPath,
+  isInviteReceivedContactInteraction,
   isNumber,
   isUnknownObject
 } from 'global-shared'
@@ -15,18 +18,22 @@ import { SERVER_ENV } from 'src/app/env'
 import { countUnreadMessagesByIds } from 'src/modules/messages/lib/message-persistence'
 import { PresenceService } from 'src/modules/presence/presence.service'
 import { countUnseenMissedRoomCalls } from 'src/modules/room-calls/lib/missed-room-calls'
+import { localizedText } from 'src/shared/lib/localized-text'
 import { stringifyMongoId } from 'src/shared/lib/normalize-object-id'
 
 import { ChatRoomModel } from '../chat-rooms/chat-rooms.model'
 import { UserModel } from '../user/user.model'
 
 import { WEB_PUSH_EXPIRED_STATUS_CODES } from './notifications.constants'
+import { NOTIFICATIONS_I18N } from './notifications.i18n'
 import { WebPushSubscriptionModel } from './notifications.model'
 import type {
+  SendInvitePushNotificationsParams,
   SendMessagePushNotificationsParams,
   SendRoomCallPushNotificationsParams,
   WebPushBadgeRoomProjection,
   WebPushTargetUserProjection,
+  WebPushUserLanguageProjection,
   WebPushSubscriptionDocument
 } from './notifications.types'
 
@@ -62,7 +69,11 @@ export class NotificationsService {
           endpoint: payload.endpoint,
           expirationTime: payload.expirationTime,
           keys: payload.keys,
-          enabledGroups: payload.enabledGroups,
+          enabledGroups: {
+            calls: payload.enabledGroups.calls,
+            invites: payload.enabledGroups.invites ?? true,
+            messages: payload.enabledGroups.messages
+          },
           userAgent: payload.userAgent ?? '',
           updatedAt: now
         },
@@ -143,10 +154,32 @@ export class NotificationsService {
     await this.sendWebPushToUsers(targetUserIds, roomId, 'calls', payload)
   }
 
+  async sendInvitePushNotifications({ inviterId, inviterNickname, recipientId }: SendInvitePushNotificationsParams) {
+    if (!SERVER_ENV.notifications.webPush.enabled) return
+    if (recipientId === inviterId) return
+
+    const recipient = await UserModel.findById(recipientId, {
+      'personal.language': 1
+    }).lean<WebPushUserLanguageProjection>()
+    const title = inviterNickname || SERVER_ENV.info.appName
+    const payload: WebPushNotificationPayload = {
+      title,
+      options: {
+        body: localizedText(NOTIFICATIONS_I18N.contactInvitePushBody, recipient?.personal.language),
+        tag: `invite:${inviterId}`,
+        data: {
+          url: getAppContactPath()
+        }
+      }
+    }
+
+    await this.sendWebPushToUsers([recipientId], null, 'invites', payload)
+  }
+
   private async sendWebPushToUsers(
     userIds: string[],
-    roomId: string,
-    group: 'calls' | 'messages',
+    roomId: string | null,
+    group: WebPushNotificationGroup,
     payload: WebPushNotificationPayload
   ) {
     const [subscriptions, users] = await Promise.all([
@@ -158,6 +191,7 @@ export class NotificationsService {
         { _id: { $in: userIds } },
         {
           'personal.chatRooms': 1,
+          'personal.contacts': 1,
           'personal.lastSeenMissedRoomCallCalledAt': 1,
           'personal.mutedChatRoomIds': 1,
           'system.role': 1
@@ -166,6 +200,8 @@ export class NotificationsService {
     ])
     const userById = new Map(users.map((user) => [stringifyMongoId(user._id), user]))
     const activeSubscriptions = subscriptions.filter((subscription) => {
+      if (!roomId) return true
+
       const mutedRoomIds = userById.get(subscription.userId)?.personal.mutedChatRoomIds ?? []
 
       return !mutedRoomIds.includes(roomId)
@@ -237,7 +273,10 @@ export class NotificationsService {
           countUnreadMessagesByIds(userId, messageIds),
           countUnseenMissedRoomCalls(userId, roomIds, user.personal.lastSeenMissedRoomCallCalledAt ?? 0)
         ])
-        const badgeCount = unreadMessagesCount + unseenMissedRoomCallsCount
+        const incomingInvitesCount = Object.values(user.personal.contacts).filter(({ interaction }) =>
+          isInviteReceivedContactInteraction(interaction)
+        ).length
+        const badgeCount = unreadMessagesCount + unseenMissedRoomCallsCount + incomingInvitesCount
 
         return [userId, badgeCount] as const
       })

@@ -1,4 +1,4 @@
-export type NotificationEventGroup = 'messages' | 'calls'
+export type NotificationEventGroup = 'messages' | 'calls' | 'invites'
 
 export type NotificationSettingGroup = 'general' | NotificationEventGroup
 
@@ -19,4 +19,5 @@ export interface DeviceNotificationSettings {
   general: NotificationGroupSettings
   messages: NotificationGroupSettings
   calls: NotificationGroupSettings
+  invites: NotificationGroupSettings
 }

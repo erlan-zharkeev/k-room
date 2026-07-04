@@ -1,11 +1,50 @@
-import type { NmorphSelectModelValueType } from '@nmorph/nmorph-ui-kit'
+import { DEFAULT_MEDIA_DEVICE_SELECT_VALUE } from './constants'
+import type { BuildMediaDeviceSelectOptionsParams, MediaDeviceSelectModelValue, MediaDeviceSelectOption } from './types'
 
-export const resolveSingleSelectValue = (value: NmorphSelectModelValueType, emptyValue = '') => {
+export const resolveMediaDeviceSelectValue = (
+  value: MediaDeviceSelectModelValue = '',
+  emptyValue = DEFAULT_MEDIA_DEVICE_SELECT_VALUE
+) => {
   const deviceId = Array.isArray(value) ? value[0] : value
 
   if (!deviceId || deviceId === emptyValue) return ''
 
   return deviceId
+}
+
+export const resolveMediaDeviceSelectOptionValue = (deviceId: string, emptyValue = DEFAULT_MEDIA_DEVICE_SELECT_VALUE) =>
+  deviceId || emptyValue
+
+export const buildMediaDeviceSelectOptions = ({
+  defaultOptionLabel,
+  devices,
+  emptyValue = DEFAULT_MEDIA_DEVICE_SELECT_VALUE,
+  unknownOptionLabel,
+  unknownOptionLabelWithIndex = false
+}: BuildMediaDeviceSelectOptionsParams) => {
+  const optionsByValue = new Map<string, MediaDeviceSelectOption>()
+
+  if (defaultOptionLabel) {
+    optionsByValue.set(emptyValue, {
+      value: emptyValue,
+      label: defaultOptionLabel
+    })
+  }
+
+  devices.forEach(({ deviceId, label }, index) => {
+    const value = resolveMediaDeviceSelectOptionValue(deviceId, emptyValue)
+
+    if (optionsByValue.has(value)) {
+      return
+    }
+
+    optionsByValue.set(value, {
+      value,
+      label: label || `${unknownOptionLabel}${unknownOptionLabelWithIndex ? ` ${index + 1}` : ''}`
+    })
+  })
+
+  return [...optionsByValue.values()]
 }
 
 export const resolveSelectedDeviceId = (devices: MediaDeviceInfo[], deviceId: string, emptyDeviceId = '') => {

@@ -1,8 +1,6 @@
-import { getClientPlatform } from 'src/shared/lib'
-
-import { APP_BADGE_SERVICE_WORKER_SYNC_MESSAGE_TYPE } from '../config/service-worker-message.constants'
-
 import type { AppBadgeNavigator, AppBadgeServiceWorkerSyncMessage } from './app-badge.types'
+import { getClientPlatform } from './browser'
+import { APP_BADGE_SERVICE_WORKER_SYNC_MESSAGE_TYPE } from './service-worker-message.constants'
 
 const getBrowserAppBadgeNavigator = () => {
   const badgeNavigator = navigator as AppBadgeNavigator

@@ -18,6 +18,7 @@ import { isValidMongoId, stringifyMongoId } from 'src/shared/lib/normalize-objec
 import { emitSocketEvent } from 'src/shared/lib/transport-meta'
 import type { EmitServerToClientSocketEvent } from 'src/shared/types'
 
+import type { NotificationsService } from '../notifications/notifications.service'
 import type { PresenceService } from '../presence/presence.service'
 import { emitToUsers } from '../presence/presence.utils'
 import { transformUserToContact } from '../user/lib/transform-user'
@@ -217,7 +218,8 @@ export const updateContactInteraction = async (
   userId: string,
   contactId: string,
   interaction: Interaction,
-  presenceService: PresenceService
+  presenceService: PresenceService,
+  notificationsService?: Pick<NotificationsService, 'sendInvitePushNotifications'>
 ) => {
   const updateAuthorContactInteraction = async () => setContactInteraction(userId, contactId, interaction)
   const updateContactSide = async () => setContactInteraction(contactId, userId, interaction)
@@ -270,6 +272,11 @@ export const updateContactInteraction = async (
       )
 
       emitToUsers([contactData._id], 'invite-received', payload)
+      void notificationsService?.sendInvitePushNotifications({
+        inviterId: userId,
+        inviterNickname: payload.nickname,
+        recipientId: stringifyMongoId(contactData._id)
+      })
       break
     }
     case 'invite-accepted':
@@ -285,13 +292,20 @@ export const updateContactInteractionType = async (
   userId: string,
   contactId: string,
   interaction: Interaction,
-  presenceService: PresenceService
+  presenceService: PresenceService,
+  notificationsService?: Pick<NotificationsService, 'sendInvitePushNotifications'>
 ) => {
   if (isDefaultContactInteraction(interaction)) {
     const currentInteraction = await getContactInteraction(userId, contactId)
 
     if (isBlockedContactInteraction(currentInteraction)) {
-      const result = await updateContactInteraction(userId, contactId, interaction, presenceService)
+      const result = await updateContactInteraction(
+        userId,
+        contactId,
+        interaction,
+        presenceService,
+        notificationsService
+      )
 
       if (result.success) {
         emitContactInteractionUpdated(userId, contactId, interaction)
@@ -306,7 +320,7 @@ export const updateContactInteractionType = async (
     return
   }
 
-  const result = await updateContactInteraction(userId, contactId, interaction, presenceService)
+  const result = await updateContactInteraction(userId, contactId, interaction, presenceService, notificationsService)
 
   if (result.success) {
     emitContactInteractionUpdated(userId, contactId, interaction)

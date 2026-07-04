@@ -3,15 +3,15 @@ import { useDevicesList, useUserMedia } from '@vueuse/core'
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
-import { useI18n } from 'src/shared/lib'
+import {
+  resolveMediaDeviceSelectValue,
+  syncSelectedDeviceId,
+  syncSelectedDeviceIdOnDeviceChange,
+  useMediaDeviceSelectOptions
+} from 'src/shared/lib'
 
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../config/i18n/devices.i18n'
 import type { DevicePermissionStatus } from '../../config/types/devices.types'
-import {
-  resolveSingleSelectValue,
-  syncSelectedDeviceId,
-  syncSelectedDeviceIdOnDeviceChange
-} from '../../lib/device-selection'
 import {
   buildInputDeviceConstraints,
   canEnumerateMediaDevices,
@@ -34,7 +34,7 @@ export const useMediaInputDevice = ({
   startCheckLabel,
   stopCheckLabel
 }: UseMediaInputDeviceOptions) => {
-  const { t } = useI18n()
+  const { buildMediaDeviceSelectOptions } = useMediaDeviceSelectOptions()
   const { settings, setByPath } = useSettings()
   const { audioInputs, devices, isSupported, videoInputs } = useDevicesList({
     constraints: {
@@ -58,10 +58,10 @@ export const useMediaInputDevice = ({
   )
   const { permissionCalloutType, permissionStatus } = useDevicePermissionStatus(isInputSupported, inputPermission)
   const inputOptions = computed(() =>
-    inputDevices.value.map(({ deviceId, label }) => ({
-      value: deviceId,
-      label: label || t(SETTINGS_PAGE_DEVICES_I18N.unknownDevice)
-    }))
+    buildMediaDeviceSelectOptions({
+      devices: inputDevices.value,
+      emptyValue: ''
+    })
   )
   const isInputChecking = computed(() => Boolean(inputStream.value))
   const inputCheckLabel = computed(() => (isInputChecking.value ? stopCheckLabel : startCheckLabel))
@@ -165,7 +165,7 @@ export const useMediaInputDevice = ({
   }
 
   const setSelectedInputDevice = async (value: NmorphSelectModelValueType = '') => {
-    const deviceId = resolveSingleSelectValue(value)
+    const deviceId = resolveMediaDeviceSelectValue(value, '')
     const shouldRestartCheck = isInputChecking.value
 
     await updateSelectedDeviceId(deviceId)

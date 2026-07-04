@@ -10,6 +10,7 @@ import {
 } from '../config/appearance.constants'
 import type { ColorSchema, WallpaperSettings } from '../config/appearance.types'
 import { DEFAULT_SETTINGS } from '../config/constants'
+import { DEFAULT_NOTIFICATION_GROUP_SETTINGS } from '../config/notification.constants'
 import type { DeviceSetting } from '../config/types'
 
 const settingsStore = dexieKeyValueStore<DeviceSetting>(db.settings, 'settings')
@@ -36,11 +37,18 @@ export const useSettings = () => {
 
     if (!initializedSettings) return
 
+    const isInviteNotificationsSynced = 'invites' in initializedSettings.notifications
     const { dark, light } = initializedSettings.appearance.themes
     const isDarkWallpaperSynced = isWallpaperSynced(dark.wallpaper, DARK_WALLPAPER_SETTINGS)
     const isLightWallpaperSynced = isWallpaperSynced(light.wallpaper, LIGHT_WALLPAPER_SETTINGS)
     const isDarkColorSchemaSynced = isColorSchemaSynced(dark.colorSchema, DARK_COLOR_SCHEMA)
     const isLightColorSchemaSynced = isColorSchemaSynced(light.colorSchema, LIGHT_COLOR_SCHEMA)
+
+    if (!isInviteNotificationsSynced) {
+      await mutate((data) => {
+        data.notifications.invites = { ...DEFAULT_NOTIFICATION_GROUP_SETTINGS }
+      })
+    }
 
     if (isDarkWallpaperSynced && isLightWallpaperSynced && isDarkColorSchemaSynced && isLightColorSchemaSynced) return
 

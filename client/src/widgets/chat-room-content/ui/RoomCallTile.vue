@@ -13,11 +13,11 @@ import {
   NmorphIconMicrophone,
   NmorphIconMonitor,
   NmorphIconMute,
-  NmorphIconVideoCamera,
-  NmorphMediaTile
+  NmorphIconVideoCamera
 } from '@nmorph/nmorph-ui-kit'
 
 import { ROOM_CALL_SESSION_I18N } from 'src/features/room-call-session'
+import { AppMediaTile } from 'src/shared/ui'
 
 import { ROOM_CALL_TILE_STATE_ICON_SIZE } from '../config/constants'
 import type { RoomCallTileEmits, RoomCallTileProps } from '../config/types'
@@ -49,19 +49,14 @@ const {
 
 <template>
   <div class="room-call-tile" :class="{ 'room-call-tile--screen': isRoomCallScreenTile }" @click="emit('select')">
-    <NmorphMediaTile
+    <AppMediaTile
       class="room-call-tile__media"
-      :src-object="props.item.stream"
       :name="props.item.name"
       :avatar-src="avatarImageSrc"
+      :stream="props.item.stream"
       :mirrored="props.item.mirrored"
-      muted
       :video-off="isMediaTileVideoOff"
-      :show-status="false"
-      aspect="fill"
-      fit="contain"
       :screen-sharing="isRoomCallScreenTile"
-      design="plain"
     />
     <div class="room-call-tile__top" @click.stop>
       <div class="room-call-tile__bar room-call-tile__overlay">
@@ -211,12 +206,19 @@ const {
   box-shadow: none;
 }
 
-.room-call-tile :deep(.nmorph-media-tile__name) {
+.room-call-tile :deep(.app-media-tile__name) {
   display: none;
 }
 
-.room-call-tile__media.nmorph-media-tile--plain {
+.room-call-tile__media.app-media-tile {
+  aspect-ratio: auto;
+  height: 100%;
   border: 0;
+  background: var(--app-content-surface);
+}
+
+.room-call-tile__media :deep(.app-media-tile__video) {
+  object-fit: contain;
   background: var(--app-content-surface);
 }
 

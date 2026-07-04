@@ -20,6 +20,7 @@ import { type AppSoundKind, log, TOAST_I18N, useAppToast, useI18n } from 'src/sh
 import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
 import { resolveWorstRoomCallConnectionQuality } from '../lib/resolve-room-call-connection-quality'
 import { resolveRoomCallJoinMediaKind } from '../lib/resolve-room-call-join-media-kind'
+import { resolveNextRoomCallVideoFacingMode, resolveRoomCallVideoInputDeviceId } from '../lib/room-call-media'
 import { isRoomCallBlockingStartForUser, isRoomCallUnfinished } from '../lib/room-call-start-availability'
 
 import { useRoomCallLocalMedia } from './use-room-call-local-media.model'
@@ -38,7 +39,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   const { t } = useI18n()
   const toast = useAppToast()
   const { roomCalls } = useRoomCall()
-  const { settings } = useSettings()
+  const { settings, setByPath } = useSettings()
   const { hasInteracted } = useSystem()
   const { playAppSound, startLoopAppSound, stopAppSound } = useAppSound()
   const { user } = useUser()
@@ -58,6 +59,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     startVideo,
     stopRoomCallLocalMedia,
     stopScreen,
+    videoFacingMode,
     videoStream
   } = useRoomCallLocalMedia()
   const {
@@ -413,6 +415,70 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     }
   }
 
+  const setActiveRoomCallAudioInputDevice = async (deviceId: string) => {
+    const wasAudioEnabled = localMediaState.value.audio
+    const shouldRestartAudio = Boolean(audioStream.value)
+
+    await setByPath('ioDevices.audioInputDeviceId', deviceId)
+
+    if (!shouldRestartAudio) {
+      return
+    }
+
+    try {
+      await startAudio({ deviceId, enabled: wasAudioEnabled })
+      await syncActiveRoomCallPeerTracks()
+    } catch (error) {
+      log('error', 'Change room call audio input device failed', error)
+      showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallAudioStartFailed))
+    }
+  }
+
+  const setActiveRoomCallVideoInputDevice = async (deviceId: string) => {
+    const wasVideoEnabled = localMediaState.value.video
+    const shouldRestartVideo = Boolean(videoStream.value)
+
+    await setByPath('ioDevices.videoInputDeviceId', deviceId)
+
+    if (!shouldRestartVideo) {
+      return
+    }
+
+    try {
+      await startVideo({ deviceId, enabled: wasVideoEnabled })
+      await syncActiveRoomCallPeerTracks()
+    } catch (error) {
+      log('error', 'Change room call video input device failed', error)
+      showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallVideoStartFailed))
+    }
+  }
+
+  const setActiveRoomCallAudioOutputDevice = (deviceId: string) => {
+    return setByPath('ioDevices.audioOutputDeviceId', deviceId)
+  }
+
+  const switchActiveRoomCallVideoFacingMode = async () => {
+    if (!localMediaState.value.video) {
+      return
+    }
+
+    const nextFacingMode = resolveNextRoomCallVideoFacingMode(videoFacingMode.value)
+
+    try {
+      await setByPath('ioDevices.videoInputDeviceId', '')
+      const stream = await startVideo({ deviceId: '', facingMode: nextFacingMode })
+      await syncActiveRoomCallPeerTracks()
+      const deviceId = resolveRoomCallVideoInputDeviceId(stream)
+
+      if (deviceId) {
+        await setByPath('ioDevices.videoInputDeviceId', deviceId)
+      }
+    } catch (error) {
+      log('error', 'Switch room call video input facing mode failed', error)
+      showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallVideoStartFailed))
+    }
+  }
+
   const startActiveRoomCallScreen = async () => {
     if (isActiveRoomCallScreenSharingByAnotherParticipant.value) {
       return
@@ -519,6 +585,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     audioStream,
     videoStream,
     screenStream,
+    videoFacingMode,
     remoteStreamsByUserId,
     connectionQualityByUserId,
     handRaisedByUserId,
@@ -535,6 +602,10 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     leaveActiveRoomCall,
     setActiveRoomCallAudioEnabled,
     setActiveRoomCallVideoEnabled,
+    setActiveRoomCallAudioInputDevice,
+    setActiveRoomCallVideoInputDevice,
+    setActiveRoomCallAudioOutputDevice,
+    switchActiveRoomCallVideoFacingMode,
     startActiveRoomCallScreen,
     stopActiveRoomCallScreen,
     sendActiveRoomCallQuickCommand,

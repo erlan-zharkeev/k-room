@@ -101,17 +101,6 @@ export const useContactSync = () => {
     await updateStoredContactData(contactId, { interactionType: interaction })
   }
 
-  const processInvitation = async (payload: Contact) => {
-    const existingContact = await getContact(payload.id)
-    const systemData = getRequiredContactSystemData()
-
-    await putContact({
-      ...payload,
-      savedAt: existingContact?.savedAt ?? systemData.savedAt,
-      isTyping: existingContact?.isTyping ?? systemData.isTyping
-    })
-  }
-
   const updateContactTypingStatus = async ({ contactId, isTyping }: EventGetContactTypingStatus) => {
     const [existingContact, existingKnownUser] = await Promise.all([getContact(contactId), getKnownUser(contactId)])
 
@@ -132,7 +121,6 @@ export const useContactSync = () => {
     updateStatus,
     updateContactData,
     updateContactInteractionType,
-    processInvitation,
     updateContactTypingStatus
   }
 }

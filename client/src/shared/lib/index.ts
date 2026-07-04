@@ -29,7 +29,13 @@ export {
   useScreen
 } from './browser/browser'
 export { useMediaDevicePermission, useTouchInput } from './browser/browser.model'
+export { syncAppBadge } from './browser/app-badge'
+export { isClientPushEnabled, showClientPushWithImage } from './browser/client-push'
 export { IMAGE_RESOLUTIONS } from './browser/constants'
+export {
+  APP_BADGE_SERVICE_WORKER_SYNC_MESSAGE_TYPE,
+  NOTIFICATION_FOREGROUND_SERVICE_WORKER_SYNC_MESSAGE_TYPE
+} from './browser/service-worker-message.constants'
 export { createClassNameWithModifiers, stopPropagation } from './dom/dom'
 export {
   buildPathWithParams,
@@ -38,6 +44,16 @@ export {
   isFormFieldInvalid,
   getNmorphGeneratedColorSchema
 } from './misc/misc'
+export {
+  buildMediaDeviceSelectOptions,
+  resolveMediaDeviceSelectOptionValue,
+  resolveMediaDeviceSelectValue,
+  resolveSelectedDeviceId,
+  resolveSelectedDeviceIdOnDeviceChange,
+  syncSelectedDeviceId,
+  syncSelectedDeviceIdOnDeviceChange
+} from './media/device-selection'
+export { DEFAULT_MEDIA_DEVICE_SELECT_VALUE } from './media/constants'
 export { acquireUrl, releaseUrl, useLiveMediaUrl, useLiveMediaUrlMap, useLiveMediaUrls } from './media/media'
 export { loadStorageEstimate, useStorageEstimate } from './storage/storage.model'
 export { setI18nRuntime, useI18n } from './i18n/i18n'
@@ -65,6 +81,8 @@ export { TOAST_I18N } from './toast/i18n'
 export { captureClientSentryException, captureClientSentryMessage, withClientSentryScope } from './sentry/sentry'
 export { DB_QUOTA_I18N } from './db/i18n'
 export { BROWSER_I18N } from './browser/i18n'
+export { MEDIA_DEVICE_I18N } from './media/i18n'
+export { useMediaDeviceSelectOptions } from './media/use-media-device-select-options.model'
 export { calculateAudioVolumeDb, createAudioMeterAnalyser } from './audio/audio-meter'
 export {
   APP_SOUND_KIND_VALUES,
@@ -74,10 +92,17 @@ export {
 } from './audio/constants'
 export { buildNextEmojiPickerQuickList } from './emoji/emoji'
 export type { AppSoundKind, AudioMeterAnalyser } from './audio/types'
-export type { ClientPlatform, FileLoaderValue } from './browser/types'
+export type {
+  ClientPlatform,
+  ClientPushMediaGetter,
+  ClientPushNotificationGroupSettings,
+  FileLoaderValue
+} from './browser/types'
+export type { AppBadgeNavigator, AppBadgeServiceWorkerSyncMessage } from './browser/app-badge.types'
 export type { ContextRef, KebabCase } from './misc/types'
 export type { I18nKey } from './i18n/define-i18n'
 export type { I18nTranslate } from './i18n/i18n.types'
+export type { MediaDeviceSelectModelValue, MediaDeviceSelectOption } from './media/types'
 export type { DateTimeFormatPatternMap, DateTimeFormat } from './time/types'
 export type { FormField, FormPatternRule, FormRequiredPatternRule, FormRule } from './validation/types'
 export type { AppToastStack, AppToastInput } from './toast/types'

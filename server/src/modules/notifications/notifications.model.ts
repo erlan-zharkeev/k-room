@@ -22,6 +22,11 @@ const webPushSubscriptionEnabledGroupsSchema = new Schema(
       type: Boolean,
       required: true
     },
+    invites: {
+      type: Boolean,
+      required: true,
+      default: true
+    },
     messages: {
       type: Boolean,
       required: true

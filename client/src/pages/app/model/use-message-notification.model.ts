@@ -6,9 +6,7 @@ import { useKnownUser } from 'src/entities/known-user'
 import { useMedia } from 'src/entities/media-file'
 import { useAppSound, useSettings } from 'src/entities/setting'
 import { useSystem } from 'src/entities/system'
-import { useAppToast, useI18n } from 'src/shared/lib'
-
-import { isClientPushEnabled, showClientPushWithImage } from '../lib/client-push'
+import { isClientPushEnabled, showClientPushWithImage, useAppToast, useI18n } from 'src/shared/lib'
 
 export const useMessageNotification = () => {
   const { getById } = useChatRoom()

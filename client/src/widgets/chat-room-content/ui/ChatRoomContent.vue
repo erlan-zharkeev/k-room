@@ -24,6 +24,7 @@ const {
   joinableSelectedRoomCall,
   audioStream,
   videoStream,
+  videoFacingMode,
   screenStream,
   connectionQualityByUserId,
   remoteStreamsByUserId,
@@ -87,6 +88,7 @@ const {
           :room-call="selectedActiveRoomCall"
           :audio-stream="audioStream"
           :video-stream="videoStream"
+          :video-facing-mode="videoFacingMode"
           :screen-stream="screenStream"
           :connection-quality-by-user-id="connectionQualityByUserId"
           :remote-streams-by-user-id="remoteStreamsByUserId"

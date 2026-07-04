@@ -21,7 +21,20 @@ export type RoomCallConnectionQuality = 'good' | 'poor' | 'reconnecting' | 'unst
 
 export type RoomCallPanelDisplayMode = 'focus' | 'grid'
 
+export type RoomCallVideoFacingMode = 'environment' | 'left' | 'right' | 'user'
+
 export type RoomCallLocalMediaStreamList = Array<MediaStream | null | undefined>
+
+export interface StartRoomCallAudioOptions {
+  deviceId?: string
+  enabled?: boolean
+}
+
+export interface StartRoomCallVideoOptions {
+  deviceId?: string
+  enabled?: boolean
+  facingMode?: RoomCallVideoFacingMode
+}
 
 export type RoomCallRemoteStreamsByUserId = Record<string, MediaStream | undefined>
 
@@ -167,3 +180,12 @@ export interface RoomCallAudioContextMenuItemEmits {
 }
 
 export type RoomCallAudioContextMenuItemEmit = (event: 'select') => void
+
+export interface RoomCallDeviceMenuProps {
+  disabled?: boolean
+}
+
+export interface RoomCallIoDeviceSettingsProps {
+  active?: boolean
+  disabled?: boolean
+}

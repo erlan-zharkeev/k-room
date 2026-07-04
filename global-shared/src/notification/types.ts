@@ -5,6 +5,7 @@ export interface WebPushSubscriptionKeysPayload {
 
 export interface WebPushSubscriptionEnabledGroups {
   calls: boolean
+  invites?: boolean
   messages: boolean
 }
 
@@ -29,7 +30,7 @@ export interface EventUpdateNotificationForeground {
   foreground: boolean
 }
 
-export type WebPushNotificationGroup = 'calls' | 'messages'
+export type WebPushNotificationGroup = 'calls' | 'invites' | 'messages'
 
 export interface WebPushNotificationPayload {
   title: string

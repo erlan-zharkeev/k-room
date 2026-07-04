@@ -3,7 +3,7 @@ import type { NotificationSettingGroup, NotificationSettingKey } from 'src/entit
 import { SETTINGS_PAGE_NOTIFICATIONS_I18N } from '../i18n/notifications.i18n'
 import type { SettingsNotificationOption, SettingsNotificationSection } from '../types/notifications.types'
 
-export const NOTIFICATION_GROUP_IDS: NotificationSettingGroup[] = ['general', 'messages', 'calls']
+export const NOTIFICATION_GROUP_IDS: NotificationSettingGroup[] = ['general', 'messages', 'calls', 'invites']
 
 export const NOTIFICATION_CHANNEL_IDS: NotificationSettingKey[] = [
   'toast',
@@ -25,6 +25,10 @@ export const SETTINGS_NOTIFICATION_SECTIONS: SettingsNotificationSection[] = [
   {
     id: 'calls',
     title: SETTINGS_PAGE_NOTIFICATIONS_I18N.calls
+  },
+  {
+    id: 'invites',
+    title: SETTINGS_PAGE_NOTIFICATIONS_I18N.invites
   }
 ]
 
@@ -116,6 +120,30 @@ export const SETTINGS_NOTIFICATION_OPTIONS: Record<string, SettingsNotificationO
       id: 'nativePush',
       label: SETTINGS_PAGE_NOTIFICATIONS_I18N.callNativePush,
       description: SETTINGS_PAGE_NOTIFICATIONS_I18N.callNativePushDescription,
+      visibility: 'native'
+    }
+  ],
+  invites: [
+    {
+      id: 'toast',
+      label: SETTINGS_PAGE_NOTIFICATIONS_I18N.inviteToasts,
+      description: SETTINGS_PAGE_NOTIFICATIONS_I18N.inviteToastsDescription
+    },
+    {
+      id: 'sound',
+      label: SETTINGS_PAGE_NOTIFICATIONS_I18N.inviteSound,
+      description: SETTINGS_PAGE_NOTIFICATIONS_I18N.inviteSoundDescription
+    },
+    {
+      id: 'browserPush',
+      label: SETTINGS_PAGE_NOTIFICATIONS_I18N.inviteBrowserPush,
+      description: SETTINGS_PAGE_NOTIFICATIONS_I18N.inviteBrowserPushDescription,
+      visibility: 'browser'
+    },
+    {
+      id: 'nativePush',
+      label: SETTINGS_PAGE_NOTIFICATIONS_I18N.inviteNativePush,
+      description: SETTINGS_PAGE_NOTIFICATIONS_I18N.inviteNativePushDescription,
       visibility: 'native'
     }
   ]

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { NmorphText, NmorphButton, NmorphCallout, NmorphAudioMeter, NmorphSelect } from '@nmorph/nmorph-ui-kit'
 
+import { MEDIA_DEVICE_I18N } from 'src/shared/lib'
+
 import { SETTINGS_PAGE_DEVICES_I18N } from '../../../config/i18n/devices.i18n'
 import { useAudioInputDevice } from '../../../model/devices/use-audio-input-device.model'
 import SettingsCard from '../../SettingsCard.vue'
@@ -24,7 +26,7 @@ const {
 </script>
 
 <template>
-  <SettingsCard :title="$t(SETTINGS_PAGE_DEVICES_I18N.audioInputDevice)" :has-warning="hasAudioInputPermissionWarning">
+  <SettingsCard :title="$t(MEDIA_DEVICE_I18N.audioInputDevice)" :has-warning="hasAudioInputPermissionWarning">
     <div class="settings-audio-input-device-card">
       <NmorphText variant="body-small">{{ $t(SETTINGS_PAGE_DEVICES_I18N.audioInputDeviceDescription) }}</NmorphText>
 
@@ -34,7 +36,7 @@ const {
         <NmorphSelect
           :key="settings.ioDevices.audioInputDeviceId"
           class="settings-audio-input-device-card__select"
-          :aria-label="$t(SETTINGS_PAGE_DEVICES_I18N.audioInputDevice)"
+          :aria-label="$t(MEDIA_DEVICE_I18N.audioInputDevice)"
           :model-value="settings.ioDevices.audioInputDeviceId"
           :options="audioInputOptions"
           :loading="audioInputLoading"

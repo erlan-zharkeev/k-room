@@ -1,5 +1,6 @@
 import type { ImageObject } from 'global-shared'
 
+import type { MediaRecord } from '../db/types'
 import type { I18nTranslate } from '../i18n/i18n.types'
 
 export type ClientPlatform = 'browser' | 'native'
@@ -21,3 +22,9 @@ export interface ConsoleColor {
 export type ScreenBreakpointName = 'mobile' | 'portrait-tablet' | 'tablet' | 'desktop'
 
 export type ScreenBreakpoints = Record<ScreenBreakpointName, number>
+
+export interface ClientPushNotificationGroupSettings {
+  nativePush: boolean
+}
+
+export type ClientPushMediaGetter = (mediaId: string) => Promise<MediaRecord | undefined>

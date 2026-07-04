@@ -2,10 +2,8 @@ import type { PluginListener } from '@tauri-apps/api/core'
 import type { Options as NativeNotificationOptions } from '@tauri-apps/plugin-notification'
 import type { MediaId } from 'global-shared'
 
-import type { NotificationGroupSettings } from 'src/entities/setting'
-import { getClientPlatform } from 'src/shared/lib'
-
-import type { BrowserPushMediaGetter } from './types'
+import { getClientPlatform } from './browser'
+import type { ClientPushMediaGetter, ClientPushNotificationGroupSettings } from './types'
 
 let nativeNotificationPermissionRequest: Promise<boolean> | null = null
 let nativeNotificationActionListener: Promise<PluginListener> | null = null
@@ -78,8 +76,8 @@ const showNativePush = async (title: string, options: NotificationOptions) => {
 }
 
 export const isClientPushEnabled = (
-  generalSettings: NotificationGroupSettings,
-  groupSettings: NotificationGroupSettings
+  generalSettings: ClientPushNotificationGroupSettings,
+  groupSettings: ClientPushNotificationGroupSettings
 ) => {
   if (getClientPlatform() !== 'native') return false
 
@@ -90,7 +88,7 @@ export const showClientPushWithImage = async (
   title: string,
   options: NotificationOptions,
   _imageId: MediaId,
-  _getMedia: BrowserPushMediaGetter
+  _getMedia: ClientPushMediaGetter
 ) => {
   if (getClientPlatform() === 'native') {
     await showNativePush(title, options)

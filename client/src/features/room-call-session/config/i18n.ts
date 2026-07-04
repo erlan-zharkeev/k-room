@@ -28,6 +28,16 @@ export const ROOM_CALL_SESSION_I18N = defineI18n('roomCallSession', {
     ru: 'Включить или выключить камеру',
     zh: '切换摄像头'
   },
+  roomCallDevices: {
+    en: 'Call devices',
+    ru: 'Устройства звонка',
+    zh: '通话设备'
+  },
+  switchVideoInputFacingMode: {
+    en: 'Switch camera',
+    ru: 'Переключить камеру',
+    zh: '切换摄像头'
+  },
   toggleScreenRoomCall: {
     en: 'Toggle screen sharing',
     ru: 'Включить или выключить демонстрацию экрана',

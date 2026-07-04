@@ -15,9 +15,7 @@ import { useAppSound, useSettings } from 'src/entities/setting'
 import { useSystem } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
 import { ROOM_CALL_SESSION_I18N } from 'src/features/room-call-session'
-import { useI18n } from 'src/shared/lib'
-
-import { isClientPushEnabled, showClientPushWithImage } from '../lib/client-push'
+import { isClientPushEnabled, showClientPushWithImage, useI18n } from 'src/shared/lib'
 
 export const useRoomCallNotification = () => {
   const { getById } = useChatRoom()

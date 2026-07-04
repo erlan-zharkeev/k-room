@@ -108,6 +108,36 @@ export interface AdminUserActionResponse {
   records?: AdminUserRecord[]
 }
 
+export interface AdminUserListActionRequest {
+  query?: UnknownObject
+}
+
+export interface AdminUserListActionContext {
+  currentAdmin?: unknown
+  resource: {
+    build: (params: UnknownObject) => {
+      toJSON: (currentAdmin?: unknown) => AdminUserRecord
+    }
+  }
+}
+
+export interface AdminUserListActionResponse extends AdminUserActionResponse {
+  meta: {
+    total: number
+    perPage: number
+    page: number
+    direction: 'asc' | 'desc'
+    sortBy: string
+  }
+}
+
+export interface AdminUserListQueryParams {
+  direction: 'asc' | 'desc'
+  page: number
+  perPage: number
+  sortBy: string
+}
+
 export type UserIdProjection = Pick<UserSchema, '_id'>
 
 export type UserChatRoomsProjection = Pick<UserSchema, '_id'> & {

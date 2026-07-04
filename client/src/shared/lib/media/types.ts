@@ -10,3 +10,18 @@ export type MediaUrlCacheKeyParams = {
   lastModified?: string
   lastChecked: number
 }
+
+export type MediaDeviceSelectModelValue = string | string[] | null | undefined
+
+export interface MediaDeviceSelectOption {
+  label: string
+  value: string
+}
+
+export interface BuildMediaDeviceSelectOptionsParams {
+  devices: MediaDeviceInfo[]
+  emptyValue?: string
+  defaultOptionLabel?: string
+  unknownOptionLabel: string
+  unknownOptionLabelWithIndex?: boolean
+}

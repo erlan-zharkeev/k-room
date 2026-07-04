@@ -2,7 +2,12 @@ import { isString, isUnknownObject } from 'global-shared'
 
 import { loadStorageEstimate } from '../storage/storage.model'
 
-import { DEXIE_CACHE_TRIM_EVENT_COOLDOWN_MS, DEXIE_QUOTA_ERROR_NAME_SET } from './constants'
+import {
+  DEXIE_CACHE_TRIM_EVENT_COOLDOWN_MS,
+  DEXIE_QUOTA_ERROR_NAME_SET,
+  DEXIE_SAFARI_STORAGE_ERROR_MESSAGES,
+  DEXIE_SAFARI_STORAGE_ERROR_NAME_SET
+} from './constants'
 import type { DexieCacheTrimEvent, DexieCacheTrimEventKind, DexieCacheTrimmer, DexieErrorLike } from './types'
 
 const cacheTrimmerById = new Map<string, DexieCacheTrimmer>()
@@ -64,8 +69,11 @@ const requestDexieCacheTrim = () => {
 
 const isSafariStorageWriteError = (data: DexieErrorLike) => {
   const { message, name } = data
+  const isKnownSafariStorageErrorName = isString(name) && DEXIE_SAFARI_STORAGE_ERROR_NAME_SET.has(name)
+  const hasKnownSafariStorageErrorMessage =
+    isString(message) && DEXIE_SAFARI_STORAGE_ERROR_MESSAGES.some((errorMessage) => message.includes(errorMessage))
 
-  return name === 'UnknownError' && isString(message) && message.includes('Unable to store record in object store')
+  return isKnownSafariStorageErrorName && hasKnownSafariStorageErrorMessage
 }
 
 export const isDexieQuotaError = (error: unknown): boolean => {

@@ -6,6 +6,7 @@ import {
   type EventUpdateInteraction
 } from 'global-shared'
 
+import { NotificationsService } from 'src/modules/notifications/notifications.service'
 import { PresenceService } from 'src/modules/presence/presence.service'
 import { emitToUsers } from 'src/modules/presence/presence.utils'
 import { socketAckMiddleware, socketErrorMiddleware } from 'src/shared/lib/socket-error'
@@ -22,7 +23,10 @@ import {
 
 @Injectable()
 export class ContactsSocketService {
-  constructor(private readonly presenceService: PresenceService) {}
+  constructor(
+    private readonly presenceService: PresenceService,
+    private readonly notificationsService: NotificationsService
+  ) {}
 
   register(socket: SocketInstance) {
     socket.on(
@@ -70,7 +74,13 @@ export class ContactsSocketService {
       socketAckMiddleware<EventUpdateInteraction>(
         socket,
         async ({ contactId, interaction }) => {
-          await updateContactInteractionType(socket.data.userId, contactId, interaction, this.presenceService)
+          await updateContactInteractionType(
+            socket.data.userId,
+            contactId,
+            interaction,
+            this.presenceService,
+            this.notificationsService
+          )
         },
         { basicError: CONTACTS_I18N.updateContactInteractionFailed }
       )
