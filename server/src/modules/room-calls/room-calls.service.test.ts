@@ -121,7 +121,7 @@ describe('room-calls.service', () => {
     expect(leaveRoomCallParticipantMock.finishRoomCall).not.toHaveBeenCalled()
   })
 
-  it('finishes two-person room call when socket disconnects', async () => {
+  it('delegates two-person socket disconnect to participant helper', async () => {
     const redisService = {}
     const roomCall = createRoomCall()
 
@@ -129,11 +129,14 @@ describe('room-calls.service', () => {
 
     await leaveActiveRoomCallsBySocket(redisService as never, 'user-a', 'socket-a')
 
-    expect(leaveRoomCallParticipantMock.finishRoomCall).toHaveBeenCalledWith(redisService, roomCall, [
+    expect(leaveRoomCallParticipantMock.leaveRoomCallParticipant).toHaveBeenCalledWith(
+      redisService,
+      roomCall,
       'user-a',
-      'user-b'
-    ])
-    expect(leaveRoomCallParticipantMock.leaveRoomCallParticipant).not.toHaveBeenCalled()
+      'socket-a',
+      'disconnected'
+    )
+    expect(leaveRoomCallParticipantMock.finishRoomCall).not.toHaveBeenCalled()
   })
 
   it('keeps multi-person room call active when socket disconnects', async () => {

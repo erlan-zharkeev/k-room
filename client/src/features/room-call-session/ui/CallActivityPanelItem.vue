@@ -138,6 +138,8 @@ const {
 
 .call-activity-panel-item:not(.call-activity-panel-item--compact) .call-activity-panel-item__label {
   justify-content: center;
+  justify-self: center;
+  max-width: 100%;
 }
 
 .call-activity-panel-item__avatar {
@@ -177,6 +179,11 @@ const {
 .call-activity-panel-item__text,
 .call-activity-panel-item__title {
   min-width: 0;
+}
+
+.call-activity-panel-item:not(.call-activity-panel-item--compact) .call-activity-panel-item__title {
+  flex: 0 1 auto;
+  width: auto;
 }
 
 .call-activity-panel-item--compact .call-activity-panel-item__text {

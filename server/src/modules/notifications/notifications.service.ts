@@ -140,6 +140,7 @@ export class NotificationsService {
     const isGroupRoom = room?.chatKind === 'group'
     const title = isGroupRoom && room?.chatName ? room.chatName : initiatorNickname
     const body = isGroupRoom ? `${initiatorNickname} started a call` : 'Incoming call'
+    const group: WebPushNotificationGroup = isGroupRoom ? 'messages' : 'calls'
     const payload: WebPushNotificationPayload = {
       title,
       options: {
@@ -151,7 +152,7 @@ export class NotificationsService {
       }
     }
 
-    await this.sendWebPushToUsers(targetUserIds, roomId, 'calls', payload)
+    await this.sendWebPushToUsers(targetUserIds, roomId, group, payload)
   }
 
   async sendInvitePushNotifications({ inviterId, inviterNickname, recipientId }: SendInvitePushNotificationsParams) {

@@ -42,13 +42,17 @@ const {
       'chat-room-header--with-primary-actions': hasHeaderPrimaryActions
     }"
   >
-    <ContentNavigationBackButton v-if="isPortraitTabletOrLess" class="chat-room-header__back" />
+    <ContentNavigationBackButton
+      v-if="isPortraitTabletOrLess"
+      class="chat-room-header__back chat-room-header__back--outside"
+    />
     <NmorphCard
       tag="header"
       shadow-type="inset"
       class="chat-room-content-header"
       content-class="chat-room-content-header__content"
     >
+      <ContentNavigationBackButton v-if="isPortraitTabletOrLess" class="chat-room-content-header__back" />
       <AppProfileBasicData
         :image-id="props.room.avatarId"
         :avatar-icon="avatarIcon"
@@ -91,7 +95,7 @@ const {
           <NmorphSelectButton
             v-if="hasRoomCallViewSwitch"
             class="chat-room-content-header__view-switch"
-            thickness="basic"
+            thickness="thin"
             :model-value="props.contentView"
             :aria-label="$t(CHAT_ROOM_CONTENT_I18N.selectChatRoomContentView)"
             @update:model-value="updateChatRoomContentView"
@@ -148,6 +152,10 @@ const {
   min-height: 64px;
 }
 
+.chat-room-content-header__back.content-navigation-back-button {
+  display: none;
+}
+
 .chat-room-content-header {
   min-width: 0;
   height: 100%;
@@ -192,15 +200,42 @@ const {
 }
 
 @media (width < 560px) {
-  .chat-room-header--with-primary-actions .chat-room-content-header :deep(.chat-room-content-header__content) {
-    grid-template-areas:
-      'profile menu'
-      'primary-actions primary-actions';
-    grid-template-columns: minmax(0, 1fr) max-content;
+  .chat-room-header--with-back {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .chat-room-header--with-primary-actions .chat-room-content-header__profile {
+  .chat-room-header__back--outside.content-navigation-back-button {
+    display: none;
+  }
+
+  .chat-room-content-header__back.content-navigation-back-button {
+    display: flex;
+    grid-area: back;
+    align-self: stretch;
+
+    width: 42px;
+    height: auto;
+    min-height: 42px;
+  }
+
+  .chat-room-content-header :deep(.chat-room-content-header__content) {
+    grid-template-areas: 'back profile actions';
+    grid-template-columns: max-content minmax(0, 1fr) max-content;
+  }
+
+  .chat-room-content-header__profile {
     grid-area: profile;
+  }
+
+  .chat-room-content-header__actions {
+    grid-area: actions;
+  }
+
+  .chat-room-header--with-primary-actions .chat-room-content-header :deep(.chat-room-content-header__content) {
+    grid-template-areas:
+      'profile profile menu'
+      'back primary-actions primary-actions';
+    grid-template-columns: max-content minmax(0, 1fr) max-content;
   }
 
   .chat-room-header--with-primary-actions .chat-room-content-header__actions {

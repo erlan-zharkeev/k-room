@@ -10,7 +10,7 @@ export const APP_SOUND_KIND_VALUES = [
 export const APP_SOUND_SRC_BY_KIND = {
   'incoming-call': '/sounds/incoming-call.mp3',
   'incoming-message': '/sounds/incoming-message.mp3',
-  'interlocutor-busy': '/sounds/interlocutor-busy.mp3',
+  'interlocutor-busy': '/sounds/interlocutor-busy.mp3?v=3-beeps',
   'outgoing-call': '/sounds/outgoing-call.mp3'
 } as const satisfies Record<AppSoundKind, string>
 

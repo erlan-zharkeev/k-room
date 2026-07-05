@@ -120,7 +120,6 @@ export interface BuildRoomCallActivityTitleParams {
 }
 
 export interface BuildRoomCallActivityTextParams {
-  activeParticipantQuantity: number
   isPrivateRoom: boolean
   participantText: string
   text: string

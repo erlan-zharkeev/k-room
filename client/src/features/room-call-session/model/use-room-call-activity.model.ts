@@ -151,7 +151,6 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
     const activeParticipantQuantity = resolveActiveRoomCallParticipantQuantity(roomCall)
     const participantText = t(ROOM_CALL_SESSION_I18N.roomCallParticipants, { quantity: activeParticipantQuantity })
     const text = buildRoomCallActivityText({
-      activeParticipantQuantity,
       isPrivateRoom,
       participantText,
       text: t(textSource, { title: title })

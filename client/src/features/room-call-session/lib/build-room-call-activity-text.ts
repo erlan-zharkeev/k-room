@@ -6,7 +6,6 @@ export const resolveActiveRoomCallParticipantQuantity = ({ participants }: RoomC
   participants.filter(({ leftAt }) => !leftAt).length
 
 export const buildRoomCallActivityText = ({
-  activeParticipantQuantity,
   isPrivateRoom,
   participantText,
   text
@@ -15,5 +14,5 @@ export const buildRoomCallActivityText = ({
     return text
   }
 
-  return `${text}, ${activeParticipantQuantity} ${participantText}`
+  return `${text}, ${participantText}`
 }

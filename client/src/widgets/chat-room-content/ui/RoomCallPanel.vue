@@ -17,7 +17,7 @@ import {
   NmorphIconVideoCameraOff
 } from '@nmorph/nmorph-ui-kit'
 
-import { ROOM_CALL_SESSION_I18N, RoomCallAudioOutput, RoomCallDeviceMenu } from 'src/features/room-call-session'
+import { ROOM_CALL_SESSION_I18N, RoomCallDeviceMenu } from 'src/features/room-call-session'
 
 import {
   ROOM_CALL_QUICK_COMMANDS,
@@ -58,7 +58,6 @@ const {
 
 <template>
   <div ref="roomCallPanel" class="room-call-panel">
-    <RoomCallAudioOutput />
     <div
       class="room-call-panel__tiles"
       :style="roomCallPanelTilesStyle"
@@ -464,7 +463,9 @@ const {
 @media (width < 560px) {
   .room-call-panel__bottom {
     display: grid;
-    grid-template-columns: var(--room-call-panel-quick-commands-toggle-width) minmax(0, 1fr);
+    grid-template-columns: var(--room-call-panel-quick-commands-toggle-width) minmax(0, 1fr) var(
+        --room-call-panel-quick-commands-toggle-width
+      );
   }
 
   .room-call-panel__quick-commands-bar {

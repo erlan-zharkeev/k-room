@@ -24,7 +24,7 @@ export const useRoomCallNotification = () => {
   const { get: getMedia } = useMedia()
   const { settings } = useSettings()
   const { hasInteracted } = useSystem()
-  const { startLoopAppSound, stopAppSound } = useAppSound()
+  const { playAppSound, startLoopAppSound, stopAppSound } = useAppSound()
   const { t } = useI18n()
   const { user } = useUser()
   let incomingRoomCallSoundRoomCallId = ''
@@ -65,13 +65,27 @@ export const useRoomCallNotification = () => {
   }
 
   const playStartedRoomCallSound = async (payload: EventRoomCallStarted) => {
-    const { calls, general } = settings.value.notifications
+    const { calls, general, messages } = settings.value.notifications
     const { roomCall } = payload
+    const room = resolveStartedRoomCallNotificationRoom(payload)
 
     if (!hasInteracted.value) return
     if (!general.sound) return
+    if (!room) return
+
+    if (!isRoomPrivate(room)) {
+      if (!messages.sound) return
+
+      try {
+        await playAppSound('incoming-message')
+      } catch (error) {
+        void error
+      }
+
+      return
+    }
+
     if (!calls.sound) return
-    if (!resolveStartedRoomCallNotificationRoom(payload)) return
 
     stopStartedRoomCallSound()
     incomingRoomCallSoundRoomCallId = roomCall.id
@@ -97,12 +111,14 @@ export const useRoomCallNotification = () => {
   }
 
   const showStartedRoomCallPush = async (payload: EventRoomCallStarted) => {
-    const { calls, general } = settings.value.notifications
+    const { calls, general, messages } = settings.value.notifications
     const { roomCall } = payload
     const room = resolveStartedRoomCallNotificationRoom(payload)
 
-    if (!isClientPushEnabled(general, calls)) return
     if (!room) return
+    const notificationGroup = isRoomPrivate(room) ? calls : messages
+
+    if (!isClientPushEnabled(general, notificationGroup)) return
 
     await showClientPushWithImage(
       resolveStartedRoomCallPushTitle(payload, room),

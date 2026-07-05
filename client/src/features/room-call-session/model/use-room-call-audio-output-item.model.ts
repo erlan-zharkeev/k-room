@@ -2,13 +2,35 @@ import { isFunction } from 'global-shared'
 import { onBeforeUnmount, useTemplateRef, watch } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
-import { log } from 'src/shared/lib'
+import { captureClientSentryException, log, withClientSentryScope } from 'src/shared/lib'
 
 import type { RoomCallAudioOutputItemProps } from '../config/types'
 
 export const useRoomCallAudioOutputItem = (props: RoomCallAudioOutputItemProps) => {
   const audioRef = useTemplateRef<HTMLAudioElement>('audio')
   const { settings } = useSettings()
+
+  const readRoomCallAudioOutputTrackContext = () =>
+    props.item.stream.getAudioTracks().map((track) => ({
+      enabled: track.enabled,
+      id: track.id,
+      label: track.label,
+      muted: track.muted,
+      readyState: track.readyState
+    }))
+
+  const captureRoomCallAudioOutputError = (error: unknown, reason: string) => {
+    withClientSentryScope((scope) => {
+      scope.setTag('room_call.audio_output.reason', reason)
+      scope.setContext('room_call_audio_output', {
+        audioOutputDeviceId: settings.value.ioDevices.audioOutputDeviceId || null,
+        muted: props.item.muted,
+        tracks: readRoomCallAudioOutputTrackContext(),
+        userId: props.item.userId
+      })
+      captureClientSentryException(error)
+    })
+  }
 
   const resetRoomCallAudioOutputDevice = async (audio: HTMLAudioElement) => {
     try {
@@ -30,6 +52,7 @@ export const useRoomCallAudioOutputItem = (props: RoomCallAudioOutputItemProps) 
         await resetRoomCallAudioOutputDevice(audio)
       }
 
+      captureRoomCallAudioOutputError(error, 'set-sink-id')
       log('warn', 'Failed to set room call audio output device', error)
     }
   }
@@ -43,6 +66,7 @@ export const useRoomCallAudioOutputItem = (props: RoomCallAudioOutputItemProps) 
     try {
       await audio.play()
     } catch (error) {
+      captureRoomCallAudioOutputError(error, 'play')
       log('warn', 'Failed to play room call audio output', error)
     }
   }

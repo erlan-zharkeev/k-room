@@ -62,7 +62,6 @@ const {
 
   width: min(720px, calc(100vw - 32px));
   padding: 12px;
-  border: var(--nmorph-plain-border);
   border-radius: 8px;
 
   background: var(--nmorph-main-color);

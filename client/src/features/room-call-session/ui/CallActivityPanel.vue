@@ -200,6 +200,11 @@ const {
   width: 100%;
 }
 
+.call-activity-panel--large .call-activity-panel__stepper {
+  display: grid;
+  justify-items: center;
+}
+
 .call-activity-panel__indicator {
   position: absolute;
   bottom: -4px;

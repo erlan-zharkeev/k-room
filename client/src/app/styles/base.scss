@@ -2,6 +2,7 @@
 
 * {
   box-sizing: border-box;
+
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -23,6 +24,10 @@ body,
   height: 100%;
   min-height: 0;
   margin: 0;
+}
+
+html {
+  background: var(--nmorph-main-color, #1c1f21);
 }
 
 body {
