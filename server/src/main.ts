@@ -6,12 +6,12 @@ import 'reflect-metadata'
 import { NestFactory } from '@nestjs/core'
 import cookieParser from 'cookie-parser'
 import { type NextFunction, type Request, type Response } from 'express'
-import { CLIENT_VERSION_HEADER } from 'global-shared'
 
 import { createAdminRouter, getAdminFaviconPath } from './app/adminjs'
 import { AppExceptionFilter } from './app/app-exception.filter'
 import { AppModule } from './app/app.module'
 import { connectDatabase } from './app/connect-database'
+import { EXPOSED_RESPONSE_HEADERS } from './app/constants'
 import { SERVER_ENV } from './app/env'
 import { initSentry, setupSentryErrorHandler } from './app/sentry'
 import { errorToMessage } from './shared/lib/error-to-message'
@@ -39,7 +39,7 @@ const bootstrap = async () => {
   app.enableCors({
     origin: SERVER_ENV.origins,
     credentials: true,
-    exposedHeaders: [CLIENT_VERSION_HEADER],
+    exposedHeaders: EXPOSED_RESPONSE_HEADERS,
     optionsSuccessStatus: 200
   })
   expressApp.set('trust proxy', true)

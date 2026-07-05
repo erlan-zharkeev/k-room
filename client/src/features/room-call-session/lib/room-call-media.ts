@@ -86,6 +86,17 @@ export const resolveRoomCallVideoInputDeviceId = (stream: MediaStream | null | u
   return track?.getSettings().deviceId ?? ''
 }
 
+export const hasSwitchableRoomCallVideoInputDevice = (devices: MediaDeviceInfo[]) => {
+  const videoInputDeviceKeys = new Set(
+    devices
+      .filter(({ kind }) => kind === 'videoinput')
+      .map(({ deviceId, groupId, label }) => deviceId || groupId || label)
+      .filter(Boolean)
+  )
+
+  return videoInputDeviceKeys.size > 1
+}
+
 export const isRoomCallVideoFacingModeMirrored = (facingMode?: RoomCallVideoFacingMode | null) => facingMode === 'user'
 
 export const resolveNextRoomCallVideoFacingMode = (

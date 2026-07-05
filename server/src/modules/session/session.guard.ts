@@ -26,8 +26,7 @@ export class AccessTokenGuard implements CanActivate {
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest<Request>()
     const response = context.switchToHttp().getResponse<Response>()
-    const { cookies } = request
-    const accessToken = cookies.jwt
+    const accessToken = this.sessionService.getAccessToken(request)
 
     if (!accessToken) {
       throw new AppError(401, this.sessionService.getUnauthorizedMessage())

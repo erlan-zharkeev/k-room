@@ -6,7 +6,7 @@ import { useContact } from 'src/entities/contact'
 import { useKnownUser } from 'src/entities/known-user'
 import { useRoomCall } from 'src/entities/room-call'
 import { useUser } from 'src/entities/user'
-import { socketStatus } from 'src/shared/api'
+import { socket, socketStatus } from 'src/shared/api'
 import { useI18n } from 'src/shared/lib'
 
 import { ROOM_CALL_ACTIVITY_DOT_COLOR_BY_KIND } from '../config/constants'
@@ -19,6 +19,11 @@ import {
 import { buildRoomCallActivityTitle } from '../lib/build-room-call-activity-title'
 import { resolveRoomCallActivityI18n } from '../lib/resolve-room-call-activity-i18n'
 import { resolveRoomCallActivityKind } from '../lib/resolve-room-call-activity-kind'
+import {
+  canJoinRoomCallActivity,
+  canLeaveRoomCallActivity,
+  isCurrentSocketRoomCallParticipant
+} from '../lib/room-call-activity-permissions'
 import { isRoomCallUnfinished } from '../lib/room-call-start-availability'
 import { sortRoomCallActivityRoomCalls } from '../lib/sort-room-call-activity-room-calls'
 
@@ -41,10 +46,11 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
     joinActiveRoomCall,
     leaveActiveRoomCall
   } = useActiveRoomCallSession()
-  const { declineRoomCall } = useRoomCallSession()
+  const { declineRoomCall, leaveRoomCall } = useRoomCallSession()
   const activityStepperIndex = ref(0)
   const joiningMediaKind = ref<RoomCallMediaKind | null>(null)
   const isDecliningRoomCall = ref(false)
+  const isLeavingVisibleRoomCall = ref(false)
 
   const resolveUserById = (id: string) => contactById.value.get(id) ?? knownUserById.value.get(id)
 
@@ -150,11 +156,10 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
       participantText,
       text: t(textSource, { title: title })
     })
-    const canJoin = kind === 'incoming' || kind === 'joinable'
-    const canLeaveActiveRoomCall = kind === 'active'
-    const canLeaveIncomingRoomCall = kind === 'incoming'
-    const canLeaveOutgoingRoomCall = kind === 'outgoing'
-    const canLeave = canLeaveActiveRoomCall || canLeaveIncomingRoomCall || canLeaveOutgoingRoomCall
+    const isCurrentSocketParticipant = isCurrentSocketRoomCallParticipant(roomCall, user.value.id, socket.id)
+    const isActiveSessionRoomCall = roomCall.id === activeRoomCallId.value
+    const canJoin = canJoinRoomCallActivity(kind, isCurrentSocketParticipant)
+    const canLeave = canLeaveRoomCallActivity(kind, isCurrentSocketParticipant, isActiveSessionRoomCall)
 
     return {
       avatarId,
@@ -267,9 +272,14 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
     const isSessionBusyForLeave = isRoomCallSessionBusy.value && !isIncomingRoomCall
     const cannotLeaveRoomCall = !item.canLeave
     const isDeclineInProgress = isDecliningRoomCall.value
+    const isVisibleLeaveInProgress = isLeavingVisibleRoomCall.value
     const isLeaveBlockedByConnection = isActivityDisabled.value
     const actionUnavailable =
-      cannotLeaveRoomCall || isSessionBusyForLeave || isDeclineInProgress || isLeaveBlockedByConnection
+      cannotLeaveRoomCall ||
+      isSessionBusyForLeave ||
+      isDeclineInProgress ||
+      isVisibleLeaveInProgress ||
+      isLeaveBlockedByConnection
 
     if (actionUnavailable) {
       return false
@@ -285,20 +295,31 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
       }
     }
 
-    return leaveActiveRoomCall()
+    if (item.roomCall.id === activeRoomCallId.value) {
+      return leaveActiveRoomCall()
+    }
+
+    isLeavingVisibleRoomCall.value = true
+
+    try {
+      return await leaveRoomCall(item.roomCall.id, 'left')
+    } finally {
+      isLeavingVisibleRoomCall.value = false
+    }
   }
   const isActivityActionLoading = computed(() => {
     const isDeclineInProgress = isDecliningRoomCall.value
     const isJoinInProgress = isJoiningRoomCall.value
     const isLeaveInProgress = isLeavingRoomCall.value
+    const isVisibleLeaveInProgress = isLeavingVisibleRoomCall.value
 
-    return isDeclineInProgress || isJoinInProgress || isLeaveInProgress
+    return isDeclineInProgress || isJoinInProgress || isLeaveInProgress || isVisibleLeaveInProgress
   })
   const isActivityLeaveLoading = computed(() => {
     const item = activityItem.value
     const isIncomingRoomCall = item?.kind === 'incoming'
 
-    return isIncomingRoomCall ? isDecliningRoomCall.value : isLeavingRoomCall.value
+    return isIncomingRoomCall ? isDecliningRoomCall.value : isLeavingRoomCall.value || isLeavingVisibleRoomCall.value
   })
 
   return {

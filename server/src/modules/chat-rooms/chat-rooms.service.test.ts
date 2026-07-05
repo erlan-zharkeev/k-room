@@ -83,6 +83,7 @@ const {
   createChatRoom,
   closeSupportChat,
   deleteChatRoom,
+  leaveChatRoom,
   openSupportChat,
   updateChatRoom,
   updateMutedChatRoom,
@@ -415,6 +416,31 @@ describe('chat-rooms.service', () => {
     expect(userPersistenceMock.removeChatRoomFromUsersByIds).toHaveBeenCalledWith('room-1', ['user-1', 'user-2'])
     expect(mediaServiceMock.deleteBucketFileById).not.toHaveBeenCalled()
     expect(presenceUtilsMock.emitToUsers).toHaveBeenCalledWith(['user-1', 'user-2'], 'chat-room-deleted', {
+      roomId: 'room-1'
+    })
+  })
+
+  it('deletes group chat room when last member leaves', async () => {
+    const execRemoveRoomFromUsers = vi.fn().mockResolvedValue(undefined)
+    const room = {
+      adminId: 'user-1',
+      avatarId: null,
+      chatKind: 'group',
+      users: ['user-1'],
+      messages: ['message-1']
+    }
+
+    chatRoomModelMock.findOne.mockReturnValueOnce(createLeanQuery(room)).mockReturnValueOnce(createLeanQuery(room))
+    chatRoomModelMock.deleteOne.mockReturnValue({ exec: vi.fn().mockResolvedValue(undefined) })
+    userPersistenceMock.removeChatRoomFromUsersByIds.mockReturnValue({ exec: execRemoveRoomFromUsers })
+
+    await leaveChatRoom('user-1', { roomId: 'room-1' }, {} as never)
+
+    expect(chatRoomModelMock.findOneAndUpdate).not.toHaveBeenCalled()
+    expect(chatRoomModelMock.deleteOne).toHaveBeenCalledWith({ _id: 'room-1' })
+    expect(messagePersistenceMock.deleteMessagesByIds).toHaveBeenCalledWith(['message-1'])
+    expect(userPersistenceMock.removeChatRoomFromUsersByIds).toHaveBeenCalledWith('room-1', ['user-1'])
+    expect(presenceUtilsMock.emitToUsers).toHaveBeenCalledWith(['user-1'], 'chat-room-deleted', {
       roomId: 'room-1'
     })
   })

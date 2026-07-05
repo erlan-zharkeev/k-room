@@ -1,5 +1,6 @@
 import { socket } from './socket'
 import { setSocketConnected, setSocketReconnectFailed, setSocketReconnecting } from './socket-status'
+import { syncSocketNativeAuthSession } from './sync-socket-native-auth-session'
 
 export const useSocketConnect = () => {
   const actualizeSocketData = () => {
@@ -10,6 +11,8 @@ export const useSocketConnect = () => {
   }
 
   const socketConnect = () => {
+    syncSocketNativeAuthSession()
+
     if (!socket.connected) {
       setSocketReconnectFailed(false)
       socket.connect()

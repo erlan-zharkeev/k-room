@@ -14,6 +14,7 @@ import { useMessage } from 'src/entities/message'
 import { usePinChatRoomOrder } from 'src/features/pin-chat-room'
 import { socket, useSocketAction, useSocketAvailability } from 'src/shared/api'
 import { useI18n, useScreen } from 'src/shared/lib'
+import { runClientUiTask } from 'src/shared/model'
 
 import type { ChatRoomNavigationItem } from '../config/types'
 import { resolveLastMessageDescription } from '../lib/resolve-last-message-description'
@@ -123,8 +124,10 @@ export const useChatRoomsList = () => {
     () => !searchQuery.value.trim() && chatRoomListGroups.value.pinnedChatRoomList.length > 1
   )
 
-  const openChatRoom = (roomId: string) => {
-    router.push(buildChatRoomRoute(roomId))
+  const openChatRoom = async (roomId: string) => {
+    await runClientUiTask('chat-rooms-navigation:open-room', async () => {
+      await router.push(buildChatRoomRoute(roomId))
+    })
   }
 
   const reorderPinnedChatRooms = async (items: ChatRoomNavigationItem[]) => {

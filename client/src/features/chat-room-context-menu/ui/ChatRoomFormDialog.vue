@@ -149,7 +149,7 @@ const {
 }
 
 .chat-room-form-dialog__contacts-card :deep(.nmorph-checkbox-group__content) {
-  padding: 1px 0;
+  padding: 5px 0 1px;
 }
 
 .chat-room-form-dialog__actions {

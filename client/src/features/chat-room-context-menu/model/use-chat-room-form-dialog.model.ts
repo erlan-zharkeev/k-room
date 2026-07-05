@@ -5,13 +5,15 @@ import {
   type EventCreateRoom,
   type EventUpdateChatRoom
 } from 'global-shared'
-import { computed, onBeforeUnmount, toRef, toRefs, type Ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, toRef, toRefs, type Ref, watch } from 'vue'
 
 import { getRoomOtherUserIds, useChatRoom } from 'src/entities/chat-room'
 import { useContact } from 'src/entities/contact'
 import { useKnownUser } from 'src/entities/known-user'
 import { useUser } from 'src/entities/user'
 import { useSocketAction } from 'src/shared/api'
+import { waitNextFrame } from 'src/shared/lib'
+import { runClientUiTask } from 'src/shared/model'
 import type { AppProfilePickerItem } from 'src/shared/ui'
 
 import { CHAT_ROOM_NAME_MAX_LENGTH_PATTERN } from '../config/constants'
@@ -24,7 +26,7 @@ import { useChatRoomFormState } from './use-chat-room-form-state.model'
 export const useChatRoomFormDialog = (
   props: ChatRoomFormDialogProps,
   isChatRoomFormDialogOpen: Ref<boolean>,
-  openChatRoom: (roomId: string) => void
+  openChatRoom: (roomId: string) => Promise<void> | void
 ) => {
   const roomId = toRef(props, 'roomId')
   const { chatRooms, getById, getPersonalByContactId } = useChatRoom()
@@ -231,6 +233,12 @@ export const useChatRoomFormDialog = (
     closeChatRoomFormDialog()
   }
 
+  const closeChatRoomFormDialogBeforeOpeningRoom = async () => {
+    closeChatRoomFormDialog()
+    await nextTick()
+    await waitNextFrame()
+  }
+
   const createChatRoom = async () => {
     if (!canCreateChat.value || chatRoomFormState.isSavingChatRoom) return
 
@@ -258,8 +266,10 @@ export const useChatRoomFormDialog = (
 
     const { roomId } = response.payload
 
-    closeChatRoomFormDialog()
-    openChatRoom(roomId)
+    await runClientUiTask('chat-room-form:open-created-room', async () => {
+      await closeChatRoomFormDialogBeforeOpeningRoom()
+      await openChatRoom(roomId)
+    })
   }
 
   const updateChatRoom = async (room: ChatRoom) => {
@@ -303,8 +313,10 @@ export const useChatRoomFormDialog = (
     }
 
     if (existingPrivateChatRoomId) {
-      closeChatRoomFormDialog()
-      openChatRoom(existingPrivateChatRoomId)
+      await runClientUiTask('chat-room-form:open-existing-private-room', async () => {
+        await closeChatRoomFormDialogBeforeOpeningRoom()
+        await openChatRoom(existingPrivateChatRoomId)
+      })
 
       return
     }

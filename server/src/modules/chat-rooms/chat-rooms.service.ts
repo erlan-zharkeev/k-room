@@ -427,8 +427,14 @@ export const leaveChatRoom = async (
   const userIds = stringifyMongoIds(users)
   const remainingUserIds = getRoomOtherUserIds({ users: userIds }, userId)
   const isAdminLeaving = isRoomAdmin(room, userId)
+  const isLastMemberLeaving = remainingUserIds.length === 0
 
   let nextRoomAdminId = adminId
+
+  if (isLastMemberLeaving) {
+    await deleteChatRoom(userId, { roomId })
+    return
+  }
 
   if (isAdminLeaving) {
     if (!nextAdminId) {

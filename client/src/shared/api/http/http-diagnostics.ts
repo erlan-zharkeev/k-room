@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios'
-import { isString, isUnknownObject } from 'global-shared'
+import { isString, isUnknownObject, shouldIgnoreSentryError } from 'global-shared'
 
 import { captureClientSentryMessage, withClientSentryScope } from 'src/shared/lib'
 
@@ -10,6 +10,7 @@ import {
   FAILED_TO_PERFORM_OPERATION_SENTRY_MESSAGE,
   FAILED_TO_PERFORM_OPERATION_SENTRY_TAG
 } from './http-diagnostics.constants'
+import type { FailedToPerformOperationHttpCaptureOptions } from './types'
 
 const getStringField = (value: unknown, field: string) => {
   if (!isUnknownObject(value)) return undefined
@@ -45,13 +46,26 @@ export const isFailedToPerformOperationError = (error: unknown) => {
   return message?.toLowerCase().includes(FAILED_TO_PERFORM_OPERATION_MESSAGE_PART) ?? false
 }
 
-export const captureFailedToPerformOperationHttpError = (error: unknown) => {
-  if (!isFailedToPerformOperationError(error)) return
+export const captureFailedToPerformOperationHttpError = (
+  error: unknown,
+  options: FailedToPerformOperationHttpCaptureOptions = {}
+) => {
+  const { displayedMessage, fallbackMessage, silent, status } = options
+  const displayedFallback = Boolean(fallbackMessage && displayedMessage === fallbackMessage)
+  const hasFallbackErrorMessage =
+    isFailedToPerformOperationError(error) ||
+    (displayedMessage ? displayedMessage.toLowerCase().includes(FAILED_TO_PERFORM_OPERATION_MESSAGE_PART) : false)
+
+  if (!displayedFallback && !hasFallbackErrorMessage) return
 
   const { apiBaseUrl, appVersion } = __CLIENT_ENV_DATA__
   const axiosError = error instanceof AxiosError ? error : undefined
   const { config, response } = axiosError ?? {}
   const errorMessage = getErrorMessage(error)
+  const sentryMessage = errorMessage ?? displayedMessage
+  const responseStatus = response?.status ?? status
+
+  if (shouldIgnoreSentryError({ message: sentryMessage, silent, status: responseStatus })) return
 
   withClientSentryScope((scope) => {
     scope.setLevel('error')
@@ -65,11 +79,12 @@ export const captureFailedToPerformOperationHttpError = (error: unknown) => {
       errorCode: axiosError?.code ?? getStringField(error, 'code'),
       errorMessage,
       errorName: error instanceof Error ? error.name : getStringField(error, 'name'),
+      displayedMessage,
       online: navigator.onLine,
       platform: navigator.platform,
       requestMethod: config?.method,
       requestUrl: getUrlWithoutSearch(config?.url),
-      responseStatus: response?.status,
+      responseStatus,
       responseStatusText: response?.statusText,
       tauriRuntime: isTauriRuntime(),
       userAgent: navigator.userAgent

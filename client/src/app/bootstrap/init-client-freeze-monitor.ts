@@ -2,6 +2,8 @@ import * as Sentry from '@sentry/vue'
 import { isNumber, isString, isUnknownObject } from 'global-shared'
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 
+import { readClientUiTaskDiagnostics } from 'src/shared/model'
+
 import { router } from '../router'
 
 import {
@@ -17,22 +19,12 @@ import {
   CLIENT_FREEZE_SENTRY_CATEGORY,
   CLIENT_FREEZE_SENTRY_MESSAGE
 } from './client-freeze-monitor.constants'
-
-type ClientFreezeKind = 'input-delay' | 'long-task'
-type ClientFreezeContext = Record<string, unknown>
-type ClientFreezeDiagnosticEvent = ClientFreezeContext & {
-  atMs: number
-  fullPath: string
-  kind: string
-}
-type ClientFreezeRouteTransition = {
-  finishedAtMs?: number
-  fromFullPath: string
-  fromName: string | null
-  startedAtMs: number
-  toFullPath: string
-  toName: string | null
-}
+import type {
+  ClientFreezeContext,
+  ClientFreezeDiagnosticEvent,
+  ClientFreezeKind,
+  ClientFreezeRouteTransition
+} from './client-freeze-monitor.types'
 
 let isClientFreezeMonitorInitialized = false
 let longTaskObserver: PerformanceObserver | undefined
@@ -254,7 +246,9 @@ const resolveRecentInputEvent = (startTimeMs: number) => {
   }
 }
 
-const resolveProbableCause = (startTimeMs: number) => {
+const resolveProbableCause = (startTimeMs: number, probableClientUiTaskName?: string) => {
+  if (probableClientUiTaskName) return `ui-task:${probableClientUiTaskName}`
+
   if (activeRouteTransition && startTimeMs >= activeRouteTransition.startedAtMs) return 'route-transition'
 
   const recentInputEvent = resolveRecentInputEvent(startTimeMs)
@@ -297,6 +291,7 @@ const captureClientFreeze = (kind: ClientFreezeKind, context: ClientFreezeContex
 
   lastCapturedAtByKind[kind] = now
   const probableCause = Reflect.get(data, 'probableCause')
+  const probableClientUiTask = Reflect.get(data, 'probableClientUiTask')
 
   Sentry.withScope((scope) => {
     scope.setContext(CLIENT_FREEZE_SENTRY_CATEGORY, data)
@@ -307,6 +302,7 @@ const captureClientFreeze = (kind: ClientFreezeKind, context: ClientFreezeContex
     scope.setLevel('warning')
     scope.setTag('client.freeze.kind', kind)
     if (isString(probableCause)) scope.setTag('client.freeze.probable_cause', probableCause)
+    if (isString(probableClientUiTask)) scope.setTag('client.freeze.ui_task', probableClientUiTask)
     Sentry.captureMessage(CLIENT_FREEZE_SENTRY_MESSAGE)
   })
 }
@@ -357,19 +353,24 @@ const initLongTaskMonitor = () => {
 
       const attribution = readLongTaskAttribution(entry)
       const recentResources = readRecentResourceTimings(startTime, duration)
+      const endTimeMs = startTime + duration
+      const uiTasks = readClientUiTaskDiagnostics(startTime, endTimeMs, CLIENT_FREEZE_RECENT_ACTIVITY_WINDOW_MS)
+      const probableClientUiTaskName = uiTasks.probableTask?.name
 
       captureClientFreeze('long-task', {
         activeRouteTransition: readRouteTransitionContext(activeRouteTransition),
         diagnosticTrail: readDiagnosticTrail(),
         durationMs: Math.round(duration),
-        endTimeMs: Math.round(startTime + duration),
+        endTimeMs: Math.round(endTimeMs),
         entryType,
         lastInputEvent: resolveRecentInputEvent(startTime),
         lastRouteTransition: readRouteTransitionContext(lastRouteTransition),
-        probableCause: resolveProbableCause(startTime),
+        probableClientUiTask: probableClientUiTaskName ?? null,
+        probableCause: resolveProbableCause(startTime, probableClientUiTaskName),
         recentResources: recentResources.length ? recentResources : null,
         taskAttribution: attribution.length ? attribution : null,
         taskName: name || null,
+        uiTasks,
         startTimeMs: Math.round(startTime)
       })
     })

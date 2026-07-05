@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  hasSwitchableRoomCallVideoInputDevice,
   isRoomCallVideoFacingModeMirrored,
   resolveNextRoomCallVideoFacingMode,
   resolveRoomCallVideoDeviceLabelFacingMode,
@@ -52,5 +53,26 @@ describe('room call media helpers', () => {
     expect(resolveNextRoomCallVideoFacingMode('user')).toBe('environment')
     expect(resolveNextRoomCallVideoFacingMode('environment')).toBe('user')
     expect(resolveNextRoomCallVideoFacingMode(null)).toBe('user')
+  })
+
+  it('shows video input switch only when another real camera is available', () => {
+    expect(hasSwitchableRoomCallVideoInputDevice([createVideoDevice('camera-1', 'FaceTime HD Camera')])).toBe(false)
+    expect(
+      hasSwitchableRoomCallVideoInputDevice([
+        createVideoDevice('camera-1', 'Front Camera'),
+        createVideoDevice('camera-2', 'Back Camera')
+      ])
+    ).toBe(true)
+    expect(
+      hasSwitchableRoomCallVideoInputDevice([
+        createVideoDevice('', ''),
+        createVideoDevice('', ''),
+        {
+          deviceId: 'microphone-1',
+          kind: 'audioinput',
+          label: 'Microphone'
+        } as MediaDeviceInfo
+      ])
+    ).toBe(false)
   })
 })

@@ -1,4 +1,7 @@
-import { AUTH_ENDPOINTS } from 'global-shared'
+import { AxiosError } from 'axios'
+import { AUTH_ENDPOINTS, REQ_STATUS } from 'global-shared'
+
+import { buildNativeAuthRefreshHeaders, clearNativeAuthSession } from '../native-auth-session'
 
 import { httpClient } from './http-client'
 
@@ -22,9 +25,17 @@ export const refreshAuthTokens = () => {
         method: 'post',
         url: `${__CLIENT_ENV_DATA__.apiBaseUrl}${AUTH_ENDPOINTS.updateTokensPair}`,
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          ...buildNativeAuthRefreshHeaders()
         },
         responseType: 'json'
+      })
+      .catch((error) => {
+        if (error instanceof AxiosError && error.response?.status === REQ_STATUS.notAuth) {
+          clearNativeAuthSession()
+        }
+
+        throw error
       })
       .finally(() => {
         authRefreshPromise = null

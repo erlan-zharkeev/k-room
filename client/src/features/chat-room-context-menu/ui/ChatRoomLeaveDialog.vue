@@ -12,11 +12,11 @@ const props = defineProps<ChatRoomLeaveDialogProps>()
 const {
   canLeaveChatRoom,
   closeLeaveChatRoomDialog,
-  isCurrentUserChatRoomAdmin,
   isLeavingChatRoom,
   leaveChatRoom,
   newAdminItems,
-  selectedNewAdminIds
+  selectedNewAdminIds,
+  shouldSelectNewAdminBeforeLeaving
 } = useChatRoomLeave(props, model)
 </script>
 
@@ -25,12 +25,12 @@ const {
     <div class="app-dialog-stack">
       <NmorphText>{{
         $t(
-          isCurrentUserChatRoomAdmin
+          shouldSelectNewAdminBeforeLeaving
             ? CHAT_ROOM_CONTEXT_MENU_I18N.leaveGroupAdminConfirm
             : CHAT_ROOM_CONTEXT_MENU_I18N.leaveGroupConfirm
         )
       }}</NmorphText>
-      <div v-if="isCurrentUserChatRoomAdmin" class="app-dialog-stack">
+      <div v-if="shouldSelectNewAdminBeforeLeaving" class="app-dialog-stack">
         <NmorphText as="small" color="semi-contrast" variant="body-small">{{
           $t(CHAT_ROOM_CONTEXT_MENU_I18N.newGroupAdministrator)
         }}</NmorphText>

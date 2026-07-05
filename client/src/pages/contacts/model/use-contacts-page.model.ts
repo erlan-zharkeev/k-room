@@ -15,7 +15,8 @@ import { useRoute, useRouter } from 'vue-router'
 
 import { useChatRoom } from 'src/entities/chat-room'
 import { useSocketAction } from 'src/shared/api'
-import { useI18n, useScreen, type ContactRecord } from 'src/shared/lib'
+import { useI18n, useScreen, waitNextFrame, type ContactRecord } from 'src/shared/lib'
+import { runClientUiTask } from 'src/shared/model'
 
 import { CONTACTS_PAGE_I18N } from '../config/i18n'
 
@@ -70,12 +71,15 @@ export const useContactsPage = () => {
     })
   }
 
-  const goToChatRoom = (roomId?: string) => {
+  const goToChatRoom = async (roomId?: string) => {
     if (!roomId) return
 
-    router.push({
-      path: getAppChatRoomPath(roomId),
-      query: isPortraitTabletOrLess.value ? { ...route.query, view: 'content' } : route.query
+    await runClientUiTask('contacts:open-room', async () => {
+      await waitNextFrame()
+      await router.push({
+        path: getAppChatRoomPath(roomId),
+        query: isPortraitTabletOrLess.value ? { ...route.query, view: 'content' } : route.query
+      })
     })
   }
 
@@ -87,7 +91,7 @@ export const useContactsPage = () => {
     creatingChatContactIds.add(contactId)
     void emitSocketAction('create-chat-room', payload, {
       onSuccess: ({ payload: responsePayload }) => {
-        goToChatRoom(responsePayload?.roomId)
+        void goToChatRoom(responsePayload?.roomId)
       },
       onSettled: () => {
         creatingChatContactIds.delete(contactId)

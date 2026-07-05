@@ -1,4 +1,5 @@
 import { parse } from 'cookie'
+import { isString, isUnknownObject } from 'global-shared'
 import jwt from 'jsonwebtoken'
 
 import { SERVER_ENV } from 'src/app/env'
@@ -7,6 +8,16 @@ import { emitSocketEvent } from 'src/shared/lib/transport-meta'
 import type { EmitServerToClientSocketEvent, SocketInstance } from 'src/shared/types'
 
 import type { SocketTokenPayload } from './auth.types'
+
+const readSocketAuthString = (socket: SocketInstance, key: string) => {
+  const { auth } = socket.handshake
+
+  if (!isUnknownObject(auth)) return ''
+
+  const value = Reflect.get(auth, key)
+
+  return isString(value) ? value : ''
+}
 
 const emitAuthError = (socket: SocketInstance) => {
   const emit = socket.emit.bind(socket) as EmitServerToClientSocketEvent
@@ -33,7 +44,7 @@ const verifySocketToken = async (token: string) => {
 export const socketAuthMiddleware = async (socket: SocketInstance) => {
   const cookie = socket.handshake.headers.cookie
   const parsedCookie = parse(cookie ?? '')
-  const accessToken = parsedCookie.jwt ?? ''
+  const accessToken = parsedCookie.jwt ?? readSocketAuthString(socket, 'accessToken')
 
   if (!accessToken) {
     emitAuthError(socket)
@@ -42,7 +53,7 @@ export const socketAuthMiddleware = async (socket: SocketInstance) => {
 
   try {
     const decoded = await verifySocketToken(accessToken)
-    const deviceId = parsedCookie['device-id'] ?? ''
+    const deviceId = parsedCookie['device-id'] ?? readSocketAuthString(socket, 'deviceId')
     const language = getSocketLanguage(socket)
 
     socket.data = {

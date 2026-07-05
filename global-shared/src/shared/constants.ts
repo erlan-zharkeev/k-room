@@ -9,6 +9,10 @@ export const DAY_IN_MS = DAY_IN_SEC * SECOND_IN_MS
 export const WEEK_IN_MS = 7 * DAY_IN_MS
 export const ROOM_PARTICIPANT_LIMIT = 5
 export const CLIENT_VERSION_HEADER = 'x-k-room-client-version'
+export const NATIVE_AUTH_CLIENT_HEADER = 'x-k-room-native-client'
+export const NATIVE_AUTH_ACCESS_TOKEN_HEADER = 'x-k-room-native-access-token'
+export const NATIVE_AUTH_REFRESH_TOKEN_HEADER = 'x-k-room-native-refresh-token'
+export const NATIVE_AUTH_DEVICE_ID_HEADER = 'x-k-room-native-device-id'
 
 export const firebaseProviders = ['google', 'facebook'] as const
 

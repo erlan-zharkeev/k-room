@@ -20,6 +20,13 @@ export interface CreateHttpErrorPayload {
   payload?: BackendResponse<unknown> | null
 }
 
+export interface FailedToPerformOperationHttpCaptureOptions {
+  displayedMessage?: string
+  fallbackMessage?: string
+  silent?: boolean
+  status?: number
+}
+
 export type HttpError = Error & {
   type: 'http-error'
   message: string

@@ -288,6 +288,10 @@ export {
   MB_IN_BYTES,
   MINUTE_IN_MS,
   MINUTE_IN_SEC,
+  NATIVE_AUTH_ACCESS_TOKEN_HEADER,
+  NATIVE_AUTH_CLIENT_HEADER,
+  NATIVE_AUTH_DEVICE_ID_HEADER,
+  NATIVE_AUTH_REFRESH_TOKEN_HEADER,
   providers,
   ROOM_PARTICIPANT_LIMIT,
   SECOND_IN_MS,
@@ -305,7 +309,8 @@ export type {
   StreamSettings,
   BackendMessage,
   BackendResponse,
-  TransportMeta
+  TransportMeta,
+  NativeAuthSession
 } from './shared/types'
 
 export type {

@@ -7,7 +7,7 @@ import type { ClientPlatform } from './types'
 import type { ImageToBase64Params } from './types'
 
 export const getClientPlatform = (): ClientPlatform => {
-  return '__TAURI_INTERNALS__' in window ? 'native' : 'browser'
+  return typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window ? 'native' : 'browser'
 }
 
 export const getDataUrlMimeType = (url: string) => url.match(/^data:([^;]+);/)?.[1] ?? ''
@@ -55,6 +55,11 @@ export const readFileAsDataUrl = (file: File) =>
     reader.addEventListener('load', () => resolve(isString(reader.result) ? reader.result : undefined))
     reader.addEventListener('error', () => resolve(undefined))
     reader.readAsDataURL(file)
+  })
+
+export const waitNextFrame = () =>
+  new Promise<void>((resolve) => {
+    window.requestAnimationFrame(() => resolve())
   })
 
 export const canShowBrowserPush = () => 'Notification' in window && Notification.permission === 'granted'

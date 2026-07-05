@@ -11,6 +11,7 @@ const props = defineProps<RoomCallDeviceMenuProps>()
 const ROOM_CALL_DEVICE_MENU_ICON_SIZE = '16px'
 const {
   isRoomCallDeviceSettingsOpen,
+  isVideoFacingModeSwitchVisible,
   isVideoFacingModeSwitchDisabled,
   openRoomCallDeviceSettings,
   switchVideoInputFacingMode
@@ -20,6 +21,7 @@ const {
 <template>
   <div class="room-call-device-menu">
     <NmorphButton
+      v-if="isVideoFacingModeSwitchVisible"
       design="plain"
       borderless
       shape="circle"

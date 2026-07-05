@@ -26,6 +26,7 @@ export {
   revokeObjectUrl,
   revokeObjectUrls,
   showBrowserPush,
+  waitNextFrame,
   useScreen
 } from './browser/browser'
 export { useMediaDevicePermission, useTouchInput } from './browser/browser.model'

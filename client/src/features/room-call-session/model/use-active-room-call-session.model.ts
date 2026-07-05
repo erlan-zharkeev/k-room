@@ -38,7 +38,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   const isLeavingRoomCall = ref(false)
   const { t } = useI18n()
   const toast = useAppToast()
-  const { roomCalls } = useRoomCall()
+  const { put: putRoomCall, roomCalls } = useRoomCall()
   const { settings, setByPath } = useSettings()
   const { hasInteracted } = useSystem()
   const { playAppSound, startLoopAppSound, stopAppSound } = useAppSound()
@@ -348,11 +348,11 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       const { participantQuickCommandStateByUserId, roomCall } = response.payload
       const localMediaKind = resolveRoomCallJoinMediaKind(roomCall, mediaKind)
 
-      activeRoomCallId.value = roomCall.id
-      syncRoomCallRuntimeState(roomCall.id)
-
+      await putRoomCall(roomCall)
       await startRoomCallLocalMedia(localMediaKind)
 
+      activeRoomCallId.value = roomCall.id
+      syncRoomCallRuntimeState(roomCall.id)
       syncInitialRoomCallParticipantQuickCommandStates(participantQuickCommandStateByUserId)
       await syncActiveRoomCallLocalState()
       await connectActiveRoomCallPeers(roomCall)

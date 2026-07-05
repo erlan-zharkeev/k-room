@@ -33,4 +33,10 @@ export interface TransportMeta {
   clientVersion: string
 }
 
+export interface NativeAuthSession {
+  accessToken: string
+  deviceId: string
+  refreshToken: string
+}
+
 export type { RouteName, Endpoints } from '../endpoints/types'

@@ -179,12 +179,11 @@ export const useRoomCallPeerManager = () => {
   const closeRoomCallPeer = (userId: string, shouldClearPeerTask = true) => {
     const peerConnection = peerConnectionByUserId.get(userId)
 
-    if (!peerConnection) {
-      return
+    if (peerConnection) {
+      peerConnection.close()
+      peerConnectionByUserId.delete(userId)
     }
 
-    peerConnection.close()
-    peerConnectionByUserId.delete(userId)
     iceCandidatesByUserId.delete(userId)
     makingOfferByUserId.delete(userId)
     if (shouldClearPeerTask) {
@@ -411,9 +410,14 @@ export const useRoomCallPeerManager = () => {
   }
 
   const addRoomCallPeerIceCandidate = async (payload: EventRoomCallSignalReceived) => {
+    if (!isRoomCallIceCandidateSignal(payload.signal)) {
+      return
+    }
+
     const peerConnection = peerConnectionByUserId.get(payload.fromUserId)
 
-    if (!peerConnection || !isRoomCallIceCandidateSignal(payload.signal)) {
+    if (!peerConnection) {
+      pushRoomCallPeerIceCandidate(payload.fromUserId, payload.signal)
       return
     }
 
@@ -496,6 +500,7 @@ export const useRoomCallPeerManager = () => {
     Array.from(peerConnectionByUserId.keys()).forEach((userId) => {
       closeRoomCallPeer(userId)
     })
+    iceCandidatesByUserId.clear()
     peerTaskByUserId.clear()
     makingOfferByUserId.clear()
     localUserId = null

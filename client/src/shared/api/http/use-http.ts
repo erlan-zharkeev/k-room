@@ -5,6 +5,7 @@ import { TOAST_I18N } from 'src/shared/lib'
 import { useI18n } from 'src/shared/lib'
 import { useAppToast } from 'src/shared/lib'
 
+import { buildNativeAuthRequestHeaders } from '../native-auth-session'
 import { handleHttpTransportMeta } from '../transport-meta'
 
 import { refreshAuthTokens, shouldSkipAuthRefresh } from './auth-refresh'
@@ -52,6 +53,7 @@ export const useHttp = () => {
 
     const requestHeaders: AxiosRequestConfig['headers'] = {
       ...(data instanceof FormData ? {} : { 'Content-Type': contentType }),
+      ...buildNativeAuthRequestHeaders(),
       ...headers
     }
 

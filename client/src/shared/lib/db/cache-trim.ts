@@ -72,8 +72,11 @@ const isSafariStorageWriteError = (data: DexieErrorLike) => {
   const isKnownSafariStorageErrorName = isString(name) && DEXIE_SAFARI_STORAGE_ERROR_NAME_SET.has(name)
   const hasKnownSafariStorageErrorMessage =
     isString(message) && DEXIE_SAFARI_STORAGE_ERROR_MESSAGES.some((errorMessage) => message.includes(errorMessage))
+  const hasKnownSafariStorageNestedError =
+    isString(message) &&
+    DEXIE_SAFARI_STORAGE_ERROR_MESSAGES.some((errorMessage) => message.includes(`UnknownError: ${errorMessage}`))
 
-  return isKnownSafariStorageErrorName && hasKnownSafariStorageErrorMessage
+  return hasKnownSafariStorageErrorMessage && (isKnownSafariStorageErrorName || hasKnownSafariStorageNestedError)
 }
 
 export const isDexieQuotaError = (error: unknown): boolean => {

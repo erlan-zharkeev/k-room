@@ -20,6 +20,7 @@ vi.mock('src/shared/lib', () => ({
     success: 'success',
     warn: 'warn'
   },
+  getClientPlatform: () => 'browser',
   useAppToast: () => toastMock,
   useI18n: () => ({
     t: (key: string) => key

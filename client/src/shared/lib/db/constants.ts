@@ -13,7 +13,7 @@ export const DEXIE_CACHE_TRIMMER_PRIORITIES = {
 
 export const DEXIE_QUOTA_ERROR_NAMES = ['QuotaExceededError'] as const
 export const DEXIE_QUOTA_ERROR_NAME_SET = new Set<string>(DEXIE_QUOTA_ERROR_NAMES)
-export const DEXIE_SAFARI_STORAGE_ERROR_NAMES = ['UnknownError', 'BulkError'] as const
+export const DEXIE_SAFARI_STORAGE_ERROR_NAMES = ['UnknownError', 'BulkError', 'ModifyError'] as const
 export const DEXIE_SAFARI_STORAGE_ERROR_NAME_SET = new Set<string>(DEXIE_SAFARI_STORAGE_ERROR_NAMES)
 export const DEXIE_SAFARI_STORAGE_ERROR_MESSAGES = [
   'Unable to store record in object store',
