@@ -66,13 +66,14 @@ export const leaveRoomCallParticipant = async (
     }
 
     const remainingParticipants = resolveRemainingRoomCallParticipants(currentRoomCall.participants, userId, socketId)
-    const shouldFinishRoomCall = remainingParticipants.length === 0
+    const shouldFinishRoomCall = remainingParticipants.length <= 1
     const participants = currentRoomCall.participants.map((participant) => {
       const isCurrentUser = participant.userId === userId
       const isCurrentSocket = participant.socketId === socketId
       const isLeavingParticipant = isCurrentUser && isCurrentSocket
+      const shouldMarkParticipantLeft = isLeavingParticipant || (shouldFinishRoomCall && !participant.leftAt)
 
-      return isLeavingParticipant ? { ...participant, leftAt } : participant
+      return shouldMarkParticipantLeft ? { ...participant, leftAt } : participant
     })
 
     if (!shouldFinishRoomCall) {

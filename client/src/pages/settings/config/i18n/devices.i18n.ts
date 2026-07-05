@@ -25,6 +25,11 @@ export const SETTINGS_PAGE_DEVICES_I18N = defineI18n('settingsPageDevices', {
     ru: 'не запрошено',
     zh: '未请求'
   },
+  permissionNativePrompt: {
+    en: 'not granted or the app could not confirm access',
+    ru: 'не выдано или приложение не смогло подтвердить доступ',
+    zh: '未授予或应用无法确认访问权限'
+  },
   permissionUnsupported: {
     en: 'unsupported',
     ru: 'не поддерживается',
@@ -34,6 +39,11 @@ export const SETTINGS_PAGE_DEVICES_I18N = defineI18n('settingsPageDevices', {
     en: 'browser controlled',
     ru: 'управляется браузером',
     zh: '由浏览器控制'
+  },
+  permissionSystemControlled: {
+    en: 'system controlled',
+    ru: 'управляется системой',
+    zh: '由系统控制'
   },
   permissionUnknown: {
     en: 'unknown',
@@ -99,6 +109,11 @@ export const SETTINGS_PAGE_DEVICES_I18N = defineI18n('settingsPageDevices', {
     en: 'Can’t get access to requested device, check browser permissions. You can change them in the site settings from the browser address bar.',
     ru: 'Не удалось получить доступ к устройству, проверьте разрешения браузера. Разрешения можно изменить в настройках сайта в адресной строке браузера.',
     zh: '无法访问请求的设备，请检查浏览器权限。你可以在浏览器地址栏中的网站设置里更改权限。'
+  },
+  cantAccessNativeDevice: {
+    en: 'Can’t get access to requested device. Check camera and microphone access for K-Room in your system privacy settings, then restart the app.',
+    ru: 'Не удалось получить доступ к устройству. Проверьте доступ K-Room к камере и микрофону в системных настройках приватности и перезапустите приложение.',
+    zh: '无法访问请求的设备。请在系统隐私设置中检查 K-Room 的摄像头和麦克风访问权限，然后重启应用。'
   },
   mediaUnsupported: {
     en: 'Media devices are not supported in this environment',

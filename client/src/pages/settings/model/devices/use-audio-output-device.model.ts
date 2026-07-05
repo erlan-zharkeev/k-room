@@ -9,6 +9,7 @@ import {
   syncSelectedDeviceId,
   syncSelectedDeviceIdOnDeviceChange,
   useMediaDeviceSelectOptions,
+  getClientPlatform,
   useI18n
 } from 'src/shared/lib'
 
@@ -24,6 +25,10 @@ export const useAudioOutputDevice = () => {
   const { playAppSound, stopAppSound } = useAppSound()
   const { showDeviceWarning } = useDeviceWarning('Audio output device request failed')
   const { audioOutputs: audioOutputDevices, isSupported: isAudioOutputSupported } = useDevicesList()
+  const controlledPermissionStatus =
+    getClientPlatform() === 'native'
+      ? SETTINGS_PAGE_DEVICES_I18N.permissionSystemControlled
+      : SETTINGS_PAGE_DEVICES_I18N.permissionBrowserControlled
 
   const audioOutputLoading = ref(true)
   const audioOutputTestLoading = ref(false)
@@ -55,7 +60,7 @@ export const useAudioOutputDevice = () => {
     t(SETTINGS_PAGE_DEVICES_I18N.permissionStatus, {
       status: t(
         isAudioOutputPlaybackSupported.value
-          ? SETTINGS_PAGE_DEVICES_I18N.permissionBrowserControlled
+          ? controlledPermissionStatus
           : SETTINGS_PAGE_DEVICES_I18N.permissionUnsupported
       )
     })

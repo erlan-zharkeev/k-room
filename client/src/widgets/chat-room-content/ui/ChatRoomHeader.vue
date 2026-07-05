@@ -20,6 +20,9 @@ const {
   avatarIconSize,
   canCloseSupportChat,
   closeSupportChat,
+  hasHeaderPrimaryActions,
+  hasRoomCallStartActions,
+  hasRoomCallViewSwitch,
   interlocutor,
   isClosingSupportChat,
   isFavoritesRoom,
@@ -32,7 +35,13 @@ const {
 } = useChatRoomHeader(props, emit)
 </script>
 <template>
-  <div class="chat-room-header" :class="{ 'chat-room-header--with-back': isPortraitTabletOrLess }">
+  <div
+    class="chat-room-header"
+    :class="{
+      'chat-room-header--with-back': isPortraitTabletOrLess,
+      'chat-room-header--with-primary-actions': hasHeaderPrimaryActions
+    }"
+  >
     <ContentNavigationBackButton v-if="isPortraitTabletOrLess" class="chat-room-header__back" />
     <NmorphCard
       tag="header"
@@ -78,34 +87,41 @@ const {
         </template>
       </AppProfileBasicData>
       <div class="chat-room-content-header__actions">
-        <NmorphSelectButton
-          v-if="props.hasRoomCall && props.isRoomCallAvailable"
-          thickness="thick"
-          :model-value="props.contentView"
-          :aria-label="$t(CHAT_ROOM_CONTENT_I18N.selectChatRoomContentView)"
-          @update:model-value="updateChatRoomContentView"
-        >
-          <NmorphSelectButtonItem :value="'text'">
-            {{ $t(CHAT_ROOM_CONTENT_I18N.textChatView) }}
-          </NmorphSelectButtonItem>
-          <NmorphSelectButtonItem :value="'call'">
-            {{ $t(CHAT_ROOM_CONTENT_I18N.roomCallView) }}
-          </NmorphSelectButtonItem>
-        </NmorphSelectButton>
-        <RoomCallMediaButtons
-          v-if="props.isRoomCallAvailable && !props.hasRoomCall"
-          :disabled="props.isRoomCallStartDisabled"
-          :loading="props.isRoomCallStarting"
-          :loading-media-kind="props.roomCallLoadingMediaKind"
-          @start="emit('start-room-call', $event)"
-        />
-        <NmorphButton
-          v-if="canCloseSupportChat"
-          :text="$t(CHAT_ROOM_CONTENT_I18N.closeSupportChat)"
-          :loading="isClosingSupportChat"
-          @click="closeSupportChat"
-        />
-        <ChatRoomContextMenu v-if="!isSupportRoom" :item="props.room" />
+        <div v-if="hasHeaderPrimaryActions" class="chat-room-content-header__primary-actions">
+          <NmorphSelectButton
+            v-if="hasRoomCallViewSwitch"
+            class="chat-room-content-header__view-switch"
+            thickness="basic"
+            :model-value="props.contentView"
+            :aria-label="$t(CHAT_ROOM_CONTENT_I18N.selectChatRoomContentView)"
+            @update:model-value="updateChatRoomContentView"
+          >
+            <NmorphSelectButtonItem :value="'text'">
+              {{ $t(CHAT_ROOM_CONTENT_I18N.textChatView) }}
+            </NmorphSelectButtonItem>
+            <NmorphSelectButtonItem :value="'call'">
+              {{ $t(CHAT_ROOM_CONTENT_I18N.roomCallView) }}
+            </NmorphSelectButtonItem>
+          </NmorphSelectButton>
+          <RoomCallMediaButtons
+            v-if="hasRoomCallStartActions"
+            class="chat-room-content-header__media-buttons"
+            :disabled="props.isRoomCallStartDisabled"
+            :loading="props.isRoomCallStarting"
+            :loading-media-kind="props.roomCallLoadingMediaKind"
+            @start="emit('start-room-call', $event)"
+          />
+          <NmorphButton
+            v-if="canCloseSupportChat"
+            class="chat-room-content-header__support-close"
+            :text="$t(CHAT_ROOM_CONTENT_I18N.closeSupportChat)"
+            :loading="isClosingSupportChat"
+            @click="closeSupportChat"
+          />
+        </div>
+        <div v-if="!isSupportRoom" class="chat-room-content-header__menu">
+          <ChatRoomContextMenu :item="props.room" />
+        </div>
       </div>
     </NmorphCard>
   </div>
@@ -116,7 +132,7 @@ const {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 8px;
-  align-items: center;
+  align-items: stretch;
 
   height: auto;
 }
@@ -125,8 +141,16 @@ const {
   grid-template-columns: max-content minmax(0, 1fr);
 }
 
+.chat-room-header__back.content-navigation-back-button {
+  align-self: stretch;
+  width: 42px;
+  height: auto;
+  min-height: 64px;
+}
+
 .chat-room-content-header {
   min-width: 0;
+  height: 100%;
 }
 
 .chat-room-content-header :deep(.chat-room-content-header__content) {
@@ -146,5 +170,52 @@ const {
   display: flex;
   gap: 8px;
   align-items: center;
+  min-width: 0;
+}
+
+.chat-room-content-header__primary-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+}
+
+.chat-room-content-header__menu {
+  flex: 0 0 auto;
+}
+
+.chat-room-content-header__view-switch,
+.chat-room-content-header__media-buttons,
+.chat-room-content-header__support-close {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (width < 560px) {
+  .chat-room-header--with-primary-actions .chat-room-content-header :deep(.chat-room-content-header__content) {
+    grid-template-areas:
+      'profile menu'
+      'primary-actions primary-actions';
+    grid-template-columns: minmax(0, 1fr) max-content;
+  }
+
+  .chat-room-header--with-primary-actions .chat-room-content-header__profile {
+    grid-area: profile;
+  }
+
+  .chat-room-header--with-primary-actions .chat-room-content-header__actions {
+    display: contents;
+  }
+
+  .chat-room-header--with-primary-actions .chat-room-content-header__primary-actions {
+    grid-area: primary-actions;
+    justify-self: end;
+    max-width: 100%;
+  }
+
+  .chat-room-header--with-primary-actions .chat-room-content-header__menu {
+    grid-area: menu;
+    justify-self: end;
+  }
 }
 </style>

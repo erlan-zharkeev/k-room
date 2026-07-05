@@ -142,7 +142,13 @@ const clearPasswordParam = (params?: AdminUserRecord['params']) => {
     return
   }
 
+  const system = params.system
+
   params[USER_PASSWORD_PATH] = ''
+
+  if (isUnknownObject(system)) {
+    system.password = ''
+  }
 }
 
 const withHiddenPassword = (response: AdminUserActionResponse) => {
@@ -300,6 +306,9 @@ export const ADMIN_USER_OPTIONS = {
         isRequired: true,
         isVisible: true,
         label: 'Password',
+        props: {
+          autoComplete: 'new-password'
+        },
         type: 'password'
       },
       'system.device': {

@@ -55,6 +55,11 @@ export const useChatRoomHeader = (props: ChatRoomHeaderProps, emit: ChatRoomHead
 
     return isOpenSupportRoom && canManageSupportRoom
   })
+  const hasRoomCallViewSwitch = computed(() => props.hasRoomCall && props.isRoomCallAvailable)
+  const hasRoomCallStartActions = computed(() => props.isRoomCallAvailable && !props.hasRoomCall)
+  const hasHeaderPrimaryActions = computed(
+    () => hasRoomCallViewSwitch.value || hasRoomCallStartActions.value || canCloseSupportChat.value
+  )
   const title = computed(() =>
     buildChatRoomTitle(
       props.room,
@@ -87,6 +92,9 @@ export const useChatRoomHeader = (props: ChatRoomHeaderProps, emit: ChatRoomHead
     avatarIconSize,
     canCloseSupportChat,
     closeSupportChat,
+    hasHeaderPrimaryActions,
+    hasRoomCallStartActions,
+    hasRoomCallViewSwitch,
     interlocutor,
     isClosingSupportChat,
     isFavoritesRoom,

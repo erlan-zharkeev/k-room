@@ -95,7 +95,7 @@ describe('room-calls.service', () => {
     expect(leaveRoomCallParticipantMock.leaveRoomCallParticipant).not.toHaveBeenCalled()
   })
 
-  it('keeps group room call active when participant leaves', async () => {
+  it('delegates group room call leave to participant helper', async () => {
     const redisService = {}
     const room = createRoom('group')
     const roomCall = createRoomCall()

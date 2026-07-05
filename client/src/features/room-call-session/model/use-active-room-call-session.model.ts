@@ -23,6 +23,7 @@ import { resolveRoomCallJoinMediaKind } from '../lib/resolve-room-call-join-medi
 import { resolveNextRoomCallVideoFacingMode, resolveRoomCallVideoInputDeviceId } from '../lib/room-call-media'
 import { isRoomCallBlockingStartForUser, isRoomCallUnfinished } from '../lib/room-call-start-availability'
 
+import { createRoomCallSignalQueue } from './room-call-signal-queue.model'
 import { useRoomCallLocalMedia } from './use-room-call-local-media.model'
 import { useRoomCallPeerManager } from './use-room-call-peer-manager.model'
 import { useRoomCallQuickCommandMonitor } from './use-room-call-quick-command-monitor.model'
@@ -87,6 +88,13 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     temporaryQuickCommandByUserId
   } = useRoomCallQuickCommandSync(activeRoomCallId)
   const { resetRoomCallRuntimeState, syncRoomCallRuntimeState } = useRoomCallRuntimeState()
+  const {
+    clearRoomCallSignalQueue,
+    flushRoomCallSignals,
+    queueJoiningRoomCallSignal,
+    startJoiningRoomCall,
+    stopJoiningRoomCall
+  } = createRoomCallSignalQueue()
   const localStreams = computed(() => [audioStream.value, videoStream.value, screenStream.value])
   const activeRoomCall = computed(() => roomCalls.value.find(({ id }) => id === activeRoomCallId.value))
   const localConnectionQuality = computed(() =>
@@ -213,6 +221,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
 
   const clearActiveRoomCallSessionState = () => {
     activeRoomCallId.value = ''
+    clearRoomCallSignalQueue()
     resetRoomCallPeers()
     resetRoomCallQuickCommands()
     resetRoomCallRuntimeState()
@@ -286,8 +295,23 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     return true
   }
 
+  const flushPendingRoomCallSignals = async (roomCallId: string) => {
+    const signals = flushRoomCallSignals(roomCallId)
+
+    for (const signal of signals) {
+      await handleRoomCallSignalReceived(signal, roomCallId, localStreams.value)
+    }
+  }
+
   const handleActiveRoomCallSignalReceived = async (payload: EventRoomCallSignalReceived) => {
-    await handleRoomCallSignalReceived(payload, activeRoomCallId.value, localStreams.value)
+    const roomCallId = activeRoomCallId.value
+
+    if (payload.roomCallId !== roomCallId) {
+      queueJoiningRoomCallSignal(payload)
+      return
+    }
+
+    await handleRoomCallSignalReceived(payload, roomCallId, localStreams.value)
   }
 
   const { disposeRoomCallSignalMonitor, initializeRoomCallSignalMonitor } = useRoomCallSignalMonitor(
@@ -336,6 +360,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
 
   const joinActiveRoomCall = async (roomCallId: string, mediaKind?: RoomCallMediaKind) => {
     isJoiningRoomCall.value = true
+    startJoiningRoomCall(roomCallId)
 
     try {
       const response = await joinRoomCall(roomCallId)
@@ -355,6 +380,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       syncRoomCallRuntimeState(roomCall.id)
       syncInitialRoomCallParticipantQuickCommandStates(participantQuickCommandStateByUserId)
       await syncActiveRoomCallLocalState()
+      await flushPendingRoomCallSignals(roomCall.id)
       await connectActiveRoomCallPeers(roomCall)
 
       return roomCall
@@ -365,6 +391,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallJoinFailed))
       return null
     } finally {
+      stopJoiningRoomCall(roomCallId)
       isJoiningRoomCall.value = false
     }
   }

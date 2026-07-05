@@ -355,6 +355,17 @@ const {
 }
 
 .room-call-panel__bottom {
+  --room-call-panel-quick-commands-toggle-width: 48px;
+  --room-call-panel-quick-command-icon-width: 28px;
+  --room-call-panel-quick-command-text-min-width: 56px;
+  --room-call-panel-quick-command-gap: 4px;
+  --room-call-panel-quick-commands-expanded-width: calc(
+    var(--room-call-panel-quick-commands-toggle-width) + var(--room-call-panel-quick-command-icon-width) +
+      var(--room-call-panel-quick-command-text-min-width) + var(--room-call-panel-quick-command-text-min-width) +
+      var(--room-call-panel-quick-command-text-min-width) + var(--room-call-panel-quick-command-gap) +
+      var(--room-call-panel-quick-command-gap) + var(--room-call-panel-quick-command-gap)
+  );
+
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -370,17 +381,6 @@ const {
 }
 
 .room-call-panel__quick-commands-bar {
-  --room-call-panel-quick-commands-toggle-width: 48px;
-  --room-call-panel-quick-command-icon-width: 28px;
-  --room-call-panel-quick-command-text-min-width: 56px;
-  --room-call-panel-quick-command-gap: 4px;
-  --room-call-panel-quick-commands-expanded-width: calc(
-    var(--room-call-panel-quick-commands-toggle-width) + var(--room-call-panel-quick-command-icon-width) +
-      var(--room-call-panel-quick-command-text-min-width) + var(--room-call-panel-quick-command-text-min-width) +
-      var(--room-call-panel-quick-command-text-min-width) + var(--room-call-panel-quick-command-gap) +
-      var(--room-call-panel-quick-command-gap) + var(--room-call-panel-quick-command-gap)
-  );
-
   overflow: hidden;
   display: flex;
   flex: 0 1 var(--room-call-panel-quick-commands-toggle-width);
@@ -459,5 +459,42 @@ const {
   gap: 6px;
   align-items: center;
   justify-self: end;
+}
+
+@media (width < 560px) {
+  .room-call-panel__bottom {
+    display: grid;
+    grid-template-columns: var(--room-call-panel-quick-commands-toggle-width) minmax(0, 1fr);
+  }
+
+  .room-call-panel__quick-commands-bar {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .room-call-panel__quick-commands-bar--expanded {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .room-call-panel__self {
+    display: flex;
+    grid-column: 2;
+    gap: 6px;
+    justify-content: center;
+
+    padding: 8px;
+  }
+
+  .room-call-panel__quick-commands-bar--expanded + .room-call-panel__self {
+    grid-column: 1 / -1;
+  }
+
+  .room-call-panel__self-controls,
+  .room-call-panel__self-actions {
+    grid-column: auto;
+    flex: 0 0 auto;
+    justify-self: auto;
+  }
 }
 </style>
