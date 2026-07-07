@@ -5,7 +5,8 @@ import {
   applyRoomCallJoined,
   applyRoomCallLeft,
   applyRoomCallMediaStateUpdated,
-  applyRoomCallSnapshot
+  applyRoomCallSnapshot,
+  mergeRoomCallSnapshot
 } from './room-call-sync'
 import { createRoomCallTestFixture } from './room-call-test-fixtures'
 
@@ -155,5 +156,24 @@ describe('room call sync', () => {
       video: true,
       screen: false
     })
+  })
+
+  it('merges a full room call snapshot without mutating the cached room call', () => {
+    const roomCall = createRoomCallTestFixture()
+
+    roomCall.startedAt = 200
+    roomCall.status = 'in-progress'
+
+    const mergedRoomCall = mergeRoomCallSnapshot(roomCall, {
+      ...createRoomCallTestFixture(),
+      startedAt: undefined,
+      status: 'calling'
+    })
+
+    expect(mergedRoomCall).not.toBe(roomCall)
+    expect(mergedRoomCall.status).toBe('in-progress')
+    expect(mergedRoomCall.startedAt).toBe(200)
+    expect(roomCall.status).toBe('in-progress')
+    expect(roomCall.startedAt).toBe(200)
   })
 })

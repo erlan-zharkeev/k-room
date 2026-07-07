@@ -56,6 +56,10 @@ import {
   resolveActiveRoomCallUserIds,
   resolveRoomCallParticipantByUserId
 } from './lib/room-call-participant'
+import {
+  buildRoomCallServerSignalDiagnostics,
+  captureRoomCallServerDiagnostic
+} from './lib/room-call-sentry-diagnostics'
 import { ROOM_CALLS_I18N } from './room-calls.i18n'
 import type { RoomCallActiveState } from './room-calls.types'
 
@@ -105,6 +109,15 @@ export const startRoomCall = async (
     roomCallId: roomCall.id,
     initiatorId: userId,
     recipientIds: room.users
+  })
+  captureRoomCallServerDiagnostic('started', {
+    mediaKind,
+    participantCount: roomCall.participants.length,
+    recipientIds: room.users.map(String),
+    roomCallId: roomCall.id,
+    roomId,
+    serverInstanceId,
+    userId
   })
 
   return {
@@ -191,6 +204,15 @@ export const joinRoomCall = async (
     roomCall: transformedRoomCall,
     roomCallId,
     startedAt
+  })
+  captureRoomCallServerDiagnostic('joined', {
+    activeParticipantIds: resolveActiveRoomCallUserIds(updatedRoomCall.participants),
+    participantCount: updatedRoomCall.participants.length,
+    roomCallId,
+    serverInstanceId,
+    socketId,
+    startedAt,
+    userId
   })
 
   return {
@@ -325,6 +347,16 @@ export const updateRoomCallMediaState = async (
   })
 
   if (!updatedRoomCall) {
+    captureRoomCallServerDiagnostic(
+      'media-state-update-missed',
+      {
+        requestedMediaState: mediaState,
+        roomCallId,
+        socketId,
+        userId
+      },
+      'warning'
+    )
     return
   }
 
@@ -332,6 +364,15 @@ export const updateRoomCallMediaState = async (
     mediaKind: updatedRoomCall.mediaKind,
     mediaState: updatedParticipantMediaState,
     roomCallId,
+    userId
+  })
+  captureRoomCallServerDiagnostic('media-state-updated', {
+    activeParticipantIds: resolveActiveRoomCallUserIds(updatedRoomCall.participants),
+    mediaKind: updatedRoomCall.mediaKind,
+    requestedMediaState: mediaState,
+    resolvedMediaState: updatedParticipantMediaState,
+    roomCallId,
+    socketId,
     userId
   })
 }
@@ -402,6 +443,19 @@ export const sendRoomCallSignal = async (
   const targetParticipant = resolveActiveRoomCallParticipantByUserId(roomCall.participants, toUserId)
 
   if (!targetParticipant) {
+    captureRoomCallServerDiagnostic(
+      'signal-target-missing',
+      {
+        activeParticipantIds: resolveActiveRoomCallUserIds(roomCall.participants),
+        roomCallId,
+        signal: buildRoomCallServerSignalDiagnostics(signal),
+        signalKind,
+        socketId,
+        toUserId,
+        userId
+      },
+      'warning'
+    )
     throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallSignalFailed)
   }
 
@@ -410,5 +464,15 @@ export const sendRoomCallSignal = async (
     roomCallId,
     signal,
     signalKind
+  })
+  captureRoomCallServerDiagnostic('signal-forwarded', {
+    activeParticipantIds: resolveActiveRoomCallUserIds(roomCall.participants),
+    fromSocketId: socketId,
+    roomCallId,
+    signal: buildRoomCallServerSignalDiagnostics(signal),
+    signalKind,
+    targetSocketId: targetParticipant.socketId,
+    toUserId,
+    userId
   })
 }

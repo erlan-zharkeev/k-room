@@ -81,6 +81,24 @@ export const applyRoomCallSnapshot = (roomCall: RoomCall, incomingRoomCall: Room
   roomCall.participants = [...participantByUserId.values()]
 }
 
+export const mergeRoomCallSnapshot = (roomCall: RoomCall | undefined, incomingRoomCall: RoomCall) => {
+  if (!roomCall) return incomingRoomCall
+
+  const nextRoomCall: RoomCall = {
+    ...roomCall,
+    participants: roomCall.participants.map((participant) => ({
+      ...participant,
+      mediaState: {
+        ...participant.mediaState
+      }
+    }))
+  }
+
+  applyRoomCallSnapshot(nextRoomCall, incomingRoomCall)
+
+  return nextRoomCall
+}
+
 export const applyRoomCallJoined = (roomCall: RoomCall, payload: EventRoomCallJoined) => {
   const { participant, roomCall: incomingRoomCall, startedAt } = payload
 

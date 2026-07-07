@@ -22,6 +22,17 @@ export const serverCaptureSentryScopedException = (error: unknown, callback: Ser
   })
 }
 
+export const serverCaptureSentryScopedMessage = (message: string, callback: ServerSentryScopeCallback) => {
+  if (!isInitialized()) {
+    return
+  }
+
+  withScope((scope) => {
+    callback(scope)
+    captureMessage(message)
+  })
+}
+
 const generateSentryError =
   (kind: 'http-error' | 'socket-error') =>
   ({ message, silent, status }: SentryErrorContext) => {

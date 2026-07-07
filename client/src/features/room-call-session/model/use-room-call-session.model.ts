@@ -11,22 +11,50 @@ import type {
 import { useRoomCall } from 'src/entities/room-call'
 import { socket, useSocketAction, useSocketAvailability } from 'src/shared/api'
 
+import { buildRoomCallSignalDiagnostics, captureRoomCallDiagnostic } from '../lib/room-call-sentry-diagnostics'
+
 export const useRoomCallSession = () => {
   const { emitSocketAction } = useSocketAction()
   const { isSocketOnlineActionAvailable } = useSocketAvailability()
   const { remove } = useRoomCall()
 
   const startRoomCall = async (roomId: string, mediaKind: RoomCallMediaKind) => {
-    return emitSocketAction<'start-room-call', RoomCallAckFailureReason>('start-room-call', {
+    captureRoomCallDiagnostic('socket-start-room-call-requested', {
       mediaKind,
       roomId
     })
+
+    const response = await emitSocketAction<'start-room-call', RoomCallAckFailureReason>('start-room-call', {
+      mediaKind,
+      roomId
+    })
+
+    captureRoomCallDiagnostic(response.ok ? 'socket-start-room-call-succeeded' : 'socket-start-room-call-failed', {
+      mediaKind,
+      reason: response.ok ? undefined : response.reason,
+      roomCallId: response.ok ? response.payload.roomCallId : undefined,
+      roomId
+    })
+
+    return response
   }
 
   const joinRoomCall = async (roomCallId: string) => {
-    return emitSocketAction<'join-room-call', RoomCallAckFailureReason>('join-room-call', {
+    captureRoomCallDiagnostic('socket-join-room-call-requested', {
       roomCallId
     })
+
+    const response = await emitSocketAction<'join-room-call', RoomCallAckFailureReason>('join-room-call', {
+      roomCallId
+    })
+
+    captureRoomCallDiagnostic(response.ok ? 'socket-join-room-call-succeeded' : 'socket-join-room-call-failed', {
+      participantCount: response.ok ? response.payload.roomCall.participants.length : undefined,
+      reason: response.ok ? undefined : response.reason,
+      roomCallId
+    })
+
+    return response
   }
 
   const declineRoomCall = async (roomCallId: string) => {
@@ -44,7 +72,17 @@ export const useRoomCallSession = () => {
   }
 
   const leaveRoomCall = async (roomCallId: string, reason: RoomCallLeaveReason) => {
+    captureRoomCallDiagnostic('socket-leave-room-call-requested', {
+      reason,
+      roomCallId
+    })
+
     const response = await emitSocketAction('leave-room-call', {
+      reason,
+      roomCallId
+    })
+
+    captureRoomCallDiagnostic(response.ok ? 'socket-leave-room-call-succeeded' : 'socket-leave-room-call-failed', {
       reason,
       roomCallId
     })
@@ -53,10 +91,24 @@ export const useRoomCallSession = () => {
   }
 
   const updateRoomCallMediaState = async (roomCallId: string, mediaState: RoomCallParticipantMediaState) => {
+    captureRoomCallDiagnostic('socket-media-state-update-requested', {
+      mediaState,
+      roomCallId
+    })
+
     const response = await emitSocketAction('update-room-call-media-state', {
       mediaState,
       roomCallId
     })
+
+    captureRoomCallDiagnostic(
+      response.ok ? 'socket-media-state-update-succeeded' : 'socket-media-state-update-failed',
+      {
+        mediaState,
+        roomCallId
+      },
+      response.ok ? 'info' : 'warning'
+    )
 
     return response.ok
   }
@@ -80,9 +132,29 @@ export const useRoomCallSession = () => {
   }
 
   const sendRoomCallSignal = (payload: EventSendRoomCallSignal) => {
-    if (!isSocketOnlineActionAvailable.value) return
+    if (!isSocketOnlineActionAvailable.value) {
+      captureRoomCallDiagnostic(
+        'socket-room-call-signal-skipped',
+        {
+          roomCallId: payload.roomCallId,
+          signal: buildRoomCallSignalDiagnostics(payload.signal),
+          signalKind: payload.signalKind,
+          socketOnlineActionAvailable: isSocketOnlineActionAvailable.value,
+          toUserId: payload.toUserId
+        },
+        'warning'
+      )
+      return
+    }
 
     socket.emit('send-room-call-signal', payload)
+    captureRoomCallDiagnostic('socket-room-call-signal-emitted', {
+      roomCallId: payload.roomCallId,
+      signal: buildRoomCallSignalDiagnostics(payload.signal),
+      signalKind: payload.signalKind,
+      socketOnlineActionAvailable: isSocketOnlineActionAvailable.value,
+      toUserId: payload.toUserId
+    })
   }
 
   return {

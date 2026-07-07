@@ -14,16 +14,20 @@ import {
   applyRoomCallEnded,
   applyRoomCallJoined,
   applyRoomCallLeft,
-  applyRoomCallMediaStateUpdated
+  applyRoomCallMediaStateUpdated,
+  mergeRoomCallSnapshot
 } from '../lib/room-call-sync'
 
 import { useRoomCall } from './use-room-call.model'
 
 export const useRoomCallSync = () => {
-  const { get, mutate, put, remove, replaceAll } = useRoomCall()
+  const { get, mergeMany, mutate, put, remove } = useRoomCall()
 
   const syncRoomCalls = async (roomCalls: EventRoomCallsUpdated) => {
-    await replaceAll(roomCalls)
+    await mergeMany(roomCalls, {
+      merge: mergeRoomCallSnapshot,
+      removeMissing: true
+    })
   }
 
   const syncRoomCall = async (incomingRoomCall: RoomCall) => {

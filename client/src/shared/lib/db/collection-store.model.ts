@@ -173,7 +173,12 @@ export const dexieCollectionStore = <T extends DbCollectionItem>(table: Table<T>
     await transaction('rw', async () => {
       if (!data.length) {
         if (removeMissing) {
-          await table.clear()
+          const existingItems = await table.toArray()
+          const idsToDelete = existingItems.map(({ id }) => id)
+
+          if (idsToDelete.length) {
+            await table.bulkDelete(idsToDelete as never[])
+          }
         }
 
         return
