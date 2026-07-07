@@ -1,6 +1,7 @@
 import type { Page } from '@playwright/test'
 
 const FIRST_RUN_OVERLAY_TIMEOUT_MS = 1_000
+const FIRST_RUN_OVERLAY_VISIBILITY_TIMEOUT_MS = 100
 const FIRST_RUN_OVERLAY_DISMISS_ATTEMPTS = 4
 const FIRST_RUN_OVERLAY_RETRY_DELAY_MS = 500
 const WELCOME_CONTINUE_BUTTON_NAME = 'Continue'
@@ -10,19 +11,27 @@ const WELCOME_CONTINUE_BUTTON_SELECTOR = '.app-welcome-dialog button'
 const TOP_BAR_LOGOUT_BUTTON_SELECTOR = '.top-bar__content-right-side button'
 
 const clickOptionalButton = async (page: Page, selector: string) => {
-  await page
-    .locator(selector)
-    .first()
+  const button = page.locator(selector).first()
+  const isVisible = await button.isVisible({ timeout: FIRST_RUN_OVERLAY_VISIBILITY_TIMEOUT_MS }).catch(() => false)
+
+  if (!isVisible) return false
+
+  return button
     .click({ force: true, timeout: FIRST_RUN_OVERLAY_TIMEOUT_MS })
-    .catch(() => undefined)
+    .then(() => true)
+    .catch(() => false)
 }
 
 const clickOptionalVisibleButton = async (page: Page, name: string) => {
-  await page
-    .getByRole('button', { name, exact: true })
-    .first()
+  const button = page.getByRole('button', { name, exact: true }).first()
+  const isVisible = await button.isVisible({ timeout: FIRST_RUN_OVERLAY_VISIBILITY_TIMEOUT_MS }).catch(() => false)
+
+  if (!isVisible) return false
+
+  return button
     .click({ force: true, timeout: FIRST_RUN_OVERLAY_TIMEOUT_MS })
-    .catch(() => undefined)
+    .then(() => true)
+    .catch(() => false)
 }
 
 export const dismissFirstRunOverlays = async (page: Page) => {
@@ -31,7 +40,10 @@ export const dismissFirstRunOverlays = async (page: Page) => {
     await clickOptionalButton(page, WELCOME_CONTINUE_BUTTON_SELECTOR)
     await clickOptionalVisibleButton(page, WELCOME_CONTINUE_BUTTON_NAME)
     await clickOptionalVisibleButton(page, ONBOARDING_SKIP_BUTTON_NAME)
-    await page.waitForTimeout(FIRST_RUN_OVERLAY_RETRY_DELAY_MS)
+
+    if (attempt < FIRST_RUN_OVERLAY_DISMISS_ATTEMPTS - 1) {
+      await page.waitForTimeout(FIRST_RUN_OVERLAY_RETRY_DELAY_MS)
+    }
   }
 }
 

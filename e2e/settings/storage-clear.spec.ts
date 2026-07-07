@@ -87,6 +87,7 @@ test.describe('settings storage', () => {
     })
 
     await expect(clearCacheCard.getByText('Media', { exact: true })).toBeVisible()
+    await dismissFirstRunOverlays(page)
     await clearCacheCard.getByRole('button', { name: 'Clear', exact: true }).click()
 
     await expect
