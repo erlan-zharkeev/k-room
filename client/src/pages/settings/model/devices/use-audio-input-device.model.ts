@@ -55,13 +55,13 @@ export const useAudioInputDevice = () => {
     inputCheckLoading: audioInputCheckLoading,
     inputLoading: audioInputLoading,
     inputOptions: audioInputOptions,
+    inputSelectValue: audioInputSelectValue,
     isInputCheckDisabled: isAudioInputCheckDisabled,
     isInputChecking: isAudioInputChecking,
     permissionCalloutType: audioInputPermissionCalloutType,
     permissionStatus: audioInputPermissionStatus,
     setInputChecking: setAudioInputChecking,
-    setSelectedInputDevice: setSelectedAudioInputDevice,
-    settings
+    setSelectedInputDevice: setSelectedAudioInputDevice
   } = useMediaInputDevice({
     kind: 'audio',
     onPermissionDenied: markAudioInputPermissionDenied,
@@ -76,7 +76,7 @@ export const useAudioInputDevice = () => {
   })
 
   return {
-    settings,
+    audioInputSelectValue,
     audioInputOptions,
     audioInputLoading,
     audioInputCheckLoading,

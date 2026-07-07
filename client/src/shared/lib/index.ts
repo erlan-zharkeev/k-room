@@ -14,6 +14,7 @@ export {
 } from './time/constants'
 export {
   canShowBrowserPush,
+  canvasToBlob,
   clearCookie,
   formatBytes,
   getClientPlatform,
@@ -21,8 +22,10 @@ export {
   getViewPort,
   imageToBase64,
   isEmptyFileWithName,
+  loadImageFromObjectUrl,
   log,
   readFileAsDataUrl,
+  resolveFileExtension,
   revokeObjectUrl,
   revokeObjectUrls,
   showBrowserPush,

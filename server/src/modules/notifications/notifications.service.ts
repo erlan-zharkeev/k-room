@@ -71,6 +71,7 @@ export class NotificationsService {
           keys: payload.keys,
           enabledGroups: {
             calls: payload.enabledGroups.calls,
+            groupCalls: payload.enabledGroups.groupCalls ?? payload.enabledGroups.messages,
             invites: payload.enabledGroups.invites ?? true,
             messages: payload.enabledGroups.messages
           },
@@ -140,7 +141,7 @@ export class NotificationsService {
     const isGroupRoom = room?.chatKind === 'group'
     const title = isGroupRoom && room?.chatName ? room.chatName : initiatorNickname
     const body = isGroupRoom ? `${initiatorNickname} started a call` : 'Incoming call'
-    const group: WebPushNotificationGroup = isGroupRoom ? 'messages' : 'calls'
+    const group: WebPushNotificationGroup = isGroupRoom ? 'groupCalls' : 'calls'
     const payload: WebPushNotificationPayload = {
       title,
       options: {

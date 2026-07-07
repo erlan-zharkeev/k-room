@@ -65,6 +65,11 @@ export const SETTINGS_PAGE_DEVICES_I18N = defineI18n('settingsPageDevices', {
     ru: 'Проверка',
     zh: '测试'
   },
+  requestDeviceAccess: {
+    en: 'Request',
+    ru: 'Запросить',
+    zh: '请求'
+  },
   stopDeviceCheck: {
     en: 'Stop',
     ru: 'Остановить',

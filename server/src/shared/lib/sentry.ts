@@ -1,5 +1,7 @@
-import { captureException, captureMessage, isInitialized } from '@sentry/node'
+import { captureException, captureMessage, isInitialized, withScope, type Scope } from '@sentry/node'
 import { isNumber, shouldIgnoreSentryError, type SentryErrorContext } from 'global-shared'
+
+type ServerSentryScopeCallback = (scope: Scope) => void
 
 export const serverCaptureSentryException = (error: unknown) => {
   if (!isInitialized()) {
@@ -7,6 +9,17 @@ export const serverCaptureSentryException = (error: unknown) => {
   }
 
   captureException(error)
+}
+
+export const serverCaptureSentryScopedException = (error: unknown, callback: ServerSentryScopeCallback) => {
+  if (!isInitialized()) {
+    return
+  }
+
+  withScope((scope) => {
+    callback(scope)
+    captureException(error)
+  })
 }
 
 const generateSentryError =

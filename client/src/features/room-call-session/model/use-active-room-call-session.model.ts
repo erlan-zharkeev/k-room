@@ -340,8 +340,9 @@ export const useActiveRoomCallSession = createGlobalState(() => {
         return null
       }
 
-      const { roomCallId } = response.payload
+      const { roomCall, roomCallId } = response.payload
 
+      await putRoomCall(roomCall)
       activeRoomCallId.value = roomCallId
       syncRoomCallRuntimeState(roomCallId)
       await syncActiveRoomCallLocalState()

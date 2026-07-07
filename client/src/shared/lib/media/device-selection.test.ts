@@ -73,4 +73,13 @@ describe('media device selection helpers', () => {
       { value: 'device-b', label: 'Camera' }
     ])
   })
+
+  it('uses a non-empty option value for an unknown device with an empty id', () => {
+    expect(
+      buildMediaDeviceSelectOptions({
+        devices: [createDevice('', '')],
+        unknownOptionLabel: 'Unknown device'
+      })
+    ).toEqual([{ value: DEFAULT_MEDIA_DEVICE_SELECT_VALUE, label: 'Unknown device' }])
+  })
 })

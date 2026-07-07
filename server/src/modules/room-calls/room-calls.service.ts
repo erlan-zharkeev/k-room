@@ -95,8 +95,10 @@ export const startRoomCall = async (
     throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallAlreadyActive, false, undefined, 'already-active')
   }
 
+  const transformedRoomCall = transformActiveRoomCallToRoomCall(roomCall)
+
   emitToUsers(room.users, 'room-call-started', {
-    roomCall: transformActiveRoomCallToRoomCall(roomCall)
+    roomCall: transformedRoomCall
   })
   void notificationsService?.sendRoomCallPushNotifications({
     roomId,
@@ -106,6 +108,7 @@ export const startRoomCall = async (
   })
 
   return {
+    roomCall: transformedRoomCall,
     roomCallId: roomCall.id
   }
 }
@@ -181,8 +184,11 @@ export const joinRoomCall = async (
 
   await removeRoomCallDeclinedUser(redisService, roomCallId, userId)
 
+  const transformedRoomCall = transformActiveRoomCallToRoomCall(updatedRoomCall)
+
   emitToUsers(resolveActiveRoomCallUserIds(updatedRoomCall.participants), 'room-call-joined', {
     participant: transformActiveRoomCallParticipant(participant),
+    roomCall: transformedRoomCall,
     roomCallId,
     startedAt
   })
@@ -191,7 +197,7 @@ export const joinRoomCall = async (
     participantQuickCommandStateByUserId: buildRoomCallParticipantQuickCommandStateByUserId(
       updatedRoomCall.participants
     ),
-    roomCall: transformActiveRoomCallToRoomCall(updatedRoomCall)
+    roomCall: transformedRoomCall
   }
 }
 

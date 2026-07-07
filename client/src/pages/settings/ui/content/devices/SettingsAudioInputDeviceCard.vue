@@ -8,7 +8,7 @@ import { useAudioInputDevice } from '../../../model/devices/use-audio-input-devi
 import SettingsCard from '../../SettingsCard.vue'
 
 const {
-  settings,
+  audioInputSelectValue,
   audioInputOptions,
   audioInputLoading,
   audioInputCheckLoading,
@@ -34,10 +34,10 @@ const {
 
       <div class="settings-audio-input-device-card__control">
         <NmorphSelect
-          :key="settings.ioDevices.audioInputDeviceId"
+          :key="audioInputSelectValue"
           class="settings-audio-input-device-card__select"
           :aria-label="$t(MEDIA_DEVICE_I18N.audioInputDevice)"
-          :model-value="settings.ioDevices.audioInputDeviceId"
+          :model-value="audioInputSelectValue"
           :options="audioInputOptions"
           :loading="audioInputLoading"
           :disabled="audioInputLoading || audioInputOptions.length === 0"

@@ -1,4 +1,4 @@
-import type { ImageObject, MediaObject } from 'global-shared'
+import type { ImageObject, MediaObject, VideoObject } from 'global-shared'
 
 import type { MessageMediaDraftObjectDetails } from '../config/types'
 
@@ -28,9 +28,58 @@ const loadImageAspectRatioDetails = async (file: File): Promise<MessageMediaDraf
   }
 }
 
+const loadVideoMetadata = (video: HTMLVideoElement) =>
+  new Promise<void>((resolve, reject) => {
+    const cleanup = () => {
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata)
+      video.removeEventListener('error', handleError)
+    }
+    const handleLoadedMetadata = () => {
+      cleanup()
+      resolve()
+    }
+    const handleError = () => {
+      cleanup()
+      reject(video.error)
+    }
+
+    video.addEventListener('loadedmetadata', handleLoadedMetadata)
+    video.addEventListener('error', handleError)
+  })
+
+const loadVideoAspectRatioDetails = async (file: File): Promise<MessageMediaDraftObjectDetails<VideoObject>> => {
+  const videoUrl = URL.createObjectURL(file)
+
+  try {
+    const video = document.createElement('video')
+
+    video.preload = 'metadata'
+    video.playsInline = true
+    video.src = videoUrl
+    video.load()
+
+    await loadVideoMetadata(video)
+
+    if (!video.videoWidth || !video.videoHeight) return {}
+
+    return {
+      aspectRatio: video.videoWidth / video.videoHeight
+    }
+  } catch {
+    return {}
+  } finally {
+    URL.revokeObjectURL(videoUrl)
+  }
+}
+
 export const buildMessageImageDraftObjectDetails = async (file: File) => ({
   ...buildMessageFileDraftObjectDetails(file),
   ...(await loadImageAspectRatioDetails(file))
+})
+
+export const buildMessageVideoDraftObjectDetails = async (file: File) => ({
+  ...buildMessageFileDraftObjectDetails(file),
+  ...(await loadVideoAspectRatioDetails(file))
 })
 
 export const buildMessageMediaDraftObject = <Media extends MediaObject>(

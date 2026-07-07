@@ -31,6 +31,7 @@ export const useAudioOutputDevice = () => {
       : SETTINGS_PAGE_DEVICES_I18N.permissionBrowserControlled
 
   const audioOutputLoading = ref(true)
+  const audioOutputRequestFailed = ref(false)
   const audioOutputTestLoading = ref(false)
   const isAudioOutputPlaybackSupported = computed(canPlayAudioOutput)
   const isAudioOutputSelectionSupported = computed(() => isAudioOutputSupported.value && canSelectAudioOutputDevice())
@@ -50,12 +51,24 @@ export const useAudioOutputDevice = () => {
     return audioOutputOptions.value[0]?.value ?? ''
   })
   const hasAudioOutputOptions = computed(() => audioOutputOptions.value.length > 0)
+  const shouldRequestAudioOutputDevices = computed(() => audioOutputRequestFailed.value || !hasAudioOutputOptions.value)
   const isAudioOutputSelectDisabled = computed(
     () => audioOutputLoading.value || !isAudioOutputSelectionSupported.value || !hasAudioOutputOptions.value
   )
   const isAudioOutputTestDisabled = computed(
-    () => audioOutputTestLoading.value || !isAudioOutputPlaybackSupported.value
+    () => audioOutputLoading.value || audioOutputTestLoading.value || !isAudioOutputPlaybackSupported.value
   )
+  const audioOutputTestButtonLabel = computed(() =>
+    shouldRequestAudioOutputDevices.value
+      ? SETTINGS_PAGE_DEVICES_I18N.requestDeviceAccess
+      : SETTINGS_PAGE_DEVICES_I18N.testDeviceCheck
+  )
+  const audioOutputTestLabel = computed(() =>
+    shouldRequestAudioOutputDevices.value
+      ? SETTINGS_PAGE_DEVICES_I18N.requestDeviceAccess
+      : SETTINGS_PAGE_DEVICES_I18N.testAudioOutput
+  )
+  const audioOutputTestButtonLoading = computed(() => audioOutputLoading.value || audioOutputTestLoading.value)
   const audioOutputPermissionStatus = computed(() =>
     t(SETTINGS_PAGE_DEVICES_I18N.permissionStatus, {
       status: t(
@@ -107,7 +120,10 @@ export const useAudioOutputDevice = () => {
       if (isAudioOutputSelectionSupported.value) {
         await syncSelectedAudioOutputDevice()
       }
+
+      audioOutputRequestFailed.value = false
     } catch (error) {
+      audioOutputRequestFailed.value = true
       await setByPath('ioDevices.audioOutputDeviceId', '')
       stopAudioOutput()
       showDeviceWarning(error)
@@ -119,12 +135,18 @@ export const useAudioOutputDevice = () => {
   const testAudioOutput = async () => {
     if (isAudioOutputTestDisabled.value) return
 
+    if (shouldRequestAudioOutputDevices.value) {
+      await requestAudioOutputDevices()
+      return
+    }
+
     try {
       audioOutputTestLoading.value = true
       stopAudioOutput()
 
       await playAppSound('incoming-message')
     } catch (error) {
+      audioOutputRequestFailed.value = true
       stopAudioOutput()
       showDeviceWarning(error)
     } finally {
@@ -152,6 +174,9 @@ export const useAudioOutputDevice = () => {
     audioOutputSelectValue,
     audioOutputLoading,
     audioOutputTestLoading,
+    audioOutputTestButtonLabel,
+    audioOutputTestButtonLoading,
+    audioOutputTestLabel,
     isAudioOutputSelectDisabled,
     isAudioOutputTestDisabled,
     audioOutputPermissionCalloutType,

@@ -21,6 +21,7 @@ import { requireAuthUserId } from '../session/lib/require-auth-user-id'
 import { AccessTokenGuard } from '../session/session.guard'
 import { SessionService } from '../session/session.service'
 
+import { captureUserAvatarUpdateFailure } from './lib/capture-user-avatar-update-failure'
 import { CHANGE_PASSWORD_I18N, RESET_PASSWORD_I18N, UPDATE_USER_DATA_I18N } from './user.i18n'
 import { UserService } from './user.service'
 import {
@@ -95,6 +96,10 @@ export class UserController {
 
       return sendResponse(response, language, userData, SHARED_I18N.success, true)
     } catch (error) {
+      if (file) {
+        captureUserAvatarUpdateFailure(error, file, payload)
+      }
+
       throw toAppError(error, UPDATE_USER_DATA_I18N.failedUpdate)
     }
   }

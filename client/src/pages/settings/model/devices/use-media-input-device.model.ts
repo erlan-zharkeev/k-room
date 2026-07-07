@@ -4,6 +4,7 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
 import {
+  resolveMediaDeviceSelectOptionValue,
   resolveMediaDeviceSelectValue,
   syncSelectedDeviceId,
   syncSelectedDeviceIdOnDeviceChange,
@@ -49,6 +50,7 @@ export const useMediaInputDevice = ({
   const inputDevices = kind === 'audio' ? audioInputs : videoInputs
   const inputLoading = ref(false)
   const inputCheckLoading = ref(false)
+  const inputRequestFailed = ref(false)
   const inputStream = userMedia.stream
   const selectedDeviceId = computed(() => settings.value.ioDevices[settingKey])
   const isInputSupported = computed(() => isSupported.value || canRequestMediaInput())
@@ -59,15 +61,34 @@ export const useMediaInputDevice = ({
   const { permissionCalloutType, permissionStatus } = useDevicePermissionStatus(isInputSupported, inputPermission)
   const inputOptions = computed(() =>
     buildMediaDeviceSelectOptions({
-      devices: inputDevices.value,
-      emptyValue: ''
+      devices: inputDevices.value
     })
   )
+  const inputSelectValue = computed(() => {
+    if (inputOptions.value.length === 0) return ''
+
+    const selectedOptionValue = resolveMediaDeviceSelectOptionValue(selectedDeviceId.value)
+
+    if (inputOptions.value.some((option) => option.value === selectedOptionValue)) return selectedOptionValue
+
+    return inputOptions.value[0]?.value ?? ''
+  })
   const isInputChecking = computed(() => Boolean(inputStream.value))
-  const inputCheckLabel = computed(() => (isInputChecking.value ? stopCheckLabel : startCheckLabel))
-  const inputCheckButtonLabel = computed(() =>
-    isInputChecking.value ? SETTINGS_PAGE_DEVICES_I18N.stopDeviceCheck : SETTINGS_PAGE_DEVICES_I18N.testDeviceCheck
+  const shouldRequestInputDeviceAccess = computed(
+    () => inputPermission.value !== 'granted' || inputRequestFailed.value || inputDevices.value.length === 0
   )
+  const inputCheckLabel = computed(() => {
+    if (isInputChecking.value) return stopCheckLabel
+
+    return shouldRequestInputDeviceAccess.value ? SETTINGS_PAGE_DEVICES_I18N.requestDeviceAccess : startCheckLabel
+  })
+  const inputCheckButtonLabel = computed(() => {
+    if (isInputChecking.value) return SETTINGS_PAGE_DEVICES_I18N.stopDeviceCheck
+
+    return shouldRequestInputDeviceAccess.value
+      ? SETTINGS_PAGE_DEVICES_I18N.requestDeviceAccess
+      : SETTINGS_PAGE_DEVICES_I18N.testDeviceCheck
+  })
   const isInputDeviceUnavailable = computed(
     () => permission.value === 'granted' && isInputDeviceEnumerationSupported.value && inputDevices.value.length === 0
   )
@@ -119,11 +140,13 @@ export const useMediaInputDevice = ({
       const stream = await userMedia.start()
 
       if (stream) {
+        inputRequestFailed.value = false
         onPermissionGranted?.()
         await refreshInputDevices(true)
         onStreamStarted?.(stream)
       }
     } catch (error) {
+      inputRequestFailed.value = true
       stopInputCheck()
       if (isPermissionDeniedError(error)) {
         onPermissionDenied?.()
@@ -165,7 +188,7 @@ export const useMediaInputDevice = ({
   }
 
   const setSelectedInputDevice = async (value: NmorphSelectModelValueType = '') => {
-    const deviceId = resolveMediaDeviceSelectValue(value, '')
+    const deviceId = resolveMediaDeviceSelectValue(value)
     const shouldRestartCheck = isInputChecking.value
 
     await updateSelectedDeviceId(deviceId)
@@ -182,8 +205,8 @@ export const useMediaInputDevice = ({
   })
 
   return {
-    settings,
     inputOptions,
+    inputSelectValue,
     inputLoading,
     inputCheckLoading,
     isInputCheckDisabled,

@@ -18,14 +18,14 @@ export const useVideoInputDevice = () => {
     inputCheckLabel: videoInputCheckLabel,
     inputLoading: videoInputLoading,
     inputOptions: videoInputOptions,
+    inputSelectValue: videoInputSelectValue,
     inputStream: videoInputStream,
     isInputCheckDisabled: isVideoInputCheckDisabled,
     isInputChecking: isVideoInputChecking,
     permissionCalloutType: videoInputPermissionCalloutType,
     permissionStatus: videoInputPermissionStatus,
     setInputChecking: setVideoInputChecking,
-    setSelectedInputDevice: setSelectedVideoInputDevice,
-    settings
+    setSelectedInputDevice: setSelectedVideoInputDevice
   } = useMediaInputDevice({
     kind: 'video',
     onPermissionDenied: markVideoInputPermissionDenied,
@@ -38,7 +38,7 @@ export const useVideoInputDevice = () => {
   })
 
   return {
-    settings,
+    videoInputSelectValue,
     videoInputOptions,
     videoInputLoading,
     isVideoInputCheckDisabled,

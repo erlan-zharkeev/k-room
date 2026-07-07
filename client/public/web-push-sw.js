@@ -2,6 +2,7 @@ const APP_BADGE_SERVICE_WORKER_SYNC_MESSAGE_TYPE = '__APP_BADGE_SERVICE_WORKER_S
 const NOTIFICATION_FOREGROUND_SERVICE_WORKER_SYNC_MESSAGE_TYPE =
   '__NOTIFICATION_FOREGROUND_SERVICE_WORKER_SYNC_MESSAGE_TYPE__'
 const CALL_NOTIFICATION_GROUP = 'calls'
+const GROUP_CALL_NOTIFICATION_GROUP = 'groupCalls'
 const INVITE_NOTIFICATION_GROUP = 'invites'
 const MESSAGE_NOTIFICATION_GROUP = 'messages'
 let hasSyncedNotificationForegroundClient = false
@@ -54,6 +55,7 @@ const isAppBadgeNotification = (notification) => {
   return (
     !notification.data?.group ||
     notification.data.group === CALL_NOTIFICATION_GROUP ||
+    notification.data.group === GROUP_CALL_NOTIFICATION_GROUP ||
     notification.data.group === INVITE_NOTIFICATION_GROUP ||
     notification.data.group === MESSAGE_NOTIFICATION_GROUP
   )

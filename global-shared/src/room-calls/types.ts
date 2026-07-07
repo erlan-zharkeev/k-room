@@ -64,6 +64,7 @@ export interface EventStartRoomCall {
 }
 
 export interface StartRoomCallAckPayload {
+  roomCall: RoomCall
   roomCallId: string
 }
 
@@ -117,6 +118,7 @@ export interface EventRoomCallStarted {
 
 export interface EventRoomCallJoined {
   roomCallId: string
+  roomCall: RoomCall
   participant: RoomCallParticipant
   startedAt: number
 }

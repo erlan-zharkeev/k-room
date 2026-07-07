@@ -15,6 +15,16 @@ export const SETTINGS_PAGE_NOTIFICATIONS_I18N = defineI18n('settingsPageNotifica
     ru: 'Звонки',
     zh: '通话'
   },
+  privateCalls: {
+    en: 'Private calls',
+    ru: 'Приватные звонки',
+    zh: '私聊通话'
+  },
+  groupCalls: {
+    en: 'Group calls',
+    ru: 'Групповые звонки',
+    zh: '群组通话'
+  },
   invites: {
     en: 'Invites',
     ru: 'Приглашения',
@@ -136,9 +146,9 @@ export const SETTINGS_PAGE_NOTIFICATIONS_I18N = defineI18n('settingsPageNotifica
     zh: '声音'
   },
   callSoundDescription: {
-    en: 'Sound alerts for calls',
-    ru: 'Звуковые сигналы для звонков',
-    zh: '通话声音提醒'
+    en: 'Sound alerts for private calls',
+    ru: 'Звуковые сигналы для приватных звонков',
+    zh: '私聊通话声音提醒'
   },
   callVibration: {
     en: 'Vibration',
@@ -156,9 +166,9 @@ export const SETTINGS_PAGE_NOTIFICATIONS_I18N = defineI18n('settingsPageNotifica
     zh: '浏览器推送'
   },
   callBrowserPushDescription: {
-    en: 'Web push notifications for calls',
-    ru: 'Web push-уведомления для звонков',
-    zh: '通话 Web 推送通知'
+    en: 'Web push notifications for private calls',
+    ru: 'Web push-уведомления для приватных звонков',
+    zh: '私聊通话 Web 推送通知'
   },
   callNativePush: {
     en: 'Native push',
@@ -166,9 +176,39 @@ export const SETTINGS_PAGE_NOTIFICATIONS_I18N = defineI18n('settingsPageNotifica
     zh: '原生推送'
   },
   callNativePushDescription: {
-    en: 'Native app push notifications for calls',
-    ru: 'Push-уведомления приложения для звонков',
-    zh: '通话原生应用推送通知'
+    en: 'Native app push notifications for private calls',
+    ru: 'Push-уведомления приложения для приватных звонков',
+    zh: '私聊通话原生应用推送通知'
+  },
+  groupCallToasts: {
+    en: 'Toasts',
+    ru: 'Тосты',
+    zh: '应用内提示'
+  },
+  groupCallToastsDescription: {
+    en: 'In-app popups when a call starts in a group chat',
+    ru: 'Всплывающие уведомления, когда в групповом чате начинается звонок',
+    zh: '群聊开始通话时的应用内弹窗'
+  },
+  groupCallBrowserPush: {
+    en: 'Browser push',
+    ru: 'Браузерные пуши',
+    zh: '浏览器推送'
+  },
+  groupCallBrowserPushDescription: {
+    en: 'Web push notifications for group calls',
+    ru: 'Web push-уведомления для групповых звонков',
+    zh: '群组通话 Web 推送通知'
+  },
+  groupCallNativePush: {
+    en: 'Native push',
+    ru: 'Нативные пуши',
+    zh: '原生推送'
+  },
+  groupCallNativePushDescription: {
+    en: 'Native app push notifications for group calls',
+    ru: 'Push-уведомления приложения для групповых звонков',
+    zh: '群组通话原生应用推送通知'
   },
   inviteToasts: {
     en: 'Toasts',

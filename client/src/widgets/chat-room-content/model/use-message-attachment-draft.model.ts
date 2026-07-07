@@ -32,7 +32,8 @@ import { buildMessageAttachmentDraftListItems } from '../lib/build-message-attac
 import { buildMessageAttachmentUploadGroups } from '../lib/build-message-attachment-upload-groups'
 import {
   buildMessageFileDraftObjectDetails,
-  buildMessageImageDraftObjectDetails
+  buildMessageImageDraftObjectDetails,
+  buildMessageVideoDraftObjectDetails
 } from '../lib/build-message-draft-media-objects'
 
 import { useMessageMediaDraft } from './use-message-media-draft.model'
@@ -62,7 +63,7 @@ export const useMessageAttachmentDraft = ({
   const messageVideoDraft = useMessageMediaDraft<VideoObject>({
     draftMediaIdPrefix: MESSAGE_VIDEO_DRAFT_MEDIA_ID_PREFIX,
     mediaKind: 'video',
-    buildMediaObjectDetails: buildMessageFileDraftObjectDetails
+    buildMediaObjectDetails: buildMessageVideoDraftObjectDetails
   })
   const messageAttachmentDraftUploadValue = computed(() => [
     ...messageImageDraft.uploadValues.value,

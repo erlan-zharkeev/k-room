@@ -10,6 +10,7 @@ import type {
 } from 'global-shared'
 
 import {
+  applyRoomCallSnapshot,
   applyRoomCallEnded,
   applyRoomCallJoined,
   applyRoomCallLeft,
@@ -19,14 +20,23 @@ import {
 import { useRoomCall } from './use-room-call.model'
 
 export const useRoomCallSync = () => {
-  const { mutate, put, remove, replaceAll } = useRoomCall()
+  const { get, mutate, put, remove, replaceAll } = useRoomCall()
 
   const syncRoomCalls = async (roomCalls: EventRoomCallsUpdated) => {
     await replaceAll(roomCalls)
   }
 
-  const syncRoomCall = async (roomCall: RoomCall) => {
-    await put(roomCall)
+  const syncRoomCall = async (incomingRoomCall: RoomCall) => {
+    const roomCall = await get(incomingRoomCall.id)
+
+    if (!roomCall) {
+      await put(incomingRoomCall)
+      return
+    }
+
+    await mutate(incomingRoomCall.id, (roomCall) => {
+      applyRoomCallSnapshot(roomCall, incomingRoomCall)
+    })
   }
 
   const syncStartedRoomCall = async ({ roomCall }: EventRoomCallStarted) => {
@@ -34,6 +44,13 @@ export const useRoomCallSync = () => {
   }
 
   const syncJoinedRoomCall = async (payload: EventRoomCallJoined) => {
+    const roomCall = await get(payload.roomCallId)
+
+    if (!roomCall) {
+      await put(payload.roomCall)
+      return
+    }
+
     await mutate(payload.roomCallId, (roomCall) => {
       applyRoomCallJoined(roomCall, payload)
     })

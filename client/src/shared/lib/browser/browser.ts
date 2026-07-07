@@ -48,6 +48,12 @@ export const imageToBase64 = ({
 
 export const isEmptyFileWithName = (file: File, name: string) => file.size === 0 && file.name === name
 
+export const resolveFileExtension = (filename: string) => {
+  const extension = filename.split('.').pop()?.toLowerCase()
+
+  return extension && extension !== filename.toLowerCase() ? extension : ''
+}
+
 export const readFileAsDataUrl = (file: File) =>
   new Promise<string | undefined>((resolve) => {
     const reader = new FileReader()
@@ -55,6 +61,20 @@ export const readFileAsDataUrl = (file: File) =>
     reader.addEventListener('load', () => resolve(isString(reader.result) ? reader.result : undefined))
     reader.addEventListener('error', () => resolve(undefined))
     reader.readAsDataURL(file)
+  })
+
+export const loadImageFromObjectUrl = (url: string) =>
+  new Promise<HTMLImageElement>((resolve, reject) => {
+    const image = new Image()
+
+    image.addEventListener('load', () => resolve(image), { once: true })
+    image.addEventListener('error', reject, { once: true })
+    image.src = url
+  })
+
+export const canvasToBlob = (canvas: HTMLCanvasElement, type?: string) =>
+  new Promise<Blob | null>((resolve) => {
+    canvas.toBlob(resolve, type)
   })
 
 export const waitNextFrame = () =>

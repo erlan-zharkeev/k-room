@@ -72,6 +72,7 @@ export interface AudioObject extends MediaObject {
 }
 
 export interface VideoObject extends MediaObject {
+  aspectRatio?: number
   contentType?: string
   size?: number
 }

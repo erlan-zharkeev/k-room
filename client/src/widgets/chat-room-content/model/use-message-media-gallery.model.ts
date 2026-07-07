@@ -6,8 +6,9 @@ import { useLiveMediaUrlMap } from 'src/shared/lib'
 import {
   MESSAGE_MEDIA_GALLERY_ITEM_MAX_ASPECT_RATIO,
   MESSAGE_MEDIA_GALLERY_ITEM_MIN_ASPECT_RATIO,
-  MESSAGE_MEDIA_GALLERY_SINGLE_ITEM_TARGET_HEIGHT_PX
-} from '../config/constants'
+  MESSAGE_MEDIA_GALLERY_SINGLE_ITEM_TARGET_HEIGHT_PX,
+  MESSAGE_MEDIA_GALLERY_VIDEO_FALLBACK_ASPECT_RATIO
+} from '../config/message-media-gallery.constants'
 import type { MessageMediaGalleryProps } from '../config/types'
 import { buildMessageMediaGalleryItems } from '../lib/build-message-media-gallery-items'
 
@@ -39,10 +40,15 @@ export const useMessageMediaGallery = (props: MessageMediaGalleryProps) => {
   const singleMediaAspectRatio = computed(() => {
     const hasSingleMediaItem = messageMediaIds.value.length === 1
     const [image] = props.images
+    const [video] = props.videos
 
     if (!hasSingleMediaItem) return undefined
 
-    return singleAspectRatioItem.value?.aspectRatio ?? resolveMessageMediaGalleryAspectRatio(image?.aspectRatio)
+    return (
+      singleAspectRatioItem.value?.aspectRatio ??
+      resolveMessageMediaGalleryAspectRatio(image?.aspectRatio ?? video?.aspectRatio) ??
+      (video && MESSAGE_MEDIA_GALLERY_VIDEO_FALLBACK_ASPECT_RATIO)
+    )
   })
   const messageMediaGalleryStyle = computed(() => {
     const aspectRatio = singleMediaAspectRatio.value

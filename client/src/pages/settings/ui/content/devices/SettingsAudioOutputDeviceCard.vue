@@ -11,7 +11,9 @@ const {
   audioOutputOptions,
   audioOutputSelectValue,
   audioOutputLoading,
-  audioOutputTestLoading,
+  audioOutputTestButtonLabel,
+  audioOutputTestButtonLoading,
+  audioOutputTestLabel,
   isAudioOutputSelectDisabled,
   isAudioOutputTestDisabled,
   audioOutputPermissionCalloutType,
@@ -44,9 +46,9 @@ const {
 
         <NmorphButton
           class="settings-audio-output-device-card__check-button"
-          :text="$t(SETTINGS_PAGE_DEVICES_I18N.testDeviceCheck)"
-          :aria-label="$t(SETTINGS_PAGE_DEVICES_I18N.testAudioOutput)"
-          :loading="audioOutputTestLoading"
+          :text="$t(audioOutputTestButtonLabel)"
+          :aria-label="$t(audioOutputTestLabel)"
+          :loading="audioOutputTestButtonLoading"
           :disabled="isAudioOutputTestDisabled"
           @click="testAudioOutput"
         />

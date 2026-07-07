@@ -4,7 +4,8 @@ import {
   applyRoomCallEnded,
   applyRoomCallJoined,
   applyRoomCallLeft,
-  applyRoomCallMediaStateUpdated
+  applyRoomCallMediaStateUpdated,
+  applyRoomCallSnapshot
 } from './room-call-sync'
 import { createRoomCallTestFixture } from './room-call-test-fixtures'
 
@@ -25,6 +26,12 @@ describe('room call sync', () => {
     applyRoomCallJoined(roomCall, {
       roomCallId: 'call-1',
       participant: joinedParticipant,
+      roomCall: {
+        ...roomCall,
+        startedAt: 200,
+        status: 'in-progress',
+        participants: [roomCall.participants[0], joinedParticipant]
+      },
       startedAt: 200
     })
     applyRoomCallMediaStateUpdated(roomCall, {
@@ -60,6 +67,93 @@ describe('room call sync', () => {
         video: false,
         screen: true
       }
+    })
+  })
+
+  it('restores missing participants from joined room call snapshot', () => {
+    const roomCall = {
+      ...createRoomCallTestFixture(),
+      participants: [
+        {
+          userId: 'user-2',
+          socketId: 'socket-2',
+          joinedAt: 200,
+          mediaState: {
+            audio: true,
+            video: true,
+            screen: false
+          }
+        }
+      ]
+    }
+    const initiator = createRoomCallTestFixture().participants[0]
+    const joinedParticipant = roomCall.participants[0]
+
+    applyRoomCallJoined(roomCall, {
+      roomCallId: 'call-1',
+      participant: joinedParticipant,
+      roomCall: {
+        ...createRoomCallTestFixture(),
+        startedAt: 200,
+        status: 'in-progress',
+        participants: [initiator, joinedParticipant]
+      },
+      startedAt: 200
+    })
+
+    expect(roomCall.participants.map(({ userId }) => userId)).toEqual(['user-2', 'user-1'])
+  })
+
+  it('does not resurrect a participant from an older snapshot after that participant left', () => {
+    const roomCall = createRoomCallTestFixture()
+    const currentParticipant = roomCall.participants[0]
+
+    currentParticipant.leftAt = 300
+
+    applyRoomCallSnapshot(roomCall, {
+      ...createRoomCallTestFixture(),
+      participants: [
+        {
+          ...currentParticipant,
+          leftAt: undefined
+        }
+      ]
+    })
+
+    expect(roomCall.participants[0].leftAt).toBe(300)
+  })
+
+  it('does not downgrade an in-progress room call with an older calling snapshot', () => {
+    const roomCall = createRoomCallTestFixture()
+
+    roomCall.mediaKind = 'video'
+    roomCall.startedAt = 200
+    roomCall.status = 'in-progress'
+    roomCall.participants = [
+      {
+        ...createRoomCallTestFixture().participants[0],
+        mediaState: {
+          audio: true,
+          video: true,
+          screen: false
+        }
+      }
+    ]
+
+    applyRoomCallSnapshot(roomCall, {
+      ...createRoomCallTestFixture(),
+      mediaKind: 'audio',
+      startedAt: undefined,
+      status: 'calling'
+    })
+
+    expect(roomCall.status).toBe('in-progress')
+    expect(roomCall.startedAt).toBe(200)
+    expect(roomCall.mediaKind).toBe('video')
+    expect(roomCall.participants[0].mediaState).toEqual({
+      audio: true,
+      video: true,
+      screen: false
     })
   })
 })

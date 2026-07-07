@@ -15,7 +15,7 @@ import { useAppSound, useSettings } from 'src/entities/setting'
 import { useSystem } from 'src/entities/system'
 import { useUser } from 'src/entities/user'
 import { ROOM_CALL_SESSION_I18N } from 'src/features/room-call-session'
-import { isClientPushEnabled, showClientPushWithImage, useI18n } from 'src/shared/lib'
+import { isClientPushEnabled, showClientPushWithImage, useAppToast, useI18n } from 'src/shared/lib'
 
 export const useRoomCallNotification = () => {
   const { getById } = useChatRoom()
@@ -24,8 +24,9 @@ export const useRoomCallNotification = () => {
   const { get: getMedia } = useMedia()
   const { settings } = useSettings()
   const { hasInteracted } = useSystem()
-  const { playAppSound, startLoopAppSound, stopAppSound } = useAppSound()
+  const { startLoopAppSound, stopAppSound } = useAppSound()
   const { t } = useI18n()
+  const toast = useAppToast()
   const { user } = useUser()
   let incomingRoomCallSoundRoomCallId = ''
 
@@ -64,27 +65,37 @@ export const useRoomCallNotification = () => {
     return t(textSource, { title: title || fallbackTitle })
   }
 
+  const resolveStartedRoomCallToastTitle = (room: ChatRoom) => {
+    return room.chatName || t(ROOM_CALL_SESSION_I18N.unknownRoom)
+  }
+
+  const showStartedRoomCallToast = (payload: EventRoomCallStarted) => {
+    const { general, groupCalls } = settings.value.notifications
+    const room = resolveStartedRoomCallNotificationRoom(payload)
+
+    if (!room) return
+    if (isRoomPrivate(room)) return
+    if (!general.toast) return
+    if (!groupCalls.toast) return
+
+    toast.add(
+      {
+        title: resolveStartedRoomCallToastTitle(room),
+        content: resolveStartedRoomCallPushTitle(payload, room)
+      },
+      'message'
+    )
+  }
+
   const playStartedRoomCallSound = async (payload: EventRoomCallStarted) => {
-    const { calls, general, messages } = settings.value.notifications
+    const { calls, general } = settings.value.notifications
     const { roomCall } = payload
     const room = resolveStartedRoomCallNotificationRoom(payload)
 
     if (!hasInteracted.value) return
     if (!general.sound) return
     if (!room) return
-
-    if (!isRoomPrivate(room)) {
-      if (!messages.sound) return
-
-      try {
-        await playAppSound('incoming-message')
-      } catch (error) {
-        void error
-      }
-
-      return
-    }
-
+    if (!isRoomPrivate(room)) return
     if (!calls.sound) return
 
     stopStartedRoomCallSound()
@@ -111,12 +122,12 @@ export const useRoomCallNotification = () => {
   }
 
   const showStartedRoomCallPush = async (payload: EventRoomCallStarted) => {
-    const { calls, general, messages } = settings.value.notifications
+    const { calls, general, groupCalls } = settings.value.notifications
     const { roomCall } = payload
     const room = resolveStartedRoomCallNotificationRoom(payload)
 
     if (!room) return
-    const notificationGroup = isRoomPrivate(room) ? calls : messages
+    const notificationGroup = isRoomPrivate(room) ? calls : groupCalls
 
     if (!isClientPushEnabled(general, notificationGroup)) return
 
@@ -136,6 +147,7 @@ export const useRoomCallNotification = () => {
   }
 
   const notifyStartedRoomCall = (payload: EventRoomCallStarted) => {
+    showStartedRoomCallToast(payload)
     void showStartedRoomCallPush(payload)
     void playStartedRoomCallSound(payload)
   }

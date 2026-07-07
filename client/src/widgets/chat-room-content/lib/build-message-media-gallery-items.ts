@@ -2,25 +2,32 @@ import { isNumber, type ImageObject, type VideoObject } from 'global-shared'
 
 import {
   MESSAGE_MEDIA_GALLERY_ITEM_MAX_ASPECT_RATIO,
-  MESSAGE_MEDIA_GALLERY_ITEM_MIN_ASPECT_RATIO
-} from '../config/constants'
+  MESSAGE_MEDIA_GALLERY_ITEM_MIN_ASPECT_RATIO,
+  MESSAGE_MEDIA_GALLERY_VIDEO_FALLBACK_ASPECT_RATIO
+} from '../config/message-media-gallery.constants'
 import type { MessageMediaGalleryItem } from '../config/types'
 
-const buildMessageMediaGalleryItemAspectRatioDetails = (aspectRatio?: number) => {
+const resolveMessageMediaGalleryItemAspectRatio = (aspectRatio?: number) => {
   const hasFiniteAspectRatio = isNumber(aspectRatio) && Number.isFinite(aspectRatio)
 
-  if (!hasFiniteAspectRatio) return {}
+  if (!hasFiniteAspectRatio) return undefined
 
   const hasPositiveAspectRatio = aspectRatio > 0
 
-  if (!hasPositiveAspectRatio) return {}
+  if (!hasPositiveAspectRatio) return undefined
 
-  return {
-    aspectRatio: Math.min(
-      MESSAGE_MEDIA_GALLERY_ITEM_MAX_ASPECT_RATIO,
-      Math.max(MESSAGE_MEDIA_GALLERY_ITEM_MIN_ASPECT_RATIO, aspectRatio)
-    )
-  }
+  return Math.min(
+    MESSAGE_MEDIA_GALLERY_ITEM_MAX_ASPECT_RATIO,
+    Math.max(MESSAGE_MEDIA_GALLERY_ITEM_MIN_ASPECT_RATIO, aspectRatio)
+  )
+}
+
+const buildMessageMediaGalleryItemAspectRatioDetails = (aspectRatio?: number, fallbackAspectRatio?: number) => {
+  const resolvedAspectRatio =
+    resolveMessageMediaGalleryItemAspectRatio(aspectRatio) ??
+    resolveMessageMediaGalleryItemAspectRatio(fallbackAspectRatio)
+
+  return resolvedAspectRatio ? { aspectRatio: resolvedAspectRatio } : {}
 }
 
 const buildMessageImageMediaGalleryItems = (
@@ -51,7 +58,7 @@ const buildMessageVideoMediaGalleryItems = (
   videos: VideoObject[],
   mediaUrlById: Map<string, string>
 ): MessageMediaGalleryItem[] =>
-  videos.flatMap(({ name, size, src }) => {
+  videos.flatMap(({ aspectRatio, name, size, src }) => {
     const mediaUrl = mediaUrlById.get(src)
 
     if (!mediaUrl) return []
@@ -68,7 +75,11 @@ const buildMessageVideoMediaGalleryItems = (
         playsinline: true,
         preload: 'metadata',
         size,
-        src: mediaUrl
+        src: mediaUrl,
+        ...buildMessageMediaGalleryItemAspectRatioDetails(
+          aspectRatio,
+          MESSAGE_MEDIA_GALLERY_VIDEO_FALLBACK_ASPECT_RATIO
+        )
       }
     ]
   })

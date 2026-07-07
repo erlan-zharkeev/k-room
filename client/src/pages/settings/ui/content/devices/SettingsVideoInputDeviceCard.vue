@@ -9,7 +9,7 @@ import { useVideoInputDevice } from '../../../model/devices/use-video-input-devi
 import SettingsCard from '../../SettingsCard.vue'
 
 const {
-  settings,
+  videoInputSelectValue,
   videoInputOptions,
   videoInputLoading,
   isVideoInputCheckDisabled,
@@ -34,10 +34,10 @@ const {
 
       <div class="settings-video-input-device-card__control">
         <NmorphSelect
-          :key="settings.ioDevices.videoInputDeviceId"
+          :key="videoInputSelectValue"
           class="settings-video-input-device-card__select"
           :aria-label="$t(MEDIA_DEVICE_I18N.videoInputDevice)"
-          :model-value="settings.ioDevices.videoInputDeviceId"
+          :model-value="videoInputSelectValue"
           :options="videoInputOptions"
           :loading="videoInputLoading"
           :disabled="videoInputLoading || videoInputOptions.length === 0"

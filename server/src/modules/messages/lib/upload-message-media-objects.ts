@@ -22,12 +22,13 @@ export const uploadMessageMediaObjects = async <Media extends MediaObject>(
         contentType: fileObject.contentType,
         filename: mediaObject.name
       })
-      const imageAspectRatioDetails = bucketName === 'image' ? buildImageAspectRatioDetails(fileData.metadata) : {}
+      const aspectRatioDetails =
+        bucketName === 'image' || bucketName === 'video' ? buildImageAspectRatioDetails(fileData.metadata) : {}
       const uploadedMediaObject: Media = {
         ...mediaObject,
         src: id,
         name: mediaObject.name || id,
-        ...imageAspectRatioDetails
+        ...aspectRatioDetails
       }
 
       delete uploadedMediaObject.fileBuffer

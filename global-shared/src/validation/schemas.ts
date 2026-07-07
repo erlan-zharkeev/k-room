@@ -126,6 +126,7 @@ export const createWebPushSubscriptionSchema = (messages: ValidationMessages) =>
     }),
     enabledGroups: v.object({
       calls: v.boolean(),
+      groupCalls: v.optional(v.boolean()),
       invites: v.optional(v.boolean()),
       messages: v.boolean()
     }),

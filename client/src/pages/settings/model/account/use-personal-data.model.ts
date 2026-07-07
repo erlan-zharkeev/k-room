@@ -15,10 +15,18 @@ import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 import { useMedia } from 'src/entities/media-file'
 import { useUser } from 'src/entities/user'
 import { isExpectedHttpError, useHttp } from 'src/shared/api'
-import { revokeObjectUrl, revokeObjectUrls, useAppToast, useI18n } from 'src/shared/lib'
+import {
+  captureClientSentryException,
+  revokeObjectUrl,
+  revokeObjectUrls,
+  useAppToast,
+  useI18n,
+  withClientSentryScope
+} from 'src/shared/lib'
 
 import { SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE } from '../../config/constants/account.constants'
 import { SETTINGS_ACCOUNT_PERSONAL_DATA_I18N } from '../../config/i18n/account-personal-data.i18n'
+import { buildAccountAvatarFileDiagnostics, normalizeAccountAvatarFile } from '../../lib/account-avatar-file'
 
 export const usePersonalData = () => {
   const { put: putMedia, remove: removeMedia } = useMedia()
@@ -41,6 +49,7 @@ export const usePersonalData = () => {
     }
   })
   const accountAvatarFile = ref<File>()
+  const accountAvatarUploadDiagnostics = ref<Record<string, unknown> | null>(null)
   const accountAvatarUploadValue = ref<NmorphCustomFileData[]>([])
   const accountAvatarPreviewUrl = ref('')
   const accountAvatarWasReset = ref(false)
@@ -77,40 +86,55 @@ export const usePersonalData = () => {
     accountAvatarUploadValue.value = []
   }
 
-  const uploadAccountAvatar = (files: NmorphCustomFileData[]) => {
+  const uploadAccountAvatar = async (files: NmorphCustomFileData[]) => {
     const uploadedFile = files[files.length - 1]
     const file = uploadedFile?.data
 
     if (!file) {
       clearAccountAvatarUploadValue()
       accountAvatarFile.value = undefined
+      accountAvatarUploadDiagnostics.value = null
       accountAvatarWasReset.value = false
       clearAccountAvatarPreview()
 
       return
     }
 
-    if (file.size > SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE) {
+    const normalizedFile = await normalizeAccountAvatarFile(file)
+
+    if (normalizedFile.size > SETTINGS_ACCOUNT_AVATAR_MAX_FILE_SIZE) {
       revokeObjectUrl(uploadedFile.previewUrl)
       clearAccountAvatarUploadValue()
+      accountAvatarUploadDiagnostics.value = null
 
       return
     }
 
+    accountAvatarUploadDiagnostics.value = {
+      normalized: normalizedFile !== file,
+      originalFile: buildAccountAvatarFileDiagnostics(file),
+      uploadFile: buildAccountAvatarFileDiagnostics(normalizedFile)
+    }
     accountAvatarUploadValue.value
       .filter(({ previewUrl }) => previewUrl !== uploadedFile.previewUrl)
       .forEach(({ previewUrl }) => revokeObjectUrl(previewUrl))
-    accountAvatarUploadValue.value = [uploadedFile]
+    accountAvatarUploadValue.value = [
+      {
+        ...uploadedFile,
+        data: normalizedFile
+      }
+    ]
     clearAccountAvatarPreview()
-    accountAvatarFile.value = file
+    accountAvatarFile.value = normalizedFile
     accountAvatarWasReset.value = false
-    accountAvatarPreviewObjectUrl = URL.createObjectURL(file)
+    accountAvatarPreviewObjectUrl = URL.createObjectURL(normalizedFile)
     accountAvatarPreviewUrl.value = accountAvatarPreviewObjectUrl
   }
 
   const resetAccountAvatar = () => {
     clearAccountAvatarUploadValue()
     accountAvatarFile.value = undefined
+    accountAvatarUploadDiagnostics.value = null
     accountAvatarWasReset.value = true
     clearAccountAvatarPreview()
   }
@@ -129,6 +153,22 @@ export const usePersonalData = () => {
     toast.add({ content: t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.nicknameCopied) })
   }
 
+  const captureAccountAvatarUpdateFailure = (error: unknown) => {
+    if (!accountAvatarChanged.value) return
+
+    withClientSentryScope((scope) => {
+      scope.setTag('settings.account.update.reason', 'avatar')
+      scope.setContext('settings_account_avatar_update', {
+        avatarReset: accountAvatarWasReset.value,
+        file: buildAccountAvatarFileDiagnostics(accountAvatarFile.value),
+        hasCurrentAvatar: Boolean(avatarId.value),
+        nicknameChanged: accountNicknameChanged.value,
+        upload: accountAvatarUploadDiagnostics.value
+      })
+      captureClientSentryException(error)
+    })
+  }
+
   const updateAccountData = async () => {
     const nickname = formData.nickname.value
     const currentAvatarId = avatarId.value
@@ -141,7 +181,7 @@ export const usePersonalData = () => {
     requestFormData.append('reset-avatar', accountAvatarWasReset.value ? 'reset' : '')
 
     if (accountAvatarFile.value) {
-      requestFormData.append('file', accountAvatarFile.value)
+      requestFormData.append('file', accountAvatarFile.value, accountAvatarFile.value.name)
     }
 
     try {
@@ -169,12 +209,14 @@ export const usePersonalData = () => {
       }
 
       accountAvatarFile.value = undefined
+      accountAvatarUploadDiagnostics.value = null
       accountAvatarWasReset.value = false
       clearAccountAvatarUploadValue()
       clearAccountAvatarPreview()
     } catch (error) {
       if (isExpectedHttpError(error)) return
 
+      captureAccountAvatarUpdateFailure(error)
       throw error
     } finally {
       isAccountSaving.value = false

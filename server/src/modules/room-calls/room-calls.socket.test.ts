@@ -77,7 +77,18 @@ describe('room-calls.socket', () => {
 
   it('acks started room call payload', async () => {
     const { handlers, notificationsService, redisService } = registerRoomCallHandlers()
-    const result = { roomCallId: 'call-1' }
+    const result = {
+      roomCall: {
+        id: 'call-1',
+        calledAt: 1,
+        initiatorId: 'user-1',
+        mediaKind: 'video',
+        participants: [],
+        roomId: 'room-1',
+        status: 'calling'
+      },
+      roomCallId: 'call-1'
+    }
 
     roomCallsServiceMock.startRoomCall.mockResolvedValue(result)
 

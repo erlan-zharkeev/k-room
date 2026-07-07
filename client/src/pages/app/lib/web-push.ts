@@ -8,8 +8,8 @@ export const isWebPushSupported = () => {
   return 'Notification' in window && 'PushManager' in window && 'serviceWorker' in navigator
 }
 
-export const hasEnabledWebPushGroups = ({ calls, invites, messages }: WebPushSubscriptionEnabledGroups) => {
-  return calls || invites || messages
+export const hasEnabledWebPushGroups = ({ calls, groupCalls, invites, messages }: WebPushSubscriptionEnabledGroups) => {
+  return Boolean(calls || groupCalls || invites || messages)
 }
 
 export const urlBase64ToUint8Array = (value: string) => {

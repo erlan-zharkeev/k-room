@@ -38,6 +38,7 @@ export const useSettings = () => {
     if (!initializedSettings) return
 
     const isInviteNotificationsSynced = 'invites' in initializedSettings.notifications
+    const isGroupCallNotificationsSynced = 'groupCalls' in initializedSettings.notifications
     const { dark, light } = initializedSettings.appearance.themes
     const isDarkWallpaperSynced = isWallpaperSynced(dark.wallpaper, DARK_WALLPAPER_SETTINGS)
     const isLightWallpaperSynced = isWallpaperSynced(light.wallpaper, LIGHT_WALLPAPER_SETTINGS)
@@ -47,6 +48,12 @@ export const useSettings = () => {
     if (!isInviteNotificationsSynced) {
       await mutate((data) => {
         data.notifications.invites = { ...DEFAULT_NOTIFICATION_GROUP_SETTINGS }
+      })
+    }
+
+    if (!isGroupCallNotificationsSynced) {
+      await mutate((data) => {
+        data.notifications.groupCalls = { ...DEFAULT_NOTIFICATION_GROUP_SETTINGS, sound: false, vibration: false }
       })
     }
 
