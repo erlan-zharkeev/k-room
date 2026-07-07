@@ -50,11 +50,24 @@ const attemptLogin = async (page: Page, login: string, password: string) => {
   }
 }
 
+const dismissFirstRunOverlaysIfVisible = async (page: Page) => {
+  const hasFirstRunOverlay = await page
+    .locator('.app-welcome-dialog, .nmorph-guide-step')
+    .first()
+    .isVisible({ timeout: 500 })
+    .catch(() => false)
+
+  if (!hasFirstRunOverlay) return
+
+  await dismissFirstRunOverlays(page)
+}
+
 const loginWithKnownPassword = async (page: Page, login: string, passwords: string[]) => {
   await logout(page)
 
   for (const password of passwords) {
     if (await attemptLogin(page, login, password)) {
+      await dismissFirstRunOverlaysIfVisible(page)
       return password
     }
   }
@@ -63,6 +76,7 @@ const loginWithKnownPassword = async (page: Page, login: string, passwords: stri
 }
 
 const logout = async (page: Page) => {
+  await dismissFirstRunOverlaysIfVisible(page)
   await logoutFromApp(page)
 }
 
