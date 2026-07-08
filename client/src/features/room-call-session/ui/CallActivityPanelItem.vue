@@ -101,7 +101,7 @@ const {
         borderless
         :aria-label="$t(ROOM_CALL_SESSION_I18N.leaveRoomCall)"
         :loading="props.leaveLoading"
-        :disabled="props.leaveLoading || props.disabled"
+        :disabled="props.leaveLoading"
         @click.stop="emit('leave')"
       >
         <NmorphIcon width="16px" height="16px">

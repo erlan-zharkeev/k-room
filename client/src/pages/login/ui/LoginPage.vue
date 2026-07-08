@@ -21,6 +21,7 @@ const {
   captchaResetKey,
   captchaToken,
   formData,
+  isFirebaseLoginDisabled,
   isFirebaseLoginLoading,
   isFormDisabled,
   isLoading,
@@ -61,7 +62,7 @@ const {
       />
 
       <NmorphButton
-        :disabled="isFormDisabled"
+        :disabled="isFirebaseLoginDisabled"
         fill
         :loading="isFirebaseLoginLoading"
         @click="onFirebaseLogin('google')"

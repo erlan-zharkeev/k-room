@@ -810,20 +810,10 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   }
 
   watch(localMediaState, () => {
-    captureRoomCallDiagnostic('active-session-local-media-state-watch-fired', {
-      activeRoomCallId: activeRoomCallId.value,
-      localMediaState: localMediaState.value,
-      localStreams: buildRoomCallLocalStreamsDiagnostics(localStreams.value)
-    })
     void syncActiveRoomCallLocalState()
   })
 
   watch(activeRoomCallPeerParticipantKey, () => {
-    captureRoomCallDiagnostic('active-session-peer-participant-watch-fired', {
-      activeRoomCallId: activeRoomCallId.value,
-      participantKey: activeRoomCallPeerParticipantKey.value,
-      participants: activeRoomCall.value?.participants
-    })
     void connectActiveRoomCallPeers()
   })
 

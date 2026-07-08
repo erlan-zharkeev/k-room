@@ -86,6 +86,8 @@ const {
   height: 100%;
   min-height: 0;
 
+  background: var(--nmorph-main-color);
+
   @include screen-tablet {
     grid-template-columns: minmax(0, 1fr);
   }

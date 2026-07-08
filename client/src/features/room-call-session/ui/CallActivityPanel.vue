@@ -180,7 +180,7 @@ const {
 }
 
 .call-activity-panel--disabled {
-  @include disabled-state;
+  opacity: 0.7;
 }
 
 .call-activity-panel--large {

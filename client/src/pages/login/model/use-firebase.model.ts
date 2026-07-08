@@ -12,6 +12,28 @@ import { LOGIN_FORM_I18N } from '../config/i18n'
 
 import { initFirebase } from './init-firebase.model'
 
+type FirebaseAuthModule = typeof import('firebase/auth')
+
+let firebaseAuthModule: FirebaseAuthModule | null = null
+let firebaseAuthModulePromise: Promise<FirebaseAuthModule> | null = null
+
+const prepareFirebaseAuthModule = async () => {
+  if (firebaseAuthModule) return firebaseAuthModule
+
+  if (!firebaseAuthModulePromise) {
+    firebaseAuthModulePromise = initFirebase()
+      .then(() => import('firebase/auth'))
+      .catch((error) => {
+        firebaseAuthModulePromise = null
+        throw error
+      })
+  }
+
+  firebaseAuthModule = await firebaseAuthModulePromise
+
+  return firebaseAuthModule
+}
+
 export const useFirebase = () => {
   const { doHttpRequest } = useHttp()
   const { activateClientSession } = useClientSession()
@@ -19,21 +41,36 @@ export const useFirebase = () => {
   const { t } = useI18n()
   const toast = useAppToast()
   const isFirebaseLoginLoading = ref(false)
+  const isFirebaseLoginReady = ref(__CLIENT_ENV_DATA__.isE2E || Boolean(firebaseAuthModule))
+
+  if (!__CLIENT_ENV_DATA__.isE2E && !isFirebaseLoginReady.value) {
+    void prepareFirebaseAuthModule()
+      .then(() => {
+        isFirebaseLoginReady.value = true
+      })
+      .catch((error) => {
+        log('error', 'Firebase auth preload failed', error)
+      })
+  }
 
   const getFirebaseCredential = async (provider: FirebaseProvider) => {
     if (__CLIENT_ENV_DATA__.isE2E) {
       return E2E_FIREBASE_AUTH_RESULT
     }
 
-    await initFirebase()
-    const { FacebookAuthProvider, GoogleAuthProvider, getAuth, signInWithPopup } = await import('firebase/auth')
+    if (!firebaseAuthModule) {
+      throw new Error('Firebase auth is not ready')
+    }
+
+    const { FacebookAuthProvider, GoogleAuthProvider, getAuth, signInWithPopup } = firebaseAuthModule
     const Provider = provider === 'google' ? GoogleAuthProvider : FacebookAuthProvider
     const currentProvider = new Provider()
     const auth = getAuth()
 
     auth.languageCode = settings.value.localization.language
 
-    const result = await signInWithPopup(auth, currentProvider)
+    const signInResult = signInWithPopup(auth, currentProvider)
+    const result = await signInResult
     const { displayName, email, photoURL, uid } = result.user
 
     return {
@@ -97,6 +134,7 @@ export const useFirebase = () => {
   }
 
   return {
+    isFirebaseLoginReady,
     isFirebaseLoginLoading,
     onFirebaseLogin
   }

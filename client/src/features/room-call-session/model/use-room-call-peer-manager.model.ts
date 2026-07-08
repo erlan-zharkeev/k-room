@@ -1,8 +1,12 @@
-import { useIntervalFn } from '@vueuse/core'
+import { useIntervalFn, useTimeoutFn } from '@vueuse/core'
 import { type EventRoomCallSignalReceived, type RoomCallSignalKind } from 'global-shared'
 import { shallowRef } from 'vue'
 
-import { ROOM_CALL_CONNECTION_QUALITY_CHECK_INTERVAL_MS, ROOM_CALL_RTC_CONFIGURATION } from '../config/constants'
+import {
+  ROOM_CALL_CONNECTION_QUALITY_CHECK_INTERVAL_MS,
+  ROOM_CALL_PEER_CREATE_ANSWER_TIMEOUT_MS,
+  ROOM_CALL_RTC_CONFIGURATION
+} from '../config/constants'
 import type {
   ConnectRoomCallPeersParams,
   RoomCallConnectionQuality,
@@ -35,6 +39,34 @@ import {
 } from '../lib/room-call-sentry-diagnostics'
 
 import { useRoomCallSession } from './use-room-call-session.model'
+
+const createRoomCallPeerTimeoutError = () => new DOMException('Room call peer operation timed out', 'TimeoutError')
+
+const isRoomCallPeerTimeoutError = (error: unknown) => {
+  return error instanceof DOMException && error.name === 'TimeoutError'
+}
+
+const withRoomCallPeerTimeout = async <T>(task: Promise<T>, timeoutMs: number, onTimeout: () => void) => {
+  let stopTimeout: (() => void) | undefined
+  const timeoutTask = new Promise<never>((_, reject) => {
+    const { stop } = useTimeoutFn(
+      () => {
+        onTimeout()
+        reject(createRoomCallPeerTimeoutError())
+      },
+      timeoutMs,
+      { immediate: true }
+    )
+
+    stopTimeout = stop
+  })
+
+  try {
+    return await Promise.race([task, timeoutTask])
+  } finally {
+    stopTimeout?.()
+  }
+}
 
 export const useRoomCallPeerManager = () => {
   const peerConnectionByUserId = new Map<string, RTCPeerConnection>()
@@ -114,18 +146,10 @@ export const useRoomCallPeerManager = () => {
       return
     }
 
-    const previousQuality = connectionQualityByUserId.value[userId]
-
     connectionQualityByUserId.value = {
       ...connectionQualityByUserId.value,
       [userId]: quality
     }
-    captureRoomCallPeerDiagnostic('peer-connection-quality-changed', {
-      counters: buildRoomCallPeerCountersDiagnostics(userId),
-      peerUserId: userId,
-      previousQuality,
-      quality
-    })
   }
 
   const removeRoomCallConnectionQuality = (userId: string) => {
@@ -218,7 +242,6 @@ export const useRoomCallPeerManager = () => {
   }
 
   const enqueueRoomCallPeerTask = async (userId: string, task: () => Promise<void>) => {
-    const hasPreviousTask = peerTaskByUserId.has(userId)
     const previousTask = peerTaskByUserId.get(userId) ?? Promise.resolve()
     const nextTask = previousTask
       .catch(() => undefined)
@@ -234,10 +257,6 @@ export const useRoomCallPeerManager = () => {
       })
 
     peerTaskByUserId.set(userId, nextTask)
-    captureRoomCallPeerDiagnostic('peer-task-enqueued', {
-      hasPreviousTask,
-      peerUserId: userId
-    })
 
     try {
       await nextTask
@@ -271,10 +290,6 @@ export const useRoomCallPeerManager = () => {
 
   const rollbackRoomCallPeerLocalOffer = async (userId: string, peerConnection: RTCPeerConnection) => {
     if (peerConnection.signalingState !== 'have-local-offer') {
-      captureRoomCallPeerDiagnostic('peer-local-offer-rollback-skipped', {
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        peerUserId: userId
-      })
       return true
     }
 
@@ -783,7 +798,27 @@ export const useRoomCallPeerManager = () => {
         return
       }
 
-      const answer = await peerConnection.createAnswer()
+      captureRoomCallPeerDiagnostic('peer-answer-create-started', {
+        fromUserId: payload.fromUserId,
+        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
+        roomCallId: payload.roomCallId
+      })
+      const answer = await withRoomCallPeerTimeout(
+        peerConnection.createAnswer(),
+        ROOM_CALL_PEER_CREATE_ANSWER_TIMEOUT_MS,
+        () => {
+          captureRoomCallPeerDiagnostic(
+            'peer-answer-create-timeout',
+            {
+              fromUserId: payload.fromUserId,
+              peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
+              roomCallId: payload.roomCallId,
+              timeoutMs: ROOM_CALL_PEER_CREATE_ANSWER_TIMEOUT_MS
+            },
+            'warning'
+          )
+        }
+      )
       captureRoomCallPeerDiagnostic('peer-answer-created', {
         fromUserId: payload.fromUserId,
         peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
@@ -805,6 +840,12 @@ export const useRoomCallPeerManager = () => {
         return
       }
 
+      captureRoomCallPeerDiagnostic('peer-answer-set-local-started', {
+        fromUserId: payload.fromUserId,
+        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
+        roomCallId: payload.roomCallId,
+        signal: buildRoomCallSignalDiagnostics(answer)
+      })
       await peerConnection.setLocalDescription(answer)
       captureRoomCallPeerDiagnostic('peer-answer-local-description-set', {
         fromUserId: payload.fromUserId,
@@ -831,6 +872,11 @@ export const useRoomCallPeerManager = () => {
         'warning'
       )
     } catch (error) {
+      if (isRoomCallPeerTimeoutError(error)) {
+        await recoverRoomCallPeerConnection(payload.roomCallId, payload.fromUserId, localStreams)
+        return
+      }
+
       await handleRoomCallPeerDescriptionError(error, payload.roomCallId, payload.fromUserId, localStreams)
     }
   }

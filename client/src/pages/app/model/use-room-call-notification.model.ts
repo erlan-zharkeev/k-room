@@ -76,7 +76,7 @@ export const useRoomCallNotification = () => {
     if (!room) return
     if (isRoomPrivate(room)) return
     if (!general.toast) return
-    if (!groupCalls.toast) return
+    if (groupCalls.toast === false) return
 
     toast.add(
       {

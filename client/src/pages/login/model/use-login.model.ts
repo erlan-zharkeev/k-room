@@ -22,7 +22,7 @@ export const useLogin = () => {
   const { doHttpRequest } = useHttp()
   const { activateClientSession } = useClientSession()
   const { hasInteracted } = useSystem()
-  const { isFirebaseLoginLoading, onFirebaseLogin } = useFirebase()
+  const { isFirebaseLoginLoading, isFirebaseLoginReady, onFirebaseLogin } = useFirebase()
   const { t } = useI18n()
   const validationMessages = createValidationMessages(t)
   const isLoading = ref(false)
@@ -49,6 +49,7 @@ export const useLogin = () => {
 
   const isFormValid = computed(() => formRef.value?.formData.isFormValid.value)
   const isFormDisabled = computed(() => isLoading.value || isFirebaseLoginLoading.value)
+  const isFirebaseLoginDisabled = computed(() => isFormDisabled.value || !isFirebaseLoginReady.value)
   const isCaptchaBlocked = computed(() => captchaRequired.value && !captchaToken.value)
   const isSubmitDisabled = computed(() => isFormDisabled.value || isCaptchaBlocked.value)
   const isSubmitBtnDisabled = computed(() => {
@@ -91,6 +92,7 @@ export const useLogin = () => {
     captchaToken,
     formData,
     isFirebaseLoginLoading,
+    isFirebaseLoginDisabled,
     isFormDisabled,
     isLoading,
     isFormValid,

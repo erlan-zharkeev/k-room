@@ -10,7 +10,8 @@ import {
 } from '../config/appearance.constants'
 import type { ColorSchema, WallpaperSettings } from '../config/appearance.types'
 import { DEFAULT_SETTINGS } from '../config/constants'
-import { DEFAULT_NOTIFICATION_GROUP_SETTINGS } from '../config/notification.constants'
+import { DEFAULT_NOTIFICATION_SETTINGS } from '../config/notification.constants'
+import type { DeviceNotificationSettings, NotificationSettingGroup } from '../config/notification.types'
 import type { DeviceSetting } from '../config/types'
 
 const settingsStore = dexieKeyValueStore<DeviceSetting>(db.settings, 'settings')
@@ -20,6 +21,42 @@ const isWallpaperSynced = (wallpaper: WallpaperSettings, defaultWallpaper: Wallp
 
 const isColorSchemaSynced = (colorSchema: ColorSchema, defaultColorSchema: ColorSchema) =>
   Object.entries(defaultColorSchema).every(([key, value]) => colorSchema[key as keyof ColorSchema] === value)
+
+const syncNotificationGroupSettings = (notifications: DeviceNotificationSettings, group: NotificationSettingGroup) => {
+  if (!hasMissingNotificationGroupSettings(notifications, group)) return
+
+  const defaults = DEFAULT_NOTIFICATION_SETTINGS[group]
+  const current = notifications[group]
+  notifications[group] = { ...defaults, ...current }
+}
+
+const hasMissingNotificationGroupSettings = (
+  notifications: DeviceNotificationSettings,
+  group: NotificationSettingGroup
+) => {
+  const defaults = DEFAULT_NOTIFICATION_SETTINGS[group]
+  const current = notifications[group]
+
+  return !current || Object.keys(defaults).some((key) => !(key in current))
+}
+
+const hasMissingNotificationSettings = (notifications: DeviceNotificationSettings) => {
+  return (
+    hasMissingNotificationGroupSettings(notifications, 'general') ||
+    hasMissingNotificationGroupSettings(notifications, 'messages') ||
+    hasMissingNotificationGroupSettings(notifications, 'calls') ||
+    hasMissingNotificationGroupSettings(notifications, 'groupCalls') ||
+    hasMissingNotificationGroupSettings(notifications, 'invites')
+  )
+}
+
+const syncNotificationSettings = (notifications: DeviceNotificationSettings) => {
+  syncNotificationGroupSettings(notifications, 'general')
+  syncNotificationGroupSettings(notifications, 'messages')
+  syncNotificationGroupSettings(notifications, 'calls')
+  syncNotificationGroupSettings(notifications, 'groupCalls')
+  syncNotificationGroupSettings(notifications, 'invites')
+}
 
 export const useSettings = () => {
   const { ensure, get, mutate, reset, setByPath, shallowUpdate } = settingsStore
@@ -37,23 +74,15 @@ export const useSettings = () => {
 
     if (!initializedSettings) return
 
-    const isInviteNotificationsSynced = 'invites' in initializedSettings.notifications
-    const isGroupCallNotificationsSynced = 'groupCalls' in initializedSettings.notifications
     const { dark, light } = initializedSettings.appearance.themes
     const isDarkWallpaperSynced = isWallpaperSynced(dark.wallpaper, DARK_WALLPAPER_SETTINGS)
     const isLightWallpaperSynced = isWallpaperSynced(light.wallpaper, LIGHT_WALLPAPER_SETTINGS)
     const isDarkColorSchemaSynced = isColorSchemaSynced(dark.colorSchema, DARK_COLOR_SCHEMA)
     const isLightColorSchemaSynced = isColorSchemaSynced(light.colorSchema, LIGHT_COLOR_SCHEMA)
 
-    if (!isInviteNotificationsSynced) {
+    if (hasMissingNotificationSettings(initializedSettings.notifications)) {
       await mutate((data) => {
-        data.notifications.invites = { ...DEFAULT_NOTIFICATION_GROUP_SETTINGS }
-      })
-    }
-
-    if (!isGroupCallNotificationsSynced) {
-      await mutate((data) => {
-        data.notifications.groupCalls = { ...DEFAULT_NOTIFICATION_GROUP_SETTINGS, sound: false, vibration: false }
+        syncNotificationSettings(data.notifications)
       })
     }
 

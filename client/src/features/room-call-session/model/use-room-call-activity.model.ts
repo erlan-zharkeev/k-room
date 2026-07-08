@@ -30,12 +30,18 @@ import { sortRoomCallActivityRoomCalls } from '../lib/sort-room-call-activity-ro
 import { useActiveRoomCallSession } from './use-active-room-call-session.model'
 import { useRoomCallSession } from './use-room-call-session.model'
 
+const dismissedRoomCallIds = ref<ReadonlySet<string>>(new Set())
+
+const dismissRoomCallActivity = (roomCallId: string) => {
+  dismissedRoomCallIds.value = new Set([...dismissedRoomCallIds.value, roomCallId])
+}
+
 export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: UseRoomCallActivityParams) => {
   const { t } = useI18n()
   const { getById } = useChatRoom()
   const { contactById } = useContact()
   const { knownUserById } = useKnownUser()
-  const { roomCalls } = useRoomCall()
+  const { remove, roomCalls } = useRoomCall()
   const { user } = useUser()
   const {
     activeRoomCall,
@@ -51,6 +57,34 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
   const joiningMediaKind = ref<RoomCallMediaKind | null>(null)
   const isDecliningRoomCall = ref(false)
   const isLeavingVisibleRoomCall = ref(false)
+
+  const isPreferredVisibleRoomCall = (candidate: RoomCall, current: RoomCall) => {
+    const candidateIsActiveSession = candidate.id === activeRoomCallId.value
+    const currentIsActiveSession = current.id === activeRoomCallId.value
+
+    if (candidateIsActiveSession !== currentIsActiveSession) return candidateIsActiveSession
+
+    const candidateIsInProgress = candidate.status === 'in-progress'
+    const currentIsInProgress = current.status === 'in-progress'
+
+    if (candidateIsInProgress !== currentIsInProgress) return candidateIsInProgress
+
+    return candidate.calledAt > current.calledAt
+  }
+
+  const deduplicateVisibleRoomCallsByRoom = (visibleRoomCalls: RoomCall[]) => {
+    const roomCallByRoomId = new Map<string, RoomCall>()
+
+    visibleRoomCalls.forEach((roomCall) => {
+      const currentRoomCall = roomCallByRoomId.get(roomCall.roomId)
+
+      if (!currentRoomCall || isPreferredVisibleRoomCall(roomCall, currentRoomCall)) {
+        roomCallByRoomId.set(roomCall.roomId, roomCall)
+      }
+    })
+
+    return sortRoomCallActivityRoomCalls([...roomCallByRoomId.values()])
+  }
 
   const resolveUserById = (id: string) => contactById.value.get(id) ?? knownUserById.value.get(id)
 
@@ -79,15 +113,21 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
 
   const filteredRoomCalls = computed(() => {
     const selectedRoomId = roomId?.value
-    const unfinishedRoomCalls = roomCalls.value.filter(isRoomCallUnfinished)
+    const unfinishedRoomCalls = roomCalls.value.filter(
+      (roomCall) => isRoomCallUnfinished(roomCall) && !dismissedRoomCallIds.value.has(roomCall.id)
+    )
     const visibleRoomCalls = selectedRoomId
       ? unfinishedRoomCalls.filter((roomCall) => roomCall.roomId === selectedRoomId)
       : unfinishedRoomCalls
 
-    return sortRoomCallActivityRoomCalls(visibleRoomCalls)
+    return deduplicateVisibleRoomCallsByRoom(visibleRoomCalls)
   })
   const activeSessionRoomCall = computed(() => {
-    if (!activeRoomCall.value || !isRoomCallUnfinished(activeRoomCall.value)) {
+    if (
+      !activeRoomCall.value ||
+      !isRoomCallUnfinished(activeRoomCall.value) ||
+      dismissedRoomCallIds.value.has(activeRoomCall.value.id)
+    ) {
       return
     }
 
@@ -220,7 +260,7 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
   const openCurrentRoomCall = async () => {
     const item = activityItem.value
 
-    if (!item || !isOpenEnabled.value) {
+    if (!item || !isOpenEnabled.value || isActivityDisabled.value) {
       return
     }
 
@@ -272,17 +312,15 @@ export const useRoomCallActivity = ({ isOpenEnabled, openRoomCall, roomId }: Use
     const cannotLeaveRoomCall = !item.canLeave
     const isDeclineInProgress = isDecliningRoomCall.value
     const isVisibleLeaveInProgress = isLeavingVisibleRoomCall.value
-    const isLeaveBlockedByConnection = isActivityDisabled.value
     const actionUnavailable =
-      cannotLeaveRoomCall ||
-      isSessionBusyForLeave ||
-      isDeclineInProgress ||
-      isVisibleLeaveInProgress ||
-      isLeaveBlockedByConnection
+      cannotLeaveRoomCall || isSessionBusyForLeave || isDeclineInProgress || isVisibleLeaveInProgress
 
     if (actionUnavailable) {
       return false
     }
+
+    dismissRoomCallActivity(item.roomCall.id)
+    void remove(item.roomCall.id)
 
     if (isIncomingRoomCall) {
       isDecliningRoomCall.value = true
