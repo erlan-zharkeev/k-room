@@ -8,7 +8,7 @@ const { roomCallAudioOutputItems } = useRoomCallAudioOutput()
 
 <template>
   <div class="room-call-audio-output" aria-hidden="true">
-    <RoomCallAudioOutputItem v-for="item in roomCallAudioOutputItems" :key="item.userId" :item="item" />
+    <RoomCallAudioOutputItem v-for="item in roomCallAudioOutputItems" :key="item.key" :item="item" />
   </div>
 </template>
 

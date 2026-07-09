@@ -5,11 +5,9 @@ export const mediaStore = dexieCollectionStore<MediaRecord>(db.media)
 
 export const useMedia = () => {
   const { bulkDelete, get, put, remove, reset, update } = mediaStore
-  const media = mediaStore.use()
   const getLiveMediaUrl = (id: string) => useLiveMediaUrl(id)
 
   return {
-    media,
     getLiveMediaUrl,
     bulkDelete,
     get,

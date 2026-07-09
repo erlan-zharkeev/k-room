@@ -1,6 +1,6 @@
 import { getAppChatRoomPath } from 'global-shared'
 import partition from 'lodash/partition'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import {
@@ -30,12 +30,19 @@ export const useChatRoomsList = () => {
   const { t } = useI18n()
   const { chatRooms } = useChatRoom()
   const { getChatRoomPrivateContact, getChatRoomSupportContact } = useChatRoomContactLookup()
-  const { getById } = useMessage()
+  const { getById, loadByIds } = useMessage()
   const { emitSocketAction } = useSocketAction()
   const { isSocketOnlineActionAvailable } = useSocketAvailability()
   const { updatePinnedChatRoomOrder } = usePinChatRoomOrder()
 
   const normalizedSearchQuery = computed(() => searchQuery.value.trim().toLowerCase())
+  const displayedLastMessageIds = computed(() =>
+    chatRooms.value.flatMap((room) => {
+      const displayedLastMessageId = getRoomDisplayedLastMessageId(room)
+
+      return displayedLastMessageId ? [displayedLastMessageId] : []
+    })
+  )
 
   const buildChatRoomRoute = (roomId: string) => {
     const query = isPortraitTabletOrLess.value ? { ...route.query, view: 'content' } : route.query
@@ -146,6 +153,8 @@ export const useChatRoomsList = () => {
       }
     )
   }
+
+  watch(displayedLastMessageIds, (messageIds) => void loadByIds(messageIds), { immediate: true })
 
   return {
     searchQuery,

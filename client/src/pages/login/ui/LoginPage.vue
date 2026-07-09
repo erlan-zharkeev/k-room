@@ -65,6 +65,7 @@ const {
         :disabled="isFirebaseLoginDisabled"
         fill
         :loading="isFirebaseLoginLoading"
+        type="button"
         @click="onFirebaseLogin('google')"
       >
         <div class="login-page__button__google">

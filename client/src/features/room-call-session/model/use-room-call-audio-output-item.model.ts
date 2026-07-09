@@ -45,6 +45,8 @@ export const useRoomCallAudioOutputItem = (props: RoomCallAudioOutputItemProps) 
 
     const { audioOutputDeviceId } = settings.value.ioDevices
 
+    if (!audioOutputDeviceId && !audio.sinkId) return
+
     try {
       await audio.setSinkId(audioOutputDeviceId)
     } catch (error) {

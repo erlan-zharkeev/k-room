@@ -366,15 +366,6 @@ export const updateRoomCallMediaState = async (
     roomCallId,
     userId
   })
-  captureRoomCallServerDiagnostic('media-state-updated', {
-    activeParticipantIds: resolveActiveRoomCallUserIds(updatedRoomCall.participants),
-    mediaKind: updatedRoomCall.mediaKind,
-    requestedMediaState: mediaState,
-    resolvedMediaState: updatedParticipantMediaState,
-    roomCallId,
-    socketId,
-    userId
-  })
 }
 
 export const sendRoomCallQuickCommand = async (
@@ -464,15 +455,5 @@ export const sendRoomCallSignal = async (
     roomCallId,
     signal,
     signalKind
-  })
-  captureRoomCallServerDiagnostic('signal-forwarded', {
-    activeParticipantIds: resolveActiveRoomCallUserIds(roomCall.participants),
-    fromSocketId: socketId,
-    roomCallId,
-    signal: buildRoomCallServerSignalDiagnostics(signal),
-    signalKind,
-    targetSocketId: targetParticipant.socketId,
-    toUserId,
-    userId
   })
 }

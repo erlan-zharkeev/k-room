@@ -8,6 +8,15 @@ import { hasRoomCallAudioOutputStream } from '../lib/room-call-audio-output'
 import { useActiveRoomCallSession } from './use-active-room-call-session.model'
 import { useRoomCallRuntimeState } from './use-room-call-runtime-state.model'
 
+const buildRoomCallAudioOutputItemKey = (userId: string, stream: MediaStream) => {
+  const audioTrackIds = stream
+    .getAudioTracks()
+    .map(({ id }) => id)
+    .join(':')
+
+  return [userId, stream.id, audioTrackIds].join(':')
+}
+
 export const useRoomCallAudioOutput = () => {
   const { user } = useUser()
   const { activeRoomCall, remoteStreamsByUserId } = useActiveRoomCallSession()
@@ -30,6 +39,7 @@ export const useRoomCallAudioOutput = () => {
 
       return [
         {
+          key: buildRoomCallAudioOutputItemKey(userId, stream),
           muted: Boolean(mutedRemoteAudioByUserId.value[userId]),
           stream,
           userId

@@ -1,6 +1,6 @@
 import { initializeMediaCacheTrimmer } from 'src/entities/media-file'
 import { useSettings } from 'src/entities/setting'
-import { initializeDexieCollectionStores, openDexieDatabase } from 'src/shared/lib'
+import { openDexieDatabase } from 'src/shared/lib'
 
 let clientIndexedDbInitPromise: Promise<void> | null = null
 
@@ -9,7 +9,7 @@ const initializeClientIndexedDbData = async () => {
 
   initializeMediaCacheTrimmer()
   await openDexieDatabase()
-  await Promise.all([settingsStore.initialize(), initializeDexieCollectionStores()])
+  await settingsStore.initialize()
 }
 
 export const initClientIndexedDbData = () => {

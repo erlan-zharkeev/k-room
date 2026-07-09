@@ -272,59 +272,35 @@ export const useActiveRoomCallSession = createGlobalState(() => {
 
   const syncActiveRoomCallMediaState = async () => {
     if (!activeRoomCallId.value) {
-      captureRoomCallDiagnostic('active-session-media-state-sync-skipped', {
-        localMediaState: localMediaState.value,
-        reason: 'missing-active-room-call-id'
-      })
       return false
     }
 
-    captureRoomCallDiagnostic('active-session-media-state-sync-started', {
-      localMediaState: localMediaState.value,
-      roomCallId: activeRoomCallId.value
-    })
     const synced = await updateRoomCallMediaState(activeRoomCallId.value, localMediaState.value)
 
-    captureRoomCallDiagnostic(synced ? 'active-session-media-state-synced' : 'active-session-media-state-sync-failed', {
-      localMediaState: localMediaState.value,
-      roomCallId: activeRoomCallId.value
-    })
+    if (!synced) {
+      captureRoomCallDiagnostic(
+        'active-session-media-state-sync-failed',
+        {
+          localMediaState: localMediaState.value,
+          roomCallId: activeRoomCallId.value
+        },
+        'warning'
+      )
+    }
 
     return synced
   }
 
   const syncActiveRoomCallPeerTracks = async () => {
     if (!activeRoomCallId.value) {
-      captureRoomCallDiagnostic('active-session-peer-track-sync-skipped', {
-        localStreams: buildRoomCallLocalStreamsDiagnostics(localStreams.value),
-        reason: 'missing-active-room-call-id'
-      })
       return
     }
 
-    captureRoomCallDiagnostic('active-session-peer-track-sync-started', {
-      localStreams: buildRoomCallLocalStreamsDiagnostics(localStreams.value),
-      roomCallId: activeRoomCallId.value
-    })
     await syncRoomCallPeerTracks(activeRoomCallId.value, localStreams.value)
-    captureRoomCallDiagnostic('active-session-peer-track-synced', {
-      localStreams: buildRoomCallLocalStreamsDiagnostics(localStreams.value),
-      roomCallId: activeRoomCallId.value
-    })
   }
 
   const syncActiveRoomCallLocalState = async () => {
-    captureRoomCallDiagnostic('active-session-local-state-sync-started', {
-      activeRoomCallId: activeRoomCallId.value,
-      localMediaState: localMediaState.value,
-      localStreams: buildRoomCallLocalStreamsDiagnostics(localStreams.value)
-    })
     await Promise.all([syncActiveRoomCallMediaState(), syncActiveRoomCallPeerTracks()])
-    captureRoomCallDiagnostic('active-session-local-state-synced', {
-      activeRoomCallId: activeRoomCallId.value,
-      localMediaState: localMediaState.value,
-      localStreams: buildRoomCallLocalStreamsDiagnostics(localStreams.value)
-    })
   }
 
   const connectActiveRoomCallPeers = async (roomCall?: RoomCall) => {
@@ -332,29 +308,13 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     const currentUserId = user.value.id
 
     if (!targetRoomCall || !currentUserId) {
-      captureRoomCallDiagnostic('active-session-peer-connect-skipped', {
-        currentUserId,
-        hasTargetRoomCall: Boolean(targetRoomCall),
-        roomCallId: targetRoomCall?.id
-      })
       return false
     }
 
-    captureRoomCallDiagnostic('active-session-peer-connect-started', {
-      currentUserId,
-      localStreams: buildRoomCallLocalStreamsDiagnostics(localStreams.value),
-      participants: targetRoomCall.participants,
-      roomCallId: targetRoomCall.id
-    })
     await connectRoomCallPeers({
       currentUserId,
       localStreams: localStreams.value,
       participants: targetRoomCall.participants,
-      roomCallId: targetRoomCall.id
-    })
-    captureRoomCallDiagnostic('active-session-peer-connected', {
-      currentUserId,
-      remoteUserIds: Object.keys(remoteStreamsByUserId.value),
       roomCallId: targetRoomCall.id
     })
 
@@ -363,23 +323,22 @@ export const useActiveRoomCallSession = createGlobalState(() => {
 
   const flushPendingRoomCallSignals = async (roomCallId: string) => {
     const signals = flushRoomCallSignals(roomCallId)
+    const signalKindCounts = {
+      answer: signals.filter(({ signalKind }) => signalKind === 'answer').length,
+      iceCandidate: signals.filter(({ signalKind }) => signalKind === 'ice-candidate').length,
+      offer: signals.filter(({ signalKind }) => signalKind === 'offer').length
+    }
 
-    captureRoomCallDiagnostic('active-session-pending-signals-flush-started', {
-      roomCallId,
-      signals: signals.map(({ fromUserId, signal, signalKind }) => ({
-        fromUserId,
-        signal: buildRoomCallSignalDiagnostics(signal),
-        signalKind
-      })),
-      signalCount: signals.length
-    })
+    if (signals.length) {
+      captureRoomCallDiagnostic('active-session-pending-signals-flush-started', {
+        roomCallId,
+        signalCount: signals.length,
+        signalKindCounts
+      })
+    }
     for (const signal of signals) {
       await handleRoomCallSignalReceived(signal, roomCallId, localStreams.value)
     }
-    captureRoomCallDiagnostic('active-session-pending-signals-flushed', {
-      roomCallId,
-      signalCount: signals.length
-    })
   }
 
   const handleActiveRoomCallSignalReceived = async (payload: EventRoomCallSignalReceived) => {
@@ -387,22 +346,19 @@ export const useActiveRoomCallSession = createGlobalState(() => {
 
     if (payload.roomCallId !== roomCallId) {
       const queued = queueJoiningRoomCallSignal(payload)
-      captureRoomCallDiagnostic(queued ? 'active-session-signal-queued' : 'active-session-signal-ignored', {
-        activeRoomCallId: roomCallId,
-        fromUserId: payload.fromUserId,
-        payloadRoomCallId: payload.roomCallId,
-        signal: buildRoomCallSignalDiagnostics(payload.signal),
-        signalKind: payload.signalKind
-      })
+
+      if (!queued) {
+        captureRoomCallDiagnostic('active-session-signal-ignored', {
+          activeRoomCallId: roomCallId,
+          fromUserId: payload.fromUserId,
+          payloadRoomCallId: payload.roomCallId,
+          signal: buildRoomCallSignalDiagnostics(payload.signal),
+          signalKind: payload.signalKind
+        })
+      }
       return
     }
 
-    captureRoomCallDiagnostic('active-session-signal-received', {
-      fromUserId: payload.fromUserId,
-      roomCallId,
-      signal: buildRoomCallSignalDiagnostics(payload.signal),
-      signalKind: payload.signalKind
-    })
     await handleRoomCallSignalReceived(payload, roomCallId, localStreams.value)
   }
 
@@ -822,11 +778,6 @@ export const useActiveRoomCallSession = createGlobalState(() => {
 
     if (!roomCall) return
 
-    captureRoomCallDiagnostic('active-session-status-changed', {
-      roomCallId: roomCall.id,
-      status
-    })
-
     const isConnected = status === 'in-progress'
     const isInitiatedByCurrentUser = roomCall.initiatorId === user.value.id
     const isOutgoingSoundRoomCall = roomCall.id === outgoingRoomCallSoundRoomCallId
@@ -856,11 +807,6 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   })
 
   watch(isActiveRoomCallScreenSharingByAnotherParticipant, (isScreenSharing) => {
-    captureRoomCallDiagnostic('active-session-remote-screen-sharing-state-changed', {
-      activeRoomCallId: activeRoomCallId.value,
-      isScreenSharing,
-      localMediaState: localMediaState.value
-    })
     if (!isScreenSharing) {
       return
     }

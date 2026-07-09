@@ -91,24 +91,21 @@ export const useRoomCallSession = () => {
   }
 
   const updateRoomCallMediaState = async (roomCallId: string, mediaState: RoomCallParticipantMediaState) => {
-    captureRoomCallDiagnostic('socket-media-state-update-requested', {
-      mediaState,
-      roomCallId
-    })
-
     const response = await emitSocketAction('update-room-call-media-state', {
       mediaState,
       roomCallId
     })
 
-    captureRoomCallDiagnostic(
-      response.ok ? 'socket-media-state-update-succeeded' : 'socket-media-state-update-failed',
-      {
-        mediaState,
-        roomCallId
-      },
-      response.ok ? 'info' : 'warning'
-    )
+    if (!response.ok) {
+      captureRoomCallDiagnostic(
+        'socket-media-state-update-failed',
+        {
+          mediaState,
+          roomCallId
+        },
+        'warning'
+      )
+    }
 
     return response.ok
   }
@@ -148,13 +145,6 @@ export const useRoomCallSession = () => {
     }
 
     socket.emit('send-room-call-signal', payload)
-    captureRoomCallDiagnostic('socket-room-call-signal-emitted', {
-      roomCallId: payload.roomCallId,
-      signal: buildRoomCallSignalDiagnostics(payload.signal),
-      signalKind: payload.signalKind,
-      socketOnlineActionAvailable: isSocketOnlineActionAvailable.value,
-      toUserId: payload.toUserId
-    })
   }
 
   return {

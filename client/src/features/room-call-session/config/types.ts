@@ -61,6 +61,7 @@ export interface RoomCallTemporaryQuickCommandState {
 }
 
 export interface RoomCallAudioOutputItem {
+  key: string
   muted: boolean
   stream: MediaStream
   userId: string

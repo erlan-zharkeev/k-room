@@ -4,6 +4,13 @@ import type { RoomCallVideoFacingMode } from '../config/types'
 export const buildRoomCallMediaDeviceConstraints = (deviceId: string): MediaTrackConstraints | true =>
   deviceId ? { deviceId: { exact: deviceId } } : true
 
+export const buildRoomCallAudioDeviceConstraints = (deviceId: string): MediaTrackConstraints => ({
+  ...(deviceId && { deviceId: { exact: deviceId } }),
+  autoGainControl: true,
+  echoCancellation: true,
+  noiseSuppression: true
+})
+
 export const buildRoomCallVideoDeviceConstraints = (
   deviceId: string,
   facingMode?: RoomCallVideoFacingMode

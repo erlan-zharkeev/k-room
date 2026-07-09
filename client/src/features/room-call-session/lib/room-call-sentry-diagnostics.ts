@@ -85,6 +85,20 @@ export const buildRoomCallLocalStreamsDiagnostics = (streams: RoomCallLocalMedia
   return streams.map(buildRoomCallMediaStreamDiagnostics)
 }
 
+export const buildRoomCallLocalTrackIdDiagnostics = (streams: RoomCallLocalMediaStreamList) => {
+  const tracks = streams.flatMap((stream) => stream?.getTracks() ?? [])
+  const audioTracks = tracks.filter(({ kind }) => kind === 'audio')
+  const videoTracks = tracks.filter(({ kind }) => kind === 'video')
+
+  return {
+    localAudioTrackIds: audioTracks.map(({ id }) => id).join(','),
+    localAudioTrackCount: audioTracks.length,
+    localStreamIds: streams.map((stream) => stream?.id ?? '').join(','),
+    localVideoTrackIds: videoTracks.map(({ id }) => id).join(','),
+    localVideoTrackCount: videoTracks.length
+  }
+}
+
 const buildRoomCallDescriptionDiagnostics = (
   description: RTCSessionDescription | RTCSessionDescriptionInit | Record<string, unknown> | null
 ) => {

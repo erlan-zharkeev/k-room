@@ -271,9 +271,9 @@ export const useChatRoomMessages = (
 
     try {
       await runInitialMessagesScroll(roomId, previousRoomId, async () => {
-        restoreCachedLoadedMessageRanges(room.value)
-
         const anchorMessageId = getSavedMessagesScrollAnchorMessageId(roomId)
+
+        await restoreCachedLoadedMessageRanges(room.value, anchorMessageId ?? undefined)
 
         if (anchorMessageId) {
           await loadMessagesAround(anchorMessageId)

@@ -1,37 +1,60 @@
-import { AUTH_ENDPOINTS, type FirebaseProvider, type SignInWithProviderPayload, type UserData } from 'global-shared'
+import { FacebookAuthProvider, getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import {
+  AUTH_ENDPOINTS,
+  isString,
+  isUnknownObject,
+  type FirebaseProvider,
+  type SignInWithProviderPayload,
+  type UserData
+} from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 import { ref } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
 import { useClientSession } from 'src/features/client-session'
 import { isExpectedHttpError, useHttp } from 'src/shared/api'
-import { log, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
+import {
+  captureClientSentryMessage,
+  log,
+  TOAST_I18N,
+  useAppToast,
+  useI18n,
+  withClientSentryScope
+} from 'src/shared/lib'
 
 import { E2E_FIREBASE_AUTH_RESULT } from '../config/constants'
 import { LOGIN_FORM_I18N } from '../config/i18n'
 
 import { initFirebase } from './init-firebase.model'
 
-type FirebaseAuthModule = typeof import('firebase/auth')
+if (!__CLIENT_ENV_DATA__.isE2E) {
+  initFirebase()
+}
 
-let firebaseAuthModule: FirebaseAuthModule | null = null
-let firebaseAuthModulePromise: Promise<FirebaseAuthModule> | null = null
+const readFirebaseErrorField = (error: unknown, field: string) => {
+  if (!isUnknownObject(error)) return undefined
 
-const prepareFirebaseAuthModule = async () => {
-  if (firebaseAuthModule) return firebaseAuthModule
+  const value = Reflect.get(error, field)
 
-  if (!firebaseAuthModulePromise) {
-    firebaseAuthModulePromise = initFirebase()
-      .then(() => import('firebase/auth'))
-      .catch((error) => {
-        firebaseAuthModulePromise = null
-        throw error
-      })
-  }
+  return isString(value) ? value : undefined
+}
 
-  firebaseAuthModule = await firebaseAuthModulePromise
+const captureFirebaseLoginFailure = (error: unknown, provider: FirebaseProvider) => {
+  withClientSentryScope((scope) => {
+    scope.setLevel('warning')
+    scope.setTag('firebase_login.diagnostic', 'true')
+    scope.setTag('firebase_login.provider', provider)
+    scope.setContext('firebase_login', {
+      code: readFirebaseErrorField(error, 'code') ?? null,
+      message: readFirebaseErrorField(error, 'message') ?? null,
+      name: readFirebaseErrorField(error, 'name') ?? null,
+      online: typeof navigator === 'undefined' ? undefined : navigator.onLine,
+      provider,
+      userAgent: typeof navigator === 'undefined' ? undefined : navigator.userAgent
+    })
 
-  return firebaseAuthModule
+    captureClientSentryMessage('Firebase login failed')
+  })
 }
 
 export const useFirebase = () => {
@@ -41,28 +64,13 @@ export const useFirebase = () => {
   const { t } = useI18n()
   const toast = useAppToast()
   const isFirebaseLoginLoading = ref(false)
-  const isFirebaseLoginReady = ref(__CLIENT_ENV_DATA__.isE2E || Boolean(firebaseAuthModule))
-
-  if (!__CLIENT_ENV_DATA__.isE2E && !isFirebaseLoginReady.value) {
-    void prepareFirebaseAuthModule()
-      .then(() => {
-        isFirebaseLoginReady.value = true
-      })
-      .catch((error) => {
-        log('error', 'Firebase auth preload failed', error)
-      })
-  }
+  const isFirebaseLoginReady = ref(true)
 
   const getFirebaseCredential = async (provider: FirebaseProvider) => {
     if (__CLIENT_ENV_DATA__.isE2E) {
       return E2E_FIREBASE_AUTH_RESULT
     }
 
-    if (!firebaseAuthModule) {
-      throw new Error('Firebase auth is not ready')
-    }
-
-    const { FacebookAuthProvider, GoogleAuthProvider, getAuth, signInWithPopup } = firebaseAuthModule
     const Provider = provider === 'google' ? GoogleAuthProvider : FacebookAuthProvider
     const currentProvider = new Provider()
     const auth = getAuth()
@@ -96,6 +104,7 @@ export const useFirebase = () => {
         provider: normalizedProvider
       }
     } catch (error) {
+      captureFirebaseLoginFailure(error, provider)
       log('error', 'Firebase login failed', error)
 
       toast.add({
