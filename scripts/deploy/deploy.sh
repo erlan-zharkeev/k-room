@@ -75,6 +75,11 @@ load_env_fallback_file "$SECRET_ENV_FILE"
 load_env_fallback_file "$ENV_FILE"
 load_env_fallback_file "$SHARED_ENV_FILE"
 
+if [ -z "${TURN_SHARED_SECRET:-}" ] && [ -n "${ACCESS_TOKEN_SECRET:-}" ]; then
+  TURN_SHARED_SECRET="$(printf '%s' "k-room-turn-v1:$ACCESS_TOKEN_SECRET" | sha256sum | cut -d ' ' -f 1)"
+  export TURN_SHARED_SECRET
+fi
+
 require_env DOCKERHUB_USERNAME
 require_env DOCKERHUB_TOKEN
 require_env MONGO_ADMIN_PASSWORD
