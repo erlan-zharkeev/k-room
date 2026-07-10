@@ -14,6 +14,8 @@ export type {
   RoomCallTemporaryQuickCommand,
   RoomCallLeaveReason,
   RoomCallAckFailureReason,
+  RoomCallIceServer,
+  RoomCallRtcConfiguration,
   RoomCallParticipantMediaState,
   RoomCallParticipantQuickCommandState,
   RoomCallParticipantQuickCommandStateByUserId,
@@ -48,6 +50,7 @@ export {
   ROOM_CALL_DEFAULT_PARTICIPANT_QUICK_COMMAND_STATE,
   ROOM_CALL_LOAD_LIMIT_MAX,
   ROOM_CALL_MEDIA_KIND_VALUES,
+  ROOM_CALL_STUN_URLS,
   ROOM_CALL_STATUS_VALUES
 } from './room-calls/constants'
 
@@ -330,6 +333,8 @@ export type {
   ClientToServerSocketAction,
   ClientToServerSocketAckAction,
   ServerToClientSocketAction,
+  ServerToClientSocketAckAction,
+  RoomCallSignalDeliveryAck,
   SocketAppActions,
   SocketSystemActions,
   EventAuthError,

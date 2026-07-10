@@ -151,9 +151,15 @@ describe('room-calls.socket', () => {
     expect(roomCallsServiceMock.setRoomCallHandRaised).toHaveBeenCalledWith(redisService, 'user-1', 'socket-1', {
       roomCallId: 'call-1'
     })
-    expect(roomCallsServiceMock.sendRoomCallSignal).toHaveBeenCalledWith(redisService, 'user-1', 'socket-1', {
-      roomCallId: 'call-1'
-    })
+    expect(roomCallsServiceMock.sendRoomCallSignal).toHaveBeenCalledWith(
+      redisService,
+      'user-1',
+      'socket-1',
+      expect.objectContaining({
+        roomCallId: 'call-1',
+        signalId: expect.any(String)
+      })
+    )
     expect(roomCallsServiceMock.leaveActiveRoomCallsBySocket).toHaveBeenCalledWith(redisService, 'user-1', 'socket-1')
   })
 })

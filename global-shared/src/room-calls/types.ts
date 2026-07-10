@@ -12,6 +12,16 @@ export type RoomCallLeaveReason = 'declined' | 'disconnected' | 'left'
 
 export type RoomCallAckFailureReason = 'access-failed' | 'already-active' | 'join-failed' | 'limit-reached'
 
+export interface RoomCallIceServer {
+  credential?: string
+  urls: string[]
+  username?: string
+}
+
+export interface RoomCallRtcConfiguration {
+  iceServers: RoomCallIceServer[]
+}
+
 export interface RoomCallParticipantMediaState {
   audio: boolean
   video: boolean
@@ -64,6 +74,7 @@ export interface EventStartRoomCall {
 }
 
 export interface StartRoomCallAckPayload {
+  rtcConfiguration: RoomCallRtcConfiguration
   roomCall: RoomCall
   roomCallId: string
 }
@@ -75,6 +86,7 @@ export interface EventJoinRoomCall {
 export interface JoinRoomCallAckPayload {
   roomCall: RoomCall
   participantQuickCommandStateByUserId: RoomCallParticipantQuickCommandStateByUserId
+  rtcConfiguration: RoomCallRtcConfiguration
 }
 
 export interface EventLeaveRoomCall {
@@ -97,6 +109,7 @@ export interface EventUpdateRoomCallMediaState {
 
 export interface EventSendRoomCallSignal {
   roomCallId: string
+  signalId: string
   toUserId: string
   signalKind: RoomCallSignalKind
   signal: unknown
@@ -163,6 +176,7 @@ export interface EventRoomCallHandRaisedUpdated {
 
 export interface EventRoomCallSignalReceived {
   roomCallId: string
+  signalId: string
   fromUserId: string
   signalKind: RoomCallSignalKind
   signal: unknown

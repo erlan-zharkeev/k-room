@@ -11,6 +11,7 @@ const createSignal = (
   fromUserId,
   roomCallId,
   signal: { type: signalKind, sdp: 'v=0' },
+  signalId: `${roomCallId}-${fromUserId}-${signalKind}`,
   signalKind
 })
 

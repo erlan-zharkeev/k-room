@@ -71,6 +71,19 @@ The Tauri desktop client uses the same policy as a native startup recovery check
 
 Recovery cleanup intentionally targets PWA/browser caches and service workers, not IndexedDB user data.
 
+### WebRTC TURN Relay
+
+Production calls use the `turn` service from `compose.prod.yml` as a relay when a direct peer-to-peer route cannot be established through STUN. Coturn uses host networking to avoid Docker relay-range translation overhead. The server creates short-lived TURN REST credentials for each start/join acknowledgement; the shared TURN secret is never included in the client bundle.
+
+Before the next production deploy:
+
+1. Set `TURN_EXTERNAL_IP` to the production host's public IPv4 address.
+2. Generate a random `TURN_SHARED_SECRET`, for example with `openssl rand -hex 32`.
+3. Store both values in `.env.secret` on the deploy host.
+4. Allow inbound TCP and UDP `3478`, TCP and UDP `5349`, and UDP `49160-49260` in the host and provider firewalls.
+
+The committed production URLs use `k-room.space`, so the existing application certificate is reused for `turns:k-room.space:5349`. `TURN_URLS` can be replaced with an external TURN provider or a dedicated TURN hostname. Keep UDP first, TCP second, and TLS/TCP as the final fallback.
+
 ## Root Package Scripts
 
 These commands are defined in the root `package.json`.

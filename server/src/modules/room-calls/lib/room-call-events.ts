@@ -1,12 +1,15 @@
 import type { EventRoomCallSignalReceived } from 'global-shared'
 
 import { getIO } from 'src/shared/lib/io'
-import { emitSocketEvent } from 'src/shared/lib/transport-meta'
-import type { EmitServerToClientSocketEvent } from 'src/shared/types'
+import { buildTransportMeta } from 'src/shared/lib/transport-meta'
 
-export const emitRoomCallSignalReceived = (socketId: string, payload: EventRoomCallSignalReceived) => {
-  const room = getIO().to(socketId)
-  const emit = room.emit.bind(room) as EmitServerToClientSocketEvent
+import { ROOM_CALL_SIGNAL_DELIVERY_ACK_TIMEOUT_MS } from '../room-calls.constants'
 
-  emitSocketEvent(emit, 'room-call-signal-received', payload)
+export const emitRoomCallSignalReceived = async (socketId: string, payload: EventRoomCallSignalReceived) => {
+  const responses = await getIO()
+    .timeout(ROOM_CALL_SIGNAL_DELIVERY_ACK_TIMEOUT_MS)
+    .to(socketId)
+    .emitWithAck('room-call-signal-received', payload, buildTransportMeta())
+
+  return responses.includes(true)
 }

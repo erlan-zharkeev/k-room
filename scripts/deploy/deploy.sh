@@ -56,19 +56,6 @@ require_env() {
   fi
 }
 
-load_env_fallback_file "$SECRET_ENV_FILE"
-
-require_env DOCKERHUB_USERNAME
-require_env DOCKERHUB_TOKEN
-require_env MONGO_ADMIN_PASSWORD
-require_env RESEND_API_KEY
-require_env ADMIN_PASSWORD
-require_env ACCESS_TOKEN_SECRET
-require_env REFRESH_TOKEN_SECRET
-require_env EMAIL_CONFIRM_SECRET
-require_env TURNSTILE_SECRET_KEY
-require_env VAPID_PRIVATE_KEY
-
 if [ ! -f "$COMPOSE_FILE" ]; then
   echo "[deploy] Compose file not found: $COMPOSE_FILE" >&2
   exit 1
@@ -84,11 +71,30 @@ if [ ! -f "$SHARED_ENV_FILE" ]; then
   exit 1
 fi
 
+load_env_fallback_file "$SECRET_ENV_FILE"
+load_env_fallback_file "$ENV_FILE"
+load_env_fallback_file "$SHARED_ENV_FILE"
+
+require_env DOCKERHUB_USERNAME
+require_env DOCKERHUB_TOKEN
+require_env MONGO_ADMIN_PASSWORD
+require_env RESEND_API_KEY
+require_env ADMIN_PASSWORD
+require_env ACCESS_TOKEN_SECRET
+require_env REFRESH_TOKEN_SECRET
+require_env EMAIL_CONFIRM_SECRET
+require_env TURNSTILE_SECRET_KEY
+require_env TURN_EXTERNAL_IP
+require_env TURN_REALM
+require_env TURN_SHARED_SECRET
+require_env TURN_URLS
+require_env VAPID_PRIVATE_KEY
+
 mkdir -p "$ROOT_DIR/scripts/deploy/certs"
 
 cat "$SHARED_ENV_FILE" "$ENV_FILE" > "$MERGED_ENV_FILE"
 printf '\n' >> "$MERGED_ENV_FILE"
-for env_name in MONGO_ADMIN_PASSWORD RESEND_API_KEY ADMIN_PASSWORD ACCESS_TOKEN_SECRET REFRESH_TOKEN_SECRET EMAIL_CONFIRM_SECRET TURNSTILE_SECRET_KEY VAPID_PRIVATE_KEY REDIS_URL; do
+for env_name in MONGO_ADMIN_PASSWORD RESEND_API_KEY ADMIN_PASSWORD ACCESS_TOKEN_SECRET REFRESH_TOKEN_SECRET EMAIL_CONFIRM_SECRET TURNSTILE_SECRET_KEY TURN_EXTERNAL_IP TURN_REALM TURN_SHARED_SECRET TURN_URLS VAPID_PRIVATE_KEY REDIS_URL; do
   eval "env_value=\${$env_name:-}"
   if [ -n "$env_value" ]; then
     printf '%s=%s\n' "$env_name" "$env_value" >> "$MERGED_ENV_FILE"

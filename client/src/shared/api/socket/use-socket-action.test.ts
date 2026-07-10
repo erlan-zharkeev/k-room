@@ -90,4 +90,26 @@ describe('useSocketAction', () => {
 
     expect(socketMock.emitWithAck).toHaveBeenCalledWith('open-support-chat')
   })
+
+  it('supports a custom timeout and silent transport failures', async () => {
+    const { emitSocketAction } = useSocketAction()
+
+    socketMock.emitWithAck.mockRejectedValue(new Error('timeout'))
+
+    await expect(
+      emitSocketAction(
+        'send-room-call-signal',
+        {
+          roomCallId: 'call-1',
+          signal: { type: 'answer' },
+          signalId: 'signal-1',
+          signalKind: 'answer',
+          toUserId: 'user-2'
+        },
+        { showTransportErrorToast: false, timeoutMs: 8_000 }
+      )
+    ).resolves.toEqual({ ok: false, handledByGlobalError: true })
+    expect(socketMock.timeout).toHaveBeenCalledWith(8_000)
+    expect(socketToastMock.showSocketTransportErrorToast).not.toHaveBeenCalled()
+  })
 })

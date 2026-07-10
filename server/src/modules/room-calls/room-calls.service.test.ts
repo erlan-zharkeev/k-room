@@ -7,6 +7,7 @@ import {
   joinRoomCall,
   leaveActiveRoomCallsBySocket,
   leaveRoomCall,
+  sendRoomCallSignal,
   updateRoomCallMediaState
 } from './room-calls.service'
 import type { RoomCallActiveParticipant, RoomCallActiveState } from './room-calls.types'
@@ -34,9 +35,20 @@ const presenceUtilsMock = vi.hoisted(() => ({
   emitToUsers: vi.fn()
 }))
 
+const roomCallEventsMock = vi.hoisted(() => ({
+  emitRoomCallSignalReceived: vi.fn()
+}))
+
+const roomCallDiagnosticsMock = vi.hoisted(() => ({
+  buildRoomCallServerSignalDiagnostics: vi.fn(() => ({ present: true })),
+  captureRoomCallServerDiagnostic: vi.fn()
+}))
+
 vi.mock('./lib/assert-room-call-access', () => roomCallAccessMock)
 vi.mock('./lib/leave-room-call-participant', () => leaveRoomCallParticipantMock)
 vi.mock('./lib/room-call-active-state', () => roomCallActiveStateMock)
+vi.mock('./lib/room-call-events', () => roomCallEventsMock)
+vi.mock('./lib/room-call-sentry-diagnostics', () => roomCallDiagnosticsMock)
 vi.mock('../presence/presence.utils', () => presenceUtilsMock)
 
 const createRoom = (chatKind: ChatRoomCallAccessProjection['chatKind']): ChatRoomCallAccessProjection => ({
@@ -218,5 +230,63 @@ describe('room-calls.service', () => {
       roomCallId: roomCall.id,
       userId: 'user-a'
     })
+  })
+
+  it('waits for recipient acknowledgement before acknowledging a signaling action', async () => {
+    const redisService = {}
+    const roomCall = createRoomCall()
+
+    roomCallAccessMock.assertRoomCallParticipantAccess.mockResolvedValue({
+      room: createRoom('direct'),
+      roomCall
+    })
+    roomCallEventsMock.emitRoomCallSignalReceived.mockResolvedValue(true)
+
+    await expect(
+      sendRoomCallSignal(redisService as never, 'user-a', 'socket-a', {
+        roomCallId: roomCall.id,
+        signal: { type: 'answer' },
+        signalId: 'signal-1',
+        signalKind: 'answer',
+        toUserId: 'user-b'
+      })
+    ).resolves.toBeUndefined()
+    expect(roomCallEventsMock.emitRoomCallSignalReceived).toHaveBeenCalledWith('socket-b', {
+      fromUserId: 'user-a',
+      roomCallId: roomCall.id,
+      signal: { type: 'answer' },
+      signalId: 'signal-1',
+      signalKind: 'answer'
+    })
+    expect(roomCallDiagnosticsMock.captureRoomCallServerDiagnostic).toHaveBeenCalledWith(
+      'signal-delivered',
+      expect.objectContaining({ signalId: 'signal-1' })
+    )
+  })
+
+  it('fails signaling acknowledgement when the recipient does not confirm delivery', async () => {
+    const redisService = {}
+    const roomCall = createRoomCall()
+
+    roomCallAccessMock.assertRoomCallParticipantAccess.mockResolvedValue({
+      room: createRoom('direct'),
+      roomCall
+    })
+    roomCallEventsMock.emitRoomCallSignalReceived.mockResolvedValue(false)
+
+    await expect(
+      sendRoomCallSignal(redisService as never, 'user-a', 'socket-a', {
+        roomCallId: roomCall.id,
+        signal: { type: 'offer' },
+        signalId: 'signal-2',
+        signalKind: 'offer',
+        toUserId: 'user-b'
+      })
+    ).rejects.toMatchObject({ silent: true })
+    expect(roomCallDiagnosticsMock.captureRoomCallServerDiagnostic).toHaveBeenCalledWith(
+      'signal-delivery-failed',
+      expect.objectContaining({ signalId: 'signal-2' }),
+      'warning'
+    )
   })
 })

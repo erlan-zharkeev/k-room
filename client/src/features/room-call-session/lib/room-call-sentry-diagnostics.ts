@@ -211,6 +211,66 @@ export const buildRoomCallPeerConnectionDiagnostics = (peerConnection: RTCPeerCo
   }
 }
 
+const buildRoomCallIceCandidateStatsDiagnostics = (stats: unknown) => {
+  if (!isUnknownObject(stats)) {
+    return null
+  }
+
+  return {
+    candidateType: readPrimitiveField(stats, 'candidateType'),
+    networkType: readPrimitiveField(stats, 'networkType'),
+    protocol: readPrimitiveField(stats, 'protocol'),
+    relayProtocol: readPrimitiveField(stats, 'relayProtocol'),
+    tcpType: readPrimitiveField(stats, 'tcpType')
+  }
+}
+
+export const buildRoomCallSelectedCandidatePairDiagnostics = (statsReport: RTCStatsReport) => {
+  let selectedCandidatePair: Record<string, unknown> | undefined
+
+  statsReport.forEach((stats) => {
+    if (!isUnknownObject(stats)) {
+      return
+    }
+
+    if (stats.type === 'transport' && isString(stats.selectedCandidatePairId)) {
+      const candidatePair = statsReport.get(stats.selectedCandidatePairId)
+
+      if (isUnknownObject(candidatePair)) {
+        selectedCandidatePair = candidatePair
+      }
+      return
+    }
+
+    const isSelectedCandidatePair =
+      stats.type === 'candidate-pair' && (stats.selected === true || stats.nominated === true)
+
+    if (!selectedCandidatePair && isSelectedCandidatePair) {
+      selectedCandidatePair = stats
+    }
+  })
+
+  if (!selectedCandidatePair) {
+    return { present: false }
+  }
+
+  const localCandidateId = readPrimitiveField(selectedCandidatePair, 'localCandidateId')
+  const remoteCandidateId = readPrimitiveField(selectedCandidatePair, 'remoteCandidateId')
+
+  return {
+    present: true,
+    availableOutgoingBitrate: readPrimitiveField(selectedCandidatePair, 'availableOutgoingBitrate'),
+    currentRoundTripTime: readPrimitiveField(selectedCandidatePair, 'currentRoundTripTime'),
+    localCandidate: isString(localCandidateId)
+      ? buildRoomCallIceCandidateStatsDiagnostics(statsReport.get(localCandidateId))
+      : null,
+    remoteCandidate: isString(remoteCandidateId)
+      ? buildRoomCallIceCandidateStatsDiagnostics(statsReport.get(remoteCandidateId))
+      : null,
+    state: readPrimitiveField(selectedCandidatePair, 'state')
+  }
+}
+
 export const buildRoomCallErrorDiagnostics = (error: unknown) => {
   if (error instanceof Error) {
     return {
@@ -245,6 +305,12 @@ export const captureRoomCallDiagnostic = (
     scope.setLevel(level)
     scope.setTag('room_call.diagnostic', 'true')
     scope.setTag('room_call.diagnostic_event', event)
+    if (isString(context.roomCallId)) {
+      scope.setTag('room_call.id', context.roomCallId)
+    }
+    if (isString(context.signalId)) {
+      scope.setTag('room_call.signal_id', context.signalId)
+    }
     scope.setFingerprint(['room-call-diagnostic', event])
     scope.setContext('room_call_diagnostic', {
       event,

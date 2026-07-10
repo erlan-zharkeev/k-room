@@ -9,13 +9,13 @@ import type {
 } from 'global-shared'
 
 import { useRoomCall } from 'src/entities/room-call'
-import { socket, useSocketAction, useSocketAvailability } from 'src/shared/api'
+import { useSocketAction } from 'src/shared/api'
 
+import { ROOM_CALL_SIGNAL_ACK_TIMEOUT_MS, ROOM_CALL_SIGNAL_SEND_ATTEMPTS } from '../config/constants'
 import { buildRoomCallSignalDiagnostics, captureRoomCallDiagnostic } from '../lib/room-call-sentry-diagnostics'
 
 export const useRoomCallSession = () => {
   const { emitSocketAction } = useSocketAction()
-  const { isSocketOnlineActionAvailable } = useSocketAvailability()
   const { remove } = useRoomCall()
 
   const startRoomCall = async (roomId: string, mediaKind: RoomCallMediaKind) => {
@@ -128,23 +128,57 @@ export const useRoomCallSession = () => {
     return response.ok
   }
 
-  const sendRoomCallSignal = (payload: EventSendRoomCallSignal) => {
-    if (!isSocketOnlineActionAvailable.value) {
-      captureRoomCallDiagnostic(
-        'socket-room-call-signal-skipped',
-        {
+  const sendRoomCallSignal = async (payload: EventSendRoomCallSignal) => {
+    for (let attempt = 1; attempt <= ROOM_CALL_SIGNAL_SEND_ATTEMPTS; attempt += 1) {
+      captureRoomCallDiagnostic('socket-room-call-signal-send-requested', {
+        attempt,
+        roomCallId: payload.roomCallId,
+        signal: buildRoomCallSignalDiagnostics(payload.signal),
+        signalId: payload.signalId,
+        signalKind: payload.signalKind,
+        toUserId: payload.toUserId
+      })
+      const response = await emitSocketAction('send-room-call-signal', payload, {
+        showTransportErrorToast: false,
+        timeoutMs: ROOM_CALL_SIGNAL_ACK_TIMEOUT_MS
+      })
+
+      if (response.ok) {
+        captureRoomCallDiagnostic('socket-room-call-signal-delivered', {
+          attempt,
           roomCallId: payload.roomCallId,
-          signal: buildRoomCallSignalDiagnostics(payload.signal),
+          signalId: payload.signalId,
           signalKind: payload.signalKind,
-          socketOnlineActionAvailable: isSocketOnlineActionAvailable.value,
+          toUserId: payload.toUserId
+        })
+        return true
+      }
+
+      captureRoomCallDiagnostic(
+        'socket-room-call-signal-send-attempt-failed',
+        {
+          attempt,
+          roomCallId: payload.roomCallId,
+          signalId: payload.signalId,
+          signalKind: payload.signalKind,
           toUserId: payload.toUserId
         },
         'warning'
       )
-      return
     }
 
-    socket.emit('send-room-call-signal', payload)
+    captureRoomCallDiagnostic(
+      'socket-room-call-signal-delivery-failed',
+      {
+        attempts: ROOM_CALL_SIGNAL_SEND_ATTEMPTS,
+        roomCallId: payload.roomCallId,
+        signalId: payload.signalId,
+        signalKind: payload.signalKind,
+        toUserId: payload.toUserId
+      },
+      'error'
+    )
+    return false
   }
 
   return {

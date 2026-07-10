@@ -24,6 +24,7 @@ services:
       REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET}
       EMAIL_CONFIRM_SECRET: ${EMAIL_CONFIRM_SECRET}
       TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY}
+      TURN_SHARED_SECRET: ${TURN_SHARED_SECRET}
       VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
     depends_on:
@@ -66,6 +67,31 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+
+  turn:
+    image: coturn/coturn:4.14.0-r0-alpine
+    restart: unless-stopped
+    network_mode: host
+    user: '0:0'
+    command:
+      - --listening-port=3478
+      - --tls-listening-port=5349
+      - --min-port=49160
+      - --max-port=49260
+      - --external-ip=${TURN_EXTERNAL_IP}
+      - --realm=${TURN_REALM}
+      - --use-auth-secret
+      - --static-auth-secret=${TURN_SHARED_SECRET}
+      - --cert=/etc/coturn/certs/fullchain.pem
+      - --pkey=/etc/coturn/certs/privkey.pem
+      - --proc-user=nobody
+      - --proc-group=nogroup
+      - --fingerprint
+      - --no-cli
+      - --no-multicast-peers
+      - --log-file=stdout
+    volumes:
+      - ./scripts/deploy/certs:/etc/coturn/certs:ro
 
   mongo-express:
     image: mongo-express:latest

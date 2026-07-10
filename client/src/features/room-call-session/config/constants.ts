@@ -1,3 +1,5 @@
+import { ROOM_CALL_STUN_URLS } from 'global-shared'
+
 import { ROOM_CALL_SESSION_I18N } from './i18n'
 import type { RoomCallActivityKind, RoomCallConnectionQuality } from './types'
 
@@ -18,13 +20,18 @@ export const ROOM_CALL_ACTIVITY_I18N_BY_KIND = {
 export const ROOM_CALL_RTC_CONFIGURATION: RTCConfiguration = {
   iceServers: [
     {
-      urls: 'stun:stun.l.google.com:19302'
+      urls: [...ROOM_CALL_STUN_URLS]
     }
   ]
 }
 
 export const ROOM_CALL_CONNECTION_QUALITY_CHECK_INTERVAL_MS = 2_000
-export const ROOM_CALL_PEER_CREATE_ANSWER_TIMEOUT_MS = 5_000
+export const ROOM_CALL_HANDLED_SIGNAL_ID_LIMIT = 1_000
+export const ROOM_CALL_PEER_CONNECTION_TIMEOUT_MS = 15_000
+export const ROOM_CALL_PEER_DISCONNECTED_TIMEOUT_MS = 5_000
+export const ROOM_CALL_PEER_OPERATION_TIMEOUT_MS = 5_000
+export const ROOM_CALL_SIGNAL_ACK_TIMEOUT_MS = 8_000
+export const ROOM_CALL_SIGNAL_SEND_ATTEMPTS = 3
 export const ROOM_CALL_CONNECTION_QUALITY_THRESHOLDS = {
   poor: {
     jitter: 0.08,

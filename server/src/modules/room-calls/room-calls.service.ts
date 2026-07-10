@@ -32,6 +32,7 @@ import {
   assertRoomCallParticipantAccess,
   assertRoomCallStartAccess
 } from './lib/assert-room-call-access'
+import { buildRoomCallRtcConfiguration } from './lib/build-room-call-rtc-configuration'
 import { cleanupStaleRoomCall } from './lib/cleanup-stale-room-call-participants'
 import { finishRoomCall, leaveRoomCallParticipant } from './lib/leave-room-call-participant'
 import { loadAvailableUserRoomCallPage } from './lib/load-available-user-room-call-page'
@@ -121,6 +122,7 @@ export const startRoomCall = async (
   })
 
   return {
+    rtcConfiguration: buildRoomCallRtcConfiguration(userId),
     roomCall: transformedRoomCall,
     roomCallId: roomCall.id
   }
@@ -219,7 +221,8 @@ export const joinRoomCall = async (
     participantQuickCommandStateByUserId: buildRoomCallParticipantQuickCommandStateByUserId(
       updatedRoomCall.participants
     ),
-    roomCall: transformedRoomCall
+    roomCall: transformedRoomCall,
+    rtcConfiguration: buildRoomCallRtcConfiguration(userId)
   }
 }
 
@@ -428,8 +431,17 @@ export const sendRoomCallSignal = async (
   redisService: RedisService,
   userId: string,
   socketId: string,
-  { roomCallId, signal, signalKind, toUserId }: EventSendRoomCallSignal
+  { roomCallId, signal, signalId, signalKind, toUserId }: EventSendRoomCallSignal
 ) => {
+  captureRoomCallServerDiagnostic('signal-received', {
+    roomCallId,
+    signal: buildRoomCallServerSignalDiagnostics(signal),
+    signalId,
+    signalKind,
+    socketId,
+    toUserId,
+    userId
+  })
   const { roomCall } = await assertRoomCallParticipantAccess(redisService, userId, socketId, roomCallId)
   const targetParticipant = resolveActiveRoomCallParticipantByUserId(roomCall.participants, toUserId)
 
@@ -440,6 +452,7 @@ export const sendRoomCallSignal = async (
         activeParticipantIds: resolveActiveRoomCallUserIds(roomCall.participants),
         roomCallId,
         signal: buildRoomCallServerSignalDiagnostics(signal),
+        signalId,
         signalKind,
         socketId,
         toUserId,
@@ -450,10 +463,41 @@ export const sendRoomCallSignal = async (
     throw new AppError(REQ_STATUS.badRequest, ROOM_CALLS_I18N.roomCallSignalFailed)
   }
 
-  emitRoomCallSignalReceived(targetParticipant.socketId, {
-    fromUserId: userId,
-    roomCallId,
-    signal,
-    signalKind
-  })
+  try {
+    const delivered = await emitRoomCallSignalReceived(targetParticipant.socketId, {
+      fromUserId: userId,
+      roomCallId,
+      signal,
+      signalId,
+      signalKind
+    })
+
+    if (!delivered) {
+      throw new Error('Room call signal recipient did not acknowledge delivery')
+    }
+
+    captureRoomCallServerDiagnostic('signal-delivered', {
+      roomCallId,
+      signalId,
+      signalKind,
+      targetSocketId: targetParticipant.socketId,
+      toUserId,
+      userId
+    })
+  } catch (error) {
+    captureRoomCallServerDiagnostic(
+      'signal-delivery-failed',
+      {
+        error: error instanceof Error ? { message: error.message, name: error.name } : { type: typeof error },
+        roomCallId,
+        signalId,
+        signalKind,
+        targetSocketId: targetParticipant.socketId,
+        toUserId,
+        userId
+      },
+      'warning'
+    )
+    throw new AppError(REQ_STATUS.server, ROOM_CALLS_I18N.roomCallSignalFailed, true, error)
+  }
 }

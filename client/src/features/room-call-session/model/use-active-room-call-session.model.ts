@@ -83,6 +83,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     handleRoomCallSignalReceived,
     remoteStreamsByUserId,
     resetRoomCallPeers,
+    setRoomCallPeerRtcConfiguration,
     syncRoomCallPeerTracks
   } = useRoomCallPeerManager()
   const {
@@ -408,8 +409,9 @@ export const useActiveRoomCallSession = createGlobalState(() => {
         return null
       }
 
-      const { roomCall, roomCallId } = response.payload
+      const { roomCall, roomCallId, rtcConfiguration } = response.payload
 
+      setRoomCallPeerRtcConfiguration(rtcConfiguration)
       await putRoomCall(roomCall)
       activeRoomCallId.value = roomCallId
       syncRoomCallRuntimeState(roomCallId)
@@ -469,9 +471,10 @@ export const useActiveRoomCallSession = createGlobalState(() => {
         return null
       }
 
-      const { participantQuickCommandStateByUserId, roomCall } = response.payload
+      const { participantQuickCommandStateByUserId, roomCall, rtcConfiguration } = response.payload
       const localMediaKind = resolveRoomCallJoinMediaKind(roomCall, mediaKind)
 
+      setRoomCallPeerRtcConfiguration(rtcConfiguration)
       await putRoomCall(roomCall)
       await startRoomCallLocalMedia(localMediaKind)
 

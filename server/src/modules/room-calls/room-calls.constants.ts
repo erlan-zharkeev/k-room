@@ -14,6 +14,8 @@ export const ROOM_CALL_SERVER_INSTANCE_HEARTBEAT_INTERVAL_MS = 5_000
 
 export const ROOM_CALL_STALE_PARTICIPANT_CLEANUP_INTERVAL_MS = 10_000
 
+export const ROOM_CALL_SIGNAL_DELIVERY_ACK_TIMEOUT_MS = 6_000
+
 export const ROOM_CALL_ACTIVE_STATE_KEY_PREFIX = {
   ALL: 'room-call:active:all',
   CALL: 'room-call:active:call',

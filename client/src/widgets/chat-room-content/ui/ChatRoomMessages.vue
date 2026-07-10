@@ -113,6 +113,7 @@ const {
       shape="circle"
       design="plain"
       borderless
+      color="var(--nmorph-white-color)"
       :aria-label="$t(CHAT_ROOM_CONTENT_I18N.backToBottom)"
       @click="scrollMessagesToBottom"
     >

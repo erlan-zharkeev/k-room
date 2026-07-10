@@ -91,6 +91,12 @@ export const captureRoomCallServerDiagnostic = (
     scope.setLevel(level)
     scope.setTag('room_call.diagnostic', 'true')
     scope.setTag('room_call.diagnostic_event', event)
+    if (isString(context.roomCallId)) {
+      scope.setTag('room_call.id', context.roomCallId)
+    }
+    if (isString(context.signalId)) {
+      scope.setTag('room_call.signal_id', context.signalId)
+    }
     scope.setFingerprint(['room-call-server-diagnostic', event])
     scope.setContext('room_call_server_diagnostic', {
       event,

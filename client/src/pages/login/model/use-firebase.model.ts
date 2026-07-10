@@ -27,8 +27,14 @@ import { LOGIN_FORM_I18N } from '../config/i18n'
 
 import { initFirebase } from './init-firebase.model'
 
-if (!__CLIENT_ENV_DATA__.isE2E) {
-  initFirebase()
+const firebaseAuth = __CLIENT_ENV_DATA__.isE2E ? null : getAuth(initFirebase())
+
+const getFirebaseAuth = () => {
+  if (!firebaseAuth) {
+    throw new Error('Firebase auth is not initialized')
+  }
+
+  return firebaseAuth
 }
 
 const readFirebaseErrorField = (error: unknown, field: string) => {
@@ -39,17 +45,39 @@ const readFirebaseErrorField = (error: unknown, field: string) => {
   return isString(value) ? value : undefined
 }
 
+const readFirebaseLoginRuntimeDiagnostics = () => {
+  const userActivation = typeof navigator === 'undefined' ? undefined : Reflect.get(navigator, 'userActivation')
+  const isUserActivationAvailable = isUnknownObject(userActivation)
+
+  return {
+    documentHasFocus: typeof document === 'undefined' ? undefined : document.hasFocus(),
+    documentVisibilityState: typeof document === 'undefined' ? undefined : document.visibilityState,
+    isSecureContext: typeof window === 'undefined' ? undefined : window.isSecureContext,
+    isTopWindow: typeof window === 'undefined' ? undefined : window.top === window,
+    userActivationHasBeenActive: isUserActivationAvailable
+      ? Boolean(Reflect.get(userActivation, 'hasBeenActive'))
+      : undefined,
+    userActivationIsActive: isUserActivationAvailable ? Boolean(Reflect.get(userActivation, 'isActive')) : undefined
+  }
+}
+
 const captureFirebaseLoginFailure = (error: unknown, provider: FirebaseProvider) => {
+  const code = readFirebaseErrorField(error, 'code')
+  const name = readFirebaseErrorField(error, 'name')
+
   withClientSentryScope((scope) => {
     scope.setLevel('warning')
+    scope.setTag('firebase_login.code', code ?? 'unknown')
     scope.setTag('firebase_login.diagnostic', 'true')
+    scope.setTag('firebase_login.name', name ?? 'unknown')
     scope.setTag('firebase_login.provider', provider)
     scope.setContext('firebase_login', {
-      code: readFirebaseErrorField(error, 'code') ?? null,
+      code: code ?? null,
       message: readFirebaseErrorField(error, 'message') ?? null,
-      name: readFirebaseErrorField(error, 'name') ?? null,
+      name: name ?? null,
       online: typeof navigator === 'undefined' ? undefined : navigator.onLine,
       provider,
+      ...readFirebaseLoginRuntimeDiagnostics(),
       userAgent: typeof navigator === 'undefined' ? undefined : navigator.userAgent
     })
 
@@ -73,7 +101,7 @@ export const useFirebase = () => {
 
     const Provider = provider === 'google' ? GoogleAuthProvider : FacebookAuthProvider
     const currentProvider = new Provider()
-    const auth = getAuth()
+    const auth = getFirebaseAuth()
 
     auth.languageCode = settings.value.localization.language
 

@@ -4,6 +4,8 @@ export const ROOM_CALL_ACTUALIZATION_LIMIT = 100
 
 export const ROOM_CALL_LOAD_LIMIT_MAX = 50
 
+export const ROOM_CALL_STUN_URLS = ['stun:stun.l.google.com:19302'] as const
+
 export const ROOM_CALL_STATUS_VALUES = [
   'calling',
   'in-progress',

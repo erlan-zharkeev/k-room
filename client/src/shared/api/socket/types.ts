@@ -3,7 +3,9 @@ import type {
   ClientToServerSocketAckPayloadMap,
   ClientToServerSocketPayloadMap,
   ServerToClientSocketAction,
+  ServerToClientSocketAckAction,
   ServerToClientSocketEvents,
+  ServerToClientSocketPayloadMap,
   SocketAckFailure,
   SocketAckResponse,
   SocketAckSuccess
@@ -19,10 +21,19 @@ export type SocketEventListener =
     }[ServerToClientSocketAction]
   | readonly ['connect' | 'disconnect', () => void]
 
+export type SocketAckEventListener = {
+  [Event in ServerToClientSocketAckAction]: readonly [
+    Event,
+    (payload: ServerToClientSocketPayloadMap[Event]) => void | Promise<void>
+  ]
+}[ServerToClientSocketAckAction]
+
 export interface EmitSocketActionOptions<TResponsePayload = void, TReason extends string = string> {
   onSuccess?: (response: SocketAckSuccess<TResponsePayload>) => void
   onFailure?: (response: SocketAckFailure<TReason>) => void
   onSettled?: () => void
+  showTransportErrorToast?: boolean
+  timeoutMs?: number
 }
 
 export type EmitSocketActionWithAck = <TEvent extends ClientToServerSocketAckAction, TReason extends string = string>(

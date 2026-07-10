@@ -196,6 +196,7 @@ export interface ClientToServerSocketAckPayloadMap {
   'mark-room-calls-as-seen': void
   'leave-room-call': void
   'update-room-call-media-state': void
+  'send-room-call-signal': void
   'send-room-call-quick-command': void
   'set-room-call-hand-raised': void
 }
@@ -246,12 +247,17 @@ export type ClientToServerSocketEvents = SocketEventMap<
   ClientToServerSocketPayloadMap,
   ClientToServerSocketAckPayloadMap
 >
+export type RoomCallSignalDeliveryAck = (delivered: true) => void
+
 export type ServerToClientSocketEvents = {
-  [TEvent in keyof ServerToClientSocketPayloadMap]: SocketEventPayloadHandler<ServerToClientSocketPayloadMap[TEvent]>
+  [TEvent in keyof ServerToClientSocketPayloadMap]: TEvent extends 'room-call-signal-received'
+    ? (payload: ServerToClientSocketPayloadMap[TEvent], meta: TransportMeta, ack: RoomCallSignalDeliveryAck) => void
+    : SocketEventPayloadHandler<ServerToClientSocketPayloadMap[TEvent]>
 }
 export type ClientToServerSocketAction = keyof ClientToServerSocketPayloadMap
 export type ClientToServerSocketAckAction = keyof ClientToServerSocketAckPayloadMap
 export type ServerToClientSocketAction = keyof ServerToClientSocketPayloadMap
+export type ServerToClientSocketAckAction = 'room-call-signal-received'
 export type SocketAppActions = ClientToServerSocketAction | ServerToClientSocketAction
 export type SocketSystemActions =
   | 'connection'

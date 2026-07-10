@@ -28,17 +28,22 @@ export const useSocketAction = () => {
     payload: ClientToServerSocketPayloadMap[TEvent],
     options: EmitSocketActionOptions<ClientToServerSocketAckPayloadMap[TEvent], TReason> = {}
   ) => {
+    const shouldShowTransportErrorToast = options.showTransportErrorToast !== false
+    const timeoutMs = options.timeoutMs ?? SOCKET_ACTION_ACK_TIMEOUT_MS
+
     if (!isSocketOnlineActionAvailable.value) {
       const response = buildSocketTransportFailureResponse<TReason>()
 
-      showSocketTransportErrorToast()
+      if (shouldShowTransportErrorToast) {
+        showSocketTransportErrorToast()
+      }
       options.onFailure?.(response)
       options.onSettled?.()
 
       return response
     }
 
-    const emitWithAckSocket = socket.timeout(SOCKET_ACTION_ACK_TIMEOUT_MS) as SocketWithAck
+    const emitWithAckSocket = socket.timeout(timeoutMs) as SocketWithAck
 
     try {
       let response: SocketAckResponse<ClientToServerSocketAckPayloadMap[TEvent], TReason>
@@ -66,7 +71,9 @@ export const useSocketAction = () => {
       const response: SocketAckResponse<ClientToServerSocketAckPayloadMap[TEvent], TReason> =
         buildSocketTransportFailureResponse()
 
-      showSocketTransportErrorToast()
+      if (shouldShowTransportErrorToast) {
+        showSocketTransportErrorToast()
+      }
       options.onFailure?.(response)
 
       return response

@@ -19,6 +19,11 @@ export interface EnvVariables {
   REFRESH_TOKEN_SECRET: string
   EMAIL_CONFIRM_SECRET: string
   REDIS_URL?: string
+  TURN_CREDENTIAL_TTL_SECONDS?: string
+  TURN_EXTERNAL_IP?: string
+  TURN_REALM?: string
+  TURN_SHARED_SECRET?: string
+  TURN_URLS?: string
   TURNSTILE_SITE_KEY?: string
   TURNSTILE_SECRET_KEY?: string
   CLIENT_BLOCKED_APP_VERSIONS?: string

@@ -1,9 +1,9 @@
-import { getApps, initializeApp } from 'firebase/app'
+import { getApp, getApps, initializeApp } from 'firebase/app'
 
 export const initFirebase = () => {
-  if (getApps().length) return
+  if (getApps().length) return getApp()
 
-  initializeApp({
+  return initializeApp({
     apiKey: __CLIENT_ENV_DATA__.firebaseApiKey,
     authDomain: 'k-room-3a49a.firebaseapp.com',
     projectId: 'k-room-3a49a',

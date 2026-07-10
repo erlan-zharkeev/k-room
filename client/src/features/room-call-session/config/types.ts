@@ -42,7 +42,7 @@ export type RoomCallConnectionQualityByUserId = Record<string, RoomCallConnectio
 
 export type RoomCallUserFlagByUserId = Record<string, boolean | undefined>
 
-export type SendRoomCallSignal = (payload: EventSendRoomCallSignal) => void
+export type SendRoomCallSignal = (payload: EventSendRoomCallSignal) => Promise<boolean>
 
 export type HandleRoomCallSignalReceived = (payload: EventRoomCallSignalReceived) => void | Promise<void>
 

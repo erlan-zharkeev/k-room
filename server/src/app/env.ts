@@ -30,6 +30,9 @@ const REFRESH_TOKEN_SECRET = getEnv('REFRESH_TOKEN_SECRET', envs)
 const RESEND_API_KEY = getEnv('RESEND_API_KEY', envs)
 const SENTRY_ENABLED = getEnv('SENTRY_ENABLED', envs)
 const SENTRY_ENVIRONMENT = getEnv('SENTRY_ENVIRONMENT', envs)
+const TURN_CREDENTIAL_TTL_SECONDS = getEnv('TURN_CREDENTIAL_TTL_SECONDS', envs)
+const TURN_SHARED_SECRET = getEnv('TURN_SHARED_SECRET', envs)
+const TURN_URLS = getEnv('TURN_URLS', envs)
 const vapidPrivateKey = getEnv('VAPID_PRIVATE_KEY', envs)
 const vapidSubject = getEnv('VAPID_SUBJECT', envs)
 
@@ -60,6 +63,10 @@ const turnstileSecretKey = getEnv('TURNSTILE_SECRET_KEY', envs) || (isDev ? TURN
 const clientUrl = isDev ? `${APP_HOST}:${CLIENT_PORT}` : APP_HOST
 const blockedAppVersions = CLIENT_BLOCKED_APP_VERSIONS.split(',')
   .map((version) => version.trim())
+  .filter(Boolean)
+const turnCredentialTtlSeconds = Number(TURN_CREDENTIAL_TTL_SECONDS) || 3_600
+const turnUrls = TURN_URLS.split(',')
+  .map((url) => url.trim())
   .filter(Boolean)
 const devOrigins = [
   clientUrl,
@@ -119,6 +126,13 @@ export const SERVER_ENV = {
   sentry: {
     sentryEnvironment: SENTRY_ENVIRONMENT,
     sentryEnabled: SENTRY_ENABLED === 'true'
+  },
+  roomCalls: {
+    turn: {
+      credentialTtlSeconds: turnCredentialTtlSeconds,
+      sharedSecret: TURN_SHARED_SECRET,
+      urls: turnUrls
+    }
   },
   security: {
     redisUrl,
