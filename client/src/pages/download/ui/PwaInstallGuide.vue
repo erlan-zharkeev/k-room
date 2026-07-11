@@ -81,7 +81,7 @@ const props = defineProps<{
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .pwa-install-guide {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 16px minmax(0, 1fr) 16px minmax(0, 1fr);

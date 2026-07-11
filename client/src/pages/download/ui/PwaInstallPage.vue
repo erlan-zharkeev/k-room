@@ -45,7 +45,7 @@ const { appName } = __CLIENT_ENV_DATA__
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .pwa-install-page {
   display: grid;
   place-items: center;

@@ -76,7 +76,10 @@ const {
         </div>
       </NmorphButton>
 
-      <div class="login-page__forgot">
+      <div class="login-page__links">
+        <RouterLink :to="ROUTE_NAMES.download">
+          <NmorphText color="accent">{{ $t(LOGIN_FORM_I18N.downloadApp) }}</NmorphText>
+        </RouterLink>
         <RouterLink :to="ROUTE_NAMES.passwordRecovery">
           <NmorphText color="accent">{{ $t(LOGIN_FORM_I18N.forgotPassword) }}</NmorphText>
         </RouterLink>
@@ -96,8 +99,9 @@ const {
   gap: 12px;
 }
 
-.login-page__forgot {
-  text-align: right;
+.login-page__links {
+  display: flex;
+  justify-content: space-between;
 }
 
 .login-page__button__google {

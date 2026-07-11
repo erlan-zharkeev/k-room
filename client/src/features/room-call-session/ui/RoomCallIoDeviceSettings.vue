@@ -27,6 +27,7 @@ const {
     <div class="room-call-io-device-settings__field">
       <NmorphText as="small" variant="body-small">{{ $t(MEDIA_DEVICE_I18N.audioInputDevice) }}</NmorphText>
       <NmorphSelect
+        class="room-call-io-device-settings__select"
         :key="audioInputSelectValue"
         :aria-label="$t(MEDIA_DEVICE_I18N.audioInputDevice)"
         :model-value="audioInputSelectValue"
@@ -41,6 +42,7 @@ const {
     <div class="room-call-io-device-settings__field">
       <NmorphText as="small" variant="body-small">{{ $t(MEDIA_DEVICE_I18N.videoInputDevice) }}</NmorphText>
       <NmorphSelect
+        class="room-call-io-device-settings__select"
         :key="videoInputSelectValue"
         :aria-label="$t(MEDIA_DEVICE_I18N.videoInputDevice)"
         :model-value="videoInputSelectValue"
@@ -55,6 +57,7 @@ const {
     <div class="room-call-io-device-settings__field">
       <NmorphText as="small" variant="body-small">{{ $t(MEDIA_DEVICE_I18N.audioOutputDevice) }}</NmorphText>
       <NmorphSelect
+        class="room-call-io-device-settings__select"
         :key="audioOutputSelectValue"
         :aria-label="$t(MEDIA_DEVICE_I18N.audioOutputDevice)"
         :model-value="audioOutputSelectValue"
@@ -80,5 +83,29 @@ const {
   display: grid;
   gap: 4px;
   min-width: 0;
+}
+
+.room-call-io-device-settings__select {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.room-call-io-device-settings__select :deep(.nmorph-select__content) {
+  overflow: hidden;
+  min-width: 0;
+}
+
+.room-call-io-device-settings__select :deep(.nmorph-select__selected-values-line) {
+  width: 100%;
+  min-width: 0;
+}
+
+.room-call-io-device-settings__select :deep(.nmorph-select__selected-value) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.room-call-io-device-settings__select :deep(.nmorph-select__chevron) {
+  flex: 0 0 auto;
 }
 </style>

@@ -26,6 +26,11 @@ export const LOGIN_FORM_I18N = defineI18n('loginForm', {
     ru: 'Забыли пароль?',
     zh: '忘记密码？'
   },
+  downloadApp: {
+    en: 'Download app',
+    ru: 'Скачать приложение',
+    zh: '下载应用'
+  },
   failedToLogin: {
     en: 'Failed to login',
     ru: 'Не удалось войти',
