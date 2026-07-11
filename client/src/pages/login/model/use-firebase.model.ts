@@ -1,26 +1,12 @@
 import { FacebookAuthProvider, getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
-import {
-  AUTH_ENDPOINTS,
-  isString,
-  isUnknownObject,
-  type FirebaseProvider,
-  type SignInWithProviderPayload,
-  type UserData
-} from 'global-shared'
+import { AUTH_ENDPOINTS, type FirebaseProvider, type SignInWithProviderPayload, type UserData } from 'global-shared'
 import { v4 as uuidv4 } from 'uuid'
 import { ref } from 'vue'
 
 import { useSettings } from 'src/entities/setting'
 import { useClientSession } from 'src/features/client-session'
 import { isExpectedHttpError, useHttp } from 'src/shared/api'
-import {
-  captureClientSentryMessage,
-  log,
-  TOAST_I18N,
-  useAppToast,
-  useI18n,
-  withClientSentryScope
-} from 'src/shared/lib'
+import { log, TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
 import { E2E_FIREBASE_AUTH_RESULT } from '../config/constants'
 import { LOGIN_FORM_I18N } from '../config/i18n'
@@ -35,54 +21,6 @@ const getFirebaseAuth = () => {
   }
 
   return firebaseAuth
-}
-
-const readFirebaseErrorField = (error: unknown, field: string) => {
-  if (!isUnknownObject(error)) return undefined
-
-  const value = Reflect.get(error, field)
-
-  return isString(value) ? value : undefined
-}
-
-const readFirebaseLoginRuntimeDiagnostics = () => {
-  const userActivation = typeof navigator === 'undefined' ? undefined : Reflect.get(navigator, 'userActivation')
-  const isUserActivationAvailable = isUnknownObject(userActivation)
-
-  return {
-    documentHasFocus: typeof document === 'undefined' ? undefined : document.hasFocus(),
-    documentVisibilityState: typeof document === 'undefined' ? undefined : document.visibilityState,
-    isSecureContext: typeof window === 'undefined' ? undefined : window.isSecureContext,
-    isTopWindow: typeof window === 'undefined' ? undefined : window.top === window,
-    userActivationHasBeenActive: isUserActivationAvailable
-      ? Boolean(Reflect.get(userActivation, 'hasBeenActive'))
-      : undefined,
-    userActivationIsActive: isUserActivationAvailable ? Boolean(Reflect.get(userActivation, 'isActive')) : undefined
-  }
-}
-
-const captureFirebaseLoginFailure = (error: unknown, provider: FirebaseProvider) => {
-  const code = readFirebaseErrorField(error, 'code')
-  const name = readFirebaseErrorField(error, 'name')
-
-  withClientSentryScope((scope) => {
-    scope.setLevel('warning')
-    scope.setTag('firebase_login.code', code ?? 'unknown')
-    scope.setTag('firebase_login.diagnostic', 'true')
-    scope.setTag('firebase_login.name', name ?? 'unknown')
-    scope.setTag('firebase_login.provider', provider)
-    scope.setContext('firebase_login', {
-      code: code ?? null,
-      message: readFirebaseErrorField(error, 'message') ?? null,
-      name: name ?? null,
-      online: typeof navigator === 'undefined' ? undefined : navigator.onLine,
-      provider,
-      ...readFirebaseLoginRuntimeDiagnostics(),
-      userAgent: typeof navigator === 'undefined' ? undefined : navigator.userAgent
-    })
-
-    captureClientSentryMessage('Firebase login failed')
-  })
 }
 
 export const useFirebase = () => {
@@ -132,7 +70,6 @@ export const useFirebase = () => {
         provider: normalizedProvider
       }
     } catch (error) {
-      captureFirebaseLoginFailure(error, provider)
       log('error', 'Firebase login failed', error)
 
       toast.add({

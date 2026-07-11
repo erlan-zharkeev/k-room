@@ -1,0 +1,1 @@
+export const CLIENT_SENTRY_NORMALIZE_DEPTH = 6

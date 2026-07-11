@@ -1,0 +1,2 @@
+export const MIN_APP_VIEWPORT_WIDTH_PX = 320
+export const MIN_APP_VIEWPORT_HEIGHT_PX = 350

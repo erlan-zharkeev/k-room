@@ -3,13 +3,13 @@ import { initClientData, initClientIndexedDbData } from 'src/features/client-ses
 import { setHttpClientLanguage, setSocketLanguage } from 'src/shared/api'
 import { log } from 'src/shared/lib'
 
-import { initNativeDesktopWebCache } from '../lib/native-desktop-cache'
 import { pinia } from '../providers/pinia'
 import { router } from '../router'
 
 import { initI18n } from './init-i18n'
 import { initNmorphUi } from './init-nmorph-ui'
 import { initSentry } from './init-sentry'
+import { initNativeDesktopWebCache } from './native-desktop-cache/native-desktop-cache-control.model'
 import type { VueApp } from './types'
 
 export const initApp = async (app: VueApp) => {
@@ -29,7 +29,7 @@ export const initApp = async (app: VueApp) => {
   setHttpClientLanguage(language)
   setSocketLanguage(language)
   initI18n(app, language)
-  initNmorphUi(app, language)
+  initNmorphUi(app, language, settings.value.appearance)
   app.use(router)
   initSentry(app)
   void app.runWithContext(initClientData)

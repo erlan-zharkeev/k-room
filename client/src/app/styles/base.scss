@@ -27,14 +27,14 @@ body,
 }
 
 html {
-  background: var(--nmorph-main-color, #1c1f21);
+  background: var(--nmorph-main-color, var(--app-bootstrap-theme-bg, #1c1f21));
 }
 
 body {
   min-width: 320px;
   height: 100dvh;
   padding: 8px;
-  background: var(--nmorph-main-color, #1c1f21);
+  background: var(--nmorph-main-color, var(--app-bootstrap-theme-bg, #1c1f21));
 }
 
 button,

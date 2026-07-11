@@ -1,12 +1,7 @@
-import { isString } from 'global-shared'
+import { log } from 'src/shared/lib'
 
-import { getClientPlatform, log } from 'src/shared/lib'
-
-import {
-  DYNAMIC_IMPORT_ERROR_MESSAGES,
-  NATIVE_DESKTOP_CACHE_CLEANUP_STORAGE_PREFIX,
-  NATIVE_DESKTOP_CHUNK_RECOVERY_STORAGE_PREFIX
-} from '../config/constants'
+import { NATIVE_DESKTOP_CACHE_CLEANUP_STORAGE_PREFIX, NATIVE_DESKTOP_CHUNK_RECOVERY_STORAGE_PREFIX } from './constants'
+import { isNativeDesktopClient } from './lib'
 
 const getStorageValue = (storage: Storage, key: string) => {
   try {
@@ -24,15 +19,6 @@ const setStorageValue = (storage: Storage, key: string, value: string) => {
   }
 }
 
-const getErrorMessage = (error: unknown) => {
-  if (error instanceof Error) return error.message
-  if (isString(error)) return error
-
-  return ''
-}
-
-const isNativeDesktopClient = () => getClientPlatform() === 'native'
-
 const clearNativeDesktopWebCache = async () => {
   const serviceWorkerRegistrations =
     'serviceWorker' in navigator ? await navigator.serviceWorker.getRegistrations() : []
@@ -47,12 +33,6 @@ const clearNativeDesktopWebCache = async () => {
   ])
 
   return true
-}
-
-export const isDynamicImportFetchError = (error: unknown) => {
-  const message = getErrorMessage(error).toLowerCase()
-
-  return Boolean(message && DYNAMIC_IMPORT_ERROR_MESSAGES.some((errorMessage) => message.includes(errorMessage)))
 }
 
 export const initNativeDesktopWebCache = async () => {

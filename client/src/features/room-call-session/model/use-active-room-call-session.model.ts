@@ -10,6 +10,7 @@ import {
 } from 'global-shared'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
+import { useChatRoom } from 'src/entities/chat-room'
 import { useRoomCall } from 'src/entities/room-call'
 import { useAppSound, useSettings } from 'src/entities/setting'
 import { useSystem } from 'src/entities/system'
@@ -21,12 +22,6 @@ import { ROOM_CALL_SESSION_I18N } from '../config/i18n'
 import { resolveWorstRoomCallConnectionQuality } from '../lib/resolve-room-call-connection-quality'
 import { resolveRoomCallJoinMediaKind } from '../lib/resolve-room-call-join-media-kind'
 import { resolveNextRoomCallVideoFacingMode, resolveRoomCallVideoInputDeviceId } from '../lib/room-call-media'
-import {
-  buildRoomCallErrorDiagnostics,
-  buildRoomCallLocalStreamsDiagnostics,
-  buildRoomCallSignalDiagnostics,
-  captureRoomCallDiagnostic
-} from '../lib/room-call-sentry-diagnostics'
 import { isRoomCallBlockingStartForUser, isRoomCallUnfinished } from '../lib/room-call-start-availability'
 
 import { createRoomCallSignalQueue } from './room-call-signal-queue.model'
@@ -45,6 +40,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   const isLeavingRoomCall = ref(false)
   const { t } = useI18n()
   const toast = useAppToast()
+  const { isPrivate: isChatRoomPrivate } = useChatRoom()
   const { put: putRoomCall, roomCalls } = useRoomCall()
   const { settings, setByPath } = useSettings()
   const { hasInteracted } = useSystem()
@@ -104,10 +100,19 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   } = createRoomCallSignalQueue()
   const localStreams = computed(() => [audioStream.value, videoStream.value, screenStream.value])
   const activeRoomCall = computed(() => roomCalls.value.find(({ id }) => id === activeRoomCallId.value))
+  const isActiveRoomCallPrivate = computed(() => {
+    const roomCall = activeRoomCall.value
+
+    return Boolean(roomCall && isChatRoomPrivate(roomCall.roomId))
+  })
   const localConnectionQuality = computed(() =>
     resolveWorstRoomCallConnectionQuality(Object.values(peerConnectionQualityByUserId.value))
   )
   const connectionQualityByUserId = computed(() => {
+    if (isActiveRoomCallPrivate.value) {
+      return peerConnectionQualityByUserId.value
+    }
+
     const quality = localConnectionQuality.value
 
     if (!quality) {
@@ -227,12 +232,6 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   }
 
   const clearActiveRoomCallSessionState = () => {
-    captureRoomCallDiagnostic('active-session-clear-started', {
-      activeRoomCallId: activeRoomCallId.value,
-      localMediaState: localMediaState.value,
-      localStreams: buildRoomCallLocalStreamsDiagnostics(localStreams.value),
-      peerUserIds: Object.keys(remoteStreamsByUserId.value)
-    })
     activeRoomCallId.value = ''
     clearRoomCallSignalQueue()
     resetRoomCallPeers()
@@ -240,7 +239,6 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     resetRoomCallRuntimeState()
     stopOutgoingRoomCallSound()
     stopRoomCallLocalMedia()
-    captureRoomCallDiagnostic('active-session-cleared')
   }
 
   const showRoomCallSessionError = (content: string) => {
@@ -278,17 +276,6 @@ export const useActiveRoomCallSession = createGlobalState(() => {
 
     const synced = await updateRoomCallMediaState(activeRoomCallId.value, localMediaState.value)
 
-    if (!synced) {
-      captureRoomCallDiagnostic(
-        'active-session-media-state-sync-failed',
-        {
-          localMediaState: localMediaState.value,
-          roomCallId: activeRoomCallId.value
-        },
-        'warning'
-      )
-    }
-
     return synced
   }
 
@@ -324,19 +311,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
 
   const flushPendingRoomCallSignals = async (roomCallId: string) => {
     const signals = flushRoomCallSignals(roomCallId)
-    const signalKindCounts = {
-      answer: signals.filter(({ signalKind }) => signalKind === 'answer').length,
-      iceCandidate: signals.filter(({ signalKind }) => signalKind === 'ice-candidate').length,
-      offer: signals.filter(({ signalKind }) => signalKind === 'offer').length
-    }
 
-    if (signals.length) {
-      captureRoomCallDiagnostic('active-session-pending-signals-flush-started', {
-        roomCallId,
-        signalCount: signals.length,
-        signalKindCounts
-      })
-    }
     for (const signal of signals) {
       await handleRoomCallSignalReceived(signal, roomCallId, localStreams.value)
     }
@@ -346,17 +321,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     const roomCallId = activeRoomCallId.value
 
     if (payload.roomCallId !== roomCallId) {
-      const queued = queueJoiningRoomCallSignal(payload)
-
-      if (!queued) {
-        captureRoomCallDiagnostic('active-session-signal-ignored', {
-          activeRoomCallId: roomCallId,
-          fromUserId: payload.fromUserId,
-          payloadRoomCallId: payload.roomCallId,
-          signal: buildRoomCallSignalDiagnostics(payload.signal),
-          signalKind: payload.signalKind
-        })
-      }
+      queueJoiningRoomCallSignal(payload)
       return
     }
 
@@ -373,21 +338,10 @@ export const useActiveRoomCallSession = createGlobalState(() => {
 
   const startActiveRoomCall = async (roomId: string, mediaKind: RoomCallMediaKind) => {
     if (!canStartActiveRoomCall(roomId)) {
-      captureRoomCallDiagnostic('active-session-start-skipped', {
-        hasBlockingUserRoomCall: hasBlockingUserRoomCall.value,
-        hasRoomId: Boolean(roomId),
-        isRoomCallSessionBusy: isRoomCallSessionBusy.value,
-        mediaKind,
-        roomId
-      })
       return null
     }
 
     isStartingRoomCall.value = true
-    captureRoomCallDiagnostic('active-session-start-requested', {
-      mediaKind,
-      roomId
-    })
 
     try {
       await startRoomCallLocalMedia(mediaKind)
@@ -396,15 +350,6 @@ export const useActiveRoomCallSession = createGlobalState(() => {
 
       if (!response.ok) {
         stopRoomCallLocalMedia()
-        captureRoomCallDiagnostic(
-          'active-session-start-ack-failed',
-          {
-            mediaKind,
-            reason: response.reason,
-            roomId
-          },
-          'warning'
-        )
         showRoomCallAckFailure(response)
         return null
       }
@@ -417,27 +362,10 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       syncRoomCallRuntimeState(roomCallId)
       await syncActiveRoomCallLocalState()
       void startOutgoingRoomCallSound(roomCallId)
-      captureRoomCallDiagnostic('active-session-started', {
-        localMediaState: localMediaState.value,
-        localStreams: buildRoomCallLocalStreamsDiagnostics(localStreams.value),
-        mediaKind,
-        roomCall,
-        roomCallId,
-        roomId
-      })
 
       return roomCallId
     } catch (error) {
       log('error', 'Start room call failed', error)
-      captureRoomCallDiagnostic(
-        'active-session-start-failed',
-        {
-          error: buildRoomCallErrorDiagnostics(error),
-          mediaKind,
-          roomId
-        },
-        'error'
-      )
       clearActiveRoomCallSessionState()
       showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallStartFailed))
       return null
@@ -449,24 +377,11 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   const joinActiveRoomCall = async (roomCallId: string, mediaKind?: RoomCallMediaKind) => {
     isJoiningRoomCall.value = true
     startJoiningRoomCall(roomCallId)
-    captureRoomCallDiagnostic('active-session-join-requested', {
-      mediaKind,
-      roomCallId
-    })
 
     try {
       const response = await joinRoomCall(roomCallId)
 
       if (!response.ok) {
-        captureRoomCallDiagnostic(
-          'active-session-join-ack-failed',
-          {
-            mediaKind,
-            reason: response.reason,
-            roomCallId
-          },
-          'warning'
-        )
         showRoomCallAckFailure(response)
         return null
       }
@@ -484,27 +399,10 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       await syncActiveRoomCallLocalState()
       await flushPendingRoomCallSignals(roomCall.id)
       await connectActiveRoomCallPeers(roomCall)
-      captureRoomCallDiagnostic('active-session-joined', {
-        localMediaKind,
-        localMediaState: localMediaState.value,
-        localStreams: buildRoomCallLocalStreamsDiagnostics(localStreams.value),
-        mediaKind,
-        roomCall,
-        roomCallId: roomCall.id
-      })
 
       return roomCall
     } catch (error) {
       log('error', 'Join room call failed', error)
-      captureRoomCallDiagnostic(
-        'active-session-join-failed',
-        {
-          error: buildRoomCallErrorDiagnostics(error),
-          mediaKind,
-          roomCallId
-        },
-        'error'
-      )
       await leaveRoomCall(roomCallId, 'left')
       clearActiveRoomCallSessionState()
       showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallJoinFailed))
@@ -519,27 +417,14 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     const roomCallId = activeRoomCallId.value
 
     if (!roomCallId) {
-      captureRoomCallDiagnostic('active-session-leave-without-active-call', {
-        reason
-      })
       stopRoomCallLocalMedia()
       return false
     }
 
     isLeavingRoomCall.value = true
-    captureRoomCallDiagnostic('active-session-leave-requested', {
-      reason,
-      roomCallId
-    })
 
     try {
       const left = await leaveRoomCall(roomCallId, reason)
-
-      captureRoomCallDiagnostic(left ? 'active-session-left' : 'active-session-leave-failed', {
-        reason,
-        roomCallId
-      })
-
       return left
     } finally {
       clearActiveRoomCallSessionState()
@@ -548,11 +433,6 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   }
 
   const setActiveRoomCallAudioEnabled = async (enabled: boolean) => {
-    captureRoomCallDiagnostic('active-session-audio-enabled-requested', {
-      enabled,
-      hasAudioStream: Boolean(audioStream.value),
-      roomCallId: activeRoomCallId.value
-    })
     if (!enabled || audioStream.value) {
       setAudioEnabled(enabled)
       return
@@ -562,25 +442,11 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       await startAudio()
     } catch (error) {
       log('error', 'Start room call audio failed', error)
-      captureRoomCallDiagnostic(
-        'active-session-audio-start-failed',
-        {
-          enabled,
-          error: buildRoomCallErrorDiagnostics(error),
-          roomCallId: activeRoomCallId.value
-        },
-        'error'
-      )
       showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallAudioStartFailed))
     }
   }
 
   const setActiveRoomCallVideoEnabled = async (enabled: boolean) => {
-    captureRoomCallDiagnostic('active-session-video-enabled-requested', {
-      enabled,
-      hasVideoStream: Boolean(videoStream.value),
-      roomCallId: activeRoomCallId.value
-    })
     if (!enabled || videoStream.value) {
       setVideoEnabled(enabled)
       return
@@ -590,15 +456,6 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       await startVideo()
     } catch (error) {
       log('error', 'Start room call video failed', error)
-      captureRoomCallDiagnostic(
-        'active-session-video-start-failed',
-        {
-          enabled,
-          error: buildRoomCallErrorDiagnostics(error),
-          roomCallId: activeRoomCallId.value
-        },
-        'error'
-      )
       showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallVideoStartFailed))
     }
   }
@@ -608,12 +465,6 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     const shouldRestartAudio = Boolean(audioStream.value)
 
     await setByPath('ioDevices.audioInputDeviceId', deviceId)
-    captureRoomCallDiagnostic('active-session-audio-input-device-set', {
-      deviceId,
-      roomCallId: activeRoomCallId.value,
-      shouldRestartAudio,
-      wasAudioEnabled
-    })
 
     if (!shouldRestartAudio) {
       return
@@ -624,16 +475,6 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       await syncActiveRoomCallPeerTracks()
     } catch (error) {
       log('error', 'Change room call audio input device failed', error)
-      captureRoomCallDiagnostic(
-        'active-session-audio-input-device-change-failed',
-        {
-          deviceId,
-          error: buildRoomCallErrorDiagnostics(error),
-          roomCallId: activeRoomCallId.value,
-          wasAudioEnabled
-        },
-        'error'
-      )
       showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallAudioStartFailed))
     }
   }
@@ -643,12 +484,6 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     const shouldRestartVideo = Boolean(videoStream.value)
 
     await setByPath('ioDevices.videoInputDeviceId', deviceId)
-    captureRoomCallDiagnostic('active-session-video-input-device-set', {
-      deviceId,
-      roomCallId: activeRoomCallId.value,
-      shouldRestartVideo,
-      wasVideoEnabled
-    })
 
     if (!shouldRestartVideo) {
       return
@@ -659,25 +494,11 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       await syncActiveRoomCallPeerTracks()
     } catch (error) {
       log('error', 'Change room call video input device failed', error)
-      captureRoomCallDiagnostic(
-        'active-session-video-input-device-change-failed',
-        {
-          deviceId,
-          error: buildRoomCallErrorDiagnostics(error),
-          roomCallId: activeRoomCallId.value,
-          wasVideoEnabled
-        },
-        'error'
-      )
       showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallVideoStartFailed))
     }
   }
 
   const setActiveRoomCallAudioOutputDevice = (deviceId: string) => {
-    captureRoomCallDiagnostic('active-session-audio-output-device-set', {
-      deviceId,
-      roomCallId: activeRoomCallId.value
-    })
     return setByPath('ioDevices.audioOutputDeviceId', deviceId)
   }
 
@@ -687,11 +508,6 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     }
 
     const nextFacingMode = resolveNextRoomCallVideoFacingMode(videoFacingMode.value)
-    captureRoomCallDiagnostic('active-session-video-facing-mode-switch-requested', {
-      currentFacingMode: videoFacingMode.value,
-      nextFacingMode,
-      roomCallId: activeRoomCallId.value
-    })
 
     try {
       await setByPath('ioDevices.videoInputDeviceId', '')
@@ -704,51 +520,24 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       }
     } catch (error) {
       log('error', 'Switch room call video input facing mode failed', error)
-      captureRoomCallDiagnostic(
-        'active-session-video-facing-mode-switch-failed',
-        {
-          error: buildRoomCallErrorDiagnostics(error),
-          nextFacingMode,
-          roomCallId: activeRoomCallId.value
-        },
-        'error'
-      )
       showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallVideoStartFailed))
     }
   }
 
   const startActiveRoomCallScreen = async () => {
     if (isActiveRoomCallScreenSharingByAnotherParticipant.value) {
-      captureRoomCallDiagnostic('active-session-screen-start-skipped', {
-        reason: 'another-participant-sharing',
-        roomCallId: activeRoomCallId.value
-      })
       return
     }
 
-    captureRoomCallDiagnostic('active-session-screen-start-requested', {
-      roomCallId: activeRoomCallId.value
-    })
     try {
       await startScreen()
     } catch (error) {
       log('error', 'Start room call screen failed', error)
-      captureRoomCallDiagnostic(
-        'active-session-screen-start-failed',
-        {
-          error: buildRoomCallErrorDiagnostics(error),
-          roomCallId: activeRoomCallId.value
-        },
-        'error'
-      )
       showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallScreenStartFailed))
     }
   }
 
   const stopActiveRoomCallScreen = () => {
-    captureRoomCallDiagnostic('active-session-screen-stop-requested', {
-      roomCallId: activeRoomCallId.value
-    })
     stopScreen()
   }
 
@@ -793,10 +582,6 @@ export const useActiveRoomCallSession = createGlobalState(() => {
 
   watch(activeRoomCallFinished, (isFinished) => {
     if (isFinished) {
-      captureRoomCallDiagnostic('active-session-finished', {
-        activeRoomCallId: activeRoomCallId.value,
-        roomCall: activeRoomCall.value
-      })
       const shouldPlayInterlocutorBusySound = Boolean(outgoingRoomCallSoundRoomCallId)
 
       stopOutgoingRoomCallSound()

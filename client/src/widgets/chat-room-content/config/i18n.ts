@@ -218,10 +218,25 @@ export const CHAT_ROOM_CONTENT_I18N = defineI18n('chatRoomContent', {
     ru: 'поднять руку',
     zh: '举手'
   },
+  roomCallQuickCommandLowerHand: {
+    en: 'lower hand',
+    ru: 'убрать руку',
+    zh: '放下手'
+  },
   roomCallQuickCommands: {
     en: 'Quick commands',
     ru: 'Быстрые команды',
     zh: '快捷指令'
+  },
+  roomCallQuickCommandsShortcut: {
+    en: 'Q',
+    ru: 'Q',
+    zh: 'Q'
+  },
+  roomCallCloseQuickCommands: {
+    en: 'Close quick commands',
+    ru: 'Закрыть быстрые команды',
+    zh: '关闭快捷指令'
   },
   roomCallFocusDisplayMode: {
     en: 'Focus view',

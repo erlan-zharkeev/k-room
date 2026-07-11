@@ -23,6 +23,7 @@ const {
   wallpaperStyle,
   showNavigation,
   showContent,
+  showFooterBackButton,
   contentTitleKey,
   navigationTitleKey,
   isContentLayoutEnabled
@@ -63,7 +64,7 @@ const {
               </NmorphCard>
             </OnboardingGuideTarget>
           </div>
-          <MobileNavFooter v-if="isPortraitTabletOrLess" class="widget" />
+          <MobileNavFooter v-if="isPortraitTabletOrLess" class="widget" :show-back="showFooterBackButton" />
         </section>
       </main>
     </OnboardingGuide>

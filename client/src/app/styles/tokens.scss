@@ -16,6 +16,9 @@
   --app-message-surface: var(--app-message-surface-dark);
   --app-message-self-surface: var(--app-message-self-surface-dark);
   --app-muted-surface-soft: color-mix(in srgb, var(--nmorph-placeholder-text-color), transparent 78%);
+  --app-logo-shade-dark: color-mix(in srgb, var(--nmorph-main-color), white 25%);
+  --app-logo-shade-medium: color-mix(in srgb, var(--nmorph-main-color), white 36%);
+  --app-logo-shade-light: color-mix(in srgb, var(--nmorph-main-color), white 53%);
   --app-card-basic-width: 420px;
   --app-shadow-dark: color-mix(in srgb, var(--nmorph-dark-shade-color), transparent 20%);
   --app-shadow-dark-soft: color-mix(in srgb, var(--nmorph-dark-shade-color), transparent 32%);
@@ -27,6 +30,9 @@
 }
 
 :root[data-app-theme-mode='light'] {
+  --app-logo-shade-dark: color-mix(in srgb, var(--nmorph-main-color), black 35%);
+  --app-logo-shade-medium: color-mix(in srgb, var(--nmorph-main-color), black 25%);
+  --app-logo-shade-light: color-mix(in srgb, var(--nmorph-main-color), black 15%);
   --app-message-surface: var(--app-message-surface-light);
   --app-message-self-surface: var(--app-message-self-surface-light);
 }

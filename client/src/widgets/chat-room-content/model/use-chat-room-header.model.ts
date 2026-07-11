@@ -4,7 +4,7 @@ import { computed, ref } from 'vue'
 import { CHAT_ROOM_I18N, getRoomOtherUserIds, isRoomFavorites, isRoomSupport } from 'src/entities/chat-room'
 import { useUser } from 'src/entities/user'
 import { useSocketAction } from 'src/shared/api'
-import { useI18n, useScreen } from 'src/shared/lib'
+import { useI18n } from 'src/shared/lib'
 
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { ChatRoomContentView, ChatRoomHeaderEmit, ChatRoomHeaderProps } from '../config/types'
@@ -16,7 +16,6 @@ export const useChatRoomHeader = (props: ChatRoomHeaderProps, emit: ChatRoomHead
   const { t } = useI18n()
   const { user } = useUser()
   const { emitSocketAction } = useSocketAction()
-  const { isPortraitTabletOrLess } = useScreen()
   const { getRoomInterlocutor, getUsersByIds } = useChatRoomUserLookup()
   const isClosingSupportChat = ref(false)
 
@@ -99,7 +98,6 @@ export const useChatRoomHeader = (props: ChatRoomHeaderProps, emit: ChatRoomHead
     isClosingSupportChat,
     isFavoritesRoom,
     isSupportRoom,
-    isPortraitTabletOrLess,
     membersQuantityText,
     supportStatusText,
     updateChatRoomContentView,

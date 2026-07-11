@@ -27,6 +27,7 @@ const {
     :class="{ 'app-navigation--footer': props.footer }"
     content-class="app-navigation__content"
   >
+    <slot name="prepend" />
     <RouterLink
       v-for="item in APP_PAGE_NAV_ITEMS"
       :key="item.id"

@@ -16,11 +16,15 @@ import { useCallActivityPanelItem } from '../model/use-call-activity-panel-item.
 const props = defineProps<CallActivityPanelItemProps>()
 const emit = defineEmits<CallActivityPanelItemEmits>()
 const {
+  actionButtonThickness,
+  actionIconSize,
   avatarImageSrc,
   audioButtonText,
   isAudioJoinLoading,
   isLargePrivateActivity,
   isVideoJoinLoading,
+  joinActionColor,
+  leaveActionColor,
   showJoinControls,
   videoButtonText
 } = useCallActivityPanelItem(props)
@@ -71,12 +75,14 @@ const {
           shape="square"
           design="plain"
           borderless
+          :thickness="actionButtonThickness"
+          :color="joinActionColor"
           :aria-label="$t(audioButtonText)"
           :loading="isAudioJoinLoading"
           :disabled="props.loading || props.disabled"
           @click="emit('join-audio')"
         >
-          <NmorphIcon width="16px" height="16px">
+          <NmorphIcon :width="actionIconSize" :height="actionIconSize">
             <NmorphIconPhone />
           </NmorphIcon>
         </NmorphButton>
@@ -84,12 +90,14 @@ const {
           shape="square"
           design="plain"
           borderless
+          :thickness="actionButtonThickness"
+          :color="joinActionColor"
           :aria-label="$t(videoButtonText)"
           :loading="isVideoJoinLoading"
           :disabled="props.loading || props.disabled"
           @click="emit('join-video')"
         >
-          <NmorphIcon width="16px" height="16px">
+          <NmorphIcon :width="actionIconSize" :height="actionIconSize">
             <NmorphIconVideoCamera />
           </NmorphIcon>
         </NmorphButton>
@@ -99,12 +107,14 @@ const {
         shape="square"
         design="plain"
         borderless
+        :thickness="actionButtonThickness"
+        :color="leaveActionColor"
         :aria-label="$t(ROOM_CALL_SESSION_I18N.leaveRoomCall)"
         :loading="props.leaveLoading"
         :disabled="props.leaveLoading"
         @click.stop="emit('leave')"
       >
-        <NmorphIcon width="16px" height="16px">
+        <NmorphIcon :width="actionIconSize" :height="actionIconSize">
           <NmorphIconClose />
         </NmorphIcon>
       </NmorphButton>
@@ -193,7 +203,7 @@ const {
 .call-activity-panel-item__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 16px;
   justify-content: center;
 }
 

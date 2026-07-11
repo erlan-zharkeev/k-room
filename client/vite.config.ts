@@ -8,6 +8,7 @@ import { defineConfig } from 'vite'
 import type { Plugin } from 'vite'
 
 import { createClientEnvData } from './create-client-env-data'
+import { THEME_BOOTSTRAP_STORAGE_KEY, THEME_BOOTSTRAP_VERSION } from './src/app/bootstrap/theme-bootstrap/constants'
 import { CLIENT_UPDATE_RELOAD_STORAGE_PREFIX } from './src/shared/api/constants'
 import {
   APP_BADGE_SERVICE_WORKER_SYNC_MESSAGE_TYPE,
@@ -153,6 +154,9 @@ export default defineConfig(({ mode }) => {
         transformIndexHtml: (html) =>
           html
             .replaceAll('__THEME_BG__', clientEnvData.themeBg)
+            .replaceAll('__THEME_ACCENT__', clientEnvData.themeAccent)
+            .replaceAll('__THEME_BOOTSTRAP_STORAGE_KEY__', THEME_BOOTSTRAP_STORAGE_KEY)
+            .replaceAll('__THEME_BOOTSTRAP_VERSION__', String(THEME_BOOTSTRAP_VERSION))
             .replaceAll('__APP_NAME__', clientEnvData.appName)
             .replaceAll('__CLIENT_RECOVERY_CONFIG__', JSON.stringify(clientRecoveryConfig).replace(/</g, '\\u003c'))
             .replaceAll('__SERVICE_WORKER_REGISTER_SCRIPT__', serviceWorkerRegisterScript)

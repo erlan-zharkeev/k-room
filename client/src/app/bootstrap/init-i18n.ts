@@ -2,7 +2,7 @@ import type { AppLanguage } from 'global-shared'
 
 import { setI18nRuntime } from 'src/shared/lib'
 
-import { appI18n, setI18nLanguage } from '../lib/i18n'
+import { appI18n, setI18nLanguage } from '../model/i18n-control.model'
 
 import type { VueApp } from './types'
 

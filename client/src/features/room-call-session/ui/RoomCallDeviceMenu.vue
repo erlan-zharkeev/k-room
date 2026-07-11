@@ -8,7 +8,6 @@ import { useRoomCallDeviceMenu } from '../model/use-room-call-device-menu.model'
 import RoomCallIoDeviceSettings from './RoomCallIoDeviceSettings.vue'
 
 const props = defineProps<RoomCallDeviceMenuProps>()
-const ROOM_CALL_DEVICE_MENU_ICON_SIZE = '16px'
 const {
   isRoomCallDeviceSettingsOpen,
   isVideoFacingModeSwitchVisible,
@@ -30,11 +29,13 @@ const {
       @click="switchVideoInputFacingMode"
     >
       <template #icon-only>
-        <NmorphIcon :width="ROOM_CALL_DEVICE_MENU_ICON_SIZE" :height="ROOM_CALL_DEVICE_MENU_ICON_SIZE">
+        <NmorphIcon width="20px" height="20px">
           <NmorphIconRefresh />
         </NmorphIcon>
       </template>
     </NmorphButton>
+
+    <slot />
 
     <NmorphButton
       design="plain"
@@ -45,7 +46,7 @@ const {
       @click="openRoomCallDeviceSettings"
     >
       <template #icon-only>
-        <NmorphIcon :width="ROOM_CALL_DEVICE_MENU_ICON_SIZE" :height="ROOM_CALL_DEVICE_MENU_ICON_SIZE">
+        <NmorphIcon width="16px" height="16px">
           <NmorphIconSetting />
         </NmorphIcon>
       </template>

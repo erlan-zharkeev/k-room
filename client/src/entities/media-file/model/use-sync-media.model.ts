@@ -1,4 +1,5 @@
 import { isHttpError } from 'src/shared/api'
+import { log } from 'src/shared/lib'
 
 import { enqueueMediaSync } from '../lib/media-sync-queue'
 import { syncMedia } from '../lib/sync-media'
@@ -30,7 +31,7 @@ export const useSyncMedia = () => {
       } catch (error) {
         if (isHttpError(error)) return
 
-        console.error(error)
+        log('error', 'Media sync failed', error)
       }
     }
 

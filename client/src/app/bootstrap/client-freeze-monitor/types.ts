@@ -1,6 +1,8 @@
+import type { UnknownObject } from 'global-shared'
+
 export type ClientFreezeKind = 'input-delay' | 'long-task'
 
-export type ClientFreezeContext = Record<string, unknown>
+export type ClientFreezeContext = UnknownObject
 
 export type ClientFreezeDiagnosticEvent = ClientFreezeContext & {
   atMs: number

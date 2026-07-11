@@ -1,8 +1,6 @@
-import type { Component } from 'vue'
-
-import SelectLanguageCnFlagIcon from '../ui/icons/SelectLanguageCnFlagIcon.vue'
-import SelectLanguageGbFlagIcon from '../ui/icons/SelectLanguageGbFlagIcon.vue'
-import SelectLanguageRuFlagIcon from '../ui/icons/SelectLanguageRuFlagIcon.vue'
+import selectLanguageCnFlagSrc from '../assets/cn.svg'
+import selectLanguageGbFlagSrc from '../assets/gb.svg'
+import selectLanguageRuFlagSrc from '../assets/ru.svg'
 
 import type { SelectLanguageOption, SelectLanguageOptionFlag } from './types'
 
@@ -36,8 +34,8 @@ export const SELECT_LANGUAGE_OPTIONS: SelectLanguageOption[] = [
   }
 ]
 
-export const SELECT_LANGUAGE_FLAG_ICON_MAP = {
-  gb: SelectLanguageGbFlagIcon,
-  ru: SelectLanguageRuFlagIcon,
-  cn: SelectLanguageCnFlagIcon
-} satisfies Record<SelectLanguageOptionFlag, Component>
+export const SELECT_LANGUAGE_FLAG_SRC_MAP = {
+  gb: selectLanguageGbFlagSrc,
+  ru: selectLanguageRuFlagSrc,
+  cn: selectLanguageCnFlagSrc
+} satisfies Record<SelectLanguageOptionFlag, string>

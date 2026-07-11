@@ -3,7 +3,7 @@ import { watch } from 'vue'
 import { useSettings } from 'src/entities/setting'
 import { setHttpClientLanguage, setSocketLanguage, updateSocketLanguage } from 'src/shared/api'
 
-import { setI18nLanguage } from '../lib/i18n'
+import { setI18nLanguage } from '../model/i18n-control.model'
 
 export const useLanguageProvider = () => {
   const { settings } = useSettings()

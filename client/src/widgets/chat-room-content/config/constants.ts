@@ -49,7 +49,6 @@ export const ROOM_CALL_QUICK_COMMANDS = [
   i18n: (typeof CHAT_ROOM_CONTENT_I18N)[keyof typeof CHAT_ROOM_CONTENT_I18N]
   id: RoomCallQuickCommand
 }[]
-export const ROOM_CALL_QUICK_COMMANDS_TOGGLE_I18N = CHAT_ROOM_CONTENT_I18N.roomCallQuickCommands
 export const ROOM_CALL_TEMPORARY_QUICK_COMMAND_I18N_BY_COMMAND = {
   no: CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandNo,
   ok: CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandOk,
@@ -63,7 +62,6 @@ export const ROOM_CALL_TEMPORARY_QUICK_COMMAND_TEXT_COLOR_BY_COMMAND = {
   ok: 'accent',
   yes: 'success'
 } as const satisfies Record<RoomCallTemporaryQuickCommand, string>
-export const ROOM_CALL_QUICK_COMMAND_ICON_SIZE = '20px'
 export const ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE = '20px'
 export const ROOM_CALL_TILE_STATE_ICON_SIZE = '16px'
 export const ROOM_CALL_CONNECTION_QUALITY_BAR_LEVELS = [

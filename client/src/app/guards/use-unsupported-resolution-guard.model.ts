@@ -1,7 +1,7 @@
 import { useWindowSize } from '@vueuse/core'
 import { computed } from 'vue'
 
-import { MIN_APP_VIEWPORT_HEIGHT_PX, MIN_APP_VIEWPORT_WIDTH_PX } from '../config/constants'
+import { MIN_APP_VIEWPORT_HEIGHT_PX, MIN_APP_VIEWPORT_WIDTH_PX } from './constants'
 
 export const useUnsupportedResolutionGuard = () => {
   const { height, width } = useWindowSize()

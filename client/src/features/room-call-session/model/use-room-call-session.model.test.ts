@@ -3,10 +3,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const roomCallMock = vi.hoisted(() => ({ remove: vi.fn() }))
 const socketActionMock = vi.hoisted(() => ({ emitSocketAction: vi.fn() }))
-const diagnosticsMock = vi.hoisted(() => ({
-  buildRoomCallSignalDiagnostics: vi.fn(() => ({ present: true })),
-  captureRoomCallDiagnostic: vi.fn()
-}))
 
 vi.mock('src/entities/room-call', () => ({ useRoomCall: () => roomCallMock }))
 vi.mock('src/shared/api', () => ({ useSocketAction: () => socketActionMock }))
@@ -15,7 +11,6 @@ vi.mock('../config/constants', () => ({
   ROOM_CALL_SIGNAL_ACK_TIMEOUT_MS: 8_000,
   ROOM_CALL_SIGNAL_SEND_ATTEMPTS: 3
 }))
-vi.mock('../lib/room-call-sentry-diagnostics', () => diagnosticsMock)
 
 vi.stubGlobal('__CLIENT_ENV_DATA__', { appName: 'K-Room Test' })
 

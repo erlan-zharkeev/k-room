@@ -4,16 +4,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 const socketApiMock = vi.hoisted(() => ({
   registerSocketAckEventListeners: vi.fn()
 }))
-const diagnosticsMock = vi.hoisted(() => ({
-  buildRoomCallErrorDiagnostics: vi.fn(() => ({ name: 'Error' })),
-  buildRoomCallSignalDiagnostics: vi.fn(() => ({ present: true })),
-  captureRoomCallDiagnostic: vi.fn()
+const sharedLibMock = vi.hoisted(() => ({
+  log: vi.fn()
 }))
 
 vi.mock('src/shared/api', () => socketApiMock)
+vi.mock('src/shared/lib', () => sharedLibMock)
 vi.mock('@nmorph/nmorph-ui-kit', () => ({}))
 vi.mock('../config/constants', () => ({ ROOM_CALL_HANDLED_SIGNAL_ID_LIMIT: 1_000 }))
-vi.mock('../lib/room-call-sentry-diagnostics', () => diagnosticsMock)
 
 vi.stubGlobal('__CLIENT_ENV_DATA__', { appName: 'K-Room Test' })
 
@@ -59,9 +57,10 @@ describe('useRoomCallSignalMonitor', () => {
   })
 
   it('allows a failed signal to be retried', async () => {
+    const processingError = new Error('failed')
     const handleRoomCallSignalReceived = vi
       .fn<(payload: EventRoomCallSignalReceived) => Promise<void>>()
-      .mockRejectedValueOnce(new Error('failed'))
+      .mockRejectedValueOnce(processingError)
       .mockResolvedValueOnce(undefined)
     const { initializeRoomCallSignalMonitor } = useRoomCallSignalMonitor(handleRoomCallSignalReceived)
 
@@ -75,10 +74,11 @@ describe('useRoomCallSignalMonitor', () => {
     await expect(listener(signal)).resolves.toBeUndefined()
     await Promise.resolve()
     expect(handleRoomCallSignalReceived).toHaveBeenCalledTimes(2)
-    expect(diagnosticsMock.captureRoomCallDiagnostic).toHaveBeenCalledWith(
-      'active-session-signal-processing-failed',
-      expect.objectContaining({ signalId: 'signal-1' }),
-      'error'
-    )
+    expect(sharedLibMock.log).toHaveBeenCalledWith('error', 'Room call signal processing failed', {
+      error: processingError,
+      roomCallId: signal.roomCallId,
+      signalId: signal.signalId,
+      signalKind: signal.signalKind
+    })
   })
 })

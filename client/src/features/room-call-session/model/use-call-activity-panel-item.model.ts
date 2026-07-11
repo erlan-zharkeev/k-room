@@ -17,13 +17,21 @@ export const useCallActivityPanelItem = (props: CallActivityPanelItemProps) => {
   const isAudioJoinLoading = computed(() => props.loadingMediaKind === 'audio')
   const isVideoJoinLoading = computed(() => props.loadingMediaKind === 'video')
   const isLargePrivateActivity = computed(() => !props.compact && props.item.isPrivateRoom)
+  const actionButtonThickness = computed(() => (props.compact ? 'basic' : 'thick'))
+  const actionIconSize = computed(() => (props.compact ? '16px' : '32px'))
+  const joinActionColor = computed(() => (props.compact ? undefined : 'var(--nmorph-success-text-color)'))
+  const leaveActionColor = computed(() => (props.compact ? undefined : 'var(--nmorph-error-text-color)'))
 
   return {
+    actionButtonThickness,
+    actionIconSize,
     avatarImageSrc,
     audioButtonText,
     isAudioJoinLoading,
     isLargePrivateActivity,
     isVideoJoinLoading,
+    joinActionColor,
+    leaveActionColor,
     showJoinControls,
     videoButtonText
   }

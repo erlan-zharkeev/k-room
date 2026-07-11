@@ -57,23 +57,63 @@ export const DOWNLOAD_PAGE_I18N = defineI18n('downloadPage', {
     zh: '在 Mac 上，点击 Mac，打开 K-Room.dmg，然后把 K-Room 拖到 Applications。如果 macOS 提示无法打开，因为无法验证开发者，请打开 System Settings > Privacy & Security，点击 Open Anyway，然后点击 Open。'
   },
   pwaInstallTitle: {
-    en: i18nFormatter(['appName'], (appName: string) => `Install ${appName} on a phone`),
-    ru: i18nFormatter(['appName'], (appName: string) => `Установить ${appName} на телефон`),
-    zh: i18nFormatter(['appName'], (appName: string) => `在手机上安装 ${appName}`)
+    en: i18nFormatter(['appName'], (appName: string) => `Install ${appName} on a phone or tablet`),
+    ru: i18nFormatter(['appName'], (appName: string) => `Установить ${appName} на телефон или планшет`),
+    zh: i18nFormatter(['appName'], (appName: string) => `在手机或平板电脑上安装 ${appName}`)
+  },
+  pwaAndroidInstallTitle: {
+    en: i18nFormatter(['appName'], (appName: string) => `Install ${appName} on Android`),
+    ru: i18nFormatter(['appName'], (appName: string) => `Установить ${appName} на Android`),
+    zh: i18nFormatter(['appName'], (appName: string) => `在 Android 上安装 ${appName}`)
+  },
+  pwaIosInstallTitle: {
+    en: i18nFormatter(['appName'], (appName: string) => `Install ${appName} on iOS or iPadOS`),
+    ru: i18nFormatter(['appName'], (appName: string) => `Установить ${appName} на iOS или iPadOS`),
+    zh: i18nFormatter(['appName'], (appName: string) => `在 iOS 或 iPadOS 上安装 ${appName}`)
   },
   pwaAndroidInstallHelp: {
-    en: 'Open this site in Chrome, tap the menu, choose Install app or Add to Home screen, then confirm.',
-    ru: 'Откройте этот сайт в Chrome, нажмите меню, выберите «Установить приложение» или «Добавить на главный экран», затем подтвердите.',
-    zh: '在 Chrome 中打开此网站，点按菜单，选择“安装应用”或“添加到主屏幕”，然后确认。'
+    en: 'Open this site in Chrome and follow these steps.',
+    ru: 'Откройте этот сайт в Chrome и выполните следующие действия.',
+    zh: '在 Chrome 中打开此网站，然后按照以下步骤操作。'
   },
   pwaIosInstallHelp: {
-    en: 'Open this site in Safari, tap Share, choose Add to Home Screen, then tap Add.',
-    ru: 'Откройте этот сайт в Safari, нажмите «Поделиться», выберите «На экран “Домой”», затем нажмите «Добавить».',
-    zh: '在 Safari 中打开此网站，点按“分享”，选择“添加到主屏幕”，然后点按“添加”。'
+    en: 'Open this site in Safari and follow these steps.',
+    ru: 'Откройте этот сайт в Safari и выполните следующие действия.',
+    zh: '在 Safari 中打开此网站，然后按照以下步骤操作。'
   },
-  pwaAutoInstallNote: {
-    en: 'A mobile PWA cannot be installed automatically from a link. Browsers require a user action and confirmation.',
-    ru: 'Мобильную PWA нельзя установить автоматически по ссылке. Браузеры требуют действие пользователя и подтверждение.',
-    zh: '移动端 PWA 不能通过链接自动安装。浏览器需要用户操作和确认。'
+  pwaStepMenu: {
+    en: 'Menu',
+    ru: 'Меню',
+    zh: '菜单'
+  },
+  pwaStepMore: {
+    en: 'More',
+    ru: 'Ещё',
+    zh: '更多'
+  },
+  pwaStepInstall: {
+    en: 'Install and create shortcut',
+    ru: 'Установить и создать ярлык',
+    zh: '安装并创建快捷方式'
+  },
+  pwaStepConfirm: {
+    en: 'Confirm',
+    ru: 'Подтвердить',
+    zh: '确认'
+  },
+  pwaStepShare: {
+    en: 'Share',
+    ru: 'Поделиться',
+    zh: '分享'
+  },
+  pwaStepHomeScreen: {
+    en: 'Add to Home Screen',
+    ru: 'На экран «Домой»',
+    zh: '添加到主屏幕'
+  },
+  pwaStepAdd: {
+    en: 'Add',
+    ru: 'Добавить',
+    zh: '添加'
   }
 })

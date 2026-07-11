@@ -14,10 +14,9 @@ import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
 import { useMedia } from 'src/entities/media-file'
 import { useUser } from 'src/entities/user'
-import { isExpectedHttpError, isHttpError, useHttp } from 'src/shared/api'
+import { isExpectedHttpError, useHttp } from 'src/shared/api'
 import {
   captureClientSentryException,
-  captureClientSentryMessage,
   revokeObjectUrl,
   revokeObjectUrls,
   useAppToast,
@@ -154,52 +153,18 @@ export const usePersonalData = () => {
     toast.add({ content: t(SETTINGS_ACCOUNT_PERSONAL_DATA_I18N.nicknameCopied) })
   }
 
-  const buildAccountAvatarUpdateErrorDiagnostics = (error: unknown) => {
-    if (isHttpError(error)) {
-      return {
-        message: error.message,
-        payloadMessage: error.payload?.message.text,
-        silent: error.silent,
-        status: error.status,
-        type: error.type
-      }
-    }
-
-    if (error instanceof Error) {
-      return {
-        message: error.message,
-        name: error.name
-      }
-    }
-
-    return {
-      type: typeof error
-    }
-  }
-
   const captureAccountAvatarUpdateFailure = (error: unknown) => {
     if (!accountAvatarChanged.value) return
 
     withClientSentryScope((scope) => {
-      const expectedHttpError = isExpectedHttpError(error)
-
-      scope.setLevel('error')
       scope.setTag('settings.account.update.reason', 'avatar')
-      scope.setTag('settings.account.update.expected_http_error', `${expectedHttpError}`)
       scope.setContext('settings_account_avatar_update', {
         avatarReset: accountAvatarWasReset.value,
-        error: buildAccountAvatarUpdateErrorDiagnostics(error),
         file: buildAccountAvatarFileDiagnostics(accountAvatarFile.value),
         hasCurrentAvatar: Boolean(avatarId.value),
         nicknameChanged: accountNicknameChanged.value,
         upload: accountAvatarUploadDiagnostics.value
       })
-
-      if (expectedHttpError) {
-        captureClientSentryMessage('Settings account avatar update failed')
-        return
-      }
-
       captureClientSentryException(error)
     })
   }
@@ -249,10 +214,9 @@ export const usePersonalData = () => {
       clearAccountAvatarUploadValue()
       clearAccountAvatarPreview()
     } catch (error) {
-      captureAccountAvatarUpdateFailure(error)
-
       if (isExpectedHttpError(error)) return
 
+      captureAccountAvatarUpdateFailure(error)
       throw error
     } finally {
       isAccountSaving.value = false

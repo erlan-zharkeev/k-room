@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { NmorphIcon, NmorphSelectButton, NmorphSelectButtonItem } from '@nmorph/nmorph-ui-kit'
+import { NmorphSelectButton, NmorphSelectButtonItem } from '@nmorph/nmorph-ui-kit'
 
 import { useI18n } from 'src/shared/lib'
 
 import {
   SELECT_LANGUAGE_DEFAULT_PROPS,
-  SELECT_LANGUAGE_FLAG_ICON_MAP,
+  SELECT_LANGUAGE_FLAG_SRC_MAP,
   SELECT_LANGUAGE_OPTIONS
 } from '../config/constants'
 import { SELECT_LANGUAGE_I18N } from '../config/i18n'
@@ -30,9 +30,12 @@ const { settings, changeLanguage, selectLanguageFlagSize } = useSelectLanguageVi
     >
       <NmorphSelectButtonItem v-for="option in SELECT_LANGUAGE_OPTIONS" :key="option.value" :value="option.value">
         <div class="select-language__option">
-          <NmorphIcon :width="selectLanguageFlagSize.WIDTH" :height="selectLanguageFlagSize.HEIGHT">
-            <component :is="SELECT_LANGUAGE_FLAG_ICON_MAP[option.flag]" />
-          </NmorphIcon>
+          <img
+            class="select-language__flag"
+            :src="SELECT_LANGUAGE_FLAG_SRC_MAP[option.flag]"
+            :style="{ width: selectLanguageFlagSize.WIDTH, height: selectLanguageFlagSize.HEIGHT }"
+            alt=""
+          />
         </div>
       </NmorphSelectButtonItem>
     </NmorphSelectButton>
@@ -46,5 +49,9 @@ const { settings, changeLanguage, selectLanguageFlagSize } = useSelectLanguageVi
   gap: 8px;
   align-items: center;
   justify-content: center;
+}
+
+.select-language__flag {
+  display: block;
 }
 </style>

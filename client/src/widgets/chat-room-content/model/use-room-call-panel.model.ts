@@ -1,11 +1,12 @@
-import { useFullscreen } from '@vueuse/core'
+import { useFullscreen, useScrollLock } from '@vueuse/core'
 import { isFunction } from 'global-shared'
-import { computed, useTemplateRef, watch } from 'vue'
+import { computed, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue'
 
 import { useUser } from 'src/entities/user'
 import { useRoomCallRuntimeState } from 'src/features/room-call-session'
 
 import { ROOM_CALL_PANEL_DISPLAY_MODE_TOGGLE_I18N } from '../config/constants'
+import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { RoomCallPanelEmit, RoomCallPanelProps, RoomCallQuickCommand, RoomCallTileItem } from '../config/types'
 import { buildRoomCallTileItems } from '../lib/build-room-call-tile-items'
 import {
@@ -30,9 +31,15 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
     syncRoomCallRuntimeState,
     toggleRoomCallQuickCommandsExpanded
   } = useRoomCallRuntimeState()
-  const { isFullscreen: isRoomCallFullscreen, toggle: toggleRoomCallFullscreen } = useFullscreen(roomCallPanelRef, {
-    autoExit: true
-  })
+  const {
+    enter: enterNativeRoomCallFullscreen,
+    exit: exitNativeRoomCallFullscreen,
+    isFullscreen: isNativeRoomCallFullscreen,
+    isSupported: isNativeRoomCallFullscreenSupported
+  } = useFullscreen(roomCallPanelRef, { autoExit: true })
+  const isRoomCallFallbackFullscreen = ref(false)
+  const isRoomCallFullscreenScrollLocked = useScrollLock(() => document.body)
+  const isRoomCallFullscreen = computed(() => isNativeRoomCallFullscreen.value || isRoomCallFallbackFullscreen.value)
 
   const resolveParticipantName = (userId: string) => {
     const participant = getUserById(userId)
@@ -109,6 +116,11 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
   })
   const isRoomCallQuickCommandsAvailable = computed(() => props.roomCall.status === 'in-progress')
   const isLocalHandRaised = computed(() => Boolean(props.handRaisedByUserId[user.value.id]))
+  const roomCallHandQuickCommandI18n = computed(() =>
+    isLocalHandRaised.value
+      ? CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandLowerHand
+      : CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandRaiseHand
+  )
 
   const updateAudioEnabled = () => {
     emit('set-audio-enabled', !props.localMediaState.audio)
@@ -135,8 +147,50 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
     emit('leave')
   }
 
+  const exitRoomCallFallbackFullscreen = () => {
+    isRoomCallFallbackFullscreen.value = false
+    isRoomCallFullscreenScrollLocked.value = false
+  }
+
+  const enterRoomCallFallbackFullscreen = () => {
+    isRoomCallFallbackFullscreen.value = true
+    isRoomCallFullscreenScrollLocked.value = true
+  }
+
+  const toggleRoomCallFullscreen = async () => {
+    if (isRoomCallFallbackFullscreen.value) {
+      exitRoomCallFallbackFullscreen()
+      return
+    }
+
+    if (isNativeRoomCallFullscreen.value) {
+      await exitNativeRoomCallFullscreen()
+      return
+    }
+
+    if (isNativeRoomCallFullscreenSupported.value) {
+      try {
+        await enterNativeRoomCallFullscreen()
+        return
+      } catch {
+        enterRoomCallFallbackFullscreen()
+        return
+      }
+    }
+
+    enterRoomCallFallbackFullscreen()
+  }
+
   const toggleRoomCallQuickCommands = () => {
     if (!isRoomCallQuickCommandsAvailable.value) {
+      return
+    }
+
+    toggleRoomCallQuickCommandsExpanded()
+  }
+
+  const closeRoomCallQuickCommands = () => {
+    if (!isRoomCallQuickCommandsExpanded.value) {
       return
     }
 
@@ -176,28 +230,34 @@ export const useRoomCallPanel = (props: RoomCallPanelProps, emit: RoomCallPanelE
     () => props.roomCall.id,
     (roomCallId) => {
       derivedStreamCache.clear()
+      exitRoomCallFallbackFullscreen()
       syncRoomCallRuntimeState(roomCallId)
     },
     { immediate: true }
   )
 
+  onBeforeUnmount(exitRoomCallFallbackFullscreen)
+
   return {
+    closeRoomCallQuickCommands,
     focusRoomCallTile,
+    isLocalHandRaised,
     isRoomCallFocusDisplayMode,
+    isRoomCallFallbackFullscreen,
     isRoomCallQuickCommandsExpanded,
     isRoomCallQuickCommandsAvailable,
     isRoomCallFullscreen,
-    isLocalHandRaised,
     isScreenSharingControlDisabled,
     isScreenSharingControlVisible,
     leaveRoomCall,
     roomCallDisplayModeToggleI18n,
+    roomCallHandQuickCommandI18n,
     roomCallMainTileItem,
     roomCallPanelTilesStyle,
     roomCallSecondaryTileItems,
     roomCallTileItems,
-    toggleRoomCallPanelDisplayMode,
     toggleRoomCallQuickCommands,
+    toggleRoomCallPanelDisplayMode,
     toggleRoomCallFullscreen,
     toggleScreenSharing,
     sendRoomCallQuickCommand,

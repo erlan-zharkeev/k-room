@@ -18,6 +18,8 @@ describe('endpoint contracts', () => {
     expect(ROUTE_NAMES.app).toBe('/app')
     expect(ROUTE_NAMES.emailConfirmation).toBe('/page/email-confirmation')
     expect(ROUTE_NAMES.download).toBe('/download')
+    expect(ROUTE_NAMES.pwaInstallAndroid).toBe('/pwa-install-android')
+    expect(ROUTE_NAMES.pwaInstallIos).toBe('/pwa-install-ios')
     expect(ROUTE_NAMES.notification).toBe('/notification')
     expect(ROUTE_NAMES.notFound).toBe('/not-found')
     expect(CLIENT_RUNTIME_ENDPOINTS.getRuntimePolicy).toBe('/client/runtime-policy')

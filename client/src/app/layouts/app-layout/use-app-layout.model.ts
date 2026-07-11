@@ -4,15 +4,13 @@ import { useRouter, type LocationQueryValue, useRoute } from 'vue-router'
 import { useSettings } from 'src/entities/setting'
 import { useScreen } from 'src/shared/lib'
 
-import { isContentTitleKey } from '../content-layout/types'
-import { isContentNavigationTitleKey } from '../content-navigation-layout/types'
-
 import {
   CONTENT_LAYOUT_EXCLUDED_ROUTE_SEGMENTS,
   TABLET_APP_LAYOUT_CONTENT_VIEW,
   TABLET_APP_LAYOUT_DEFAULT_VIEW,
   TABLET_APP_LAYOUT_VIEWS
 } from './constants'
+import { isContentNavigationTitleKey, isContentTitleKey } from './route-title'
 
 type TabletAppLayoutView = (typeof TABLET_APP_LAYOUT_VIEWS)[number]
 
@@ -74,6 +72,7 @@ export const useAppLayout = () => {
 
     return !contentRouteSegment || !CONTENT_LAYOUT_EXCLUDED_ROUTE_SEGMENTS.includes(contentRouteSegment)
   })
+  const showFooterBackButton = computed(() => showContent.value && !isContentLayoutEnabled.value)
 
   const wallpaperStyle = computed(() => {
     return {
@@ -90,6 +89,7 @@ export const useAppLayout = () => {
     contentTitleKey,
     showNavigation,
     showContent,
+    showFooterBackButton,
     showWallpaper,
     isContentLayoutEnabled,
     wallpaperStyle

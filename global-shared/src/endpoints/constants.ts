@@ -12,6 +12,8 @@ export const AUTH_ROUTE_NAMES = {
 
 export const ROOT_ROUTE_NAMES = {
   download: '/download',
+  pwaInstallAndroid: '/pwa-install-android',
+  pwaInstallIos: '/pwa-install-ios',
   notification: '/notification',
   notFound: '/not-found'
 } as const
@@ -40,6 +42,8 @@ export const ROUTE_NAMES = {
   passwordRecovery: `${LAYOUT_ROUTE_NAMES.page}/${PAGE_ROUTE_NAMES.passwordRecovery}`,
   createNewPassword: `${LAYOUT_ROUTE_NAMES.page}/${PAGE_ROUTE_NAMES.createNewPassword}`,
   download: ROOT_ROUTE_NAMES.download,
+  pwaInstallAndroid: ROOT_ROUTE_NAMES.pwaInstallAndroid,
+  pwaInstallIos: ROOT_ROUTE_NAMES.pwaInstallIos,
   notification: ROOT_ROUTE_NAMES.notification,
   privacyPolicy: `${LAYOUT_ROUTE_NAMES.docs}/${PAGE_ROUTE_NAMES.privacyPolicy}`,
   notFound: ROOT_ROUTE_NAMES.notFound

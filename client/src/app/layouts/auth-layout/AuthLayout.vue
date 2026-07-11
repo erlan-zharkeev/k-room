@@ -24,7 +24,7 @@ const route = useRoute()
         :fill="false"
         shadow-type="inset"
       >
-        <AppLogo />
+        <AppLogo variant="original" />
       </NmorphCard>
       <div class="auth-layout__controls">
         <SelectLanguage compact class="auth-layout__language" />

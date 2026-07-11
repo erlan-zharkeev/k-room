@@ -5,6 +5,7 @@ import { computed, watch } from 'vue'
 import { SYSTEM_THEME_QUERY, useSettings } from 'src/entities/setting'
 import { useSelectTheme } from 'src/features/select-theme'
 
+import { syncThemeBootstrapCache } from '../bootstrap/theme-bootstrap/theme-bootstrap-cache-control.model'
 import { getNmorphThemeShadowOptions } from '../lib/nmorph'
 
 export const useThemeProvider = () => {
@@ -21,6 +22,7 @@ export const useThemeProvider = () => {
     nmorphTheme.data.lightShadeGeneratorCoefficient = theme.lightShadeGeneratorCoefficient
     nmorphTheme.data.other = getNmorphThemeShadowOptions(theme)
     nmorphTheme.applyTheme(themeName, colorSchema)
+    syncThemeBootstrapCache(settings.value.appearance, theme)
   }
 
   const updateSystemTheme = () => {

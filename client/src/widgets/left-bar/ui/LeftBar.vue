@@ -8,7 +8,7 @@ import { AppLogo } from 'src/shared/ui'
 
 <template>
   <NmorphCard tag="aside" class="left-bar" content-class="left-bar__content">
-    <AppLogo />
+    <AppLogo inset />
     <OnboardingGuideTarget class="left-bar__navigation-guide-target" name="navigation">
       <AppNavigation />
     </OnboardingGuideTarget>

@@ -3,11 +3,11 @@ import { NmorphNotificationProvider } from '@nmorph/nmorph-ui-kit'
 import { RouterView } from 'vue-router'
 
 import { UpdateNativeDesktopBanner } from 'src/features/update-native-desktop'
+import { useMediaDevicePermission } from 'src/shared/lib'
 
 import UnsupportedResolutionGuard from './guards/UnsupportedResolutionGuard.vue'
-import { useDexieCacheTrimProvider } from './providers/use-dexie-cache-trim-provider'
-import { useLanguageProvider } from './providers/use-language-provider'
-import { useMediaDevicePermissionProvider } from './providers/use-media-device-permission-provider'
+import { useDexieCacheTrimProvider } from './providers/use-dexie-cache-trim-provider.model'
+import { useLanguageProvider } from './providers/use-language-provider.model'
 import { useThemeProvider } from './providers/use-theme-provider.model'
 import { useToastProvider } from './providers/use-toast-provider.model'
 import { useUserInteractionProvider } from './providers/use-user-interaction-provider.model'
@@ -16,7 +16,7 @@ import { useAppRootWallpaperBackground } from './use-app-root-wallpaper-backgrou
 useLanguageProvider()
 useThemeProvider()
 useUserInteractionProvider()
-useMediaDevicePermissionProvider()
+useMediaDevicePermission()
 useDexieCacheTrimProvider()
 
 const { toasts } = useToastProvider()

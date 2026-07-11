@@ -1,6 +1,6 @@
 .app-bootstrap-loader {
-  --app-bootstrap-main-color: #1c1f21;
-  --app-bootstrap-accent-color: #4a90e2;
+  --app-bootstrap-main-color: var(--app-bootstrap-theme-bg, #1c1f21);
+  --app-bootstrap-accent-color: var(--app-bootstrap-theme-accent, #4a90e2);
 
   isolation: isolate;
   position: relative;

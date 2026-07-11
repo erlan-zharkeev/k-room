@@ -57,7 +57,7 @@ export const createClientEnvData = (mode: string, envDir: string): ClientEnv => 
     turnstileSiteKey,
     sentryDsnClient: SENTRY_DSN_CLIENT,
     sentryEnvironment: getEnv('SENTRY_ENVIRONMENT', modeEnv),
-    sentryEnabled: getEnv('SENTRY_ENABLED', modeEnv) === 'true',
+    sentryEnabled: !isE2E && getEnv('SENTRY_ENABLED', modeEnv) === 'true',
     themeBg,
     themeAccent,
     themeText

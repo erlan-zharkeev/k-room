@@ -11,10 +11,6 @@ export const SETTINGS_WALLPAPER_VISIBILITY_OPTIONS = [
   { value: 'show', label: SETTINGS_PAGE_APPEARANCE_I18N.show },
   { value: 'hide', label: SETTINGS_PAGE_APPEARANCE_I18N.hide }
 ]
-export const SETTINGS_WALLPAPER_FIT_OPTIONS = [
-  { value: 'cover', label: SETTINGS_PAGE_APPEARANCE_I18N.cover },
-  { value: 'contain', label: SETTINGS_PAGE_APPEARANCE_I18N.contain }
-]
 export const SETTINGS_WALLPAPER_ANGLE_MIN = -180
 export const SETTINGS_WALLPAPER_ANGLE_MAX = 180
 export const SETTINGS_WALLPAPER_SCALE_MIN = 50

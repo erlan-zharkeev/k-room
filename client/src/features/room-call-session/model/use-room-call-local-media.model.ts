@@ -13,11 +13,6 @@ import {
   setRoomCallMediaStreamTracksEnabled,
   stopRoomCallMediaStream
 } from '../lib/room-call-media'
-import {
-  buildRoomCallErrorDiagnostics,
-  buildRoomCallMediaStreamDiagnostics,
-  captureRoomCallDiagnostic
-} from '../lib/room-call-sentry-diagnostics'
 
 export const useRoomCallLocalMedia = () => {
   const { settings } = useSettings()
@@ -47,15 +42,7 @@ export const useRoomCallLocalMedia = () => {
       const devices = await navigator.mediaDevices.enumerateDevices()
 
       return resolveRoomCallVideoStreamFacingMode(stream, devices)
-    } catch (error) {
-      captureRoomCallDiagnostic(
-        'local-video-facing-mode-devices-read-failed',
-        {
-          error: buildRoomCallErrorDiagnostics(error),
-          stream: buildRoomCallMediaStreamDiagnostics(stream)
-        },
-        'warning'
-      )
+    } catch {
       return resolveRoomCallVideoStreamFacingMode(stream)
     }
   }
@@ -113,15 +100,6 @@ export const useRoomCallLocalMedia = () => {
       return stream
     } catch (error) {
       refreshLocalMediaState()
-      captureRoomCallDiagnostic(
-        'local-audio-start-failed',
-        {
-          deviceId,
-          enabled,
-          error: buildRoomCallErrorDiagnostics(error)
-        },
-        'error'
-      )
       throw error
     } finally {
       isAudioLoading.value = false
@@ -151,17 +129,6 @@ export const useRoomCallLocalMedia = () => {
     } catch (error) {
       videoFacingMode.value = await resolveVideoFacingMode(videoStream.value ?? null)
       refreshLocalMediaState()
-      captureRoomCallDiagnostic(
-        'local-video-start-failed',
-        {
-          deviceId,
-          enabled,
-          error: buildRoomCallErrorDiagnostics(error),
-          facingMode,
-          stream: buildRoomCallMediaStreamDiagnostics(videoStream.value)
-        },
-        'error'
-      )
       throw error
     } finally {
       isVideoLoading.value = false
@@ -187,13 +154,6 @@ export const useRoomCallLocalMedia = () => {
       return stream
     } catch (error) {
       refreshLocalMediaState()
-      captureRoomCallDiagnostic(
-        'local-screen-start-failed',
-        {
-          error: buildRoomCallErrorDiagnostics(error)
-        },
-        'error'
-      )
       throw error
     } finally {
       isScreenLoading.value = false

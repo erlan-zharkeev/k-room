@@ -3,7 +3,6 @@ import { NmorphButton, NmorphText, NmorphCard, NmorphSelectButton, NmorphSelectB
 
 import { ChatRoomContextMenu } from 'src/features/chat-room-context-menu'
 import { ChatRoomTypingStatus } from 'src/features/chat-room-typing'
-import { ContentNavigationBackButton } from 'src/features/content-navigation-back-button'
 import { ROOM_CALL_SESSION_I18N, RoomCallMediaButtons } from 'src/features/room-call-session'
 import { UserActivityStatus } from 'src/features/user-activity-status'
 import { AppProfileBasicData } from 'src/shared/ui'
@@ -27,7 +26,6 @@ const {
   isClosingSupportChat,
   isFavoritesRoom,
   isSupportRoom,
-  isPortraitTabletOrLess,
   membersQuantityText,
   supportStatusText,
   updateChatRoomContentView,
@@ -35,24 +33,13 @@ const {
 } = useChatRoomHeader(props, emit)
 </script>
 <template>
-  <div
-    class="chat-room-header"
-    :class="{
-      'chat-room-header--with-back': isPortraitTabletOrLess,
-      'chat-room-header--with-primary-actions': hasHeaderPrimaryActions
-    }"
-  >
-    <ContentNavigationBackButton
-      v-if="isPortraitTabletOrLess"
-      class="chat-room-header__back chat-room-header__back--outside"
-    />
+  <div class="chat-room-header">
     <NmorphCard
       tag="header"
       shadow-type="inset"
       class="chat-room-content-header"
       content-class="chat-room-content-header__content"
     >
-      <ContentNavigationBackButton v-if="isPortraitTabletOrLess" class="chat-room-content-header__back" />
       <AppProfileBasicData
         :image-id="props.room.avatarId"
         :avatar-icon="avatarIcon"
@@ -95,7 +82,6 @@ const {
           <NmorphSelectButton
             v-if="hasRoomCallViewSwitch"
             class="chat-room-content-header__view-switch"
-            thickness="thin"
             :model-value="props.contentView"
             :aria-label="$t(CHAT_ROOM_CONTENT_I18N.selectChatRoomContentView)"
             @update:model-value="updateChatRoomContentView"
@@ -141,21 +127,6 @@ const {
   height: auto;
 }
 
-.chat-room-header--with-back {
-  grid-template-columns: max-content minmax(0, 1fr);
-}
-
-.chat-room-header__back.content-navigation-back-button {
-  align-self: stretch;
-  width: 42px;
-  height: auto;
-  min-height: 64px;
-}
-
-.chat-room-content-header__back.content-navigation-back-button {
-  display: none;
-}
-
 .chat-room-content-header {
   min-width: 0;
   height: 100%;
@@ -197,60 +168,5 @@ const {
 .chat-room-content-header__support-close {
   min-width: 0;
   max-width: 100%;
-}
-
-@media (width < 560px) {
-  .chat-room-header--with-back {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .chat-room-header__back--outside.content-navigation-back-button {
-    display: none;
-  }
-
-  .chat-room-content-header__back.content-navigation-back-button {
-    display: flex;
-    grid-area: back;
-    align-self: stretch;
-
-    width: 42px;
-    height: auto;
-    min-height: 42px;
-  }
-
-  .chat-room-content-header :deep(.chat-room-content-header__content) {
-    grid-template-areas: 'back profile actions';
-    grid-template-columns: max-content minmax(0, 1fr) max-content;
-  }
-
-  .chat-room-content-header__profile {
-    grid-area: profile;
-  }
-
-  .chat-room-content-header__actions {
-    grid-area: actions;
-  }
-
-  .chat-room-header--with-primary-actions .chat-room-content-header :deep(.chat-room-content-header__content) {
-    grid-template-areas:
-      'profile profile menu'
-      'back primary-actions primary-actions';
-    grid-template-columns: max-content minmax(0, 1fr) max-content;
-  }
-
-  .chat-room-header--with-primary-actions .chat-room-content-header__actions {
-    display: contents;
-  }
-
-  .chat-room-header--with-primary-actions .chat-room-content-header__primary-actions {
-    grid-area: primary-actions;
-    justify-self: end;
-    max-width: 100%;
-  }
-
-  .chat-room-header--with-primary-actions .chat-room-content-header__menu {
-    grid-area: menu;
-    justify-self: end;
-  }
 }
 </style>

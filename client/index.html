@@ -3,6 +3,43 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="theme-color" content="__THEME_BG__" />
+    <script>
+      ;(function () {
+        var theme = {
+          mode: 'dark',
+          main: '__THEME_BG__',
+          accent: '__THEME_ACCENT__'
+        }
+
+        try {
+          var snapshot = JSON.parse(localStorage.getItem('__THEME_BOOTSTRAP_STORAGE_KEY__'))
+          var selectedTheme = snapshot && snapshot.selectedTheme
+          var themeName =
+            selectedTheme === 'system'
+              ? window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches
+                ? 'light'
+                : 'dark'
+              : selectedTheme
+          var storedTheme =
+            snapshot &&
+            snapshot.version === __THEME_BOOTSTRAP_VERSION__ &&
+            snapshot.themes &&
+            snapshot.themes[themeName]
+          var isModeValid = storedTheme && (storedTheme.mode === 'dark' || storedTheme.mode === 'light')
+          var areColorsValid =
+            storedTheme && typeof storedTheme.main === 'string' && typeof storedTheme.accent === 'string'
+
+          if (isModeValid && areColorsValid) theme = storedTheme
+        } catch {
+          // The default theme remains active when browser storage is unavailable or invalid.
+        }
+
+        document.documentElement.dataset.appThemeMode = theme.mode
+        document.documentElement.style.setProperty('--app-bootstrap-theme-bg', theme.main)
+        document.documentElement.style.setProperty('--app-bootstrap-theme-accent', theme.accent)
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', theme.main)
+      })()
+    </script>
     <link rel="apple-touch-icon" sizes="180x180" href="/meta/apple-touch-icon.png" />
     <link rel="icon" href="/meta/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="32x32" href="/meta/favicon-32x32.png" />
@@ -24,7 +61,7 @@
         height: 100%;
         min-height: 0;
         margin: 0;
-        background: __THEME_BG__;
+        background: var(--app-bootstrap-theme-bg, __THEME_BG__);
       }
 
       body {
@@ -41,7 +78,7 @@
         place-items: center;
         height: 100%;
         min-height: 0;
-        background: __THEME_BG__;
+        background: var(--app-bootstrap-theme-bg, __THEME_BG__);
       }
 
       .app-bootstrap-loader__dots {
@@ -55,7 +92,7 @@
         width: 8px;
         border-radius: 50%;
         opacity: 0.34;
-        background: #4a90e2;
+        background: var(--app-bootstrap-theme-accent, __THEME_ACCENT__);
         animation: app-bootstrap-loader-pulse 840ms ease-in-out infinite;
       }
 

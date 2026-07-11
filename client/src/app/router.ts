@@ -15,7 +15,8 @@ import { getChatRoomContentRoutePath } from 'src/features/app-navigation'
 import { initClientData, useLogoutNavigation } from 'src/features/client-session'
 import { getSettingsContentId } from 'src/pages/settings'
 
-import { isDynamicImportFetchError, recoverNativeDesktopChunkLoad } from './lib/native-desktop-cache'
+import { isDynamicImportFetchError } from './bootstrap/native-desktop-cache/lib'
+import { recoverNativeDesktopChunkLoad } from './bootstrap/native-desktop-cache/native-desktop-cache-control.model'
 import { getAppPathFromSettings, getContentTabFromPath } from './lib/router'
 
 const loadAppLayout = () => import('./layouts/app-layout/AppLayout.vue')
@@ -28,6 +29,7 @@ const loadContactsPage = () => import('src/pages/contacts').then(({ ContactsPage
 const loadCreateNewPasswordPage = () =>
   import('src/pages/create-new-password').then(({ CreateNewPasswordPage }) => CreateNewPasswordPage)
 const loadDownloadPage = () => import('src/pages/download').then(({ DownloadPage }) => DownloadPage)
+const loadPwaInstallPage = () => import('src/pages/download').then(({ PwaInstallPage }) => PwaInstallPage)
 const loadEmailConfirmationPage = () =>
   import('src/pages/email-confirmation').then(({ EmailConfirmationPage }) => EmailConfirmationPage)
 const loadErrorPage = () => import('src/pages/error').then(({ ErrorPage }) => ErrorPage)
@@ -117,6 +119,20 @@ const routes: RouteRecordRaw[] = [
   {
     path: ROUTE_NAMES.download,
     component: loadDownloadPage
+  },
+  {
+    path: ROUTE_NAMES.pwaInstallAndroid,
+    component: loadPwaInstallPage,
+    props: {
+      platform: 'android'
+    }
+  },
+  {
+    path: ROUTE_NAMES.pwaInstallIos,
+    component: loadPwaInstallPage,
+    props: {
+      platform: 'ios'
+    }
   },
   {
     path: LAYOUT_ROUTE_NAMES.app,

@@ -3,7 +3,7 @@ import { computed } from 'vue'
 
 import { useSystem } from 'src/entities/system'
 
-import { INTERACTION_EVENTS } from '../config/constants'
+import { USER_INTERACTION_EVENTS } from './user-interaction.constants'
 
 export const useUserInteractionProvider = () => {
   const { hasInteracted, setHasInteracted } = useSystem()
@@ -13,7 +13,7 @@ export const useUserInteractionProvider = () => {
     setHasInteracted(true)
   }
 
-  INTERACTION_EVENTS.forEach((eventName) => {
+  USER_INTERACTION_EVENTS.forEach((eventName) => {
     useEventListener(interactionTarget, eventName, handleInteraction)
   })
 }

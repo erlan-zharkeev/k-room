@@ -1,6 +1,6 @@
 import { en as nmorphEn, ru as nmorphRu, zh as nmorphZh } from '@nmorph/nmorph-ui-kit'
 
-import { APP_I18N } from 'src/app/config/i18n'
+import { UNSUPPORTED_RESOLUTION_GUARD_I18N } from 'src/app/guards/i18n'
 import { AUTH_LAYOUT_I18N } from 'src/app/layouts/auth-layout/i18n'
 import { CHAT_ROOM_I18N } from 'src/entities/chat-room'
 import { APP_NAVIGATION_I18N } from 'src/features/app-navigation'
@@ -48,7 +48,7 @@ import { CHAT_ROOMS_NAVIGATION_I18N } from 'src/widgets/chat-rooms-navigation'
 import { TOP_BAR_I18N } from 'src/widgets/top-bar'
 
 const appI18nMessages = buildI18nMessages([
-  APP_I18N,
+  UNSUPPORTED_RESOLUTION_GUARD_I18N,
   AUTH_LAYOUT_I18N,
   CHAT_ROOM_I18N,
   APP_NAVIGATION_I18N,

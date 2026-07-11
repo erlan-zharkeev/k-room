@@ -14,7 +14,9 @@ export const useRoomCallDeviceMenu = (props: RoomCallDeviceMenuProps) => {
     }
   })
   const isRoomCallDeviceSettingsOpen = ref(false)
-  const isVideoFacingModeSwitchVisible = computed(() => hasSwitchableRoomCallVideoInputDevice(videoInputs.value))
+  const isVideoFacingModeSwitchVisible = computed(
+    () => localMediaState.value.video && hasSwitchableRoomCallVideoInputDevice(videoInputs.value)
+  )
   const isVideoFacingModeSwitchDisabled = computed(() => Boolean(props.disabled) || !localMediaState.value.video)
 
   const refreshVideoInputDevices = async () => {

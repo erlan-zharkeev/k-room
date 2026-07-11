@@ -39,16 +39,10 @@ const roomCallEventsMock = vi.hoisted(() => ({
   emitRoomCallSignalReceived: vi.fn()
 }))
 
-const roomCallDiagnosticsMock = vi.hoisted(() => ({
-  buildRoomCallServerSignalDiagnostics: vi.fn(() => ({ present: true })),
-  captureRoomCallServerDiagnostic: vi.fn()
-}))
-
 vi.mock('./lib/assert-room-call-access', () => roomCallAccessMock)
 vi.mock('./lib/leave-room-call-participant', () => leaveRoomCallParticipantMock)
 vi.mock('./lib/room-call-active-state', () => roomCallActiveStateMock)
 vi.mock('./lib/room-call-events', () => roomCallEventsMock)
-vi.mock('./lib/room-call-sentry-diagnostics', () => roomCallDiagnosticsMock)
 vi.mock('../presence/presence.utils', () => presenceUtilsMock)
 
 const createRoom = (chatKind: ChatRoomCallAccessProjection['chatKind']): ChatRoomCallAccessProjection => ({
@@ -258,10 +252,6 @@ describe('room-calls.service', () => {
       signalId: 'signal-1',
       signalKind: 'answer'
     })
-    expect(roomCallDiagnosticsMock.captureRoomCallServerDiagnostic).toHaveBeenCalledWith(
-      'signal-delivered',
-      expect.objectContaining({ signalId: 'signal-1' })
-    )
   })
 
   it('fails signaling acknowledgement when the recipient does not confirm delivery', async () => {
@@ -283,10 +273,5 @@ describe('room-calls.service', () => {
         toUserId: 'user-b'
       })
     ).rejects.toMatchObject({ silent: true })
-    expect(roomCallDiagnosticsMock.captureRoomCallServerDiagnostic).toHaveBeenCalledWith(
-      'signal-delivery-failed',
-      expect.objectContaining({ signalId: 'signal-2' }),
-      'warning'
-    )
   })
 })

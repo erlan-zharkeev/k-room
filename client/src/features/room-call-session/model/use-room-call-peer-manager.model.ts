@@ -31,17 +31,6 @@ import {
   isRecoverableRoomCallPeerDescriptionError
 } from '../lib/room-call-peer-error'
 import { isRoomCallIceCandidateSignal, isRoomCallSessionDescriptionSignal } from '../lib/room-call-peer-signal'
-import {
-  buildRoomCallErrorDiagnostics,
-  buildRoomCallLocalStreamsDiagnostics,
-  buildRoomCallLocalTrackIdDiagnostics,
-  buildRoomCallMediaStreamDiagnostics,
-  buildRoomCallMediaTrackDiagnostics,
-  buildRoomCallPeerConnectionDiagnostics,
-  buildRoomCallSelectedCandidatePairDiagnostics,
-  buildRoomCallSignalDiagnostics,
-  captureRoomCallDiagnostic
-} from '../lib/room-call-sentry-diagnostics'
 
 import { useRoomCallSession } from './use-room-call-session.model'
 
@@ -51,12 +40,11 @@ const isRoomCallPeerTimeoutError = (error: unknown) => {
   return error instanceof DOMException && error.name === 'TimeoutError'
 }
 
-const withRoomCallPeerTimeout = async <T>(task: Promise<T>, timeoutMs: number, onTimeout: () => void) => {
+const withRoomCallPeerTimeout = async <T>(task: Promise<T>, timeoutMs: number) => {
   let stopTimeout: (() => void) | undefined
   const timeoutTask = new Promise<never>((_, reject) => {
     const { stop } = useTimeoutFn(
       () => {
-        onTimeout()
         reject(createRoomCallPeerTimeoutError())
       },
       timeoutMs,
@@ -76,10 +64,6 @@ const withRoomCallPeerTimeout = async <T>(task: Promise<T>, timeoutMs: number, o
 export const useRoomCallPeerManager = () => {
   const peerConnectionByUserId = new Map<string, RTCPeerConnection>()
   const iceCandidatesByUserId = new Map<string, RTCIceCandidateInit[]>()
-  const appliedIceCandidateCountByUserId = new Map<string, number>()
-  const generatedIceCandidateCountByUserId = new Map<string, number>()
-  const queuedIceCandidateCountByUserId = new Map<string, number>()
-  const receivedIceCandidateCountByUserId = new Map<string, number>()
   const peerTaskByUserId = new Map<string, Promise<void>>()
   const peerConnectionWatchdogStopByUserId = new Map<string, () => void>()
   const makingOfferByUserId = new Set<string>()
@@ -97,56 +81,11 @@ export const useRoomCallPeerManager = () => {
     { immediate: false, immediateCallback: false }
   )
 
-  const incrementPeerCounter = (counter: Map<string, number>, userId: string) => {
-    const count = (counter.get(userId) ?? 0) + 1
-
-    counter.set(userId, count)
-
-    return count
-  }
-
-  const buildRoomCallPeerCountersDiagnostics = (userId: string) => ({
-    appliedIceCandidateCount: appliedIceCandidateCountByUserId.get(userId) ?? 0,
-    generatedIceCandidateCount: generatedIceCandidateCountByUserId.get(userId) ?? 0,
-    queuedIceCandidateCount: queuedIceCandidateCountByUserId.get(userId) ?? 0,
-    receivedIceCandidateCount: receivedIceCandidateCountByUserId.get(userId) ?? 0
-  })
-
-  const captureRoomCallPeerDiagnostic = (
-    event: string,
-    context: Record<string, unknown> = {},
-    level: 'error' | 'info' | 'warning' = 'info'
-  ) => {
-    captureRoomCallDiagnostic(
-      event,
-      {
-        localUserId,
-        ...context
-      },
-      level
-    )
-  }
-
-  const runRoomCallPeerOperation = async <T>(operation: string, task: Promise<T>, context: Record<string, unknown>) => {
-    return withRoomCallPeerTimeout(task, ROOM_CALL_PEER_OPERATION_TIMEOUT_MS, () => {
-      captureRoomCallPeerDiagnostic(
-        'peer-operation-timeout',
-        {
-          ...context,
-          operation,
-          timeoutMs: ROOM_CALL_PEER_OPERATION_TIMEOUT_MS
-        },
-        'warning'
-      )
-    })
-  }
+  const runRoomCallPeerOperation = <T>(task: Promise<T>) =>
+    withRoomCallPeerTimeout(task, ROOM_CALL_PEER_OPERATION_TIMEOUT_MS)
 
   const setRoomCallPeerRtcConfiguration = (configuration: RoomCallRtcConfiguration) => {
     roomCallRtcConfiguration = configuration
-    captureRoomCallPeerDiagnostic('peer-rtc-configuration-set', {
-      iceServerCount: configuration.iceServers.length,
-      hasTurnServer: configuration.iceServers.some(({ urls }) => urls.some((url) => url.startsWith('turn')))
-    })
   }
 
   const updateRemoteStream = (userId: string, stream: MediaStream) => {
@@ -208,15 +147,7 @@ export const useRoomCallPeerManager = () => {
 
       updateRoomCallConnectionQuality(userId, quality)
     } catch (error) {
-      captureRoomCallPeerDiagnostic(
-        'peer-connection-quality-sync-failed',
-        {
-          error: buildRoomCallErrorDiagnostics(error),
-          peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-          peerUserId: userId
-        },
-        'warning'
-      )
+      void error
     }
   }
 
@@ -228,32 +159,6 @@ export const useRoomCallPeerManager = () => {
     )
   }
 
-  const captureRoomCallSelectedCandidatePair = async (
-    roomCallId: string,
-    userId: string,
-    peerConnection: RTCPeerConnection
-  ) => {
-    try {
-      const statsReport = await peerConnection.getStats()
-
-      captureRoomCallPeerDiagnostic('peer-selected-candidate-pair', {
-        candidatePair: buildRoomCallSelectedCandidatePairDiagnostics(statsReport),
-        peerUserId: userId,
-        roomCallId
-      })
-    } catch (error) {
-      captureRoomCallPeerDiagnostic(
-        'peer-selected-candidate-pair-read-failed',
-        {
-          error: buildRoomCallErrorDiagnostics(error),
-          peerUserId: userId,
-          roomCallId
-        },
-        'warning'
-      )
-    }
-  }
-
   const sendPeerSignal = async (
     roomCallId: string,
     toUserId: string,
@@ -261,13 +166,6 @@ export const useRoomCallPeerManager = () => {
     signal: unknown
   ) => {
     const signalId = uuidv4()
-    captureRoomCallPeerDiagnostic('peer-signal-send-started', {
-      roomCallId,
-      signal: buildRoomCallSignalDiagnostics(signal),
-      signalId,
-      signalKind,
-      toUserId
-    })
     const delivered = await sendRoomCallSignal({
       roomCallId,
       signal,
@@ -276,37 +174,14 @@ export const useRoomCallPeerManager = () => {
       toUserId
     })
 
-    captureRoomCallPeerDiagnostic(delivered ? 'peer-signal-delivered' : 'peer-signal-delivery-failed', {
-      roomCallId,
-      signalId,
-      signalKind,
-      toUserId
-    })
-
     return delivered
   }
 
-  const handleRoomCallPeerSignalError = (error: unknown, context: Record<string, unknown> = {}) => {
+  const handleRoomCallPeerSignalError = (error: unknown) => {
     if (isExpectedRoomCallPeerSignalError(error)) {
-      captureRoomCallPeerDiagnostic(
-        'peer-signal-expected-error',
-        {
-          error: buildRoomCallErrorDiagnostics(error),
-          ...context
-        },
-        'warning'
-      )
       return
     }
 
-    captureRoomCallPeerDiagnostic(
-      'peer-signal-unexpected-error',
-      {
-        error: buildRoomCallErrorDiagnostics(error),
-        ...context
-      },
-      'error'
-    )
     throw error
   }
 
@@ -320,13 +195,7 @@ export const useRoomCallPeerManager = () => {
       .catch(() => undefined)
       .then(task)
       .catch((error) => {
-        handleRoomCallPeerSignalError(error, {
-          counters: buildRoomCallPeerCountersDiagnostics(userId),
-          peer: peerConnectionByUserId.get(userId)
-            ? buildRoomCallPeerConnectionDiagnostics(peerConnectionByUserId.get(userId) as RTCPeerConnection)
-            : undefined,
-          peerUserId: userId
-        })
+        handleRoomCallPeerSignalError(error)
       })
 
     peerTaskByUserId.set(userId, nextTask)
@@ -347,62 +216,31 @@ export const useRoomCallPeerManager = () => {
   const shouldIgnoreRoomCallPeerOfferCollision = (fromUserId: string, peerConnection: RTCPeerConnection) => {
     const hasOfferCollision = makingOfferByUserId.has(fromUserId) || peerConnection.signalingState !== 'stable'
 
-    const shouldIgnore = hasOfferCollision && !isPoliteRoomCallPeer(fromUserId)
-
-    if (shouldIgnore) {
-      captureRoomCallPeerDiagnostic('peer-offer-collision-ignored', {
-        hasOfferCollision,
-        makingOffer: makingOfferByUserId.has(fromUserId),
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        peerUserId: fromUserId
-      })
-    }
-
-    return shouldIgnore
+    return hasOfferCollision && !isPoliteRoomCallPeer(fromUserId)
   }
 
-  const rollbackRoomCallPeerLocalOffer = async (userId: string, peerConnection: RTCPeerConnection) => {
+  const rollbackRoomCallPeerLocalOffer = async (peerConnection: RTCPeerConnection) => {
     if (peerConnection.signalingState !== 'have-local-offer') {
       return true
     }
 
     try {
-      await runRoomCallPeerOperation('set-local-rollback', peerConnection.setLocalDescription({ type: 'rollback' }), {
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        peerUserId: userId
-      })
-      captureRoomCallPeerDiagnostic('peer-local-offer-rolled-back', {
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        peerUserId: userId
-      })
+      await runRoomCallPeerOperation(peerConnection.setLocalDescription({ type: 'rollback' }))
       return true
     } catch (error) {
-      handleRoomCallPeerSignalError(error, {
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        peerUserId: userId
-      })
+      handleRoomCallPeerSignalError(error)
       return false
     }
   }
 
   const addRoomCallPeerIceCandidateToConnection = async (
-    userId: string,
     peerConnection: RTCPeerConnection,
     candidate: RTCIceCandidateInit
   ) => {
     try {
-      await runRoomCallPeerOperation('add-ice-candidate', peerConnection.addIceCandidate(candidate), {
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        peerUserId: userId,
-        signal: buildRoomCallSignalDiagnostics(candidate)
-      })
-      incrementPeerCounter(appliedIceCandidateCountByUserId, userId)
+      await runRoomCallPeerOperation(peerConnection.addIceCandidate(candidate))
     } catch (error) {
-      handleRoomCallPeerSignalError(error, {
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        peerUserId: userId,
-        signal: buildRoomCallSignalDiagnostics(candidate)
-      })
+      handleRoomCallPeerSignalError(error)
     }
   }
 
@@ -423,10 +261,6 @@ export const useRoomCallPeerManager = () => {
     if (shouldClearPeerTask) {
       peerTaskByUserId.delete(userId)
     }
-    appliedIceCandidateCountByUserId.delete(userId)
-    generatedIceCandidateCountByUserId.delete(userId)
-    queuedIceCandidateCountByUserId.delete(userId)
-    receivedIceCandidateCountByUserId.delete(userId)
     removeRemoteStream(userId)
     removeRoomCallConnectionQuality(userId)
     syncRoomCallConnectionQualityMonitor()
@@ -436,16 +270,13 @@ export const useRoomCallPeerManager = () => {
     const candidates = iceCandidatesByUserId.get(userId) ?? []
 
     iceCandidatesByUserId.set(userId, [...candidates, candidate])
-    incrementPeerCounter(queuedIceCandidateCountByUserId, userId)
   }
 
   const flushRoomCallPeerIceCandidates = async (userId: string, peerConnection: RTCPeerConnection) => {
     const candidates = iceCandidatesByUserId.get(userId) ?? []
 
     iceCandidatesByUserId.delete(userId)
-    await Promise.all(
-      candidates.map((candidate) => addRoomCallPeerIceCandidateToConnection(userId, peerConnection, candidate))
-    )
+    await Promise.all(candidates.map((candidate) => addRoomCallPeerIceCandidateToConnection(peerConnection, candidate)))
   }
 
   const syncRoomCallPeerParticipants = (
@@ -481,16 +312,6 @@ export const useRoomCallPeerManager = () => {
           return
         }
 
-        captureRoomCallPeerDiagnostic(
-          'peer-connection-watchdog-timeout',
-          {
-            peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-            peerUserId: userId,
-            roomCallId,
-            timeoutMs
-          },
-          'warning'
-        )
         void enqueueRoomCallPeerTask(userId, async () => {
           if (isCurrentRoomCallPeerConnection(userId, peerConnection)) {
             await recoverRoomCallPeerConnection(roomCallId, userId, localStreams)
@@ -522,33 +343,12 @@ export const useRoomCallPeerManager = () => {
     await syncRoomCallPeerLocalTracks(peerConnection, localStreams)
     peerConnection.addEventListener('icecandidate', ({ candidate }) => {
       if (candidate) {
-        incrementPeerCounter(generatedIceCandidateCountByUserId, userId)
         void sendPeerSignal(roomCallId, userId, 'ice-candidate', candidate.toJSON())
         return
       }
     })
-    peerConnection.addEventListener('icecandidateerror', (event) => {
-      captureRoomCallPeerDiagnostic(
-        'peer-ice-candidate-error',
-        {
-          errorCode: event.errorCode,
-          errorText: event.errorText,
-          peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-          peerUserId: userId,
-          roomCallId,
-          url: event.url
-        },
-        'warning'
-      )
-    })
     peerConnection.addEventListener('track', ({ track }) => {
       if (!isCurrentRoomCallPeerConnection(userId, peerConnection)) {
-        captureRoomCallPeerDiagnostic('peer-remote-track-ignored-after-close', {
-          peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-          peerUserId: userId,
-          roomCallId,
-          track: buildRoomCallMediaTrackDiagnostics(track)
-        })
         return
       }
 
@@ -556,35 +356,6 @@ export const useRoomCallPeerManager = () => {
 
       appendRoomCallRemoteTrack(remoteStream, track)
       updateRemoteStream(userId, remoteStream)
-      captureRoomCallPeerDiagnostic('peer-remote-track-received', {
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        peerUserId: userId,
-        remoteStream: buildRoomCallMediaStreamDiagnostics(remoteStream),
-        roomCallId,
-        track: buildRoomCallMediaTrackDiagnostics(track)
-      })
-      track.addEventListener('mute', () => {
-        if (!isCurrentRoomCallPeerConnection(userId, peerConnection)) return
-
-        captureRoomCallPeerDiagnostic('peer-remote-track-muted', {
-          peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-          peerUserId: userId,
-          remoteStream: buildRoomCallMediaStreamDiagnostics(remoteStream),
-          roomCallId,
-          track: buildRoomCallMediaTrackDiagnostics(track)
-        })
-      })
-      track.addEventListener('unmute', () => {
-        if (!isCurrentRoomCallPeerConnection(userId, peerConnection)) return
-
-        captureRoomCallPeerDiagnostic('peer-remote-track-unmuted', {
-          peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-          peerUserId: userId,
-          remoteStream: buildRoomCallMediaStreamDiagnostics(remoteStream),
-          roomCallId,
-          track: buildRoomCallMediaTrackDiagnostics(track)
-        })
-      })
       track.addEventListener(
         'ended',
         () => {
@@ -592,13 +363,6 @@ export const useRoomCallPeerManager = () => {
 
           removeRoomCallRemoteTrack(remoteStream, track)
           syncRemoteStreamAfterTrackRemoval(userId, remoteStream)
-          captureRoomCallPeerDiagnostic('peer-remote-track-ended', {
-            peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-            peerUserId: userId,
-            remoteStream: buildRoomCallMediaStreamDiagnostics(remoteStream),
-            roomCallId,
-            track: buildRoomCallMediaTrackDiagnostics(track)
-          })
         },
         { once: true }
       )
@@ -608,17 +372,11 @@ export const useRoomCallPeerManager = () => {
         return
       }
 
-      captureRoomCallPeerDiagnostic('peer-connection-state-changed', {
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        peerUserId: userId,
-        roomCallId
-      })
       void syncRoomCallConnectionQuality(userId, peerConnection)
 
       if (peerConnection.connectionState === 'connected') {
         peerConnectionWatchdogStopByUserId.get(userId)?.()
         peerConnectionWatchdogStopByUserId.delete(userId)
-        void captureRoomCallSelectedCandidatePair(roomCallId, userId, peerConnection)
         return
       }
 
@@ -654,56 +412,19 @@ export const useRoomCallPeerManager = () => {
     peerConnection: RTCPeerConnection
   ) => {
     if (peerConnection.signalingState !== 'stable') {
-      captureRoomCallPeerDiagnostic('peer-offer-create-skipped', {
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId,
-        toUserId
-      })
       return
     }
 
     makingOfferByUserId.add(toUserId)
-    captureRoomCallPeerDiagnostic('peer-offer-create-started', {
-      peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-      roomCallId,
-      toUserId
-    })
 
     try {
-      const offer = await runRoomCallPeerOperation('create-offer', peerConnection.createOffer(), {
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId,
-        toUserId
-      })
-      captureRoomCallPeerDiagnostic('peer-offer-created', {
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId,
-        signal: buildRoomCallSignalDiagnostics(offer),
-        toUserId
-      })
+      const offer = await runRoomCallPeerOperation(peerConnection.createOffer())
 
       if (peerConnection.signalingState !== 'stable') {
-        captureRoomCallPeerDiagnostic('peer-offer-set-local-skipped', {
-          peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-          roomCallId,
-          signal: buildRoomCallSignalDiagnostics(offer),
-          toUserId
-        })
         return
       }
 
-      await runRoomCallPeerOperation('set-local-offer', peerConnection.setLocalDescription(offer), {
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId,
-        signal: buildRoomCallSignalDiagnostics(offer),
-        toUserId
-      })
-      captureRoomCallPeerDiagnostic('peer-offer-local-description-set', {
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId,
-        signal: buildRoomCallSignalDiagnostics(offer),
-        toUserId
-      })
+      await runRoomCallPeerOperation(peerConnection.setLocalDescription(offer))
 
       const localDescription = peerConnection.localDescription
 
@@ -716,23 +437,8 @@ export const useRoomCallPeerManager = () => {
 
         return
       }
-
-      captureRoomCallPeerDiagnostic(
-        'peer-offer-local-description-missing',
-        {
-          peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-          roomCallId,
-          toUserId
-        },
-        'warning'
-      )
     } finally {
       makingOfferByUserId.delete(toUserId)
-      captureRoomCallPeerDiagnostic('peer-offer-create-finished', {
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId,
-        toUserId
-      })
     }
   }
 
@@ -746,22 +452,12 @@ export const useRoomCallPeerManager = () => {
     }
 
     recoveringPeerUserIds.add(userId)
-    captureRoomCallPeerDiagnostic('peer-connection-recover-started', {
-      localStreams: buildRoomCallLocalStreamsDiagnostics(localStreams),
-      roomCallId,
-      userId
-    })
     try {
       closeRoomCallPeer(userId, false)
 
       const peerConnection = await ensureRoomCallPeerConnection(roomCallId, userId, localStreams)
 
       await createAndSendRoomCallPeerOffer(roomCallId, userId, peerConnection)
-      captureRoomCallPeerDiagnostic('peer-connection-recover-finished', {
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId,
-        userId
-      })
     } finally {
       recoveringPeerUserIds.delete(userId)
     }
@@ -774,18 +470,10 @@ export const useRoomCallPeerManager = () => {
     localStreams: RoomCallLocalMediaStreamList
   ) => {
     if (!isRecoverableRoomCallPeerDescriptionError(error)) {
-      handleRoomCallPeerSignalError(error, {
-        peerUserId: userId,
-        roomCallId
-      })
+      handleRoomCallPeerSignalError(error)
       return
     }
 
-    captureRoomCallPeerDiagnostic('peer-description-error-recoverable', {
-      error: buildRoomCallErrorDiagnostics(error),
-      peerUserId: userId,
-      roomCallId
-    })
     await recoverRoomCallPeerConnection(roomCallId, userId, localStreams)
   }
 
@@ -797,12 +485,6 @@ export const useRoomCallPeerManager = () => {
     const peerConnection = await ensureRoomCallPeerConnection(roomCallId, toUserId, localStreams)
 
     try {
-      captureRoomCallPeerDiagnostic('peer-offer-flow-started', {
-        localStreams: buildRoomCallLocalStreamsDiagnostics(localStreams),
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId,
-        toUserId
-      })
       await createAndSendRoomCallPeerOffer(roomCallId, toUserId, peerConnection)
     } catch (error) {
       if (isRoomCallPeerTimeoutError(error)) {
@@ -819,133 +501,35 @@ export const useRoomCallPeerManager = () => {
     localStreams: RoomCallLocalMediaStreamList
   ) => {
     if (!isRoomCallSessionDescriptionSignal(payload.signal, 'offer')) {
-      captureRoomCallPeerDiagnostic(
-        'peer-offer-invalid-signal',
-        {
-          fromUserId: payload.fromUserId,
-          roomCallId: payload.roomCallId,
-          signal: buildRoomCallSignalDiagnostics(payload.signal),
-          signalKind: payload.signalKind
-        },
-        'warning'
-      )
       return
     }
 
     const peerConnection = await ensureRoomCallPeerConnection(payload.roomCallId, payload.fromUserId, localStreams)
-    captureRoomCallPeerDiagnostic('peer-offer-received', {
-      fromUserId: payload.fromUserId,
-      localStreams: buildRoomCallLocalStreamsDiagnostics(localStreams),
-      peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-      roomCallId: payload.roomCallId,
-      signal: buildRoomCallSignalDiagnostics(payload.signal)
-    })
 
     if (shouldIgnoreRoomCallPeerOfferCollision(payload.fromUserId, peerConnection)) {
       return
     }
 
-    const didRollbackLocalOffer = await rollbackRoomCallPeerLocalOffer(payload.fromUserId, peerConnection)
+    const didRollbackLocalOffer = await rollbackRoomCallPeerLocalOffer(peerConnection)
 
     if (!didRollbackLocalOffer || !hasRoomCallPeerSignalingState(peerConnection, 'stable')) {
-      captureRoomCallPeerDiagnostic(
-        'peer-offer-answer-skipped-after-rollback',
-        {
-          didRollbackLocalOffer,
-          fromUserId: payload.fromUserId,
-          peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-          roomCallId: payload.roomCallId
-        },
-        'warning'
-      )
       return
     }
 
     try {
-      captureRoomCallPeerDiagnostic('peer-offer-set-remote-started', {
-        fromUserId: payload.fromUserId,
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId: payload.roomCallId,
-        signal: buildRoomCallSignalDiagnostics(payload.signal),
-        signalId: payload.signalId
-      })
-      await runRoomCallPeerOperation('set-remote-offer', peerConnection.setRemoteDescription(payload.signal), {
-        fromUserId: payload.fromUserId,
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId: payload.roomCallId,
-        signalId: payload.signalId
-      })
-      captureRoomCallPeerDiagnostic('peer-offer-remote-description-set', {
-        fromUserId: payload.fromUserId,
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId: payload.roomCallId,
-        signal: buildRoomCallSignalDiagnostics(payload.signal),
-        signalId: payload.signalId
-      })
+      await runRoomCallPeerOperation(peerConnection.setRemoteDescription(payload.signal))
 
       if (!hasRoomCallPeerSignalingState(peerConnection, 'have-remote-offer')) {
-        captureRoomCallPeerDiagnostic(
-          'peer-answer-create-skipped',
-          {
-            fromUserId: payload.fromUserId,
-            peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-            roomCallId: payload.roomCallId
-          },
-          'warning'
-        )
         return
       }
 
-      captureRoomCallPeerDiagnostic('peer-answer-create-started', {
-        fromUserId: payload.fromUserId,
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId: payload.roomCallId
-      })
-      const answer = await runRoomCallPeerOperation('create-answer', peerConnection.createAnswer(), {
-        fromUserId: payload.fromUserId,
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId: payload.roomCallId,
-        signalId: payload.signalId
-      })
-      captureRoomCallPeerDiagnostic('peer-answer-created', {
-        fromUserId: payload.fromUserId,
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId: payload.roomCallId,
-        signal: buildRoomCallSignalDiagnostics(answer)
-      })
+      const answer = await runRoomCallPeerOperation(peerConnection.createAnswer())
 
       if (!hasRoomCallPeerSignalingState(peerConnection, 'have-remote-offer')) {
-        captureRoomCallPeerDiagnostic(
-          'peer-answer-set-local-skipped',
-          {
-            fromUserId: payload.fromUserId,
-            peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-            roomCallId: payload.roomCallId,
-            signal: buildRoomCallSignalDiagnostics(answer)
-          },
-          'warning'
-        )
         return
       }
 
-      captureRoomCallPeerDiagnostic('peer-answer-set-local-started', {
-        fromUserId: payload.fromUserId,
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId: payload.roomCallId,
-        signal: buildRoomCallSignalDiagnostics(answer)
-      })
-      await runRoomCallPeerOperation('set-local-answer', peerConnection.setLocalDescription(answer), {
-        fromUserId: payload.fromUserId,
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId: payload.roomCallId,
-        signalId: payload.signalId
-      })
-      captureRoomCallPeerDiagnostic('peer-answer-local-description-set', {
-        fromUserId: payload.fromUserId,
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId: payload.roomCallId,
-        signal: buildRoomCallSignalDiagnostics(answer)
-      })
+      await runRoomCallPeerOperation(peerConnection.setLocalDescription(answer))
       await flushRoomCallPeerIceCandidates(payload.fromUserId, peerConnection)
 
       const localDescription = peerConnection.localDescription
@@ -964,16 +548,6 @@ export const useRoomCallPeerManager = () => {
 
         return
       }
-
-      captureRoomCallPeerDiagnostic(
-        'peer-answer-local-description-missing',
-        {
-          fromUserId: payload.fromUserId,
-          peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-          roomCallId: payload.roomCallId
-        },
-        'warning'
-      )
     } catch (error) {
       if (isRoomCallPeerTimeoutError(error)) {
         await recoverRoomCallPeerConnection(payload.roomCallId, payload.fromUserId, localStreams)
@@ -991,55 +565,15 @@ export const useRoomCallPeerManager = () => {
     const peerConnection = peerConnectionByUserId.get(payload.fromUserId)
 
     if (!peerConnection || !isRoomCallSessionDescriptionSignal(payload.signal, 'answer')) {
-      captureRoomCallPeerDiagnostic(
-        'peer-answer-ignored',
-        {
-          fromUserId: payload.fromUserId,
-          hasPeerConnection: Boolean(peerConnection),
-          roomCallId: payload.roomCallId,
-          signal: buildRoomCallSignalDiagnostics(payload.signal),
-          signalKind: payload.signalKind
-        },
-        'warning'
-      )
       return
     }
 
     if (peerConnection.signalingState !== 'have-local-offer') {
-      captureRoomCallPeerDiagnostic(
-        'peer-answer-wrong-signaling-state',
-        {
-          fromUserId: payload.fromUserId,
-          peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-          roomCallId: payload.roomCallId,
-          signal: buildRoomCallSignalDiagnostics(payload.signal)
-        },
-        'warning'
-      )
       return
     }
 
     try {
-      captureRoomCallPeerDiagnostic('peer-answer-set-remote-started', {
-        fromUserId: payload.fromUserId,
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId: payload.roomCallId,
-        signal: buildRoomCallSignalDiagnostics(payload.signal),
-        signalId: payload.signalId
-      })
-      await runRoomCallPeerOperation('set-remote-answer', peerConnection.setRemoteDescription(payload.signal), {
-        fromUserId: payload.fromUserId,
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId: payload.roomCallId,
-        signalId: payload.signalId
-      })
-      captureRoomCallPeerDiagnostic('peer-answer-remote-description-set', {
-        fromUserId: payload.fromUserId,
-        peer: buildRoomCallPeerConnectionDiagnostics(peerConnection),
-        roomCallId: payload.roomCallId,
-        signal: buildRoomCallSignalDiagnostics(payload.signal),
-        signalId: payload.signalId
-      })
+      await runRoomCallPeerOperation(peerConnection.setRemoteDescription(payload.signal))
       await flushRoomCallPeerIceCandidates(payload.fromUserId, peerConnection)
     } catch (error) {
       if (isRoomCallPeerTimeoutError(error)) {
@@ -1053,20 +587,9 @@ export const useRoomCallPeerManager = () => {
 
   const addRoomCallPeerIceCandidate = async (payload: EventRoomCallSignalReceived) => {
     if (!isRoomCallIceCandidateSignal(payload.signal)) {
-      captureRoomCallPeerDiagnostic(
-        'peer-ice-candidate-invalid-signal',
-        {
-          fromUserId: payload.fromUserId,
-          roomCallId: payload.roomCallId,
-          signal: buildRoomCallSignalDiagnostics(payload.signal),
-          signalKind: payload.signalKind
-        },
-        'warning'
-      )
       return
     }
 
-    incrementPeerCounter(receivedIceCandidateCountByUserId, payload.fromUserId)
     const peerConnection = peerConnectionByUserId.get(payload.fromUserId)
 
     if (!peerConnection) {
@@ -1079,7 +602,7 @@ export const useRoomCallPeerManager = () => {
       return
     }
 
-    await addRoomCallPeerIceCandidateToConnection(payload.fromUserId, peerConnection, payload.signal)
+    await addRoomCallPeerIceCandidateToConnection(peerConnection, payload.signal)
   }
 
   const handleRoomCallSignalReceived = async (
@@ -1087,22 +610,7 @@ export const useRoomCallPeerManager = () => {
     roomCallId: string,
     localStreams: RoomCallLocalMediaStreamList
   ) => {
-    captureRoomCallPeerDiagnostic('peer-signal-received', {
-      activeRoomCallId: roomCallId,
-      fromUserId: payload.fromUserId,
-      roomCallId: payload.roomCallId,
-      signal: buildRoomCallSignalDiagnostics(payload.signal),
-      signalId: payload.signalId,
-      signalKind: payload.signalKind
-    })
     if (payload.roomCallId !== roomCallId) {
-      captureRoomCallPeerDiagnostic('peer-signal-ignored-by-room', {
-        activeRoomCallId: roomCallId,
-        fromUserId: payload.fromUserId,
-        payloadRoomCallId: payload.roomCallId,
-        signal: buildRoomCallSignalDiagnostics(payload.signal),
-        signalKind: payload.signalKind
-      })
       return
     }
 
@@ -1153,12 +661,6 @@ export const useRoomCallPeerManager = () => {
   }
 
   const syncRoomCallPeerTracks = async (roomCallId: string, localStreams: RoomCallLocalMediaStreamList) => {
-    captureRoomCallPeerDiagnostic('peer-local-tracks-sync-started', {
-      ...buildRoomCallLocalTrackIdDiagnostics(localStreams),
-      localStreams: buildRoomCallLocalStreamsDiagnostics(localStreams),
-      peerUserIds: Array.from(peerConnectionByUserId.keys()),
-      roomCallId
-    })
     await Promise.all(
       Array.from(peerConnectionByUserId.keys()).map(async (userId) => {
         await enqueueRoomCallPeerTask(userId, async () => {
@@ -1179,9 +681,6 @@ export const useRoomCallPeerManager = () => {
   }
 
   const resetRoomCallPeers = () => {
-    captureRoomCallPeerDiagnostic('peer-reset-started', {
-      peerUserIds: Array.from(peerConnectionByUserId.keys())
-    })
     Array.from(peerConnectionByUserId.keys()).forEach((userId) => {
       closeRoomCallPeer(userId)
     })
@@ -1194,7 +693,6 @@ export const useRoomCallPeerManager = () => {
     localUserId = null
     roomCallRtcConfiguration = ROOM_CALL_RTC_CONFIGURATION
     pauseConnectionQualityMonitor()
-    captureRoomCallDiagnostic('peer-reset-finished')
   }
 
   return {

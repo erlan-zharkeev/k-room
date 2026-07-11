@@ -82,8 +82,6 @@ export const useHttpInterceptor = () => {
       }
 
       if (silent) {
-        log('error', text ?? fallbackMessage)
-
         return createHttpError({
           message: errorMessage,
           status,

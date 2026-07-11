@@ -11,6 +11,7 @@ import {
 import { router } from '../router'
 
 import { initClientFreezeMonitor } from './init-client-freeze-monitor'
+import { CLIENT_SENTRY_NORMALIZE_DEPTH } from './sentry/constants'
 import type { VueApp } from './types'
 
 const shouldIgnoreClientSentryException = (originalException: unknown) => {
@@ -49,6 +50,7 @@ export const initSentry = (app: VueApp) => {
     app,
     dsn: sentryDsnClient,
     environment: sentryEnvironment,
+    normalizeDepth: CLIENT_SENTRY_NORMALIZE_DEPTH,
     release: appVersion,
     tunnel: `${apiBaseUrl}${MONITORING_ENDPOINTS.sentryEnvelope}`,
     integrations: [Sentry.browserTracingIntegration({ router })],

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { NmorphText, NmorphButton, NmorphCard } from '@nmorph/nmorph-ui-kit'
+import { ROUTE_NAMES } from 'global-shared'
+import { RouterLink } from 'vue-router'
 
 import { PageBackButton } from 'src/features/page-back-button'
 
@@ -77,28 +79,14 @@ const {
           >
             <span class="download-page__download-button-content">
               <span class="download-page__platform-logo" aria-hidden="true">
-                <svg
+                <span
                   v-if="item.platformId === 'windows'"
-                  class="download-page__platform-svg"
-                  viewBox="0 0 4875 4875"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill="#0078d4"
-                    d="M0 0h2311v2310H0zm2564 0h2311v2310H2564zM0 2564h2311v2311H0zm2564 0h2311v2311H2564"
-                  />
-                </svg>
-                <svg
+                  class="download-page__platform-svg download-page__platform-svg--windows"
+                />
+                <span
                   v-else-if="item.platformId === 'macos'"
                   class="download-page__platform-svg download-page__platform-svg--macos"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"
-                  />
-                </svg>
+                />
               </span>
               <span class="download-page__download-button-text">
                 <NmorphText color="var(--nmorph-contrast-text-color)" weight="bold">{{ item.label }}</NmorphText>
@@ -124,17 +112,14 @@ const {
           $t(DOWNLOAD_PAGE_I18N.pwaInstallTitle, { appName: appName })
         }}</NmorphText>
 
-        <div class="download-page__mobile-install-group">
-          <NmorphText as="h3" weight="bold">Android</NmorphText>
-          <NmorphText as="p" color="semi-contrast">{{ $t(DOWNLOAD_PAGE_I18N.pwaAndroidInstallHelp) }}</NmorphText>
+        <div class="download-page__mobile-install-actions">
+          <RouterLink custom :to="ROUTE_NAMES.pwaInstallAndroid" v-slot="{ navigate }">
+            <NmorphButton fill text="Android" thickness="thick" @click="navigate" />
+          </RouterLink>
+          <RouterLink custom :to="ROUTE_NAMES.pwaInstallIos" v-slot="{ navigate }">
+            <NmorphButton fill text="iOS / iPadOS" thickness="thick" @click="navigate" />
+          </RouterLink>
         </div>
-
-        <div class="download-page__mobile-install-group">
-          <NmorphText as="h3" weight="bold">iOS</NmorphText>
-          <NmorphText as="p" color="semi-contrast">{{ $t(DOWNLOAD_PAGE_I18N.pwaIosInstallHelp) }}</NmorphText>
-        </div>
-
-        <NmorphText as="p" color="semi-contrast">{{ $t(DOWNLOAD_PAGE_I18N.pwaAutoInstallNote) }}</NmorphText>
       </section>
     </NmorphCard>
   </div>
@@ -180,15 +165,17 @@ const {
   gap: 8px;
 }
 
-.download-page__mobile-install,
-.download-page__mobile-install-group {
-  display: grid;
-  gap: 8px;
-}
-
 .download-page__mobile-install {
+  display: grid;
+  gap: 12px;
   padding-top: 12px;
   border-top: 1px solid color-mix(in srgb, var(--nmorph-contrast-text-color), transparent 88%);
+}
+
+.download-page__mobile-install-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .download-page__download-button-content {
@@ -200,11 +187,23 @@ const {
 
 .download-page__platform-svg {
   display: block;
+
   width: 18px;
   height: 18px;
+
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+}
+
+.download-page__platform-svg--windows {
+  background-color: #0078d4;
+  mask-image: url('../assets/windows.svg');
 }
 
 .download-page__platform-svg--macos {
   margin-bottom: 2px;
+  background-color: currentcolor;
+  mask-image: url('../assets/macos.svg');
 }
 </style>

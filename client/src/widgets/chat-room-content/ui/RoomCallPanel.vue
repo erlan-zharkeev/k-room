@@ -3,10 +3,8 @@ import {
   NmorphButton,
   NmorphIcon,
   NmorphIconClose,
-  NmorphIconExpand,
   NmorphIconFullScreen,
   NmorphIconGrid,
-  NmorphIconHand,
   NmorphIconMicrophone,
   NmorphIconMonitor,
   NmorphIconMute,
@@ -19,11 +17,8 @@ import {
 
 import { ROOM_CALL_SESSION_I18N, RoomCallDeviceMenu } from 'src/features/room-call-session'
 
-import {
-  ROOM_CALL_QUICK_COMMANDS,
-  ROOM_CALL_QUICK_COMMANDS_TOGGLE_I18N,
-  ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE
-} from '../config/constants'
+import { ROOM_CALL_QUICK_COMMANDS, ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE } from '../config/constants'
+import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { RoomCallPanelEmits, RoomCallPanelProps } from '../config/types'
 import { useRoomCallPanel } from '../model/use-room-call-panel.model'
 
@@ -32,8 +27,10 @@ import RoomCallTile from './RoomCallTile.vue'
 const props = defineProps<RoomCallPanelProps>()
 const emit = defineEmits<RoomCallPanelEmits>()
 const {
+  closeRoomCallQuickCommands,
   focusRoomCallTile,
   isLocalHandRaised,
+  isRoomCallFallbackFullscreen,
   isRoomCallFocusDisplayMode,
   isRoomCallQuickCommandsExpanded,
   isRoomCallQuickCommandsAvailable,
@@ -42,6 +39,7 @@ const {
   isScreenSharingControlVisible,
   leaveRoomCall,
   roomCallDisplayModeToggleI18n,
+  roomCallHandQuickCommandI18n,
   roomCallMainTileItem,
   roomCallPanelTilesStyle,
   roomCallSecondaryTileItems,
@@ -57,7 +55,11 @@ const {
 </script>
 
 <template>
-  <div ref="roomCallPanel" class="room-call-panel">
+  <div
+    ref="roomCallPanel"
+    class="room-call-panel"
+    :class="{ 'room-call-panel--fallback-fullscreen': isRoomCallFallbackFullscreen }"
+  >
     <div
       class="room-call-panel__tiles"
       :style="roomCallPanelTilesStyle"
@@ -103,66 +105,21 @@ const {
       </template>
     </div>
     <div class="room-call-panel__bottom">
-      <div
-        class="room-call-panel__quick-commands-bar"
-        :class="{ 'room-call-panel__quick-commands-bar--expanded': isRoomCallQuickCommandsExpanded }"
-      >
-        <NmorphButton
-          class="room-call-panel__quick-commands-toggle"
-          design="plain"
-          borderless
-          shape="circle"
-          :disabled="!isRoomCallQuickCommandsAvailable"
-          :aria-label="$t(ROOM_CALL_QUICK_COMMANDS_TOGGLE_I18N)"
-          @click="toggleRoomCallQuickCommands"
-        >
-          <template #icon-only>
-            <NmorphIcon>
-              <NmorphIconShrink v-if="isRoomCallQuickCommandsExpanded" />
-              <NmorphIconExpand v-else />
-            </NmorphIcon>
-          </template>
-        </NmorphButton>
-        <div
-          class="room-call-panel__quick-commands"
-          :aria-hidden="!isRoomCallQuickCommandsExpanded"
-          :inert="!isRoomCallQuickCommandsExpanded"
-        >
-          <template v-for="command in ROOM_CALL_QUICK_COMMANDS" :key="command.id">
-            <NmorphButton
-              v-if="command.id === 'raise-hand'"
-              class="room-call-panel__quick-command room-call-panel__quick-command--icon"
-              design="plain"
-              borderless
-              thickness="thin"
-              shape="circle"
-              :active="isLocalHandRaised"
-              :disabled="!isRoomCallQuickCommandsAvailable"
-              :aria-label="$t(command.i18n)"
-              @click="sendRoomCallQuickCommand(command.id)"
-            >
-              <template #icon-only>
-                <NmorphIcon width="15px" height="15px">
-                  <NmorphIconHand />
-                </NmorphIcon>
-              </template>
-            </NmorphButton>
-            <NmorphButton
-              v-if="command.id !== 'raise-hand'"
-              class="room-call-panel__quick-command room-call-panel__quick-command--text"
-              design="plain"
-              borderless
-              thickness="thin"
-              :disabled="!isRoomCallQuickCommandsAvailable"
-              :aria-label="$t(command.i18n)"
-              :text="$t(command.i18n)"
-              @click="sendRoomCallQuickCommand(command.id)"
-            >
-            </NmorphButton>
-          </template>
-        </div>
-      </div>
       <div class="room-call-panel__self">
+        <div class="room-call-panel__self-leading">
+          <NmorphButton
+            class="room-call-panel__quick-commands-toggle"
+            design="plain"
+            borderless
+            shape="circle"
+            color="var(--nmorph-accent-color)"
+            :active="isRoomCallQuickCommandsExpanded"
+            :disabled="!isRoomCallQuickCommandsAvailable"
+            :aria-label="$t(CHAT_ROOM_CONTENT_I18N.roomCallQuickCommands)"
+            :text="$t(CHAT_ROOM_CONTENT_I18N.roomCallQuickCommandsShortcut)"
+            @click="toggleRoomCallQuickCommands"
+          />
+        </div>
         <div class="room-call-panel__self-controls">
           <NmorphButton
             design="plain"
@@ -202,30 +159,44 @@ const {
               </NmorphIcon>
             </template>
           </NmorphButton>
-          <RoomCallDeviceMenu :disabled="props.isBusy" />
+          <RoomCallDeviceMenu :disabled="props.isBusy">
+            <NmorphButton
+              v-if="isScreenSharingControlVisible"
+              design="plain"
+              borderless
+              shape="circle"
+              :active="props.localMediaState.screen"
+              :disabled="isScreenSharingControlDisabled"
+              :aria-label="$t(ROOM_CALL_SESSION_I18N.toggleScreenRoomCall)"
+              @click="toggleScreenSharing"
+            >
+              <template #icon-only>
+                <NmorphIcon width="17px" height="17px">
+                  <NmorphIconMonitor />
+                </NmorphIcon>
+              </template>
+            </NmorphButton>
+            <NmorphButton
+              class="room-call-panel__display-mode"
+              design="plain"
+              borderless
+              shape="circle"
+              :aria-label="$t(roomCallDisplayModeToggleI18n)"
+              @click="toggleRoomCallPanelDisplayMode"
+            >
+              <template #icon-only>
+                <NmorphIcon width="17px" height="17px">
+                  <NmorphIconGrid v-if="isRoomCallFocusDisplayMode" />
+                  <NmorphIconListSimple v-else />
+                </NmorphIcon>
+              </template>
+            </NmorphButton>
+          </RoomCallDeviceMenu>
           <NmorphButton
-            v-if="isScreenSharingControlVisible"
             design="plain"
             borderless
             shape="circle"
-            :active="props.localMediaState.screen"
-            :disabled="isScreenSharingControlDisabled"
-            :aria-label="$t(ROOM_CALL_SESSION_I18N.toggleScreenRoomCall)"
-            @click="toggleScreenSharing"
-          >
-            <template #icon-only>
-              <NmorphIcon
-                :width="ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE"
-                :height="ROOM_CALL_TILE_SELF_CONTROL_ICON_SIZE"
-              >
-                <NmorphIconMonitor />
-              </NmorphIcon>
-            </template>
-          </NmorphButton>
-          <NmorphButton
-            design="plain"
-            borderless
-            shape="circle"
+            color="var(--nmorph-error-text-color)"
             :disabled="props.isBusy && !props.isLeaving"
             :loading="props.isLeaving"
             :aria-label="$t(ROOM_CALL_SESSION_I18N.leaveRoomCall)"
@@ -242,21 +213,6 @@ const {
           </NmorphButton>
         </div>
         <div class="room-call-panel__self-actions">
-          <NmorphButton
-            class="room-call-panel__display-mode"
-            design="plain"
-            borderless
-            shape="circle"
-            :aria-label="$t(roomCallDisplayModeToggleI18n)"
-            @click="toggleRoomCallPanelDisplayMode"
-          >
-            <template #icon-only>
-              <NmorphIcon>
-                <NmorphIconGrid v-if="isRoomCallFocusDisplayMode" />
-                <NmorphIconListSimple v-else />
-              </NmorphIcon>
-            </template>
-          </NmorphButton>
           <NmorphButton
             class="room-call-panel__fullscreen"
             design="plain"
@@ -280,6 +236,47 @@ const {
           </NmorphButton>
         </div>
       </div>
+      <div v-if="isRoomCallQuickCommandsExpanded" class="room-call-panel__quick-actions">
+        <div class="room-call-panel__quick-actions-list">
+          <template v-for="command in ROOM_CALL_QUICK_COMMANDS" :key="command.id">
+            <NmorphButton
+              v-if="command.id === 'raise-hand'"
+              class="room-call-panel__quick-action"
+              design="plain"
+              borderless
+              :active="isLocalHandRaised"
+              :disabled="!isRoomCallQuickCommandsAvailable"
+              :aria-label="$t(roomCallHandQuickCommandI18n)"
+              :text="$t(roomCallHandQuickCommandI18n)"
+              @click="sendRoomCallQuickCommand(command.id)"
+            />
+            <NmorphButton
+              v-else
+              class="room-call-panel__quick-action"
+              design="plain"
+              borderless
+              :disabled="!isRoomCallQuickCommandsAvailable"
+              :aria-label="$t(command.i18n)"
+              :text="$t(command.i18n)"
+              @click="sendRoomCallQuickCommand(command.id)"
+            />
+          </template>
+        </div>
+        <NmorphButton
+          class="room-call-panel__quick-actions-close"
+          design="plain"
+          borderless
+          shape="circle"
+          :aria-label="$t(CHAT_ROOM_CONTENT_I18N.roomCallCloseQuickCommands)"
+          @click="closeRoomCallQuickCommands"
+        >
+          <template #icon-only>
+            <NmorphIcon>
+              <NmorphIconClose />
+            </NmorphIcon>
+          </template>
+        </NmorphButton>
+      </div>
     </div>
   </div>
 </template>
@@ -297,9 +294,27 @@ const {
 }
 
 .room-call-panel:fullscreen {
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
   padding: 12px;
+
+  background: var(--nmorph-main-color);
+}
+
+.room-call-panel--fallback-fullscreen {
+  position: fixed;
+  z-index: 10000;
+  inset: 0;
+
+  box-sizing: border-box;
+  width: 100vw;
+  width: 100dvw;
+  height: 100vh;
+  height: 100dvh;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+
   background: var(--nmorph-main-color);
 }
 
@@ -354,97 +369,69 @@ const {
 }
 
 .room-call-panel__bottom {
-  --room-call-panel-quick-commands-toggle-width: 48px;
-  --room-call-panel-quick-command-icon-width: 28px;
-  --room-call-panel-quick-command-text-min-width: 56px;
-  --room-call-panel-quick-command-gap: 4px;
-  --room-call-panel-quick-commands-expanded-width: calc(
-    var(--room-call-panel-quick-commands-toggle-width) + var(--room-call-panel-quick-command-icon-width) +
-      var(--room-call-panel-quick-command-text-min-width) + var(--room-call-panel-quick-command-text-min-width) +
-      var(--room-call-panel-quick-command-text-min-width) + var(--room-call-panel-quick-command-gap) +
-      var(--room-call-panel-quick-command-gap) + var(--room-call-panel-quick-command-gap)
-  );
-
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 8px;
-  align-items: stretch;
 
+  width: 100%;
   max-width: 100%;
 }
 
-.room-call-panel__quick-commands-bar,
 .room-call-panel__self {
-  border-radius: 8px;
-  background: var(--app-shadow-dark);
-}
-
-.room-call-panel__quick-commands-bar {
-  overflow: hidden;
   display: flex;
-  flex: 0 1 var(--room-call-panel-quick-commands-toggle-width);
   align-items: center;
-  justify-content: flex-start;
 
   box-sizing: border-box;
-  width: var(--room-call-panel-quick-commands-toggle-width);
-  min-width: var(--room-call-panel-quick-commands-toggle-width);
-  max-width: 100%;
-
-  transition: flex-basis 0.18s ease, width 0.18s ease;
-}
-
-.room-call-panel__quick-commands-bar--expanded {
-  flex-basis: min(100%, var(--room-call-panel-quick-commands-expanded-width));
-  width: min(100%, var(--room-call-panel-quick-commands-expanded-width));
-}
-
-.room-call-panel__quick-commands-toggle {
-  display: flex;
-  flex: 0 0 var(--room-call-panel-quick-commands-toggle-width);
-  justify-content: center;
-}
-
-.room-call-panel__quick-commands {
-  transform: translateX(100%);
-
-  display: flex;
-  flex: 0 0 auto;
-  gap: var(--room-call-panel-quick-command-gap);
-  align-items: center;
-
-  transition: transform 0.18s ease;
-}
-
-.room-call-panel__quick-commands-bar--expanded .room-call-panel__quick-commands {
-  transform: translateX(0);
-}
-
-.room-call-panel__quick-command {
-  flex: 0 0 auto;
-}
-
-.room-call-panel__quick-command--icon {
-  width: var(--room-call-panel-quick-command-icon-width);
-  min-width: var(--room-call-panel-quick-command-icon-width);
-}
-
-.room-call-panel__quick-command--text {
-  min-width: var(--room-call-panel-quick-command-text-min-width);
-}
-
-.room-call-panel__self {
-  display: grid;
-  grid-template-columns: 1fr max-content 1fr;
-  flex: 1 1 180px;
-  align-items: center;
-
+  width: 100%;
   min-width: 0;
   max-width: 100%;
   padding: 8px 10px;
+  border-radius: 8px;
+
+  background: var(--app-shadow-dark);
+}
+
+.room-call-panel__self-leading {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: flex-start;
+
+  min-width: 0;
 }
 
 .room-call-panel__self-controls {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 6px;
+  align-items: center;
+}
+
+.room-call-panel__self-actions {
+  display: flex;
+  flex: 1 1 0;
+  gap: 6px;
+  align-items: center;
+  justify-content: flex-end;
+
+  min-width: 0;
+}
+
+.room-call-panel__quick-actions {
+  display: grid;
+  grid-template-columns: 1fr max-content 1fr;
+  align-items: center;
+
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+
+  background: var(--app-shadow-dark);
+}
+
+.room-call-panel__quick-actions-list {
   display: flex;
   grid-column: 2;
   gap: 6px;
@@ -452,50 +439,18 @@ const {
   justify-content: center;
 }
 
-.room-call-panel__self-actions {
-  display: flex;
+.room-call-panel__quick-action {
+  flex: 0 0 auto;
+}
+
+.room-call-panel__quick-actions-close {
   grid-column: 3;
-  gap: 6px;
-  align-items: center;
   justify-self: end;
 }
 
 @media (width < 560px) {
-  .room-call-panel__bottom {
-    display: grid;
-    grid-template-columns: var(--room-call-panel-quick-commands-toggle-width) minmax(0, 1fr) var(
-        --room-call-panel-quick-commands-toggle-width
-      );
-  }
-
-  .room-call-panel__quick-commands-bar {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .room-call-panel__quick-commands-bar--expanded {
-    grid-column: 1 / -1;
-    width: 100%;
-  }
-
   .room-call-panel__self {
-    display: flex;
-    grid-column: 2;
-    gap: 6px;
-    justify-content: center;
-
     padding: 8px;
-  }
-
-  .room-call-panel__quick-commands-bar--expanded + .room-call-panel__self {
-    grid-column: 1 / -1;
-  }
-
-  .room-call-panel__self-controls,
-  .room-call-panel__self-actions {
-    grid-column: auto;
-    flex: 0 0 auto;
-    justify-self: auto;
   }
 }
 </style>
