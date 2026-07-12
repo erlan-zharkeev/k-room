@@ -15,6 +15,7 @@ export interface NotificationGroupSettings {
 }
 
 export interface DeviceNotificationSettings {
+  browserPushPermissionPromptDismissed: boolean
   enabled: boolean
   general: NotificationGroupSettings
   messages: NotificationGroupSettings

@@ -409,17 +409,13 @@ export const sendRoomCallSignal = async (
   }
 
   try {
-    const delivered = await emitRoomCallSignalReceived(targetParticipant.socketId, {
+    return await emitRoomCallSignalReceived(targetParticipant.socketId, {
       fromUserId: userId,
       roomCallId,
       signal,
       signalId,
       signalKind
     })
-
-    if (!delivered) {
-      throw new Error('Room call signal recipient did not acknowledge delivery')
-    }
   } catch (error) {
     throw new AppError(REQ_STATUS.server, ROOM_CALLS_I18N.roomCallSignalFailed, true, error)
   }

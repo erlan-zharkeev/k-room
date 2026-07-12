@@ -41,7 +41,7 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   const { t } = useI18n()
   const toast = useAppToast()
   const { isPrivate: isChatRoomPrivate } = useChatRoom()
-  const { put: putRoomCall, roomCalls } = useRoomCall()
+  const { merge: mergeRoomCall, roomCalls } = useRoomCall()
   const { settings, setByPath } = useSettings()
   const { hasInteracted } = useSystem()
   const { playAppSound, startLoopAppSound, stopAppSound } = useAppSound()
@@ -169,6 +169,13 @@ export const useActiveRoomCallSession = createGlobalState(() => {
 
       return belongsToRoom && isRoomCallUnfinished(roomCall)
     })
+  const isActiveRoomCallSessionCurrent = (roomCallId: string) => {
+    if (activeRoomCallId.value !== roomCallId) return false
+
+    const roomCall = activeRoomCall.value
+
+    return !roomCall || isRoomCallUnfinished(roomCall)
+  }
 
   const canStartActiveRoomCall = (roomId: string) => {
     const hasRoomId = Boolean(roomId)
@@ -342,9 +349,13 @@ export const useActiveRoomCallSession = createGlobalState(() => {
     }
 
     isStartingRoomCall.value = true
+    let startedRoomCallId = ''
+    let isRoomCallSessionActivated = false
+    let failureKind: 'connection' | 'media' = 'media'
 
     try {
       await startRoomCallLocalMedia(mediaKind)
+      failureKind = 'connection'
 
       const response = await startRoomCall(roomId, mediaKind)
 
@@ -356,18 +367,54 @@ export const useActiveRoomCallSession = createGlobalState(() => {
 
       const { roomCall, roomCallId, rtcConfiguration } = response.payload
 
+      startedRoomCallId = roomCallId
       setRoomCallPeerRtcConfiguration(rtcConfiguration)
-      await putRoomCall(roomCall)
+      await mergeRoomCall(roomCall)
       activeRoomCallId.value = roomCallId
+      isRoomCallSessionActivated = true
       syncRoomCallRuntimeState(roomCallId)
+
+      if (!isActiveRoomCallSessionCurrent(roomCallId)) {
+        clearActiveRoomCallSessionState()
+        return null
+      }
+
       await syncActiveRoomCallLocalState()
+
+      if (!isActiveRoomCallSessionCurrent(roomCallId)) {
+        clearActiveRoomCallSessionState()
+        return null
+      }
+
       void startOutgoingRoomCallSound(roomCallId)
 
       return roomCallId
     } catch (error) {
-      log('error', 'Start room call failed', error)
+      const isLifecycleCancellation = isRoomCallSessionActivated && !isActiveRoomCallSessionCurrent(startedRoomCallId)
+
+      if (isLifecycleCancellation) {
+        clearActiveRoomCallSessionState()
+        return null
+      }
+
+      log('error', failureKind === 'media' ? 'Start room call media failed' : 'Connect started room call failed', error)
+
+      if (startedRoomCallId) {
+        try {
+          await leaveRoomCall(startedRoomCallId, 'left')
+        } catch (leaveError) {
+          log('error', 'Leave failed room call start failed', leaveError)
+        }
+      }
+
       clearActiveRoomCallSessionState()
-      showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallStartFailed))
+      showRoomCallSessionError(
+        t(
+          failureKind === 'media'
+            ? ROOM_CALL_SESSION_I18N.roomCallStartFailed
+            : ROOM_CALL_SESSION_I18N.roomCallConnectionFailed
+        )
+      )
       return null
     } finally {
       isStartingRoomCall.value = false
@@ -377,6 +424,8 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   const joinActiveRoomCall = async (roomCallId: string, mediaKind?: RoomCallMediaKind) => {
     isJoiningRoomCall.value = true
     startJoiningRoomCall(roomCallId)
+    let hasJoinedRoomCall = false
+    let failureKind: 'connection' | 'media' = 'connection'
 
     try {
       const response = await joinRoomCall(roomCallId)
@@ -389,23 +438,79 @@ export const useActiveRoomCallSession = createGlobalState(() => {
       const { participantQuickCommandStateByUserId, roomCall, rtcConfiguration } = response.payload
       const localMediaKind = resolveRoomCallJoinMediaKind(roomCall, mediaKind)
 
+      hasJoinedRoomCall = true
       setRoomCallPeerRtcConfiguration(rtcConfiguration)
-      await putRoomCall(roomCall)
-      await startRoomCallLocalMedia(localMediaKind)
-
       activeRoomCallId.value = roomCall.id
       syncRoomCallRuntimeState(roomCall.id)
       syncInitialRoomCallParticipantQuickCommandStates(participantQuickCommandStateByUserId)
+      await mergeRoomCall(roomCall)
+
+      if (!isActiveRoomCallSessionCurrent(roomCall.id)) {
+        clearActiveRoomCallSessionState()
+        return null
+      }
+
+      failureKind = 'media'
+      await startRoomCallLocalMedia(localMediaKind)
+
+      if (!isActiveRoomCallSessionCurrent(roomCall.id)) {
+        clearActiveRoomCallSessionState()
+        return null
+      }
+
+      failureKind = 'connection'
       await syncActiveRoomCallLocalState()
+
+      if (!isActiveRoomCallSessionCurrent(roomCall.id)) {
+        clearActiveRoomCallSessionState()
+        return null
+      }
+
       await flushPendingRoomCallSignals(roomCall.id)
+
+      if (!isActiveRoomCallSessionCurrent(roomCall.id)) {
+        clearActiveRoomCallSessionState()
+        return null
+      }
+
       await connectActiveRoomCallPeers(roomCall)
+
+      if (!isActiveRoomCallSessionCurrent(roomCall.id)) {
+        clearActiveRoomCallSessionState()
+        return null
+      }
 
       return roomCall
     } catch (error) {
-      log('error', 'Join room call failed', error)
-      await leaveRoomCall(roomCallId, 'left')
+      const isLifecycleCancellation = hasJoinedRoomCall && !isActiveRoomCallSessionCurrent(roomCallId)
+
+      if (isLifecycleCancellation) {
+        clearActiveRoomCallSessionState()
+        return null
+      }
+
+      log(
+        'error',
+        failureKind === 'media' ? 'Start joined room call media failed' : 'Connect joined room call failed',
+        error
+      )
+
+      if (hasJoinedRoomCall) {
+        try {
+          await leaveRoomCall(roomCallId, 'left')
+        } catch (leaveError) {
+          log('error', 'Leave failed room call join failed', leaveError)
+        }
+      }
+
       clearActiveRoomCallSessionState()
-      showRoomCallSessionError(t(ROOM_CALL_SESSION_I18N.roomCallJoinFailed))
+      showRoomCallSessionError(
+        t(
+          failureKind === 'media'
+            ? ROOM_CALL_SESSION_I18N.roomCallJoinFailed
+            : ROOM_CALL_SESSION_I18N.roomCallConnectionFailed
+        )
+      )
       return null
     } finally {
       stopJoiningRoomCall(roomCallId)
@@ -558,10 +663,14 @@ export const useActiveRoomCallSession = createGlobalState(() => {
   }
 
   watch(localMediaState, () => {
+    if (isJoiningRoomCall.value) return
+
     void syncActiveRoomCallLocalState()
   })
 
   watch(activeRoomCallPeerParticipantKey, () => {
+    if (isJoiningRoomCall.value) return
+
     void connectActiveRoomCallPeers()
   })
 

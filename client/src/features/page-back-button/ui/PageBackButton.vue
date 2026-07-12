@@ -25,4 +25,9 @@ const { handleBack } = usePageBackButton()
 .page-back-button {
   justify-self: start;
 }
+
+.page-back-button :deep(.nmorph-button__content) {
+  padding-right: 0;
+  padding-left: 0;
+}
 </style>

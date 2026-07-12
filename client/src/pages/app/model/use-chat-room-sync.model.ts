@@ -15,6 +15,7 @@ import { useSettings } from 'src/entities/setting'
 import { useUser } from 'src/entities/user'
 import { APP_PAGE_ROUTES } from 'src/features/app-navigation'
 import { usePinChatRoomOrder } from 'src/features/pin-chat-room'
+import { markSocketDataSnapshotLoaded } from 'src/shared/api'
 
 import { filterRoomPayloadMessages } from '../lib/filter-room-payload-messages'
 
@@ -35,10 +36,14 @@ export const useChatRoomSync = () => {
   }
 
   const actualizeChatRooms = async (rooms: EventGetRooms) => {
-    const visibleRooms = rooms.filter(isChatRoomVisible)
+    try {
+      const visibleRooms = rooms.filter(isChatRoomVisible)
 
-    await saveRoomPayloadMessages(visibleRooms)
-    await merge(visibleRooms.map(filterRoomPayloadMessages))
+      await saveRoomPayloadMessages(visibleRooms)
+      await merge(visibleRooms.map(filterRoomPayloadMessages))
+    } finally {
+      markSocketDataSnapshotLoaded('actual-chat-rooms')
+    }
   }
 
   const addChatRoom = async (room: EventGetRooms[number]) => {

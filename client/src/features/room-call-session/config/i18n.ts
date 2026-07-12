@@ -152,6 +152,11 @@ export const ROOM_CALL_SESSION_I18N = defineI18n('roomCallSession', {
     ru: 'Не удалось присоединиться к звонку. Проверьте доступ к микрофону и камере в браузере и системе.',
     zh: '无法加入通话。请检查浏览器和系统中的麦克风和摄像头权限。'
   },
+  roomCallConnectionFailed: {
+    en: 'Could not establish call connection. Please try again.',
+    ru: 'Не удалось установить соединение для звонка. Попробуйте ещё раз.',
+    zh: '无法建立通话连接。请重试。'
+  },
   roomCallAudioStartFailed: {
     en: 'Could not turn on microphone. Check microphone access in browser and system settings.',
     ru: 'Не удалось включить микрофон. Проверьте доступ к микрофону в браузере и системе.',

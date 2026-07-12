@@ -9,6 +9,8 @@ import type {
   RoomCall
 } from 'global-shared'
 
+import { markSocketDataSnapshotLoaded } from 'src/shared/api'
+
 import {
   applyRoomCallSnapshot,
   applyRoomCallEnded,
@@ -24,10 +26,14 @@ export const useRoomCallSync = () => {
   const { get, mergeMany, mutate, put, remove } = useRoomCall()
 
   const syncRoomCalls = async (roomCalls: EventRoomCallsUpdated) => {
-    await mergeMany(roomCalls, {
-      merge: mergeRoomCallSnapshot,
-      removeMissing: true
-    })
+    try {
+      await mergeMany(roomCalls, {
+        merge: mergeRoomCallSnapshot,
+        removeMissing: true
+      })
+    } finally {
+      markSocketDataSnapshotLoaded('room-calls-updated')
+    }
   }
 
   const syncRoomCall = async (incomingRoomCall: RoomCall) => {

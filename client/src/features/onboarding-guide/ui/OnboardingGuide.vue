@@ -3,9 +3,7 @@ import { NmorphGuide } from '@nmorph/nmorph-ui-kit'
 
 import { useOnboardingGuide } from '../model/use-onboarding-guide.model'
 
-const { activeGuideStep, completeGuide, guideLabels, initializeGuide, isGuideVisible } = useOnboardingGuide()
-
-initializeGuide()
+const { activeGuideStep, completeGuide, guideLabels, isGuideVisible } = useOnboardingGuide()
 </script>
 
 <template>

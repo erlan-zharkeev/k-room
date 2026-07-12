@@ -3,7 +3,8 @@ import { NmorphCard } from '@nmorph/nmorph-ui-kit'
 import { RouterView } from 'vue-router'
 
 import { AppWelcomeDialog } from 'src/features/app-welcome'
-import { OnboardingGuide, OnboardingGuideTarget, useOnboardingGuide } from 'src/features/onboarding-guide'
+import { BrowserPushPermissionDialog } from 'src/features/browser-push-permission'
+import { OnboardingGuide, OnboardingGuideTarget } from 'src/features/onboarding-guide'
 import { RoomCallAudioOutput } from 'src/features/room-call-session'
 import { useAppMonitors } from 'src/pages/app'
 import { useScreen } from 'src/shared/lib'
@@ -14,10 +15,11 @@ import { TopBar } from 'src/widgets/top-bar'
 import ContentLayout from './../content-layout/ContentLayout.vue'
 import ContentNavigationLayout from './../content-navigation-layout/ContentNavigationLayout.vue'
 import { useAppLayout } from './use-app-layout.model'
+import { useAppOnboarding } from './use-app-onboarding.model'
 
-useAppMonitors()
+const { syncWebPushSubscription } = useAppMonitors()
 const { isPortraitTabletOrLess } = useScreen()
-const { openPendingGuide } = useOnboardingGuide()
+const { completeBrowserPushPermissionDialog, continueAppOnboarding } = useAppOnboarding(syncWebPushSubscription)
 const {
   showWallpaper,
   wallpaperStyle,
@@ -33,7 +35,8 @@ const {
 <template>
   <div class="app-layout-root">
     <RoomCallAudioOutput />
-    <AppWelcomeDialog @complete="openPendingGuide" />
+    <AppWelcomeDialog @complete="continueAppOnboarding" />
+    <BrowserPushPermissionDialog @complete="completeBrowserPushPermissionDialog" />
     <OnboardingGuide>
       <main class="app-layout" :class="{ 'app-layout--wallpaper': showWallpaper }" :style="wallpaperStyle">
         <LeftBar v-if="!isPortraitTabletOrLess" class="widget" />
@@ -54,12 +57,12 @@ const {
             <OnboardingGuideTarget v-if="showContent" class="app-layout__guide-target" name="content">
               <NmorphCard class="app-layout__content-widget widget">
                 <ContentLayout v-if="isContentLayoutEnabled" :title-key="contentTitleKey">
-                  <RouterView v-slot="{ Component, route }" name="content">
-                    <component :is="Component" :key="route.matched[1]?.path ?? route.fullPath" />
+                  <RouterView v-slot="{ Component }" name="content">
+                    <component :is="Component" />
                   </RouterView>
                 </ContentLayout>
-                <RouterView v-else v-slot="{ Component, route }" name="content">
-                  <component :is="Component" :key="route.matched[1]?.path ?? route.fullPath" />
+                <RouterView v-else v-slot="{ Component }" name="content">
+                  <component :is="Component" />
                 </RouterView>
               </NmorphCard>
             </OnboardingGuideTarget>

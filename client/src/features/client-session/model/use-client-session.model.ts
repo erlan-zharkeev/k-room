@@ -3,7 +3,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import { allowMediaSync } from 'src/entities/media-file'
 import { useUser } from 'src/entities/user'
-import { allowAuthRefresh, useSocketConnect } from 'src/shared/api'
+import { allowAuthRefresh, startSocketDataLoading, useSocketConnect } from 'src/shared/api'
 
 import { useClientLogoutStatus } from './use-client-logout-status.model'
 
@@ -30,6 +30,7 @@ export const useClientSession = () => {
     clearLogoutStatus()
     allowAuthRefresh()
     allowMediaSync()
+    startSocketDataLoading()
     await update({ avatarId, email, id, role, nickname, onboarding, provider })
     socketConnect()
 

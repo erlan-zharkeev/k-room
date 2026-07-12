@@ -6,3 +6,4 @@ export const SOCKET_ACTION_ACK_TIMEOUT_MS = 15 * SECOND_IN_MS
 export const SOCKET_TRANSPORT_ERROR_TOAST_ID = 'socket-transport-error'
 export const SOCKET_TRANSPORT_ERROR_TOAST_DELAY_MS = 2 * SECOND_IN_MS
 export const SOCKET_TRANSPORT_ERROR_TOAST_THROTTLE_MS = 2 * SECOND_IN_MS
+export const SOCKET_DATA_SNAPSHOT_EVENTS = ['actual-contacts', 'actual-chat-rooms', 'room-calls-updated'] as const

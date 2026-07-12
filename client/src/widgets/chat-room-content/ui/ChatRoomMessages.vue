@@ -1,14 +1,8 @@
 <script setup lang="ts">
-import {
-  NmorphText,
-  NmorphButton,
-  NmorphIcon,
-  NmorphIconArrowDown,
-  NmorphProgress,
-  NmorphScroll
-} from '@nmorph/nmorph-ui-kit'
+import { NmorphText, NmorphButton, NmorphIcon, NmorphIconArrowDown, NmorphScroll } from '@nmorph/nmorph-ui-kit'
 
-import { MESSAGE_LOADING_PROGRESS_PERCENTAGE } from '../config/constants'
+import { AppLoadingProgress } from 'src/shared/ui'
+
 import { CHAT_ROOM_CONTENT_I18N } from '../config/i18n'
 import type { ChatRoomMessagesEmits, ChatRoomMessagesProps } from '../config/types'
 import { useChatRoomMessages } from '../model/use-chat-room-messages.model'
@@ -35,15 +29,7 @@ const {
 
 <template>
   <div class="chat-room-messages">
-    <div v-if="showMessagesLoadingProgress" class="chat-room-messages__loading-progress">
-      <NmorphProgress
-        class="chat-room-messages__loading-progress-line"
-        :percentage="MESSAGE_LOADING_PROGRESS_PERCENTAGE"
-        :height="4"
-        :value-right-side="false"
-        indeterminate
-      />
-    </div>
+    <AppLoadingProgress v-if="showMessagesLoadingProgress" class="chat-room-messages__loading-progress" />
     <NmorphScroll
       ref="messagesScroll"
       class="chat-room-messages__scroll"
@@ -157,12 +143,6 @@ const {
   top: -8px;
   right: -8px;
   left: -8px;
-
-  animation: chat-room-messages-loading-progress-glow 1.6s ease-in-out infinite;
-}
-
-.chat-room-messages__loading-progress-line {
-  width: 100%;
 }
 
 .chat-room-messages__scroll,
@@ -217,18 +197,5 @@ const {
 .chat-room-messages__removal-item--leaving {
   transform: translateY(-10px) scale(0.94);
   opacity: 0;
-}
-
-@keyframes chat-room-messages-loading-progress-glow {
-  0%,
-  100% {
-    opacity: 0.86;
-    filter: drop-shadow(0 0 2px color-mix(in srgb, var(--nmorph-accent-color) 42%, transparent));
-  }
-
-  50% {
-    opacity: 1;
-    filter: drop-shadow(0 0 7px color-mix(in srgb, var(--nmorph-accent-color) 78%, transparent));
-  }
 }
 </style>

@@ -79,6 +79,20 @@ const isSafariStorageWriteError = (data: DexieErrorLike) => {
   return hasKnownSafariStorageErrorMessage && (isKnownSafariStorageErrorName || hasKnownSafariStorageNestedError)
 }
 
+const isDexieTransientTransactionError = (error: unknown): boolean => {
+  const data = readErrorData(error)
+
+  if (!data) return false
+
+  const { failures, inner, message } = data
+  const hasTransientTransactionMessage =
+    isString(message) && message.includes('Attempt to delete range from database without an in-progress transaction')
+  const hasTransientInnerError = isDexieTransientTransactionError(inner)
+  const hasTransientFailure = Array.isArray(failures) && failures.some(isDexieTransientTransactionError)
+
+  return hasTransientTransactionMessage || hasTransientInnerError || hasTransientFailure
+}
+
 export const isDexieQuotaError = (error: unknown): boolean => {
   const data = readErrorData(error)
 
@@ -123,6 +137,10 @@ export const runDexieCacheTrimGuard = async <T>(operation: () => Promise<T>) => 
   try {
     return await operation()
   } catch (error) {
+    if (isDexieTransientTransactionError(error)) {
+      return operation()
+    }
+
     if (!isDexieQuotaError(error) || isTrimmingCache) {
       throw error
     }

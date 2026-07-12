@@ -12,6 +12,7 @@ import type {
 
 import { getRequiredContactSystemData, mergeContactLocalState, useContact } from 'src/entities/contact'
 import { createKnownUser, useKnownUser } from 'src/entities/known-user'
+import { markSocketDataSnapshotLoaded } from 'src/shared/api'
 
 export const useContactSync = () => {
   const {
@@ -46,8 +47,12 @@ export const useContactSync = () => {
   }
 
   const actualizeContacts = async ({ contacts: nextContacts, knownUsers }: EventGetContacts) => {
-    await syncUserContacts(nextContacts)
-    await mergeKnownUserData(knownUsers, true)
+    try {
+      await syncUserContacts(nextContacts)
+      await mergeKnownUserData(knownUsers, true)
+    } finally {
+      markSocketDataSnapshotLoaded('actual-contacts')
+    }
   }
 
   const deleteContact = async ({ deletedContactId }: EventDeleteContactSuccess) => {

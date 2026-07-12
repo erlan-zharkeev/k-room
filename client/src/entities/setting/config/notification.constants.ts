@@ -9,6 +9,7 @@ export const DEFAULT_NOTIFICATION_GROUP_SETTINGS = {
 }
 
 export const DEFAULT_NOTIFICATION_SETTINGS: DeviceNotificationSettings = {
+  browserPushPermissionPromptDismissed: false,
   enabled: true,
   general: { ...DEFAULT_NOTIFICATION_GROUP_SETTINGS },
   messages: { ...DEFAULT_NOTIFICATION_GROUP_SETTINGS },

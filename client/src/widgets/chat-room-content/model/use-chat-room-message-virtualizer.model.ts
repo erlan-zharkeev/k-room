@@ -96,8 +96,10 @@ export const useChatRoomMessageVirtualizer = (
     if (!scrollElement) return
 
     const scrollHeightDelta = scrollElement.scrollHeight - scrollHeight
+    const requestedScrollTop = scrollTop + scrollHeightDelta
 
-    messageVirtualizer.value.scrollToOffset(scrollTop + scrollHeightDelta, { behavior: 'auto' })
+    messageVirtualizer.value.scrollToOffset(requestedScrollTop, { behavior: 'auto' })
+    await nextTick()
   }
 
   watch(getMessagesScrollElement, () => handleMessageVirtualizerChange(messageVirtualizer.value), {

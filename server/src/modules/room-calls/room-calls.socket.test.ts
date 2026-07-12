@@ -121,6 +121,16 @@ describe('room-calls.socket', () => {
     })
   })
 
+  it('returns a regular failure ack when a call signal is not delivered', async () => {
+    const { handlers } = registerRoomCallHandlers()
+
+    roomCallsServiceMock.sendRoomCallSignal.mockResolvedValue(false)
+
+    const response = await handlers['send-room-call-signal']({ roomCallId: 'call-1', signalId: 'signal-1' } as never)
+
+    expect(response).toEqual({ ok: false })
+  })
+
   it('wires call actions and disconnect cleanup to service layer', async () => {
     const { handlers, redisService } = registerRoomCallHandlers()
 

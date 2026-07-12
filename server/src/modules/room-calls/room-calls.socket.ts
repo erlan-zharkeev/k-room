@@ -215,10 +215,14 @@ export class RoomCallsSocketService implements OnModuleInit, OnModuleDestroy {
       socketAckMiddleware<EventSendRoomCallSignal>(
         socket,
         async (payload) => {
-          await sendRoomCallSignal(this.redisService, socket.data.userId, socket.id, {
+          const delivered = await sendRoomCallSignal(this.redisService, socket.data.userId, socket.id, {
             ...payload,
             signalId: payload.signalId || randomUUID()
           })
+
+          if (!delivered) {
+            return { ok: false }
+          }
         },
         { basicError: ROOM_CALLS_I18N.roomCallSignalFailed }
       )

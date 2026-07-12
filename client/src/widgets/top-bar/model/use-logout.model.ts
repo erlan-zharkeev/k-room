@@ -10,7 +10,7 @@ import { useMessage } from 'src/entities/message'
 import { useRoomCall } from 'src/entities/room-call'
 import { useUser } from 'src/entities/user'
 import { useClientLogoutStatus, useLogoutNavigation } from 'src/features/client-session'
-import { blockAuthRefresh, clearNativeAuthSession, useHttp, socket } from 'src/shared/api'
+import { blockAuthRefresh, clearNativeAuthSession, socket, stopSocketDataLoading, useHttp } from 'src/shared/api'
 import { clearCookie, log, syncAppBadge } from 'src/shared/lib'
 
 export const useLogout = () => {
@@ -70,12 +70,13 @@ export const useLogout = () => {
       markLogoutFailed()
     } finally {
       try {
+        await navigateToLogin()
         clearCookie()
         clearNativeAuthSession()
         socket.disconnect()
+        stopSocketDataLoading()
         await syncAppBadge(0)
         await clearClientSession()
-        await navigateToLogin()
       } finally {
         isLogoutLoading.value = false
       }

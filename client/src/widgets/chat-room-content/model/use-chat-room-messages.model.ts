@@ -1,6 +1,6 @@
 import type { Virtualizer } from '@tanstack/vue-virtual'
 import { useTimeoutFn } from '@vueuse/core'
-import { computed, onActivated, onDeactivated, ref, toRef, watch } from 'vue'
+import { computed, nextTick, onActivated, onDeactivated, ref, toRef, watch } from 'vue'
 
 import { useMessage, useMessageRemovalMotion } from 'src/entities/message'
 import { useSocketAvailability } from 'src/shared/api'
@@ -33,6 +33,7 @@ export const useChatRoomMessages = (
   const messageListItemElements = new Map<string, HTMLElement>()
   const measuredMessageListItemElements = new Map<string, HTMLElement>()
   const measuredMessageListItemHeights = new Map<string, number>()
+  const pendingMessagePreloads = new Set<Promise<void>>()
   const isInitialMessagesRendering = ref(true)
   const messageRemovalOverlayItems = ref<MessageRemovalOverlayItem[]>([])
   const isMessagesActive = ref(true)
@@ -60,6 +61,20 @@ export const useChatRoomMessages = (
   const showInitialMessagesLoading = computed(() => hasMessages.value && !hasCachedRoomMessages.value)
   const showMessagesLoadingProgress = computed(() => isLoading.value || isInitialMessagesRendering.value)
   const messageItemsQuantity = computed(() => messageList.value.filter((item) => item.type === 'message').length)
+  const waitForMessagesScrollSettled = async () => {
+    let pendingTasks: Promise<void>[]
+
+    do {
+      await nextTick()
+      await waitMessageScrollRestoreStabilization()
+
+      pendingTasks = [...pendingMessagePreloads]
+
+      if (pendingTasks.length) {
+        await Promise.allSettled(pendingTasks)
+      }
+    } while (pendingTasks.length)
+  }
   const {
     getSavedMessagesScrollAnchorMessageId,
     getMessagesScrollElement,
@@ -67,10 +82,24 @@ export const useChatRoomMessages = (
     saveMessagesScrollState,
     scrollMessagesToBottom,
     setMessageVirtualizer,
-    showBackToBottomButton,
+    showBackToBottomButton: isBackToBottomButtonNeeded,
     updateBackToBottomButtonVisibility
-  } = useChatRoomMessageScrollManager(room, displayedLastMessageId, messageList, messageItemsQuantity)
+  } = useChatRoomMessageScrollManager(
+    room,
+    displayedLastMessageId,
+    messageList,
+    messageItemsQuantity,
+    waitForMessagesScrollSettled
+  )
+  const showBackToBottomButton = computed(() => isBackToBottomButtonNeeded.value && !showMessagesLoadingProgress.value)
   let preserveMessagesScrollPosition = (action: () => Promise<void>) => action()
+
+  const trackMessagePreload = (task?: Promise<void>) => {
+    if (!task) return
+
+    pendingMessagePreloads.add(task)
+    void task.finally(() => pendingMessagePreloads.delete(task)).catch(() => undefined)
+  }
 
   const findVisibleMessageItem = (virtualizer: Virtualizer<HTMLElement, HTMLElement>, edge: 'start' | 'end') => {
     const virtualItems = virtualizer.getVirtualItems()
@@ -95,7 +124,7 @@ export const useChatRoomMessages = (
 
     if (distanceFromRangeStart > ROOM_MESSAGES_PRELOAD_EDGE_ITEMS) return
 
-    void preserveMessagesScrollPosition(() => loadMessagesBeforeRange(room.value, range))
+    return preserveMessagesScrollPosition(() => loadMessagesBeforeRange(room.value, range))
   }
 
   const preloadMessagesAfter = (messageId: string) => {
@@ -112,7 +141,7 @@ export const useChatRoomMessages = (
 
     if (distanceFromRangeEnd > ROOM_MESSAGES_PRELOAD_EDGE_ITEMS) return
 
-    void loadMessagesAfterRange(room.value, range)
+    return loadMessagesAfterRange(room.value, range)
   }
 
   const preloadAdjacentMessages = (virtualizer: Virtualizer<HTMLElement, HTMLElement>) => {
@@ -120,11 +149,11 @@ export const useChatRoomMessages = (
     const lastVisibleMessage = findVisibleMessageItem(virtualizer, 'end')
 
     if (firstVisibleMessage) {
-      preloadMessagesBefore(firstVisibleMessage.messageId)
+      trackMessagePreload(preloadMessagesBefore(firstVisibleMessage.messageId))
     }
 
     if (lastVisibleMessage) {
-      preloadMessagesAfter(lastVisibleMessage.messageId)
+      trackMessagePreload(preloadMessagesAfter(lastVisibleMessage.messageId))
     }
   }
 
@@ -247,9 +276,11 @@ export const useChatRoomMessages = (
     })
   )
 
-  const startInitialMessagesRendering = () => {
+  const startInitialMessagesRendering = (roomId: string) => {
     initialMessagesRenderingRevision += 1
-    isInitialMessagesRendering.value = true
+    const hasSavedAnchor = Boolean(getSavedMessagesScrollAnchorMessageId(roomId))
+
+    isInitialMessagesRendering.value = !hasCachedRoomMessages.value || hasSavedAnchor
 
     return initialMessagesRenderingRevision
   }
@@ -264,7 +295,8 @@ export const useChatRoomMessages = (
   }
 
   const loadInitialMessages = async (roomId: string, previousRoomId: string | undefined) => {
-    const renderingRevision = startInitialMessagesRendering()
+    const targetRoom = room.value
+    const renderingRevision = startInitialMessagesRendering(roomId)
 
     clearPendingReadMessageIds()
     suspendTargetNavigation()
@@ -273,14 +305,28 @@ export const useChatRoomMessages = (
       await runInitialMessagesScroll(roomId, previousRoomId, async () => {
         const anchorMessageId = getSavedMessagesScrollAnchorMessageId(roomId)
 
-        await restoreCachedLoadedMessageRanges(room.value, anchorMessageId ?? undefined)
+        await restoreCachedLoadedMessageRanges(targetRoom, anchorMessageId ?? undefined)
 
-        if (anchorMessageId) {
-          await loadMessagesAround(anchorMessageId)
+        const hasCachedInitialMessages = anchorMessageId
+          ? messageById.value.has(anchorMessageId)
+          : targetRoom.messages.some((messageId) => messageById.value.has(messageId))
+
+        if (hasCachedInitialMessages) {
+          if (anchorMessageId) {
+            await loadMessagesAround(anchorMessageId, targetRoom)
+            return
+          }
+
+          await loadLatestMessages(targetRoom)
           return
         }
 
-        await loadLatestMessages()
+        if (anchorMessageId) {
+          await loadMessagesAround(anchorMessageId, targetRoom)
+          return
+        }
+
+        await loadLatestMessages(targetRoom)
       })
     } finally {
       try {

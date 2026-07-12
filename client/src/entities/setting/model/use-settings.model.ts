@@ -40,8 +40,12 @@ const hasMissingNotificationGroupSettings = (
   return !current || Object.keys(defaults).some((key) => !(key in current))
 }
 
+const hasBrowserPushPermissionPromptSetting = (notifications: DeviceNotificationSettings) =>
+  Object.prototype.hasOwnProperty.call(notifications, 'browserPushPermissionPromptDismissed')
+
 const hasMissingNotificationSettings = (notifications: DeviceNotificationSettings) => {
   return (
+    !hasBrowserPushPermissionPromptSetting(notifications) ||
     hasMissingNotificationGroupSettings(notifications, 'general') ||
     hasMissingNotificationGroupSettings(notifications, 'messages') ||
     hasMissingNotificationGroupSettings(notifications, 'calls') ||
@@ -51,6 +55,11 @@ const hasMissingNotificationSettings = (notifications: DeviceNotificationSetting
 }
 
 const syncNotificationSettings = (notifications: DeviceNotificationSettings) => {
+  if (!hasBrowserPushPermissionPromptSetting(notifications)) {
+    notifications.browserPushPermissionPromptDismissed =
+      DEFAULT_NOTIFICATION_SETTINGS.browserPushPermissionPromptDismissed
+  }
+
   syncNotificationGroupSettings(notifications, 'general')
   syncNotificationGroupSettings(notifications, 'messages')
   syncNotificationGroupSettings(notifications, 'calls')

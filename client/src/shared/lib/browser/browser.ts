@@ -10,6 +10,21 @@ export const getClientPlatform = (): ClientPlatform => {
   return typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window ? 'native' : 'browser'
 }
 
+export const isBrowserPushSupported = () => {
+  if (getClientPlatform() !== 'browser') return false
+
+  return 'Notification' in window && 'PushManager' in window && 'serviceWorker' in navigator
+}
+
+export const isInstalledPwa = () => {
+  if (getClientPlatform() !== 'browser') return false
+
+  const isStandaloneDisplayMode = window.matchMedia('(display-mode: standalone)').matches
+  const isIosStandalone = Reflect.get(navigator, 'standalone') === true
+
+  return isStandaloneDisplayMode || isIosStandalone
+}
+
 export const getDataUrlMimeType = (url: string) => url.match(/^data:([^;]+);/)?.[1] ?? ''
 
 export const getViewPort = () => {

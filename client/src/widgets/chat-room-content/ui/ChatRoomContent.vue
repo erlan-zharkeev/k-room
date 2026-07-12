@@ -53,22 +53,21 @@ const {
 
 <template>
   <section class="chat-room-page">
-    <ChatRoomHeader
-      v-if="selectedChatRoom"
-      :room="selectedChatRoom"
-      :is-private-room="isSelectedChatRoomPrivate"
-      :has-room-call="hasSelectedRoomCall"
-      :content-view="chatRoomContentView"
-      :joinable-room-call="joinableSelectedRoomCall"
-      :is-room-call-available="isRoomCallAvailable"
-      :is-room-call-start-disabled="isRoomCallStartDisabled"
-      :is-room-call-starting="isStartingRoomCall"
-      :room-call-loading-media-kind="roomCallLoadingMediaKind"
-      @update-content-view="changeChatRoomContentView"
-      @start-room-call="startSelectedRoomCall"
-    />
     <template v-if="selectedChatRoom">
-      <template v-if="isChatRoomTextView">
+      <ChatRoomHeader
+        :room="selectedChatRoom"
+        :is-private-room="isSelectedChatRoomPrivate"
+        :has-room-call="hasSelectedRoomCall"
+        :content-view="chatRoomContentView"
+        :joinable-room-call="joinableSelectedRoomCall"
+        :is-room-call-available="isRoomCallAvailable"
+        :is-room-call-start-disabled="isRoomCallStartDisabled"
+        :is-room-call-starting="isStartingRoomCall"
+        :room-call-loading-media-kind="roomCallLoadingMediaKind"
+        @update-content-view="changeChatRoomContentView"
+        @start-room-call="startSelectedRoomCall"
+      />
+      <div v-show="isChatRoomTextView" class="chat-room-page__text">
         <ChatRoomPinnedMessage :room="selectedChatRoom" @select="selectCurrentChatRoomMessage" />
         <NmorphCard shadow-type="inset" class="chat-room-page__messages">
           <ChatRoomMessages
@@ -81,8 +80,13 @@ const {
           />
         </NmorphCard>
         <ChatRoomFooter :room="selectedChatRoom" @select-editing-message="selectCurrentChatRoomMessage" />
-      </template>
-      <NmorphCard v-else shadow-type="inset" class="chat-room-page__call" content-class="chat-room-page__call-content">
+      </div>
+      <NmorphCard
+        v-show="!isChatRoomTextView"
+        shadow-type="inset"
+        class="chat-room-page__call"
+        content-class="chat-room-page__call-content"
+      >
         <RoomCallPanel
           v-if="selectedActiveRoomCall"
           :room-call="selectedActiveRoomCall"
@@ -124,6 +128,15 @@ const {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.chat-room-page__text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 8px;
+
+  min-height: 0;
 }
 
 .chat-room-page__messages,

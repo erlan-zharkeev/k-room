@@ -16,6 +16,12 @@ export { useHttp } from './http/use-http'
 export { useHttpInterceptor } from './http/use-http-interceptor'
 export { useProtectedActionCaptcha } from './http/use-protected-action-captcha.model'
 export { socket } from './socket/socket'
+export {
+  markSocketDataSnapshotLoaded,
+  socketDataStatus,
+  startSocketDataLoading,
+  stopSocketDataLoading
+} from './socket/socket-data-status'
 export { socketStatus } from './socket/socket-status'
 export { registerSocketAckEventListeners, registerSocketEventListeners } from './socket/event-listeners'
 export { setSocketLanguage, updateSocketLanguage } from './socket/use-socket-language'

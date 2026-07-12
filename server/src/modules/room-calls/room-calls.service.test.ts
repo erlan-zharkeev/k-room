@@ -244,7 +244,7 @@ describe('room-calls.service', () => {
         signalKind: 'answer',
         toUserId: 'user-b'
       })
-    ).resolves.toBeUndefined()
+    ).resolves.toBe(true)
     expect(roomCallEventsMock.emitRoomCallSignalReceived).toHaveBeenCalledWith('socket-b', {
       fromUserId: 'user-a',
       roomCallId: roomCall.id,
@@ -272,6 +272,28 @@ describe('room-calls.service', () => {
         signalKind: 'offer',
         toUserId: 'user-b'
       })
-    ).rejects.toMatchObject({ silent: true })
+    ).resolves.toBe(false)
+  })
+
+  it('keeps unexpected signaling delivery failures as server errors', async () => {
+    const redisService = {}
+    const roomCall = createRoomCall()
+    const error = new Error('adapter failed')
+
+    roomCallAccessMock.assertRoomCallParticipantAccess.mockResolvedValue({
+      room: createRoom('direct'),
+      roomCall
+    })
+    roomCallEventsMock.emitRoomCallSignalReceived.mockRejectedValue(error)
+
+    await expect(
+      sendRoomCallSignal(redisService as never, 'user-a', 'socket-a', {
+        roomCallId: roomCall.id,
+        signal: { type: 'offer' },
+        signalId: 'signal-3',
+        signalKind: 'offer',
+        toUserId: 'user-b'
+      })
+    ).rejects.toMatchObject({ cause: error, silent: true })
   })
 })

@@ -93,7 +93,8 @@ export const useChatRoomMessageScrollManager = (
   room: Ref<ChatRoom>,
   displayedLastMessageId: ComputedRef<string | null>,
   messageList: ComputedRef<MessageListItem[]>,
-  messageItemsQuantity: ComputedRef<number>
+  messageItemsQuantity: ComputedRef<number>,
+  waitForMessagesScrollSettled: () => Promise<void>
 ) => {
   const { messageById } = useMessage()
   const { settings, setByPath } = useSettings()
@@ -227,6 +228,7 @@ export const useChatRoomMessageScrollManager = (
     const nextScrollState = buildNextMessagesScrollState(scrollTop)
 
     if (!nextScrollState) return
+
     if (isSameMessageScrollState(currentScrollState, nextScrollState)) return
 
     await setByPath(`messageScrollByRoom.${roomId}`, nextScrollState)
@@ -267,6 +269,7 @@ export const useChatRoomMessageScrollManager = (
     const scrollTop = anchorVirtualItem.start + scrollState.offset
 
     virtualizer.scrollToOffset(scrollTop, { behavior: 'auto' })
+    await nextTick()
 
     return true
   }
@@ -321,6 +324,9 @@ export const useChatRoomMessageScrollManager = (
       if (isSameRoomBeforeInitialScroll) {
         await scrollMessagesToInitialPosition(roomId)
         await waitMessageScrollRestoreStabilization()
+        await waitForMessagesScrollSettled()
+        await scrollMessagesToInitialPosition(roomId)
+        await waitMessageScrollRestoreStabilization()
 
         const isSameRoomAfterInitialScroll = room.value.id === roomId
 
@@ -368,9 +374,15 @@ export const useChatRoomMessageScrollManager = (
     { flush: 'pre' }
   )
 
-  onActivated(updateBackToBottomButtonVisibility)
-  onDeactivated(() => saveCurrentMessagesScrollState())
-  onBeforeUnmount(() => saveCurrentMessagesScrollState())
+  onActivated(() => {
+    updateBackToBottomButtonVisibility()
+  })
+  onDeactivated(() => {
+    saveCurrentMessagesScrollState()
+  })
+  onBeforeUnmount(() => {
+    saveCurrentMessagesScrollState()
+  })
 
   return {
     getMessagesScrollElement,

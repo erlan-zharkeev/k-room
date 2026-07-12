@@ -47,4 +47,34 @@ describe('emitRoomCallSignalReceived', () => {
       })
     ).resolves.toBe(false)
   })
+
+  it('treats recipient acknowledgement timeout as missing delivery', async () => {
+    ioMock.emitWithAck.mockRejectedValue(new Error('operation has timed out'))
+
+    await expect(
+      emitRoomCallSignalReceived('socket-2', {
+        fromUserId: 'user-1',
+        roomCallId: 'call-1',
+        signal: { type: 'offer' },
+        signalId: 'signal-1',
+        signalKind: 'offer'
+      })
+    ).resolves.toBe(false)
+  })
+
+  it('keeps throwing unexpected delivery failures', async () => {
+    const error = new Error('adapter failed')
+
+    ioMock.emitWithAck.mockRejectedValue(error)
+
+    await expect(
+      emitRoomCallSignalReceived('socket-2', {
+        fromUserId: 'user-1',
+        roomCallId: 'call-1',
+        signal: { type: 'offer' },
+        signalId: 'signal-1',
+        signalKind: 'offer'
+      })
+    ).rejects.toBe(error)
+  })
 })

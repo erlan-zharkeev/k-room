@@ -11,7 +11,10 @@ import type {
   SocketAckSuccess
 } from 'global-shared'
 
+import type { SOCKET_DATA_SNAPSHOT_EVENTS } from './constants'
 import type { socket } from './socket'
+
+export type SocketDataSnapshotEvent = (typeof SOCKET_DATA_SNAPSHOT_EVENTS)[number]
 
 export type SocketAvailabilityStatus = 'online' | 'reconnecting' | 'offline'
 

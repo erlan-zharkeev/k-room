@@ -5,7 +5,10 @@ import { socketStatus, useSocketAvailability, useSocketReconnect } from 'src/sha
 import type { SocketAvailabilityStatus } from 'src/shared/api'
 import { useI18n } from 'src/shared/lib'
 
-import { TOP_BAR_OFFLINE_STATUS_DELAY_MS, TOP_BAR_SOCKET_RECONNECT_LOADING_MIN_MS } from '../config/constants'
+import {
+  TOP_BAR_SOCKET_RECONNECT_LOADING_MIN_MS,
+  TOP_BAR_SOCKET_UNAVAILABLE_STATUS_DELAY_MS
+} from '../config/constants'
 import { TOP_BAR_I18N } from '../config/i18n'
 
 export const useTopBarSocketStatus = () => {
@@ -13,15 +16,23 @@ export const useTopBarSocketStatus = () => {
   const { socketAvailabilityStatus } = useSocketAvailability()
   const { socketReconnect } = useSocketReconnect()
   const displayedSocketStatus = ref<SocketAvailabilityStatus | null>(null)
+  const pendingSocketStatus = ref<SocketAvailabilityStatus | null>(null)
   const isSocketReconnectLoading = ref(false)
   const isSocketReconnectAttemptFinished = ref(false)
   const isSocketReconnectMinimumLoadingTimeElapsed = ref(false)
 
-  const { start: startOfflineStatusTimer, stop: stopOfflineStatusTimer } = useTimeoutFn(
+  const {
+    isPending: isSocketUnavailableStatusPending,
+    start: startSocketUnavailableStatusTimer,
+    stop: stopSocketUnavailableStatusTimer
+  } = useTimeoutFn(
     () => {
-      displayedSocketStatus.value = 'offline'
+      if (!pendingSocketStatus.value) return
+
+      displayedSocketStatus.value = pendingSocketStatus.value
+      pendingSocketStatus.value = null
     },
-    TOP_BAR_OFFLINE_STATUS_DELAY_MS,
+    TOP_BAR_SOCKET_UNAVAILABLE_STATUS_DELAY_MS,
     { immediate: false }
   )
 
@@ -86,16 +97,25 @@ export const useTopBarSocketStatus = () => {
   watch(
     socketAvailabilityStatus,
     (status) => {
-      stopOfflineStatusTimer()
-
-      if (status !== 'offline') {
-        displayedSocketStatus.value = status
+      if (status === 'online') {
+        stopSocketUnavailableStatusTimer()
+        pendingSocketStatus.value = null
+        displayedSocketStatus.value = 'online'
         stopSocketReconnectLoadingTimer()
         isSocketReconnectLoading.value = false
         return
       }
 
-      startOfflineStatusTimer()
+      if (displayedSocketStatus.value && displayedSocketStatus.value !== 'online') {
+        displayedSocketStatus.value = status
+        return
+      }
+
+      pendingSocketStatus.value = status
+
+      if (!isSocketUnavailableStatusPending.value) {
+        startSocketUnavailableStatusTimer()
+      }
     },
     { immediate: true }
   )

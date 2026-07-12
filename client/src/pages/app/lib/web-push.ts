@@ -1,12 +1,6 @@
 import type { WebPushSubscriptionEnabledGroups, WebPushSubscriptionPayload } from 'global-shared'
 
-import { getClientPlatform } from 'src/shared/lib'
-
-export const isWebPushSupported = () => {
-  if (getClientPlatform() !== 'browser') return false
-
-  return 'Notification' in window && 'PushManager' in window && 'serviceWorker' in navigator
-}
+import { isBrowserPushSupported } from 'src/shared/lib'
 
 export const hasEnabledWebPushGroups = ({ calls, groupCalls, invites, messages }: WebPushSubscriptionEnabledGroups) => {
   return Boolean(calls || groupCalls || invites || messages)
@@ -21,13 +15,13 @@ export const urlBase64ToUint8Array = (value: string) => {
 }
 
 const getExistingWebPushServiceWorkerRegistration = async () => {
-  if (!isWebPushSupported()) return null
+  if (!isBrowserPushSupported()) return null
 
   return navigator.serviceWorker.getRegistration('/')
 }
 
 const getWebPushServiceWorkerRegistration = async () => {
-  if (!isWebPushSupported()) return null
+  if (!isBrowserPushSupported()) return null
 
   const currentRegistration = await getExistingWebPushServiceWorkerRegistration()
 
@@ -52,7 +46,7 @@ export const deleteCurrentWebPushSubscription = async () => {
 }
 
 export const subscribeToWebPush = async (publicKey: string) => {
-  if (!isWebPushSupported()) return null
+  if (!isBrowserPushSupported()) return null
   if (Notification.permission !== 'granted') return null
 
   const registration = await getWebPushServiceWorkerRegistration()

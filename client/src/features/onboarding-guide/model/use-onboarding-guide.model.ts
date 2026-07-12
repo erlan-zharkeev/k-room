@@ -1,4 +1,4 @@
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import { useUser, useUserOnboarding } from 'src/entities/user'
 import { useI18n } from 'src/shared/lib'
@@ -47,18 +47,6 @@ export const useOnboardingGuide = () => {
     }
   }
 
-  const initializeGuide = () => {
-    onMounted(async () => {
-      await nextTick()
-
-      const { guideCompleted, welcomeCompleted } = user.value.onboarding
-
-      if (welcomeCompleted && !guideCompleted) {
-        openGuide()
-      }
-    })
-  }
-
   const completeGuide = async () => {
     isGuideVisible.value = false
 
@@ -72,7 +60,6 @@ export const useOnboardingGuide = () => {
     completeGuide,
     guideLabels,
     guideStepMap,
-    initializeGuide,
     isGuideVisible,
     openGuide,
     openPendingGuide

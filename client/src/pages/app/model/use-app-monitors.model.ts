@@ -28,7 +28,7 @@ export const useAppMonitors = () => {
   useMissedRoomCallSeenSync()
   useActiveRoomCallSession()
   useSyncAvatars()
-  useWebPushSubscription()
+  const { syncWebPushSubscription } = useWebPushSubscription()
 
   onMounted(() => {
     initializeChatRoomUpdateMonitor()
@@ -49,4 +49,8 @@ export const useAppMonitors = () => {
     disposeRoomCallDataUpdateMonitor()
     disposeRoomCallNotificationMonitor()
   })
+
+  return {
+    syncWebPushSubscription
+  }
 }

@@ -33,6 +33,18 @@ const createSafariStorageModifyError = () => ({
 const createSafariStorageWrappedError = () =>
   new Error('Error modifying one or more objects. Errors: UnknownError: Failed to delete record from object store')
 
+const createSafariTransientTransactionError = () => ({
+  failures: [
+    {
+      message: 'Attempt to delete range from database without an in-progress transaction',
+      name: 'UnknownError'
+    }
+  ],
+  message:
+    'known-users.bulkPut(): 1 of 1 operations failed. Errors: UnknownError: Attempt to delete range from database without an in-progress transaction',
+  name: 'BulkError'
+})
+
 describe('cache-trim', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -65,6 +77,29 @@ describe('cache-trim', () => {
     await expect(runDexieCacheTrimGuard(operation)).resolves.toBe('saved')
 
     expect(trim).toHaveBeenCalledTimes(1)
+    expect(operation).toHaveBeenCalledTimes(2)
+  })
+
+  it('retries a Safari transient transaction failure in a fresh transaction', async () => {
+    const operation = vi
+      .fn()
+      .mockRejectedValueOnce(createSafariTransientTransactionError())
+      .mockResolvedValueOnce('saved')
+
+    await expect(runDexieCacheTrimGuard(operation)).resolves.toBe('saved')
+
+    expect(operation).toHaveBeenCalledTimes(2)
+  })
+
+  it('keeps throwing when a Safari transient transaction retry fails', async () => {
+    const retryError = createSafariTransientTransactionError()
+    const operation = vi
+      .fn()
+      .mockRejectedValueOnce(createSafariTransientTransactionError())
+      .mockRejectedValueOnce(retryError)
+
+    await expect(runDexieCacheTrimGuard(operation)).rejects.toBe(retryError)
+
     expect(operation).toHaveBeenCalledTimes(2)
   })
 })

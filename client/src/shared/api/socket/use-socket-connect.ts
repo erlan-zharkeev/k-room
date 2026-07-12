@@ -1,4 +1,5 @@
 import { socket } from './socket'
+import { startSocketDataLoading } from './socket-data-status'
 import { setSocketConnected, setSocketReconnectFailed, setSocketReconnecting } from './socket-status'
 import { syncSocketNativeAuthSession } from './sync-socket-native-auth-session'
 
@@ -6,6 +7,7 @@ export const useSocketConnect = () => {
   const actualizeSocketData = () => {
     if (!socket.connected) return
 
+    startSocketDataLoading()
     socket.emit('initialize')
     socket.emit('actualize-user-data')
   }

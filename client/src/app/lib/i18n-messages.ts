@@ -5,6 +5,7 @@ import { AUTH_LAYOUT_I18N } from 'src/app/layouts/auth-layout/i18n'
 import { CHAT_ROOM_I18N } from 'src/entities/chat-room'
 import { APP_NAVIGATION_I18N } from 'src/features/app-navigation'
 import { APP_WELCOME_I18N } from 'src/features/app-welcome'
+import { BROWSER_PUSH_PERMISSION_I18N } from 'src/features/browser-push-permission'
 import { CHAT_ROOM_CONTEXT_MENU_I18N } from 'src/features/chat-room-context-menu'
 import { CHAT_ROOM_TYPING_I18N } from 'src/features/chat-room-typing'
 import { CONTACT_INVITATION_NOTIFICATION_I18N } from 'src/features/contact-invitation-notification'
@@ -53,6 +54,7 @@ const appI18nMessages = buildI18nMessages([
   CHAT_ROOM_I18N,
   APP_NAVIGATION_I18N,
   APP_WELCOME_I18N,
+  BROWSER_PUSH_PERMISSION_I18N,
   CHAT_ROOM_CONTEXT_MENU_I18N,
   CHAT_ROOM_TYPING_I18N,
   CONTACT_INVITATION_NOTIFICATION_I18N,

@@ -124,11 +124,11 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoom>) => {
     }
   }
 
-  const loadLatestMessages = async () => {
-    if (!room?.value) return
+  const loadLatestMessages = async (targetRoom = room?.value) => {
+    if (!targetRoom) return
 
-    await restoreCachedLoadedMessageRanges(room.value)
-    await loadRoomMessages(room.value, 'latest')
+    await restoreCachedLoadedMessageRanges(targetRoom)
+    await loadRoomMessages(targetRoom, 'latest')
   }
 
   const loadMessagesBeforeRange = async (targetRoom: ChatRoom, range: MessageLoadedRange) => {
@@ -163,16 +163,16 @@ export const useLoadRoomMessages = (room?: Ref<ChatRoom>) => {
     return loadRoomMessages(targetRoom, 'after', anchorMessageId)
   }
 
-  const loadMessagesAround = async (messageId: string) => {
-    if (!room?.value) return
+  const loadMessagesAround = async (messageId: string, targetRoom = room?.value) => {
+    if (!targetRoom) return
 
-    const range = resolveCachedRoomMessageRange(room.value, messageId)
+    const range = resolveCachedRoomMessageRange(targetRoom, messageId)
 
     if (range) {
-      await loadCachedRoomMessageRange(room.value, range.startIndex, range.endIndex)
+      await loadCachedRoomMessageRange(targetRoom, range.startIndex, range.endIndex)
     }
 
-    await loadRoomMessages(room.value, 'around', messageId)
+    await loadRoomMessages(targetRoom, 'around', messageId)
   }
 
   const resetLoadedMessageRanges = (roomId?: string) => {

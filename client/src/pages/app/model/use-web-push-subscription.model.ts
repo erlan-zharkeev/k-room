@@ -7,12 +7,12 @@ import { computed, onBeforeUnmount, onMounted, watch, type WatchStopHandle } fro
 
 import { useSettings } from 'src/entities/setting'
 import { useHttp } from 'src/shared/api'
+import { isBrowserPushSupported } from 'src/shared/lib'
 
 import {
   buildWebPushSubscriptionPayload,
   deleteCurrentWebPushSubscription,
   hasEnabledWebPushGroups,
-  isWebPushSupported,
   subscribeToWebPush
 } from '../lib/web-push'
 
@@ -76,7 +76,7 @@ export const useWebPushSubscription = () => {
   }
 
   const syncWebPushSubscriptionNow = async () => {
-    if (!isWebPushSupported()) return
+    if (!isBrowserPushSupported()) return
 
     const groups = enabledGroups.value
     const shouldDisableWebPush = !hasEnabledWebPushGroups(groups) || Notification.permission !== 'granted'
@@ -125,6 +125,12 @@ export const useWebPushSubscription = () => {
     }
   }
 
+  const syncVisibleWebPushSubscription = () => {
+    if (document.visibilityState !== 'visible') return
+
+    void syncWebPushSubscription()
+  }
+
   onMounted(() => {
     stopSettingsWatch = watch(
       enabledGroupsKey,
@@ -133,10 +139,16 @@ export const useWebPushSubscription = () => {
       },
       { immediate: true }
     )
+    document.addEventListener('visibilitychange', syncVisibleWebPushSubscription)
   })
 
   onBeforeUnmount(() => {
     stopSettingsWatch?.()
     stopSettingsWatch = null
+    document.removeEventListener('visibilitychange', syncVisibleWebPushSubscription)
   })
+
+  return {
+    syncWebPushSubscription
+  }
 }

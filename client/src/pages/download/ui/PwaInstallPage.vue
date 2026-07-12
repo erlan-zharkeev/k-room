@@ -58,7 +58,7 @@ const { appName } = __CLIENT_ENV_DATA__
   max-width: var(--app-card-basic-width);
 }
 
-.pwa-install-page__content,
+.pwa-install-page :deep(.pwa-install-page__content),
 .pwa-install-page__header {
   display: grid;
   gap: 16px;

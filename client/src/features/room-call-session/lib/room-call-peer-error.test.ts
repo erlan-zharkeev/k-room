@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import { isExpectedRoomCallPeerSignalError, isRecoverableRoomCallPeerDescriptionError } from './room-call-peer-error'
+import {
+  isExpectedRoomCallPeerSignalError,
+  isRecoverableRoomCallPeerDescriptionError,
+  isRoomCallPeerTimeoutError
+} from './room-call-peer-error'
 
 describe('room call peer error helpers', () => {
   it('detects expected transient peer signal errors', () => {
@@ -12,6 +16,11 @@ describe('room call peer error helpers', () => {
     const error = new DOMException('SDP is modified in a non-acceptable way', 'InvalidModificationError')
 
     expect(isRecoverableRoomCallPeerDescriptionError(error)).toBe(true)
+  })
+
+  it('detects peer operation timeouts', () => {
+    expect(isRoomCallPeerTimeoutError(new DOMException('timed out', 'TimeoutError'))).toBe(true)
+    expect(isRoomCallPeerTimeoutError(new Error('timed out'))).toBe(false)
   })
 
   it('rejects unrelated peer errors', () => {

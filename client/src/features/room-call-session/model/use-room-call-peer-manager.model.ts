@@ -3,6 +3,8 @@ import { type EventRoomCallSignalReceived, type RoomCallRtcConfiguration, type R
 import { v4 as uuidv4 } from 'uuid'
 import { shallowRef } from 'vue'
 
+import { captureClientSentryException } from 'src/shared/lib'
+
 import {
   ROOM_CALL_CONNECTION_QUALITY_CHECK_INTERVAL_MS,
   ROOM_CALL_PEER_CONNECTION_TIMEOUT_MS,
@@ -28,17 +30,14 @@ import {
 } from '../lib/room-call-peer'
 import {
   isExpectedRoomCallPeerSignalError,
-  isRecoverableRoomCallPeerDescriptionError
+  isRecoverableRoomCallPeerDescriptionError,
+  isRoomCallPeerTimeoutError
 } from '../lib/room-call-peer-error'
 import { isRoomCallIceCandidateSignal, isRoomCallSessionDescriptionSignal } from '../lib/room-call-peer-signal'
 
 import { useRoomCallSession } from './use-room-call-session.model'
 
 const createRoomCallPeerTimeoutError = () => new DOMException('Room call peer operation timed out', 'TimeoutError')
-
-const isRoomCallPeerTimeoutError = (error: unknown) => {
-  return error instanceof DOMException && error.name === 'TimeoutError'
-}
 
 const withRoomCallPeerTimeout = async <T>(task: Promise<T>, timeoutMs: number) => {
   let stopTimeout: (() => void) | undefined
@@ -185,6 +184,12 @@ export const useRoomCallPeerManager = () => {
     throw error
   }
 
+  const handleBackgroundRoomCallPeerTaskError = (error: unknown) => {
+    if (isRoomCallPeerTimeoutError(error)) return
+
+    captureClientSentryException(error)
+  }
+
   const hasRoomCallPeerSignalingState = (peerConnection: RTCPeerConnection, signalingState: RTCSignalingState) => {
     return peerConnection.signalingState === signalingState
   }
@@ -313,10 +318,10 @@ export const useRoomCallPeerManager = () => {
         }
 
         void enqueueRoomCallPeerTask(userId, async () => {
-          if (isCurrentRoomCallPeerConnection(userId, peerConnection)) {
-            await recoverRoomCallPeerConnection(roomCallId, userId, localStreams)
-          }
-        })
+          if (!isCurrentRoomCallPeerConnection(userId, peerConnection)) return
+
+          await recoverRoomCallPeerConnection(roomCallId, userId, localStreams)
+        }).catch(handleBackgroundRoomCallPeerTaskError)
       },
       timeoutMs,
       { immediate: true }

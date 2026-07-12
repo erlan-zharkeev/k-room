@@ -3,6 +3,7 @@ import type { EventAuthError, EventErrorMessage } from 'global-shared'
 import { TOAST_I18N, useAppToast, useI18n } from 'src/shared/lib'
 
 import { socket } from './socket'
+import { stopSocketDataLoading } from './socket-data-status'
 import { setSocketConnected, setSocketReconnectFailed, setSocketReconnecting } from './socket-status'
 import { useSocketConnect } from './use-socket-connect'
 import { useSocketReconnect } from './use-socket-reconnect'
@@ -25,6 +26,7 @@ export const useSocketConnectionSync = () => {
 
   const syncSocketDisconnected = () => {
     setSocketConnected(false)
+    stopSocketDataLoading()
   }
 
   const showSocketErrorMessage = ({ message, silent }: EventErrorMessage) => {
@@ -53,6 +55,7 @@ export const useSocketConnectionSync = () => {
   const syncSocketReconnectFailed = () => {
     setSocketReconnectFailed(true)
     setSocketReconnecting(false)
+    stopSocketDataLoading()
   }
 
   return {
