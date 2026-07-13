@@ -20,6 +20,7 @@ const {
 
 <template>
   <AppDialog
+    v-if="showUpdateNativeDesktopDialog"
     :model-value="showUpdateNativeDesktopDialog"
     :title="$t(UPDATE_NATIVE_DESKTOP_I18N.title, { appName: appName, version: updateVersion })"
     :show-close="!isInstalling"
