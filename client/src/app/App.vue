@@ -2,7 +2,7 @@
 import { NmorphNotificationProvider } from '@nmorph/nmorph-ui-kit'
 import { RouterView } from 'vue-router'
 
-import { UpdateNativeDesktopBanner } from 'src/features/update-native-desktop'
+import { UpdateNativeDesktopDialog } from 'src/features/update-native-desktop'
 import { useMediaDevicePermission } from 'src/shared/lib'
 
 import UnsupportedResolutionGuard from './guards/UnsupportedResolutionGuard.vue'
@@ -25,7 +25,7 @@ const { appRootWallpaperBackgroundStyle, showAppRootWallpaperBackground } = useA
 
 <template>
   <UnsupportedResolutionGuard />
-  <UpdateNativeDesktopBanner />
+  <UpdateNativeDesktopDialog />
   <NmorphNotificationProvider :notifications="toasts" placement="top-center" />
   <div
     class="app-root-route"

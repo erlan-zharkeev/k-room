@@ -8,7 +8,8 @@ import {
   FAILED_TO_PERFORM_OPERATION_SENTRY_CONTEXT,
   FAILED_TO_PERFORM_OPERATION_SENTRY_FINGERPRINT,
   FAILED_TO_PERFORM_OPERATION_SENTRY_MESSAGE,
-  FAILED_TO_PERFORM_OPERATION_SENTRY_TAG
+  FAILED_TO_PERFORM_OPERATION_SENTRY_TAG,
+  HTTP_REQUEST_ABORTED_ERROR_MESSAGE
 } from './http-diagnostics.constants'
 import type { FailedToPerformOperationHttpCaptureOptions } from './types'
 
@@ -40,6 +41,13 @@ const getUrlWithoutSearch = (value: string | undefined) => {
 
 const isTauriRuntime = () => '__TAURI_INTERNALS__' in window || '__TAURI__' in window
 
+const isAbortedHttpRequestError = (error: unknown) => {
+  const errorCode = getStringField(error, 'code')
+  const errorMessage = getErrorMessage(error)?.toLowerCase()
+
+  return errorCode === AxiosError.ECONNABORTED && errorMessage === HTTP_REQUEST_ABORTED_ERROR_MESSAGE
+}
+
 export const isFailedToPerformOperationError = (error: unknown) => {
   const message = getErrorMessage(error)
 
@@ -57,6 +65,7 @@ export const captureFailedToPerformOperationHttpError = (
     (displayedMessage ? displayedMessage.toLowerCase().includes(FAILED_TO_PERFORM_OPERATION_MESSAGE_PART) : false)
 
   if (!displayedFallback && !hasFallbackErrorMessage) return
+  if (isAbortedHttpRequestError(error)) return
 
   const { apiBaseUrl, appVersion } = __CLIENT_ENV_DATA__
   const axiosError = error instanceof AxiosError ? error : undefined

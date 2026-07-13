@@ -23,7 +23,7 @@ export const useUpdateNativeDesktop = () => {
 
   const isInstalling = computed(() => updateStatus.value === 'installing')
   const hasInstallError = computed(() => updateStatus.value === 'failed')
-  const showUpdateNativeDesktopBanner = computed(() => {
+  const showUpdateNativeDesktopDialog = computed(() => {
     const hasPendingUpdate = Boolean(pendingUpdate.value)
     const isUpdateInstalled = updateStatus.value === 'installed'
     const canShowUpdateBanner = isNativeDesktopClient && hasPendingUpdate
@@ -104,15 +104,21 @@ export const useUpdateNativeDesktop = () => {
     updateStatus.value = 'idle'
   }
 
+  const updateNativeDesktopDialogVisibility = (visible: boolean) => {
+    if (visible) return
+
+    dismissUpdateNativeDesktop()
+  }
+
   onMounted(checkUpdateNativeDesktop)
 
   return {
-    dismissUpdateNativeDesktop,
     downloadProgress,
     hasInstallError,
     installUpdateNativeDesktop,
     isInstalling,
-    showUpdateNativeDesktopBanner,
+    showUpdateNativeDesktopDialog,
+    updateNativeDesktopDialogVisibility,
     updateVersion
   }
 }

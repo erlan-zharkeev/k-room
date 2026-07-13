@@ -121,7 +121,7 @@ const showPushNotification = async (title, options) => {
 
   await self.registration.showNotification(title, {
     icon: '/meta/android-chrome-192x192.png',
-    badge: '/meta/android-chrome-192x192.png',
+    badge: '/meta/notification-badge.png',
     ...options,
     data: {
       url: '/app',
