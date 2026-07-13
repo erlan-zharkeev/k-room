@@ -12,11 +12,12 @@ const props = defineProps<ChatRoomLeaveDialogProps>()
 const {
   canLeaveChatRoom,
   closeLeaveChatRoomDialog,
+  hasNewAdminCandidates,
   isLeavingChatRoom,
   leaveChatRoom,
   newAdminItems,
   selectedNewAdminIds,
-  shouldSelectNewAdminBeforeLeaving
+  shouldOfferNewAdminSelection
 } = useChatRoomLeave(props, model)
 </script>
 
@@ -25,22 +26,26 @@ const {
     <div class="app-dialog-stack">
       <NmorphText>{{
         $t(
-          shouldSelectNewAdminBeforeLeaving
+          shouldOfferNewAdminSelection
             ? CHAT_ROOM_CONTEXT_MENU_I18N.leaveGroupAdminConfirm
             : CHAT_ROOM_CONTEXT_MENU_I18N.leaveGroupConfirm
         )
       }}</NmorphText>
-      <div v-if="shouldSelectNewAdminBeforeLeaving" class="app-dialog-stack">
-        <NmorphText as="small" color="semi-contrast" variant="body-small">{{
+      <div v-if="shouldOfferNewAdminSelection" class="app-dialog-stack">
+        <NmorphText v-if="hasNewAdminCandidates" as="small" color="semi-contrast" variant="body-small">{{
           $t(CHAT_ROOM_CONTEXT_MENU_I18N.newGroupAdministrator)
         }}</NmorphText>
         <AppProfilePicker
+          v-if="hasNewAdminCandidates"
           v-model="selectedNewAdminIds"
           :items="newAdminItems"
           :multiple="false"
           height="180px"
           max-height="32vh"
         />
+        <NmorphText v-else color="semi-contrast">{{
+          $t(CHAT_ROOM_CONTEXT_MENU_I18N.leaveGroupAdminAutomatic)
+        }}</NmorphText>
       </div>
       <div class="app-dialog-actions">
         <NmorphButton

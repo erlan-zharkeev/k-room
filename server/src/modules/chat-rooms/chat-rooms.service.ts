@@ -40,6 +40,7 @@ import {
   loadUserMutedChatRoomsForRoom,
   loadUserPinnedChatRooms,
   loadUserPinnedChatRoomsForRoom,
+  loadUsersPublicByIds,
   removeChatRoomFromUser,
   removeChatRoomFromUsersByIds,
   setUserMutedChatRoomIds,
@@ -430,6 +431,7 @@ export const leaveChatRoom = async (
   const isLastMemberLeaving = remainingUserIds.length === 0
 
   let nextRoomAdminId = adminId
+  let nextRoomUserIds = remainingUserIds
 
   if (isLastMemberLeaving) {
     await deleteChatRoom(userId, { roomId })
@@ -437,15 +439,19 @@ export const leaveChatRoom = async (
   }
 
   if (isAdminLeaving) {
-    if (!nextAdminId) {
-      throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.leaveChatRoomNewAdminRequired)
+    const remainingUsers = await loadUsersPublicByIds(remainingUserIds)
+    const existingUserIdSet = new Set(remainingUsers.map(({ _id }) => stringifyMongoId(_id)))
+    const availableAdminIds = remainingUserIds.filter((remainingUserId) => existingUserIdSet.has(remainingUserId))
+    const automaticallySelectedAdminId = availableAdminIds[0]
+
+    if (!automaticallySelectedAdminId) {
+      await deleteChatRoom(userId, { roomId })
+      return
     }
 
-    if (!remainingUserIds.includes(nextAdminId)) {
-      throw new AppError(REQ_STATUS.badRequest, CHAT_ROOMS_I18N.leaveChatRoomInvalidNewAdmin)
-    }
-
-    nextRoomAdminId = nextAdminId
+    nextRoomAdminId =
+      nextAdminId && availableAdminIds.includes(nextAdminId) ? nextAdminId : automaticallySelectedAdminId
+    nextRoomUserIds = availableAdminIds
   }
 
   const [updatedRoom] = await Promise.all([
@@ -454,7 +460,7 @@ export const leaveChatRoom = async (
       {
         $set: {
           adminId: nextRoomAdminId,
-          users: remainingUserIds
+          users: nextRoomUserIds
         }
       },
       { new: true }
@@ -470,6 +476,6 @@ export const leaveChatRoom = async (
   emitToUsers([userId], 'chat-room-left', payload)
 
   if (updatedRoom) {
-    await emitRoomDataToUsers(remainingUserIds, updatedRoom, presenceService)
+    await emitRoomDataToUsers(nextRoomUserIds, updatedRoom, presenceService)
   }
 }

@@ -32,6 +32,7 @@ const { profileItems, selectProfiles } = useAppProfilePicker(props, selectedProf
       >
         <AppProfileBasicData
           class="app-profile-picker__item"
+          :avatar-size="44"
           :avatar-icon="item.avatarIcon"
           :avatar-icon-color="item.avatarIconColor"
           :avatar-icon-size="item.avatarIconSize"
@@ -62,7 +63,9 @@ const { profileItems, selectProfiles } = useAppProfilePicker(props, selectedProf
 
 .app-profile-picker__group {
   display: block;
+  box-sizing: border-box;
   width: 100%;
+  padding: 4px;
 }
 
 .app-profile-picker__group :deep(.nmorph-checkbox-group__wrapper),
@@ -79,6 +82,7 @@ const { profileItems, selectProfiles } = useAppProfilePicker(props, selectedProf
 .app-profile-picker__checkbox :deep(.nmorph-checkbox__label) {
   flex: 1 1 auto;
   min-width: 0;
+  margin-left: var(--indentation-03);
 }
 
 .app-profile-picker__item {

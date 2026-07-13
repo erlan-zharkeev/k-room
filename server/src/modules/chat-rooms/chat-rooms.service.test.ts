@@ -420,6 +420,60 @@ describe('chat-rooms.service', () => {
     })
   })
 
+  it('automatically assigns an existing group member when the admin leaves', async () => {
+    const room = {
+      adminId: 'user-1',
+      avatarId: null,
+      chatKind: 'group',
+      users: ['user-1', 'user-2', 'deleted-user'],
+      messages: []
+    }
+
+    chatRoomModelMock.findOne.mockReturnValue(createLeanQuery(room))
+    chatRoomModelMock.findOneAndUpdate.mockReturnValue(createLeanQuery(null))
+    userPersistenceMock.loadUsersPublicByIds.mockResolvedValue([{ _id: 'user-2' }])
+    userPersistenceMock.removeChatRoomFromUser.mockResolvedValue({ modifiedCount: 1 })
+
+    await leaveChatRoom('user-1', { roomId: 'room-1' }, {} as never)
+
+    expect(userPersistenceMock.loadUsersPublicByIds).toHaveBeenCalledWith(['user-2', 'deleted-user'])
+    expect(chatRoomModelMock.findOneAndUpdate).toHaveBeenCalledWith(
+      { _id: 'room-1' },
+      {
+        $set: {
+          adminId: 'user-2',
+          users: ['user-2']
+        }
+      },
+      { new: true }
+    )
+    expect(userPersistenceMock.removeChatRoomFromUser).toHaveBeenCalledWith('room-1', 'user-1')
+    expect(presenceUtilsMock.emitToUsers).toHaveBeenCalledWith(['user-1'], 'chat-room-left', { roomId: 'room-1' })
+  })
+
+  it('deletes group chat room when no existing members remain after the admin leaves', async () => {
+    const execRemoveRoomFromUsers = vi.fn().mockResolvedValue(undefined)
+    const room = {
+      adminId: 'user-1',
+      avatarId: null,
+      chatKind: 'group',
+      users: ['user-1', 'deleted-user'],
+      messages: ['message-1']
+    }
+
+    chatRoomModelMock.findOne.mockReturnValueOnce(createLeanQuery(room)).mockReturnValueOnce(createLeanQuery(room))
+    chatRoomModelMock.deleteOne.mockReturnValue({ exec: vi.fn().mockResolvedValue(undefined) })
+    userPersistenceMock.loadUsersPublicByIds.mockResolvedValue([])
+    userPersistenceMock.removeChatRoomFromUsersByIds.mockReturnValue({ exec: execRemoveRoomFromUsers })
+
+    await leaveChatRoom('user-1', { roomId: 'room-1' }, {} as never)
+
+    expect(chatRoomModelMock.findOneAndUpdate).not.toHaveBeenCalled()
+    expect(chatRoomModelMock.deleteOne).toHaveBeenCalledWith({ _id: 'room-1' })
+    expect(messagePersistenceMock.deleteMessagesByIds).toHaveBeenCalledWith(['message-1'])
+    expect(userPersistenceMock.removeChatRoomFromUsersByIds).toHaveBeenCalledWith('room-1', ['user-1', 'deleted-user'])
+  })
+
   it('deletes group chat room when last member leaves', async () => {
     const execRemoveRoomFromUsers = vi.fn().mockResolvedValue(undefined)
     const room = {

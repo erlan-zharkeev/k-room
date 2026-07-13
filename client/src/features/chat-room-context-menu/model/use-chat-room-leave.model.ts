@@ -27,7 +27,7 @@ export const useChatRoomLeave = (props: ChatRoomLeaveDialogProps, isLeaveChatRoo
 
     return Boolean(room && room.users.length === 1 && room.users[0] === user.value.id)
   })
-  const shouldSelectNewAdminBeforeLeaving = computed(
+  const shouldOfferNewAdminSelection = computed(
     () => isCurrentUserChatRoomAdmin.value && !isCurrentUserLastChatRoomMember.value
   )
   const newAdminItems = computed(() => {
@@ -52,12 +52,10 @@ export const useChatRoomLeave = (props: ChatRoomLeaveDialogProps, isLeaveChatRoo
       return items
     }, [])
   })
+  const hasNewAdminCandidates = computed(() => newAdminItems.value.length > 0)
 
   const isReadyToLeaveChatRoom = computed(() => canShowLeaveChatRoom.value && !isLeavingChatRoom.value)
-  const canCurrentAdminLeaveChatRoom = computed(
-    () => !shouldSelectNewAdminBeforeLeaving.value || selectedNewAdminIds.value.length === 1
-  )
-  const canLeaveChatRoom = computed(() => isReadyToLeaveChatRoom.value && canCurrentAdminLeaveChatRoom.value)
+  const canLeaveChatRoom = computed(() => isReadyToLeaveChatRoom.value)
 
   const closeLeaveChatRoomDialog = () => {
     isLeaveChatRoomDialogOpen.value = false
@@ -69,7 +67,7 @@ export const useChatRoomLeave = (props: ChatRoomLeaveDialogProps, isLeaveChatRoo
     const nextAdminId = selectedNewAdminIds.value[0]
     const payload: EventLeaveChatRoom = {
       roomId: item.value.id,
-      ...(shouldSelectNewAdminBeforeLeaving.value ? { nextAdminId } : {})
+      ...(nextAdminId ? { nextAdminId } : {})
     }
 
     isLeavingChatRoom.value = true
@@ -90,11 +88,12 @@ export const useChatRoomLeave = (props: ChatRoomLeaveDialogProps, isLeaveChatRoo
   return {
     canLeaveChatRoom,
     closeLeaveChatRoomDialog,
+    hasNewAdminCandidates,
     isCurrentUserChatRoomAdmin,
     isLeavingChatRoom,
     leaveChatRoom,
     newAdminItems,
     selectedNewAdminIds,
-    shouldSelectNewAdminBeforeLeaving
+    shouldOfferNewAdminSelection
   }
 }

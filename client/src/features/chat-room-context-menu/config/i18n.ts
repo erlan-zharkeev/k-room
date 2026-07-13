@@ -87,9 +87,14 @@ export const CHAT_ROOM_CONTEXT_MENU_I18N = defineI18n('chatRoomContextMenu', {
     zh: '确定要退出此群组吗？'
   },
   leaveGroupAdminConfirm: {
-    en: 'Choose a new administrator before leaving this group.',
-    ru: 'Выберите нового администратора перед выходом из группы.',
-    zh: '退出群组前请选择新的管理员。'
+    en: 'Choose a new administrator or one will be assigned automatically.',
+    ru: 'Выберите нового администратора, или он будет назначен автоматически.',
+    zh: '请选择新的管理员，否则系统将自动分配。'
+  },
+  leaveGroupAdminAutomatic: {
+    en: 'There are no available candidates. You can still leave the group.',
+    ru: 'Доступных кандидатов нет. Вы всё равно можете покинуть группу.',
+    zh: '没有可用的候选人。您仍然可以退出群组。'
   },
   newGroupAdministrator: {
     en: 'New administrator',
